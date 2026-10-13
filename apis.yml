@@ -255,8 +255,23 @@ apis:
   - type: APIReference
     url: https://api.ivans.com/reference/token
   baseURL: https://distribution.ivansinsurance.com
+x-coverage:
+  state: gated
+  reason: partner-login
+  method: derived
+  generated: '2026-10-13'
+  generator: derive-coverage.py (pre-flight evidence)
+  detail: >-
+    the company serves an API surface but requires credentials before any description of it can be read
+  evidence:
+  - url: https://api.ivans.com/mcp
+    status: 401
+  - url: https://status.ivans.com/mcp
+    status: 403
+  - url: https://www.ivans.com
+    status: 200
 x-enrichment:
-  date: '2026-10-13'
   status: enriched
-  artifacts_added: 20
   pass: local-v5
+  date: '2026-10-13'
+  artifacts_added: 20

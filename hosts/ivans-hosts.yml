@@ -126,12 +126,16 @@ hosts:
   - probed
   - contract-discovery
   - well-known
+  - vendor-detect
   types:
+  - Compliance
   - Website
   - Blog
   - PrivacyPolicy
   - TermsOfService
-  serves: []
+  serves:
+  - cdn
+  vendor: cloudflare
   registrable_domain: ivans.com
   role: website
   relation: own
