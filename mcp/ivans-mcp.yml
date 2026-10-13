@@ -1,0 +1,223 @@
+generated: '2026-10-13'
+method: derived
+generator: derive-mcp-candidate.py
+source:
+- openapi/ivans-authorization-openapi.json
+- openapi/ivans-distribution-platform-openapi.json
+- openapi/ivans-exchange-v1-openapi.json
+- openapi/ivans-exchange-v2-openapi.json
+- openapi/ivans-exchange-v3-openapi.json
+- openapi/ivans-identification-network-openapi.json
+- openapi/ivans-insights-openapi.json
+- openapi/ivans-passport-openapi.json
+- openapi/ivans-translation-openapi.json
+status: candidate
+deployment:
+  mode: none
+  auth: unknown
+  verified: probed
+note: 'No MCP server was found. The pre-flight posted tools/list to /mcp on www.ivans.com, api.ivans.com, insights.ivans.com, interact.ivans.com;
+  verdict gated (https://api.ivans.com/mcp answered 401: the edge authenticates before it routes, which proves nothing either way). Candidate
+  tools below are derived from the 197 operation(s) in the provider''s own OpenAPI (40 listed); they describe what a server WOULD expose, not
+  one that exists.'
+tools:
+- name: token
+  operationId: token
+  method: POST
+  path: /api/v1/token/
+  description: /api/v1/token/
+- name: bind_submission_api_v1_forms_submission_bind_post
+  operationId: bind_submission_api_v1_forms_submission_bind_post
+  method: POST
+  path: /api/v1/forms/submission/bind
+  description: Bind Submission
+- name: create_bookroll_request
+  operationId: CreateBookrollRequest
+  method: POST
+  path: /api/Bookrolls
+  description: Create a bookroll request.
+- name: get_v2_files
+  operationId: GET /api/v2/Files/{id}
+  method: GET
+  path: /api/v2/Files/{id}
+  description: Retrieve a given file
+- name: get_files_filecount
+  operationId: GET /api/v3/Files/FileCount
+  method: GET
+  path: /api/v3/Files/FileCount
+  description: Retrieve a count of all files that match the query string
+- name: agencies_create
+  operationId: agencies_create
+  method: POST
+  path: /api/v1/agencies/
+  description: Creates a new agency.
+- name: schedule_export_api_v1_looker_schedule_export_post
+  operationId: schedule_export_api_v1_looker_schedule_export_post
+  method: POST
+  path: /api/v1/looker/schedule-export
+  description: Schedule Export
+- name: auth0_token_api_v1_identity_auth0_token_post
+  operationId: auth0_token_api_v1_identity_auth0_token__post
+  method: POST
+  path: /api/v1/identity/auth0-token/
+  description: Auth0 Token
+- name: get_auth_token
+  operationId: getAuthToken
+  method: POST
+  path: /ivans/api/carrier/tokens
+  description: Obtain a token to be used with all download operations
+- name: convert_json_schema_to_api_format_api_v1_json_schema_to_api_
+  operationId: convert_json_schema_to_api_format_api_v1_json_schema_to_api_post
+  method: POST
+  path: /api/v1/json-schema-to-api
+  description: Convert Json Schema To Api Format
+- name: delete_api_notifyconfigs
+  operationId: DELETE /api/NotifyConfigs/{consumerInfoId}
+  method: DELETE
+  path: /api/NotifyConfigs/{consumerInfoId}
+  description: Removes notification configuration for a given consumer info id
+- name: get_v2_naic
+  operationId: GET /api/v2/NAIC/{naicCode}
+  method: GET
+  path: /api/v2/NAIC/{naicCode}
+  description: Gets a NAIC mapping by NAIC.
+- name: get_v3_files
+  operationId: GET /api/v3/Files
+  method: GET
+  path: /api/v3/Files
+  description: Retrieve a list of all files that match the query string
+- name: agencies_list
+  operationId: agencies_list
+  method: GET
+  path: /api/v1/agencies/
+  description: Returns agencies that are accessible to the user.
+- name: task_status_api_v1_looker_task_status_post
+  operationId: task_status_api_v1_looker_task_status_post
+  method: POST
+  path: /api/v1/looker/task-status
+  description: Task Status
+- name: get_document_meta_info
+  operationId: getDocumentMetaInfo
+  method: GET
+  path: /ivans/api/document
+  description: Fetch document file meta information
+- name: fast_path_submission_api_v1_forms_submission_fast_path_post
+  operationId: fast_path_submission_api_v1_forms_submission_fast_path_post
+  method: POST
+  path: /api/v1/forms/submission/fast-path
+  description: Fast Path Submission
+- name: get_notify_config
+  operationId: GetNotifyConfig
+  method: GET
+  path: /api/NotifyConfigs/{consumerInfoId}
+  description: Retrieve a notification configuration for a given consumer info id
+- name: get_v2_partners
+  operationId: GET /api/v2/Partners
+  method: GET
+  path: /api/v2/Partners
+  description: Retrieve a list of trading partners. This is a JSON-formatted collection with each object
+- name: agencies_retrieve
+  operationId: agencies_retrieve
+  method: GET
+  path: /api/v1/agencies/{id}/
+  description: Returns an agency if it is accessible to the user.
+- name: save
+  operationId: save
+  method: POST
+  path: /ivans/api/document
+  description: Stores document/attachments files (max allowed size 100MB)
+- name: get_auto_details_api_v1_auto_details_get
+  operationId: get_auto_details_api_v1_auto_details_get
+  method: GET
+  path: /api/v1/auto/details
+  description: Get Vehicle Data with VIN or Year, Make, Model or a combination of these
+- name: update_api_notifyconfigs
+  operationId: PUT /api/NotifyConfigs/{consumerInfoId}
+  method: PUT
+  path: /api/NotifyConfigs/{consumerInfoId}
+  description: Update the notification configuration settings for a given consumer info id
+- name: put_producer_by_org_v2
+  operationId: PutProducerByOrgV2
+  method: PUT
+  path: /api/v2/Organizations/{accountCode}/Producers/{producerCode}
+  description: Update the information for a given producer code
+- name: agencies_update
+  operationId: agencies_update
+  method: PUT
+  path: /api/v1/agencies/{id}/
+  description: Updates an agency if it is accessible to the user.
+- name: process_benefits_csv_request
+  operationId: processBenefitsCsvRequest
+  method: POST
+  path: /ivans/api/benefits/csv/upload
+  description: Benefits Csv upload
+- name: get_base_question_set_api_v1_forms_base_question_set_get
+  operationId: get_base_question_set_api_v1_forms_base_question_set_get
+  method: GET
+  path: /api/v1/forms/base-question-set
+  description: Get Base Question Set
+- name: delete_naic
+  operationId: DeleteNaic
+  method: DELETE
+  path: /api/WarpNAICProduct/{id}
+  description: Removes an NAIC from a Product
+- name: agents_create
+  operationId: agents_create
+  method: POST
+  path: /api/v1/agents/
+  description: Creates a new agent.
+- name: process_request
+  operationId: processRequest
+  method: POST
+  path: /ivans/api/commissiondownload
+  description: Commission Download Operation
+- name: post_base_question_set_api_v1_forms_base_question_set_post
+  operationId: post_base_question_set_api_v1_forms_base_question_set_post
+  method: POST
+  path: /api/v1/forms/base-question-set
+  description: Post Base Question Set
+- name: get_naic_list
+  operationId: GetNaicList
+  method: GET
+  path: /api/WarpNAICProduct/{id}
+  description: Retrieves a list of NAIC for a Product
+- name: agents_list
+  operationId: agents_list
+  method: GET
+  path: /api/v1/agents/
+  description: Returns agents that are accessible to the user.
+- name: process_request_2
+  operationId: processRequest_2
+  method: POST
+  path: /ivans/api/carrier/edocdownload
+  description: edoc download operation
+- name: get_basic_appetite_api_v1_forms_basic_appetite_get
+  operationId: get_basic_appetite_api_v1_forms_basic_appetite_get
+  method: GET
+  path: /api/v1/forms/basic-appetite
+  description: Get Basic Appetite
+- name: put_naic_product
+  operationId: PutNaicProduct
+  method: PUT
+  path: /api/WarpNAICProduct/{id}
+  description: Updates a Warp NAIC Product
+- name: agents_retrieve
+  operationId: agents_retrieve
+  method: GET
+  path: /api/v1/agents/{id}/
+  description: Returns an agent if it is accessible to the user.
+- name: process_request_3
+  operationId: processRequest_3
+  method: POST
+  path: /ivans/api/carrier/claimsdownload
+  description: claims download operation
+- name: get_bind_question_set_api_v1_forms_bind_get
+  operationId: get_bind_question_set_api_v1_forms_bind_get
+  method: GET
+  path: /api/v1/forms/bind
+  description: Get Bind Question Set
+- name: delete_partner
+  operationId: DeletePartner
+  method: DELETE
+  path: /api/Partners/{id}
+  description: Removes a trading partnership

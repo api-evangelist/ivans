@@ -1,0 +1,37 @@
+generated: '2026-10-13'
+method: derived
+source: openapi/ivans-authorization-openapi.json, openapi/ivans-identification-network-openapi.json
+schemes:
+- name: sec0
+  source: openapi/ivans-authorization-openapi.json
+  flows: []
+- name: oauth2
+  source: openapi/ivans-identification-network-openapi.json
+  flows:
+  - flow: password
+    tokenUrl: /api/v1/token/
+scopes:
+- scope: epic
+  description: Epic User
+  flows:
+  - password
+  sources:
+  - openapi/ivans-identification-network-openapi.json
+- scope: read
+  description: Read scope
+  flows:
+  - password
+  sources:
+  - openapi/ivans-identification-network-openapi.json
+- scope: third-party
+  description: Third Party User
+  flows:
+  - password
+  sources:
+  - openapi/ivans-identification-network-openapi.json
+- scope: write
+  description: Write scope
+  flows:
+  - password
+  sources:
+  - openapi/ivans-identification-network-openapi.json

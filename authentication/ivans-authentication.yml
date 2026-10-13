@@ -1,0 +1,50 @@
+generated: '2026-10-13'
+method: derived
+source: openapi/ivans-authorization-openapi.json, openapi/ivans-distribution-platform-openapi.json,
+  openapi/ivans-exchange-v1-openapi.json, openapi/ivans-exchange-v3-openapi.json, openapi/ivans-identification-network-openapi.json
+summary:
+  types:
+  - apiKey
+  - http
+  - oauth2
+  api_key_in:
+  - cookie
+  oauth2_flows:
+  - password
+schemes:
+- name: sec0
+  type: oauth2
+  flows: []
+  sources:
+  - openapi/ivans-authorization-openapi.json
+- name: HTTPBearer
+  type: http
+  scheme: bearer
+  sources:
+  - openapi/ivans-distribution-platform-openapi.json
+- name: Bearer
+  type: http
+  scheme: Bearer
+  description: JWT
+  sources:
+  - openapi/ivans-exchange-v1-openapi.json
+  - openapi/ivans-exchange-v3-openapi.json
+- name: cookieAuth
+  type: apiKey
+  in: cookie
+  parameter: sessionid
+  sources:
+  - openapi/ivans-identification-network-openapi.json
+- name: oauth2
+  type: oauth2
+  flows:
+  - flow: password
+    tokenUrl: /api/v1/token/
+    scopes: 4
+  sources:
+  - openapi/ivans-identification-network-openapi.json
+- name: basicAuth
+  type: http
+  scheme: basic
+  sources:
+  - openapi/ivans-identification-network-openapi.json
