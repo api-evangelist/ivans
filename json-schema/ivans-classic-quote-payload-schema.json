@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/ivans/main/json-schema/ivans-classic-quote-payload-schema.json",
+  "title": "ClassicQuotePayload",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/ivans-distribution-platform-openapi.json#/components/schemas/ClassicQuotePayload",
+  "properties": {
+    "fieldValues": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/FieldValue"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Fieldvalues"
+    },
+    "repeatableFieldBlocks": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/RepeatableFieldBlock"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Repeatablefieldblocks"
+    },
+    "lobs": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "title": "Lobs"
+    },
+    "markets": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "title": "Markets"
+    }
+  },
+  "type": "object",
+  "required": [
+    "lobs",
+    "markets"
+  ],
+  "$defs": {
+    "FieldValue": {
+      "properties": {
+        "questionId": {
+          "type": "string",
+          "title": "Questionid"
+        },
+        "value": {
+          "title": "Value"
+        }
+      },
+      "type": "object",
+      "required": [
+        "questionId",
+        "value"
+      ],
+      "title": "FieldValue"
+    },
+    "RepeatableFieldBlock": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Id"
+        },
+        "fieldBlockId": {
+          "type": "string",
+          "title": "Fieldblockid"
+        },
+        "parentId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Parentid"
+        },
+        "fieldValues": {
+          "items": {
+            "$ref": "#/$defs/FieldValue"
+          },
+          "type": "array",
+          "title": "Fieldvalues"
+        }
+      },
+      "type": "object",
+      "required": [
+        "id",
+        "fieldBlockId",
+        "fieldValues"
+      ],
+      "title": "RepeatableFieldBlock",
+      "description": "id: row id (i.e., building #2)\nfield_block_id: guid of the form group (IDNET repeatable group, i.e., building group)\nparent_id: guid of specific parent field block (i.e., location #3)"
+    }
+  }
+}

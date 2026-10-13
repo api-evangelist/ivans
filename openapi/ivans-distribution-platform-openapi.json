@@ -1,0 +1,5558 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Ivans Distribution Platform",
+    "description": "APIs for serving carrier forms, appetite, and validation",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/v1/forms/submission/bind": {
+      "post": {
+        "tags": [
+          "Submission"
+        ],
+        "summary": "Bind Submission",
+        "description": "Endpoint to bind quotes through IDP.\n\n    Metadata:\n        - clientId: integrator's account ID, required\n        - quoteId: integrator's quote ID, required\n        - callbackUrl: integrator's callback URL, required\n\n    Market metadata:\n        - riskProfile: risk profile UUID, required\n        - marketQuoteId: carrier's quote ID, optional and can be null\n        - marketAccountId: carrier's account ID, optional and can be null\n        - contractCodeId: user's market contract code UUID, optional or required, depending on user configuration\n        - credentialId: user's market credential UUID, optional and can be null\n        - referenceIds: carrier's quote IDs for binding, optional and can be null\n\n    Field values (optional, defaults to empty list):\n        - questionId: question UUID, required\n        - value: answer value, required\n\n    Repeatable field blocks (optional, defaults to empty list):\n        - id: repeatable field block UUID (integrator-generated), required\n        - fieldBlockId: repeatable form group UUID, required\n        - parentId: parent repeatable field block UUID, required if the repeatable field block is nested, otherwise null\n        - fieldValues: list of field values within the repeatable block, required\n            - questionId: question UUID, required\n            - value: answer value, required",
+        "operationId": "bind_submission_api_v1_forms_submission_bind_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "test_submission",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Test Submission"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmissionRequestPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Submission",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubmissionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "All Risk Profiles have validation errors or are not in appetite": {
+                    "value": {
+                      "detail": "invalid form submission",
+                      "errorDetails": [
+                        {
+                          "riskProfile": "e1878571-2ccf-4c4d-a07c-e163e248a1e5",
+                          "lineOfBusiness": "BOP",
+                          "validationErrors": [
+                            {
+                              "groupId": "1388bb46-c9b7-423d-95d7-7c09aab6d2a9",
+                              "questionId": "26b9b60c-1711-460a-95cd-fc743832054d",
+                              "errorMsg": {
+                                "detail": "attribute_is_required"
+                              }
+                            }
+                          ],
+                          "evaluations": []
+                        }
+                      ]
+                    }
+                  },
+                  "Contract Code is missing": {
+                    "value": {
+                      "detail": "invalid form submission",
+                      "errorDetails": [
+                        {
+                          "riskProfile": "1c13c4a9-a46a-4987-8219-b435312670d8",
+                          "lineOfBusiness": "BOP",
+                          "validationErrors": [
+                            {
+                              "groupId": "af23ccec-57a6-4989-8e41-91e3562522b6",
+                              "questionId": "6c5924fd-3934-449d-b9b2-75fb5004cc3c",
+                              "errorMsg": {
+                                "detail": "contractCodeId is required."
+                              }
+                            }
+                          ],
+                          "evaluations": []
+                        }
+                      ]
+                    }
+                  },
+                  "User does not have access to Contract Code": {
+                    "value": {
+                      "detail": "invalid form submission",
+                      "errorDetails": [
+                        {
+                          "riskProfile": "1af59457-500a-4b93-a6c0-7802bf743961",
+                          "lineOfBusiness": "BOP",
+                          "validationErrors": [
+                            {
+                              "groupId": "196bf1f8-912d-4fff-868c-bf2aa94d6a31",
+                              "questionId": "ab38bcfd-8e29-4179-9cc3-6ac496903979",
+                              "errorMsg": {
+                                "detail": "User does not have access to the contract_code: 2bd0faa7-2aba-44b4-8671-16e80db47a2df"
+                              }
+                            }
+                          ],
+                          "evaluations": []
+                        }
+                      ]
+                    }
+                  },
+                  "Credential is missing": {
+                    "value": {
+                      "detail": "invalid form submission",
+                      "errorDetails": [
+                        {
+                          "riskProfile": "cd319172-3e26-476a-9227-dfe60bd68dbd",
+                          "lineOfBusiness": "BOP",
+                          "validationErrors": [
+                            {
+                              "groupId": "8dd4037c-df21-48b7-8c45-03c4300e2c27",
+                              "questionId": "659ebffd-c587-45cd-b117-52b94fd9246a",
+                              "errorMsg": {
+                                "detail": "credentialId is required."
+                              }
+                            }
+                          ],
+                          "evaluations": []
+                        }
+                      ]
+                    }
+                  },
+                  "User does not have access to Market Credential": {
+                    "value": {
+                      "detail": "invalid form submission",
+                      "errorDetails": [
+                        {
+                          "riskProfile": "46a0248e-d5b1-4127-afb2-f43c0d2c9348",
+                          "lineOfBusiness": "BOP",
+                          "validationErrors": [
+                            {
+                              "groupId": "85765208-0e5b-49b2-8473-f58a7f174ad6",
+                              "questionId": "8aeff6fc-3366-41b1-a041-b58f2d6c9223",
+                              "errorMsg": {
+                                "detail": "User does not have access to the credential: 2bd0faa7-2aba-44b4-8671-16e80db47a2df"
+                              }
+                            }
+                          ],
+                          "evaluations": []
+                        }
+                      ]
+                    }
+                  },
+                  "User does not have access to one or more Risk Profiles": {
+                    "value": {
+                      "detail": [
+                        "user does not have permission for the submitted risk profile(s), or the risk profile(s) are no longer available: 2bd0faa7-2aba-44b4-8671-16e80db47a2df"
+                      ]
+                    }
+                  },
+                  "User submits a 'Base' Risk Profile": {
+                    "value": {
+                      "detail": [
+                        "submitted risk profile(s) are base risk profiles and cannot be submitted"
+                      ]
+                    }
+                  },
+                  "User submits a Risk Profile without a Route": {
+                    "value": {
+                      "detail": [
+                        "submitted risk profile(s) do not have a configured route"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/json-schema-to-api": {
+      "post": {
+        "tags": [
+          "Support"
+        ],
+        "summary": "Convert Json Schema To Api Format",
+        "description": "Convert JSON Schema format to API format.",
+        "operationId": "convert_json_schema_to_api_format_api_v1_json_schema_to_api_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Json Schema"
+              },
+              "example": {
+                "appetite.classification_primary_state.classification|f23c0847-1fce-4627-8744-b69bfdfa7b47": "722513",
+                "applicant_information.business_name.businessorganization_name_exact_name_needed|109cad7a-5667-4cf5-bd97-393a331121f4": "Downtown Yoga Studio LLC",
+                "risk_information.location|37877f81-0239-487e-93d0-2cc0f97a2c33": [
+                  {
+                    "location|5637ffd5-2c09-4097-803a-5f3961525f2f": 1,
+                    "address|fd44fe00-86f7-46c9-be8b-4a3e2433aa09": "456 Broadway",
+                    "address_2|5696fcee-7aee-4c81-b423-1ef6c8d80b79": "2nd Floor",
+                    "city|ca0ebfdc-acb5-467f-a804-51f971102d2f": "San Francisco",
+                    "state|5de49646-a1e6-4aee-91c5-9e2f4190f562": "CA",
+                    "zip_code|d4a96bc6-9521-4376-9275-7eafd98cecef": "94133",
+                    "building|53b9b5f5-debe-4cb9-8c72-287136f7ba6c": [
+                      {
+                        "building|48d15f9c-09c0-4f67-9eec-d5a5d8f89ee0": 1,
+                        "occupancy_type|bb9afe1b-a2d1-4112-a2ac-1951ce681061": "Tenant",
+                        "type_of_coverage|314bce56-b29f-429b-b4f6-f01da6184fa5": "Contents",
+                        "building_limit_of_insurance|352175b3-9955-48af-818c-812c4d43cb28": 0,
+                        "business_personal_property_limit|8657a469-5f23-408b-bcf8-e1624b162eee": 75000,
+                        "property_deductible|71498bd5-5c5b-4ee9-8830-25ec54819cc9": 2500,
+                        "property_deductible|ed1cf795-a9c0-4d9b-9bc6-7c91d2ef37b0": 2500,
+                        "building_type|58e21f7a-f5ac-484a-8061-4d9159f9878d": "Building",
+                        "total_estimated_payroll_at_this_building|131434a6-e3f4-434c-9864-7ef5e11b4c28": 85000,
+                        "sprinklered|3a1b45af-4a96-47e1-a391-2c88a75d55f7": 100
+                      }
+                    ]
+                  }
+                ],
+                "policy_wide.coverages_liability.bodily_injury_and_property_damage_occurrenceaggregate_limit|8a153f02-2ee7-44e9-893d-ccf1d93d1331": 500000,
+                "applicant_information.contact_information.business_phone|bb57a491-c9e4-41c2-b80a-606ba0c148de": "(415) 555-7890",
+                "applicant_information.contact_information.contact_first_name|c08ff178-b35b-4c00-8709-9f6d2010cf67": "Sarah",
+                "applicant_information.contact_information.contact_last_name|90278ac6-ee85-43dd-828b-489e46e47877": "Johnson",
+                "applicant_information.contact_information.contact_email|4d7a01cc-8bce-470a-aef4-e3cce472b1ab": "sarah@downtownyoga.com",
+                "appetite.eligibility_exposure.number_of_locations|800c6507-cbcb-45da-8339-d4a0d14da02f": 1,
+                "appetite.eligibility_exposure.total_revenue|134abdcd-011f-408c-8ea5-464fa8ae7e44": 325000,
+                "appetite.eligibility_exposure.number_of_employees|d5f471a5-d93f-41e2-ad9e-9b3c8b015617": 4,
+                "appetite.eligibility_exposure.number_of_claims|e0c0b4cb-48a2-4f1e-bc75-20b6f4d81589": 2,
+                "appetite.eligibility_exposure.any_single_claim_over_15000|57d1c3fe-4fe6-4778-b07b-57b9587d5fff": "No",
+                "appetite.eligibility_exposure.building_limit|7c93426f-33cb-4761-bada-7b5ea0eeb1bf": 0,
+                "appetite.eligibility_exposure.business_personal_property_limit|d4794e2f-c883-4ab4-9dab-097968fe1bba": 75000,
+                "applicant_information.mailing_address.address|5b407486-d1f3-4865-9964-537078b95aeb": "456 Broadway",
+                "applicant_information.mailing_address.address_2|a54f3a65-c9b4-4061-8b57-cd70e01b2666": "2nd Floor",
+                "applicant_information.mailing_address.city|db21be90-089f-475a-a695-1697276d4e8b": "San Francisco",
+                "applicant_information.mailing_address.state|7265d179-e93b-4228-a9a0-a0b2585952a4": "CA",
+                "applicant_information.mailing_address.zip_code|d7162434-bd88-4a5a-977c-330c25ded626": "94133",
+                "applicant_information.primary_location_address.address|aa2deead-993d-4bae-b7eb-4680db303499": "456 Broadway",
+                "applicant_information.primary_location_address.address_2|36405fd6-c44b-45d6-8eb1-aa07b73282ff": "2nd Floor",
+                "applicant_information.primary_location_address.city|30049514-c52d-4ac4-beab-217c633f4f93": "San Francisco",
+                "applicant_information.primary_location_address.state|97c25b3d-1390-4905-9536-c95cf0bd13fc": "CA",
+                "applicant_information.primary_location_address.zip_code|530f8d6a-9eff-449d-9ef4-1f356c2ce9b2": "94133",
+                "applicant_information.primary_location_address.is_the_mailing_address_the_same_as_the_primary_location|f7b5489c-c270-462f-80d9-8dc3f7c8a3fb": true,
+                "applicant_information.losses|afa690cb-4974-498a-ac26-23f6feb83dd9": [
+                  {
+                    "line_of_business|662bcf15-0559-460a-8cf5-dbd92649b042": "BOP",
+                    "date_of_loss|7f5cf92f-3b6e-4f26-9bf2-d7c703128b6e": "2024-03-15",
+                    "description_of_loss|bb4d3408-0d4f-4eed-a86b-bc1ac4e42c88": "Slip and fall injury in studio lobby",
+                    "loss_amount_paid|37fa3e93-4900-47f9-b496-c9460e0dcb5e": 8500
+                  },
+                  {
+                    "line_of_business|662bcf15-0559-460a-8cf5-dbd92649b042": "BOP",
+                    "date_of_loss|7f5cf92f-3b6e-4f26-9bf2-d7c703128b6e": "2023-11-20",
+                    "description_of_loss|bb4d3408-0d4f-4eed-a86b-bc1ac4e42c88": "Water damage from ceiling leak",
+                    "loss_amount_paid|37fa3e93-4900-47f9-b496-c9460e0dcb5e": 12000
+                  }
+                ],
+                "applicant_information.loss_history.does_the_insured_have_losses_to_report_for_the_last_three_years|056984c5-d8d3-44b7-98a4-ef9be0bd611e": true,
+                "applicant_information.business_information.date_business_started|71eaada5-e2cf-4a7b-a2ff-969dff93789b": "2019-09-01",
+                "agency_information.agency_information.producer_contact_email|3f7f3fd6-a2e4-41dd-b3b4-7e91a5f5bf7f": "producer@bayareainsurance.com"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/forms/submission/fast-path": {
+      "post": {
+        "tags": [
+          "Submission"
+        ],
+        "summary": "Fast Path Submission",
+        "operationId": "fast_path_submission_api_v1_forms_submission_fast_path_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "test_submission",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Test Submission"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FastPathSubmissionRequestPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auto/details": {
+      "get": {
+        "tags": [
+          "Auto Service"
+        ],
+        "summary": "Get Vehicle Data with VIN or Year, Make, Model or a combination of these",
+        "description": "Retrieve vehicle details by VIN or by year, make, and model.",
+        "operationId": "get_auto_details_api_v1_auto_details_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vin",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Full VIN",
+              "examples": [
+                "1HGCM82633A123456"
+              ],
+              "title": "Vin"
+            },
+            "description": "Full VIN"
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Model year filter",
+              "examples": [
+                2003
+              ],
+              "title": "Year"
+            },
+            "description": "Model year filter"
+          },
+          {
+            "name": "make",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Make",
+              "examples": [
+                "HONDA"
+              ],
+              "title": "Make"
+            },
+            "description": "Make"
+          },
+          {
+            "name": "model",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Model",
+              "examples": [
+                "ACCORD"
+              ],
+              "title": "Model"
+            },
+            "description": "Model"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful retrieval of vehicle details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AutoDetailResponse"
+                  },
+                  "title": "Response 200 Get Auto Details Api V1 Auto Details Get"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseWithValidationDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseWithMessageOnly"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseWithMessageOnly"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "VIN not found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "VIN not found. Please check your VIN and try again."
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseWithMessageOnly"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseWithValidationDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseWithMessageOnly"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/forms/base-question-set": {
+      "get": {
+        "tags": [
+          "Base Question Set Flow"
+        ],
+        "summary": "Get Base Question Set",
+        "description": "Returns Base Question Set for given LOB(s)\nCan optionally include Question Set for given Risk Profile(s)\nNested form param will change the structure of form to the nested structure",
+        "operationId": "get_base_question_set_api_v1_forms_base_question_set_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "lobs",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Lobs"
+            }
+          },
+          {
+            "name": "nested",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true,
+              "title": "Nested"
+            }
+          },
+          {
+            "name": "risk_profiles",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Risk Profiles"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Base Question Set Flow"
+        ],
+        "summary": "Post Base Question Set",
+        "description": "Validates answers to Base Question Set\n\nEvaluates appetite for given Risk Profile(s) and returns combined Question Set for all valid Risk Profiles",
+        "operationId": "post_base_question_set_api_v1_forms_base_question_set_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "lobs",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Lobs"
+            }
+          },
+          {
+            "name": "nested",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true,
+              "title": "Nested"
+            }
+          },
+          {
+            "name": "risk_profiles",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Risk Profiles"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuotePayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/forms/basic-appetite": {
+      "get": {
+        "tags": [
+          "Classic Flow"
+        ],
+        "summary": "Get Basic Appetite",
+        "description": "Returns form with basic appetite and available Risk Profiles.\n\n    Starting endpoint for IDP appetite flow.",
+        "operationId": "get_basic_appetite_api_v1_forms_basic_appetite_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "lobs",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Lobs"
+            }
+          },
+          {
+            "name": "markets",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "title": "Markets"
+            }
+          },
+          {
+            "name": "nested",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true,
+              "title": "Nested"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "examples": {
+                  "Nested Response": {
+                    "value": {
+                      "pages": [
+                        {
+                          "guid": "string",
+                          "label": "string",
+                          "description": "string",
+                          "order": 2147483647,
+                          "groups": [
+                            {
+                              "guid": "string",
+                              "page": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                              "label": "string",
+                              "description": "string",
+                              "isRepeatable": true,
+                              "repeatMinMax": "",
+                              "order": 2147483647,
+                              "type": "normal",
+                              "columns": [
+                                {
+                                  "guid": "string"
+                                }
+                              ],
+                              "parent": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                              "parentLabel": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                              "parentColumns": {
+                                "guid": "string"
+                              },
+                              "fields": {
+                                "guid": "string",
+                                "group": "string",
+                                "label": "string",
+                                "description": "string",
+                                "additionalDetails": {
+                                  "heading": "string",
+                                  "children": [
+                                    {
+                                      "heading": "string",
+                                      "children": [
+                                        {
+                                          "listItem": "string"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "order": 0,
+                                "type": "string",
+                                "dataClass": "string",
+                                "options": {
+                                  "label": "string",
+                                  "value": 0
+                                },
+                                "underwritingCategory": "string",
+                                "isAppetiteCategory": true,
+                                "isEnhancedAppetiteCategory": true,
+                                "isBind": true,
+                                "isRefer": true,
+                                "conditions": {
+                                  "operator": "and",
+                                  "action": "referral",
+                                  "conditions": [
+                                    {
+                                      "operator": "==",
+                                      "value": "string",
+                                      "attribute": "string",
+                                      "repeatingOperator": "ANY",
+                                      "sourceGroup": "string"
+                                    }
+                                  ]
+                                },
+                                "actionConditions": {
+                                  "operator": "and",
+                                  "action": "referral",
+                                  "conditions": [
+                                    {
+                                      "operator": "==",
+                                      "value": "string",
+                                      "attribute": "string",
+                                      "repeatingOperator": "ANY",
+                                      "sourceGroup": "string"
+                                    }
+                                  ]
+                                },
+                                "market": "string",
+                                "classificationStandardGuid": "string",
+                                "classCodeFilterFieldsGuids": [
+                                  "string"
+                                ],
+                                "unique": true,
+                                "uniqueToParent": true,
+                                "parentAttributeGuid": "string",
+                                "prefillSourceFieldGuid": "string",
+                                "minimum": 0,
+                                "maximum": 0,
+                                "isSuggestable": true,
+                                "length": 0
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "marketFields": [
+                        {
+                          "market": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                          "riskProfiles": [
+                            "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                          ],
+                          "fields": [
+                            {
+                              "uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                              "requirementLevel": "string"
+                            }
+                          ],
+                          "repeatableGroups": [
+                            {
+                              "uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                              "description": "string",
+                              "requirementLevel": "string",
+                              "risk_profile": "6434827e-903d-4bdd-b213-d1b8bad56060"
+                            }
+                          ]
+                        }
+                      ],
+                      "riskProfiles": [
+                        {
+                          "uuid": "0a952028-b25f-47b9-a7be-23872666c7f3",
+                          "name": "Test Risk Profile | BOP | Bindable Quote",
+                          "type": "Package",
+                          "market": "Test Market",
+                          "marketUuid": "20cd4728-f7d2-4c6b-aafb-ab21e3af043c",
+                          "excessAndSurplus": false,
+                          "lob": "BOP",
+                          "childLobs": [
+                            "CGL",
+                            "PROP"
+                          ],
+                          "inAppetite": true,
+                          "bindAllowed": true,
+                          "bindAppetite": true,
+                          "referAllowed": false,
+                          "routeType": "Quote",
+                          "requiredToSubmit": {
+                            "contractCode": false,
+                            "username": false,
+                            "password": false
+                          },
+                          "validationErrors": [],
+                          "evaluations": []
+                        }
+                      ]
+                    }
+                  },
+                  "Non-Nested Response": {
+                    "value": {
+                      "pages": [
+                        {
+                          "guid": "string",
+                          "label": "string",
+                          "description": "string",
+                          "order": 2147483647
+                        }
+                      ],
+                      "groups": [
+                        {
+                          "guid": "string",
+                          "page": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                          "label": "string",
+                          "description": "string",
+                          "isRepeatable": true,
+                          "repeatMinMax": "",
+                          "order": 2147483647,
+                          "type": "normal",
+                          "columns": [
+                            {
+                              "guid": "string"
+                            }
+                          ],
+                          "parent": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                          "parentLabel": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                          "parentColumns": {
+                            "guid": "string"
+                          }
+                        }
+                      ],
+                      "fields": {
+                        "guid": "string",
+                        "group": "string",
+                        "label": "string",
+                        "description": "string",
+                        "additionalDetails": {
+                          "heading": "string",
+                          "children": [
+                            {
+                              "heading": "string",
+                              "children": [
+                                {
+                                  "listItem": "string"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "order": 0,
+                        "type": "string",
+                        "dataClass": "string",
+                        "options": {
+                          "label": "string",
+                          "value": 0
+                        },
+                        "underwritingCategory": "string",
+                        "isAppetiteCategory": true,
+                        "isEnhancedAppetiteCategory": true,
+                        "isBind": true,
+                        "isRefer": true,
+                        "conditions": {
+                          "operator": "and",
+                          "action": "referral",
+                          "conditions": [
+                            {
+                              "operator": "==",
+                              "value": "string",
+                              "attribute": "string",
+                              "repeatingOperator": "ANY",
+                              "sourceGroup": "string"
+                            }
+                          ]
+                        },
+                        "actionConditions": {
+                          "operator": "and",
+                          "action": "referral",
+                          "conditions": [
+                            {
+                              "operator": "==",
+                              "value": "string",
+                              "attribute": "string",
+                              "repeatingOperator": "ANY",
+                              "sourceGroup": "string"
+                            }
+                          ]
+                        },
+                        "market": "string",
+                        "classificationStandardGuid": "string",
+                        "classCodeFilterFieldsGuids": [
+                          "string"
+                        ],
+                        "unique": true,
+                        "uniqueToParent": true,
+                        "parentAttributeGuid": "string",
+                        "prefillSourceFieldGuid": "string",
+                        "minimum": 0,
+                        "maximum": 0,
+                        "isSuggestable": true,
+                        "length": 0
+                      },
+                      "marketFields": [
+                        {
+                          "market": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                          "riskProfiles": [
+                            "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                          ],
+                          "fields": [
+                            {
+                              "uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                              "requirementLevel": "string"
+                            }
+                          ],
+                          "repeatableGroups": [
+                            {
+                              "uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                              "description": "string",
+                              "requirementLevel": "string",
+                              "risk_profile": "6434827e-903d-4bdd-b213-d1b8bad56060"
+                            }
+                          ]
+                        }
+                      ],
+                      "riskProfiles": [
+                        {
+                          "uuid": "0a952028-b25f-47b9-a7be-23872666c7f3",
+                          "name": "Test Risk Profile | BOP | Bindable Quote",
+                          "type": "Package",
+                          "market": "Test Market",
+                          "marketUuid": "20cd4728-f7d2-4c6b-aafb-ab21e3af043c",
+                          "excessAndSurplus": false,
+                          "lob": "BOP",
+                          "childLobs": [
+                            "CGL",
+                            "PROP"
+                          ],
+                          "inAppetite": true,
+                          "bindAllowed": true,
+                          "bindAppetite": true,
+                          "referAllowed": false,
+                          "routeType": "Quote",
+                          "requiredToSubmit": {
+                            "contractCode": false,
+                            "username": false,
+                            "password": false
+                          },
+                          "validationErrors": [],
+                          "evaluations": []
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/forms/bind": {
+      "get": {
+        "tags": [
+          "Post Quote Flow"
+        ],
+        "summary": "Get Bind Question Set",
+        "description": "Returns bind questions applicable to the requested risk profile\n\n    Nested form parameter will change the structure of the form to the nested structure",
+        "operationId": "get_bind_question_set_api_v1_forms_bind_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "risk_profile",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Risk Profile"
+            }
+          },
+          {
+            "name": "nested",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true,
+              "title": "Nested"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "examples": {
+                  "Nested Response": {
+                    "value": {
+                      "pages": [
+                        {
+                          "guid": "string",
+                          "label": "string",
+                          "description": "string",
+                          "order": 2147483647,
+                          "groups": [
+                            {
+                              "guid": "string",
+                              "page": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                              "label": "string",
+                              "description": "string",
+                              "isRepeatable": true,
+                              "repeatMinMax": "",
+                              "order": 2147483647,
+                              "type": "normal",
+                              "columns": [
+                                {
+                                  "guid": "string"
+                                }
+                              ],
+                              "parent": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                              "parentLabel": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                              "parentColumns": {
+                                "guid": "string"
+                              },
+                              "fields": {
+                                "guid": "string",
+                                "group": "string",
+                                "label": "string",
+                                "description": "string",
+                                "additionalDetails": {
+                                  "heading": "string",
+                                  "children": [
+                                    {
+                                      "heading": "string",
+                                      "children": [
+                                        {
+                                          "listItem": "string"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "order": 0,
+                                "type": "string",
+                                "dataClass": "string",
+                                "options": {
+                                  "label": "string",
+                                  "value": 0
+                                },
+                                "underwritingCategory": "string",
+                                "isAppetiteCategory": true,
+                                "isEnhancedAppetiteCategory": true,
+                                "isBind": true,
+                                "isRefer": true,
+                                "conditions": {
+                                  "operator": "and",
+                                  "action": "referral",
+                                  "conditions": [
+                                    {
+                                      "operator": "==",
+                                      "value": "string",
+                                      "attribute": "string",
+                                      "repeatingOperator": "ANY",
+                                      "sourceGroup": "string"
+                                    }
+                                  ]
+                                },
+                                "actionConditions": {
+                                  "operator": "and",
+                                  "action": "referral",
+                                  "conditions": [
+                                    {
+                                      "operator": "==",
+                                      "value": "string",
+                                      "attribute": "string",
+                                      "repeatingOperator": "ANY",
+                                      "sourceGroup": "string"
+                                    }
+                                  ]
+                                },
+                                "market": "string",
+                                "classificationStandardGuid": "string",
+                                "classCodeFilterFieldsGuids": [
+                                  "string"
+                                ],
+                                "unique": true,
+                                "uniqueToParent": true,
+                                "parentAttributeGuid": "string",
+                                "prefillSourceFieldGuid": "string",
+                                "minimum": 0,
+                                "maximum": 0,
+                                "isSuggestable": true,
+                                "length": 0
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "marketFields": [
+                        {
+                          "market": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                          "riskProfiles": [
+                            "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                          ],
+                          "fields": [
+                            {
+                              "uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                              "requirementLevel": "string"
+                            }
+                          ],
+                          "repeatableGroups": [
+                            {
+                              "uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                              "description": "string",
+                              "requirementLevel": "string",
+                              "risk_profile": "6434827e-903d-4bdd-b213-d1b8bad56060"
+                            }
+                          ]
+                        }
+                      ],
+                      "riskProfiles": [
+                        {
+                          "uuid": "0a952028-b25f-47b9-a7be-23872666c7f3",
+                          "name": "Test Risk Profile | BOP | Bindable Quote",
+                          "type": "Package",
+                          "market": "Test Market",
+                          "marketUuid": "20cd4728-f7d2-4c6b-aafb-ab21e3af043c",
+                          "excessAndSurplus": false,
+                          "lob": "BOP",
+                          "childLobs": [
+                            "CGL",
+                            "PROP"
+                          ],
+                          "inAppetite": true,
+                          "bindAllowed": true,
+                          "bindAppetite": true,
+                          "referAllowed": false,
+                          "routeType": "Quote",
+                          "requiredToSubmit": {
+                            "contractCode": false,
+                            "username": false,
+                            "password": false
+                          },
+                          "validationErrors": [],
+                          "evaluations": []
+                        }
+                      ]
+                    }
+                  },
+                  "Non-Nested Response": {
+                    "value": {
+                      "pages": [
+                        {
+                          "guid": "string",
+                          "label": "string",
+                          "description": "string",
+                          "order": 2147483647
+                        }
+                      ],
+                      "groups": [
+                        {
+                          "guid": "string",
+                          "page": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                          "label": "string",
+                          "description": "string",
+                          "isRepeatable": true,
+                          "repeatMinMax": "",
+                          "order": 2147483647,
+                          "type": "normal",
+                          "columns": [
+                            {
+                              "guid": "string"
+                            }
+                          ],
+                          "parent": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                          "parentLabel": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                          "parentColumns": {
+                            "guid": "string"
+                          }
+                        }
+                      ],
+                      "fields": {
+                        "guid": "string",
+                        "group": "string",
+                        "label": "string",
+                        "description": "string",
+                        "additionalDetails": {
+                          "heading": "string",
+                          "children": [
+                            {
+                              "heading": "string",
+                              "children": [
+                                {
+                                  "listItem": "string"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "order": 0,
+                        "type": "string",
+                        "dataClass": "string",
+                        "options": {
+                          "label": "string",
+                          "value": 0
+                        },
+                        "underwritingCategory": "string",
+                        "isAppetiteCategory": true,
+                        "isEnhancedAppetiteCategory": true,
+                        "isBind": true,
+                        "isRefer": true,
+                        "conditions": {
+                          "operator": "and",
+                          "action": "referral",
+                          "conditions": [
+                            {
+                              "operator": "==",
+                              "value": "string",
+                              "attribute": "string",
+                              "repeatingOperator": "ANY",
+                              "sourceGroup": "string"
+                            }
+                          ]
+                        },
+                        "actionConditions": {
+                          "operator": "and",
+                          "action": "referral",
+                          "conditions": [
+                            {
+                              "operator": "==",
+                              "value": "string",
+                              "attribute": "string",
+                              "repeatingOperator": "ANY",
+                              "sourceGroup": "string"
+                            }
+                          ]
+                        },
+                        "market": "string",
+                        "classificationStandardGuid": "string",
+                        "classCodeFilterFieldsGuids": [
+                          "string"
+                        ],
+                        "unique": true,
+                        "uniqueToParent": true,
+                        "parentAttributeGuid": "string",
+                        "prefillSourceFieldGuid": "string",
+                        "minimum": 0,
+                        "maximum": 0,
+                        "isSuggestable": true,
+                        "length": 0
+                      },
+                      "marketFields": [
+                        {
+                          "market": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                          "riskProfiles": [
+                            "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                          ],
+                          "fields": [
+                            {
+                              "uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                              "requirementLevel": "string"
+                            }
+                          ],
+                          "repeatableGroups": [
+                            {
+                              "uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                              "description": "string",
+                              "requirementLevel": "string",
+                              "risk_profile": "6434827e-903d-4bdd-b213-d1b8bad56060"
+                            }
+                          ]
+                        }
+                      ],
+                      "riskProfiles": [
+                        {
+                          "uuid": "0a952028-b25f-47b9-a7be-23872666c7f3",
+                          "name": "Test Risk Profile | BOP | Bindable Quote",
+                          "type": "Package",
+                          "market": "Test Market",
+                          "marketUuid": "20cd4728-f7d2-4c6b-aafb-ab21e3af043c",
+                          "excessAndSurplus": false,
+                          "lob": "BOP",
+                          "childLobs": [
+                            "CGL",
+                            "PROP"
+                          ],
+                          "inAppetite": true,
+                          "bindAllowed": true,
+                          "bindAppetite": true,
+                          "referAllowed": false,
+                          "routeType": "Quote",
+                          "requiredToSubmit": {
+                            "contractCode": false,
+                            "username": false,
+                            "password": false
+                          },
+                          "validationErrors": [],
+                          "evaluations": []
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "User does not have access to the requested Risk Profile": {
+                    "value": {
+                      "detail": "User does not have access to the requested risk profile"
+                    }
+                  },
+                  "Bind not allowed": {
+                    "value": {
+                      "detail": "Binding is not allowed for this risk profile"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/forms/question-set/fast-path": {
+      "get": {
+        "tags": [
+          "FastPath Flow"
+        ],
+        "summary": "Get Fast Path Question Set",
+        "description": "Returns a form with a single Risk Profile for the FastPath flow.\n\nLabels and visibility of fields are customized based on the supplied default field values template.\nFields marked as `display_in_ui: hide` in the template are removed from the form.\nFields with an `integrator_label` in the template will have their labels replaced.",
+        "operationId": "get_fast_path_question_set_api_v1_forms_question_set_fast_path_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "nested",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Nested"
+            }
+          },
+          {
+            "name": "template_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Template uuid",
+              "title": "Template Id"
+            },
+            "description": "Template uuid"
+          },
+          {
+            "name": "risk_profile",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Risk Profile uuid",
+              "title": "Risk Profile"
+            },
+            "description": "Risk Profile uuid"
+          },
+          {
+            "name": "naics_index",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "NAICS code uuid",
+              "title": "Naics Index"
+            },
+            "description": "NAICS code uuid"
+          },
+          {
+            "name": "states",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 2,
+                "pattern": "^[A-Z]{2}$"
+              },
+              "description": "List of two letter state codes",
+              "title": "States"
+            },
+            "description": "List of two letter state codes"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful retrieval of FastPath question set",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastPathFormResponse"
+                },
+                "examples": {
+                  "Non-Nested Response": {
+                    "value": {
+                      "defaultTemplate": {
+                        "name": "My FastPath Template",
+                        "description": "A pre-configured template for BOP submissions",
+                        "lobs": [
+                          "BOP"
+                        ],
+                        "markets": [
+                          "20cd4728-f7d2-4c6b-aafb-ab21e3af043c"
+                        ]
+                      },
+                      "form": {
+                        "pages": [
+                          {
+                            "guid": "eadee9a5-f15a-402f-96cf-183634001d29",
+                            "label": "Agency Information",
+                            "description": "",
+                            "order": -1
+                          },
+                          {
+                            "guid": "8000a6d0-3000-4ac0-9fb6-306747456877",
+                            "label": "Appetite",
+                            "description": "",
+                            "order": 0
+                          },
+                          {
+                            "guid": "b93e8523-e4bd-434c-96a1-a7acbf7918df",
+                            "label": "Applicant Information",
+                            "description": "",
+                            "order": 1
+                          },
+                          {
+                            "guid": "035fe20d-4b88-42d1-9f67-6c09294281a5",
+                            "label": "Risk Information",
+                            "description": "",
+                            "order": 2
+                          },
+                          {
+                            "guid": "bd2a6701-480b-450a-b89c-501e84c5e664",
+                            "label": "Policy Wide",
+                            "description": "",
+                            "order": 3
+                          }
+                        ],
+                        "groups": [
+                          {
+                            "guid": "78c6f816-968f-48a8-b74d-4a107d044e84",
+                            "page": "8000a6d0-3000-4ac0-9fb6-306747456877",
+                            "label": "Classification & Primary State",
+                            "description": "",
+                            "isRepeatable": false,
+                            "repeatMinMax": "",
+                            "order": 1,
+                            "type": "normal",
+                            "columns": [],
+                            "parentColumns": [],
+                            "children": []
+                          },
+                          {
+                            "guid": "37877f81-0239-487e-93d0-2cc0f97a2c33",
+                            "page": "035fe20d-4b88-42d1-9f67-6c09294281a5",
+                            "label": "Location",
+                            "description": "",
+                            "isRepeatable": true,
+                            "repeatMinMax": "800c6507-cbcb-45da-8339-d4a0d14da02f",
+                            "order": 1,
+                            "type": "normal",
+                            "columns": [
+                              {
+                                "guid": "5637ffd5-2c09-4097-803a-5f3961525f2f"
+                              },
+                              {
+                                "guid": "fd44fe00-86f7-46c9-be8b-4a3e2433aa09"
+                              },
+                              {
+                                "guid": "5de49646-a1e6-4aee-91c5-9e2f4190f562"
+                              }
+                            ],
+                            "parentColumns": [],
+                            "children": [
+                              {
+                                "guid": "53b9b5f5-debe-4cb9-8c72-287136f7ba6c",
+                                "page": "035fe20d-4b88-42d1-9f67-6c09294281a5",
+                                "label": "Building",
+                                "description": "",
+                                "isRepeatable": true,
+                                "repeatMinMax": "",
+                                "order": 2,
+                                "type": "normal",
+                                "columns": [
+                                  {
+                                    "guid": "48d15f9c-09c0-4f67-9eec-d5a5d8f89ee0"
+                                  },
+                                  {
+                                    "guid": "314bce56-b29f-429b-b4f6-f01da6184fa5"
+                                  }
+                                ],
+                                "parent": "37877f81-0239-487e-93d0-2cc0f97a2c33",
+                                "parentLabel": "Location",
+                                "parentColumns": [
+                                  {
+                                    "guid": "5637ffd5-2c09-4097-803a-5f3961525f2f"
+                                  }
+                                ],
+                                "children": []
+                              }
+                            ]
+                          }
+                        ],
+                        "fields": [
+                          {
+                            "guid": "f23c0847-1fce-4627-8744-b69bfdfa7b47",
+                            "group": "78c6f816-968f-48a8-b74d-4a107d044e84",
+                            "label": "Classification",
+                            "description": "",
+                            "order": 1,
+                            "type": "naics",
+                            "dataClass": "Public",
+                            "options": [],
+                            "underwritingCategory": "Basic Appetite",
+                            "isAppetiteCategory": true,
+                            "isEnhancedAppetiteCategory": false,
+                            "isBind": false,
+                            "isRefer": false,
+                            "classCodeFilterFieldsGuids": [],
+                            "unique": false,
+                            "uniqueToParent": false,
+                            "isSuggestable": false
+                          },
+                          {
+                            "guid": "5637ffd5-2c09-4097-803a-5f3961525f2f",
+                            "group": "37877f81-0239-487e-93d0-2cc0f97a2c33",
+                            "label": "Location #",
+                            "description": "",
+                            "order": 1,
+                            "type": "number",
+                            "dataClass": "Public",
+                            "options": [],
+                            "underwritingCategory": "Risk Information",
+                            "isAppetiteCategory": false,
+                            "isEnhancedAppetiteCategory": false,
+                            "isBind": false,
+                            "isRefer": false,
+                            "classCodeFilterFieldsGuids": [],
+                            "unique": true,
+                            "uniqueToParent": false,
+                            "minimum": 1,
+                            "maximum": 1000,
+                            "isSuggestable": false
+                          },
+                          {
+                            "guid": "48d15f9c-09c0-4f67-9eec-d5a5d8f89ee0",
+                            "group": "53b9b5f5-debe-4cb9-8c72-287136f7ba6c",
+                            "label": "Building #",
+                            "description": "",
+                            "order": 1,
+                            "type": "number",
+                            "dataClass": "Public",
+                            "options": [],
+                            "underwritingCategory": "Risk Information",
+                            "isAppetiteCategory": false,
+                            "isEnhancedAppetiteCategory": false,
+                            "isBind": false,
+                            "isRefer": false,
+                            "classCodeFilterFieldsGuids": [],
+                            "unique": false,
+                            "uniqueToParent": true,
+                            "minimum": 1,
+                            "maximum": 1000,
+                            "isSuggestable": false
+                          }
+                        ],
+                        "marketFields": [
+                          {
+                            "market": "Coterie",
+                            "lob": "BOP",
+                            "riskProfile": "be3a292c-f644-4b98-9a04-19bd53433dcb",
+                            "fields": [
+                              {
+                                "uuid": "f23c0847-1fce-4627-8744-b69bfdfa7b47",
+                                "requirementLevel": "Required"
+                              },
+                              {
+                                "uuid": "5637ffd5-2c09-4097-803a-5f3961525f2f",
+                                "requirementLevel": "Required"
+                              },
+                              {
+                                "uuid": "48d15f9c-09c0-4f67-9eec-d5a5d8f89ee0",
+                                "requirementLevel": "Required"
+                              }
+                            ],
+                            "repeatableGroups": [
+                              {
+                                "uuid": "37877f81-0239-487e-93d0-2cc0f97a2c33",
+                                "description": "",
+                                "requirementLevel": "Required"
+                              },
+                              {
+                                "uuid": "53b9b5f5-debe-4cb9-8c72-287136f7ba6c",
+                                "description": "",
+                                "requirementLevel": "Required"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "Nested Response": {
+                    "value": {
+                      "defaultTemplate": {
+                        "name": "My FastPath Template",
+                        "description": "A pre-configured template for BOP submissions",
+                        "lobs": [
+                          "BOP"
+                        ],
+                        "markets": [
+                          "20cd4728-f7d2-4c6b-aafb-ab21e3af043c"
+                        ]
+                      },
+                      "form": {
+                        "pages": [
+                          {
+                            "guid": "eadee9a5-f15a-402f-96cf-183634001d29",
+                            "label": "Agency Information",
+                            "description": "",
+                            "order": -1,
+                            "groups": []
+                          },
+                          {
+                            "guid": "8000a6d0-3000-4ac0-9fb6-306747456877",
+                            "label": "Appetite",
+                            "description": "",
+                            "order": 0,
+                            "groups": [
+                              {
+                                "guid": "78c6f816-968f-48a8-b74d-4a107d044e84",
+                                "page": "8000a6d0-3000-4ac0-9fb6-306747456877",
+                                "label": "Classification & Primary State",
+                                "description": "",
+                                "isRepeatable": false,
+                                "repeatMinMax": "",
+                                "order": 1,
+                                "type": "normal",
+                                "columns": [],
+                                "parentColumns": [],
+                                "children": [],
+                                "fields": [
+                                  {
+                                    "guid": "f23c0847-1fce-4627-8744-b69bfdfa7b47",
+                                    "group": "78c6f816-968f-48a8-b74d-4a107d044e84",
+                                    "label": "Classification",
+                                    "description": "",
+                                    "order": 1,
+                                    "type": "naics",
+                                    "dataClass": "Public",
+                                    "options": [],
+                                    "underwritingCategory": "Basic Appetite",
+                                    "isAppetiteCategory": true,
+                                    "isEnhancedAppetiteCategory": false,
+                                    "isBind": false,
+                                    "isRefer": false,
+                                    "classCodeFilterFieldsGuids": [],
+                                    "unique": false,
+                                    "uniqueToParent": false,
+                                    "isSuggestable": false
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "guid": "b93e8523-e4bd-434c-96a1-a7acbf7918df",
+                            "label": "Applicant Information",
+                            "description": "",
+                            "order": 1,
+                            "groups": []
+                          },
+                          {
+                            "guid": "035fe20d-4b88-42d1-9f67-6c09294281a5",
+                            "label": "Risk Information",
+                            "description": "",
+                            "order": 2,
+                            "groups": [
+                              {
+                                "guid": "37877f81-0239-487e-93d0-2cc0f97a2c33",
+                                "page": "035fe20d-4b88-42d1-9f67-6c09294281a5",
+                                "label": "Location",
+                                "description": "",
+                                "isRepeatable": true,
+                                "repeatMinMax": "800c6507-cbcb-45da-8339-d4a0d14da02f",
+                                "order": 1,
+                                "type": "normal",
+                                "columns": [
+                                  {
+                                    "guid": "5637ffd5-2c09-4097-803a-5f3961525f2f"
+                                  },
+                                  {
+                                    "guid": "fd44fe00-86f7-46c9-be8b-4a3e2433aa09"
+                                  },
+                                  {
+                                    "guid": "5de49646-a1e6-4aee-91c5-9e2f4190f562"
+                                  }
+                                ],
+                                "parentColumns": [],
+                                "children": [
+                                  {
+                                    "guid": "53b9b5f5-debe-4cb9-8c72-287136f7ba6c",
+                                    "page": "035fe20d-4b88-42d1-9f67-6c09294281a5",
+                                    "label": "Building",
+                                    "description": "",
+                                    "isRepeatable": true,
+                                    "repeatMinMax": "",
+                                    "order": 2,
+                                    "type": "normal",
+                                    "columns": [
+                                      {
+                                        "guid": "48d15f9c-09c0-4f67-9eec-d5a5d8f89ee0"
+                                      },
+                                      {
+                                        "guid": "314bce56-b29f-429b-b4f6-f01da6184fa5"
+                                      }
+                                    ],
+                                    "parent": "37877f81-0239-487e-93d0-2cc0f97a2c33",
+                                    "parentLabel": "Location",
+                                    "parentColumns": [
+                                      {
+                                        "guid": "5637ffd5-2c09-4097-803a-5f3961525f2f"
+                                      }
+                                    ],
+                                    "children": []
+                                  }
+                                ],
+                                "fields": [
+                                  {
+                                    "guid": "5637ffd5-2c09-4097-803a-5f3961525f2f",
+                                    "group": "37877f81-0239-487e-93d0-2cc0f97a2c33",
+                                    "label": "Location #",
+                                    "description": "",
+                                    "order": 1,
+                                    "type": "number",
+                                    "dataClass": "Public",
+                                    "options": [],
+                                    "underwritingCategory": "Risk Information",
+                                    "isAppetiteCategory": false,
+                                    "isEnhancedAppetiteCategory": false,
+                                    "isBind": false,
+                                    "isRefer": false,
+                                    "classCodeFilterFieldsGuids": [],
+                                    "unique": true,
+                                    "uniqueToParent": false,
+                                    "minimum": 1,
+                                    "maximum": 1000,
+                                    "isSuggestable": false
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "guid": "bd2a6701-480b-450a-b89c-501e84c5e664",
+                            "label": "Policy Wide",
+                            "description": "",
+                            "order": 3,
+                            "groups": []
+                          }
+                        ],
+                        "marketFields": [
+                          {
+                            "market": "Coterie",
+                            "lob": "BOP",
+                            "riskProfile": "be3a292c-f644-4b98-9a04-19bd53433dcb",
+                            "fields": [
+                              {
+                                "uuid": "f23c0847-1fce-4627-8744-b69bfdfa7b47",
+                                "requirementLevel": "Required"
+                              },
+                              {
+                                "uuid": "5637ffd5-2c09-4097-803a-5f3961525f2f",
+                                "requirementLevel": "Required"
+                              },
+                              {
+                                "uuid": "48d15f9c-09c0-4f67-9eec-d5a5d8f89ee0",
+                                "requirementLevel": "Required"
+                              }
+                            ],
+                            "repeatableGroups": [
+                              {
+                                "uuid": "37877f81-0239-487e-93d0-2cc0f97a2c33",
+                                "description": "",
+                                "requirementLevel": "Required"
+                              },
+                              {
+                                "uuid": "53b9b5f5-debe-4cb9-8c72-287136f7ba6c",
+                                "description": "",
+                                "requirementLevel": "Required"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "One or more requested templates are not yet available",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "The following templates are not available at this time: 3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Risk Profile not available to the authenticated user",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Risk Profile not available to user"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Risk Profile or template not found",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Risk Profile not found": {
+                    "value": {
+                      "detail": "Risk Profile not found"
+                    }
+                  },
+                  "No valid template found": {
+                    "value": {
+                      "detail": "No valid template found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auto/makes": {
+      "get": {
+        "tags": [
+          "Auto Service"
+        ],
+        "summary": "Get unique vehicle makes",
+        "description": "Retrieve unique make names for all vehicles listed alphabetically.",
+        "operationId": "get_makes_api_v1_auto_makes_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Year"
+            }
+          },
+          {
+            "name": "vehicle_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Restrict to specified types: 'Vehicle', 'Trailer'. Multiple types can be provided separated by commas.",
+              "title": "Vehicle Type"
+            },
+            "description": "Restrict to specified types: 'Vehicle', 'Trailer'. Multiple types can be provided separated by commas."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful retrieval of vehicle makes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutoFieldOptionsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseWithValidationDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseWithMessageOnly"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseWithMessageOnly"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseWithValidationDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseWithMessageOnly"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auto/models": {
+      "get": {
+        "tags": [
+          "Auto Service"
+        ],
+        "summary": "Get unique vehicle models",
+        "description": "Retrieve unique model names for all vehicles listed alphabetically.",
+        "operationId": "get_models_api_v1_auto_models_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Model year filter",
+              "examples": [
+                2020
+              ],
+              "required": true,
+              "title": "Year"
+            },
+            "description": "Model year filter"
+          },
+          {
+            "name": "make",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Make name filter (case insensitive)",
+              "examples": [
+                "Toyota"
+              ],
+              "required": true,
+              "title": "Make"
+            },
+            "description": "Make name filter (case insensitive)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful retrieval of vehicle models",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutoFieldOptionsResponse",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "title": "Response 200 Get Models Api V1 Auto Models Get"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseWithValidationDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseWithMessageOnly"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseWithMessageOnly"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseWithValidationDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseWithMessageOnly"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/risk-profiles/passport": {
+      "get": {
+        "tags": [
+          "Support"
+        ],
+        "summary": "Get Passport Risk Profiles",
+        "description": "Fetch all Passport Risk Profiles.",
+        "operationId": "get_passport_risk_profiles_api_v1_risk_profiles_passport_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PassportRiskProfile"
+                  },
+                  "type": "array",
+                  "title": "Response Get Passport Risk Profiles Api V1 Risk Profiles Passport Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/forms/refer": {
+      "get": {
+        "tags": [
+          "Post Quote Flow"
+        ],
+        "summary": "Get Refer Question Set",
+        "description": "Returns referral questions applicable to the requested risk profile.\n\n    Nested form parameter will change the structure of the form to the nested structure.",
+        "operationId": "get_refer_question_set_api_v1_forms_refer_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "risk_profile",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Risk Profile"
+            }
+          },
+          {
+            "name": "nested",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true,
+              "title": "Nested"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "examples": {
+                  "Nested Response": {
+                    "value": {
+                      "pages": [
+                        {
+                          "guid": "string",
+                          "label": "string",
+                          "description": "string",
+                          "order": 2147483647,
+                          "groups": [
+                            {
+                              "guid": "string",
+                              "page": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                              "label": "string",
+                              "description": "string",
+                              "isRepeatable": true,
+                              "repeatMinMax": "",
+                              "order": 2147483647,
+                              "type": "normal",
+                              "columns": [
+                                {
+                                  "guid": "string"
+                                }
+                              ],
+                              "parent": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                              "parentLabel": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                              "parentColumns": {
+                                "guid": "string"
+                              },
+                              "fields": {
+                                "guid": "string",
+                                "group": "string",
+                                "label": "string",
+                                "description": "string",
+                                "additionalDetails": {
+                                  "heading": "string",
+                                  "children": [
+                                    {
+                                      "heading": "string",
+                                      "children": [
+                                        {
+                                          "listItem": "string"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "order": 0,
+                                "type": "string",
+                                "dataClass": "string",
+                                "options": {
+                                  "label": "string",
+                                  "value": 0
+                                },
+                                "underwritingCategory": "string",
+                                "isAppetiteCategory": true,
+                                "isEnhancedAppetiteCategory": true,
+                                "isBind": true,
+                                "isRefer": true,
+                                "conditions": {
+                                  "operator": "and",
+                                  "action": "referral",
+                                  "conditions": [
+                                    {
+                                      "operator": "==",
+                                      "value": "string",
+                                      "attribute": "string",
+                                      "repeatingOperator": "ANY",
+                                      "sourceGroup": "string"
+                                    }
+                                  ]
+                                },
+                                "actionConditions": {
+                                  "operator": "and",
+                                  "action": "referral",
+                                  "conditions": [
+                                    {
+                                      "operator": "==",
+                                      "value": "string",
+                                      "attribute": "string",
+                                      "repeatingOperator": "ANY",
+                                      "sourceGroup": "string"
+                                    }
+                                  ]
+                                },
+                                "market": "string",
+                                "classificationStandardGuid": "string",
+                                "classCodeFilterFieldsGuids": [
+                                  "string"
+                                ],
+                                "unique": true,
+                                "uniqueToParent": true,
+                                "parentAttributeGuid": "string",
+                                "prefillSourceFieldGuid": "string",
+                                "minimum": 0,
+                                "maximum": 0,
+                                "isSuggestable": true,
+                                "length": 0
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "marketFields": [
+                        {
+                          "market": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                          "riskProfiles": [
+                            "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                          ],
+                          "fields": [
+                            {
+                              "uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                              "requirementLevel": "string"
+                            }
+                          ],
+                          "repeatableGroups": [
+                            {
+                              "uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                              "description": "string",
+                              "requirementLevel": "string",
+                              "risk_profile": "6434827e-903d-4bdd-b213-d1b8bad56060"
+                            }
+                          ]
+                        }
+                      ],
+                      "riskProfiles": [
+                        {
+                          "uuid": "0a952028-b25f-47b9-a7be-23872666c7f3",
+                          "name": "Test Risk Profile | BOP | Bindable Quote",
+                          "type": "Package",
+                          "market": "Test Market",
+                          "marketUuid": "20cd4728-f7d2-4c6b-aafb-ab21e3af043c",
+                          "excessAndSurplus": false,
+                          "lob": "BOP",
+                          "childLobs": [
+                            "CGL",
+                            "PROP"
+                          ],
+                          "inAppetite": true,
+                          "bindAllowed": true,
+                          "bindAppetite": true,
+                          "referAllowed": false,
+                          "routeType": "Quote",
+                          "requiredToSubmit": {
+                            "contractCode": false,
+                            "username": false,
+                            "password": false
+                          },
+                          "validationErrors": [],
+                          "evaluations": []
+                        }
+                      ]
+                    }
+                  },
+                  "Non-Nested Response": {
+                    "value": {
+                      "pages": [
+                        {
+                          "guid": "string",
+                          "label": "string",
+                          "description": "string",
+                          "order": 2147483647
+                        }
+                      ],
+                      "groups": [
+                        {
+                          "guid": "string",
+                          "page": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                          "label": "string",
+                          "description": "string",
+                          "isRepeatable": true,
+                          "repeatMinMax": "",
+                          "order": 2147483647,
+                          "type": "normal",
+                          "columns": [
+                            {
+                              "guid": "string"
+                            }
+                          ],
+                          "parent": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                          "parentLabel": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                          "parentColumns": {
+                            "guid": "string"
+                          }
+                        }
+                      ],
+                      "fields": {
+                        "guid": "string",
+                        "group": "string",
+                        "label": "string",
+                        "description": "string",
+                        "additionalDetails": {
+                          "heading": "string",
+                          "children": [
+                            {
+                              "heading": "string",
+                              "children": [
+                                {
+                                  "listItem": "string"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        "order": 0,
+                        "type": "string",
+                        "dataClass": "string",
+                        "options": {
+                          "label": "string",
+                          "value": 0
+                        },
+                        "underwritingCategory": "string",
+                        "isAppetiteCategory": true,
+                        "isEnhancedAppetiteCategory": true,
+                        "isBind": true,
+                        "isRefer": true,
+                        "conditions": {
+                          "operator": "and",
+                          "action": "referral",
+                          "conditions": [
+                            {
+                              "operator": "==",
+                              "value": "string",
+                              "attribute": "string",
+                              "repeatingOperator": "ANY",
+                              "sourceGroup": "string"
+                            }
+                          ]
+                        },
+                        "actionConditions": {
+                          "operator": "and",
+                          "action": "referral",
+                          "conditions": [
+                            {
+                              "operator": "==",
+                              "value": "string",
+                              "attribute": "string",
+                              "repeatingOperator": "ANY",
+                              "sourceGroup": "string"
+                            }
+                          ]
+                        },
+                        "market": "string",
+                        "classificationStandardGuid": "string",
+                        "classCodeFilterFieldsGuids": [
+                          "string"
+                        ],
+                        "unique": true,
+                        "uniqueToParent": true,
+                        "parentAttributeGuid": "string",
+                        "prefillSourceFieldGuid": "string",
+                        "minimum": 0,
+                        "maximum": 0,
+                        "isSuggestable": true,
+                        "length": 0
+                      },
+                      "marketFields": [
+                        {
+                          "market": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                          "riskProfiles": [
+                            "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                          ],
+                          "fields": [
+                            {
+                              "uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                              "requirementLevel": "string"
+                            }
+                          ],
+                          "repeatableGroups": [
+                            {
+                              "uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                              "description": "string",
+                              "requirementLevel": "string",
+                              "risk_profile": "6434827e-903d-4bdd-b213-d1b8bad56060"
+                            }
+                          ]
+                        }
+                      ],
+                      "riskProfiles": [
+                        {
+                          "uuid": "0a952028-b25f-47b9-a7be-23872666c7f3",
+                          "name": "Test Risk Profile | BOP | Bindable Quote",
+                          "type": "Package",
+                          "market": "Test Market",
+                          "marketUuid": "20cd4728-f7d2-4c6b-aafb-ab21e3af043c",
+                          "excessAndSurplus": false,
+                          "lob": "BOP",
+                          "childLobs": [
+                            "CGL",
+                            "PROP"
+                          ],
+                          "inAppetite": true,
+                          "bindAllowed": true,
+                          "bindAppetite": true,
+                          "referAllowed": false,
+                          "routeType": "Quote",
+                          "requiredToSubmit": {
+                            "contractCode": false,
+                            "username": false,
+                            "password": false
+                          },
+                          "validationErrors": [],
+                          "evaluations": []
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "User does not have access to the requested Risk Profile": {
+                    "value": {
+                      "detail": "User does not have access to the requested risk profile"
+                    }
+                  },
+                  "Referring not allowed": {
+                    "value": {
+                      "detail": "Referring is not allowed for this risk profile"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/risk-profiles/diff": {
+      "get": {
+        "tags": [
+          "Support"
+        ],
+        "summary": "Get Risk Profile Diff",
+        "operationId": "get_risk_profile_diff_api_v1_risk_profiles_diff_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "sourceRiskProfile",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Sourceriskprofile"
+            }
+          },
+          {
+            "name": "targetRiskProfile",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Targetriskprofile"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RiskProfileDiff"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/risk-profiles/{risk_profile_uuid}/json-schema": {
+      "get": {
+        "tags": [
+          "Support"
+        ],
+        "summary": "Get Risk Profile Json Schema",
+        "description": "Fetch the JSON schema for a specific risk profile.",
+        "operationId": "get_risk_profile_json_schema_api_v1_risk_profiles__risk_profile_uuid__json_schema_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "risk_profile_uuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Risk Profile Uuid"
+            }
+          },
+          {
+            "name": "templateIds",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Templateids"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/risk-profiles/lineage": {
+      "post": {
+        "tags": [
+          "Support"
+        ],
+        "summary": "Get Risk Profile Lineage",
+        "operationId": "get_risk_profile_lineage_api_v1_risk_profiles_lineage_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_get_risk_profile_lineage_api_v1_risk_profiles_lineage_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {},
+                "examples": {
+                  "Successful Response": {
+                    "value": {
+                      "b5ef001c-e9d4-4385-8416-16273ce5fd5e": [
+                        "575b06bf-5c8e-4297-bdcd-b488fe3c2a87",
+                        "4a19e95d-70fd-4019-bea8-45f09cd1f2a6",
+                        "2f0ec796-3d2c-48a6-93b2-2af8cc3dc8dd"
+                      ],
+                      "c786fe01-88fd-49bb-b096-c53c0f223d38": [],
+                      "1c4a6c00-e3c7-436a-a1b2-a4a6f96cff01": [
+                        "4d1fe374-891c-413c-bd53-9f3d4b18341c",
+                        "1c4a6c00-e3c7-436a-a1b2-a4a6f96cff01"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/auto/years": {
+      "get": {
+        "tags": [
+          "Auto Service"
+        ],
+        "summary": "Get unique vehicle years",
+        "description": "Retrieve unique model years for all vehicles in descending order.",
+        "operationId": "get_years_api_v1_auto_years_get",
+        "responses": {
+          "200": {
+            "description": "Successful retrieval of vehicle years",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutoDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseWithValidationDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseWithMessageOnly"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseWithMessageOnly"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseWithMessageOnly"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/basic-appetite-capture": {
+      "post": {
+        "tags": [
+          "Classic Flow"
+        ],
+        "summary": "Post Basic Appetite Capture",
+        "operationId": "post_basic_appetite_capture_api_v1_basic_appetite_capture_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "nested",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true,
+              "title": "Nested"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassicQuotePayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/enhanced-appetite-capture": {
+      "post": {
+        "tags": [
+          "Classic Flow"
+        ],
+        "summary": "Post Enhanced Appetite Capture",
+        "operationId": "post_enhanced_appetite_capture_api_v1_enhanced_appetite_capture_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "nested",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true,
+              "title": "Nested"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassicQuotePayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/forms/submission": {
+      "post": {
+        "tags": [
+          "Submission"
+        ],
+        "summary": "Post Submission",
+        "description": "Endpoint for quote submission.\n\n    Metadata:\n        - clientId: integrator's account ID, required\n        - quoteId: integrator's quote ID, required\n        - callbackUrl: integrator's callback URL, required\n\n    Market metadata:\n        - riskProfile: risk profile UUID, required\n        - marketQuoteId: carrier's quote ID, optional and can be null\n        - marketAccountId: carrier's account ID, optional and can be null\n        - contractCodeId: user's market contract code UUID, optional or required, depending on user configuration\n        - credentialId: user's market credential UUID, optional and can be null\n        - externalMarketQuoteId: carrier's secondary quote ID, provided by the integrator when a carrier wants more\n          than one of their quote IDs passed back to them upon resubmitting a quote, optional and can be null\n\n    Field values (optional, defaults to empty list):\n        - questionId: question UUID, required\n        - value: answer value, required\n\n    Repeatable field blocks (optional, defaults to empty list):\n        - id: repeatable field block UUID (integrator-generated), required\n        - fieldBlockId: repeatable form group UUID, required\n        - parentId: parent repeatable field block UUID, required if the repeatable field block is nested, otherwise null\n        - fieldValues: list of field values within the repeatable block, required\n            - questionId: question UUID, required\n            - value: answer value, required",
+        "operationId": "post_submission_api_v1_forms_submission_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "test_submission",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Test Submission"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmissionRequestPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Submission",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubmissionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "All Risk Profiles have validation errors or are not in appetite": {
+                    "value": {
+                      "detail": "invalid form submission",
+                      "errorDetails": [
+                        {
+                          "riskProfile": "e1878571-2ccf-4c4d-a07c-e163e248a1e5",
+                          "lineOfBusiness": "BOP",
+                          "validationErrors": [
+                            {
+                              "groupId": "1388bb46-c9b7-423d-95d7-7c09aab6d2a9",
+                              "questionId": "26b9b60c-1711-460a-95cd-fc743832054d",
+                              "errorMsg": {
+                                "detail": "attribute_is_required"
+                              }
+                            }
+                          ],
+                          "evaluations": []
+                        }
+                      ]
+                    }
+                  },
+                  "Contract Code is missing": {
+                    "value": {
+                      "detail": "invalid form submission",
+                      "errorDetails": [
+                        {
+                          "riskProfile": "1c13c4a9-a46a-4987-8219-b435312670d8",
+                          "lineOfBusiness": "BOP",
+                          "validationErrors": [
+                            {
+                              "groupId": "af23ccec-57a6-4989-8e41-91e3562522b6",
+                              "questionId": "6c5924fd-3934-449d-b9b2-75fb5004cc3c",
+                              "errorMsg": {
+                                "detail": "contractCodeId is required."
+                              }
+                            }
+                          ],
+                          "evaluations": []
+                        }
+                      ]
+                    }
+                  },
+                  "User does not have access to Contract Code": {
+                    "value": {
+                      "detail": "invalid form submission",
+                      "errorDetails": [
+                        {
+                          "riskProfile": "1af59457-500a-4b93-a6c0-7802bf743961",
+                          "lineOfBusiness": "BOP",
+                          "validationErrors": [
+                            {
+                              "groupId": "196bf1f8-912d-4fff-868c-bf2aa94d6a31",
+                              "questionId": "ab38bcfd-8e29-4179-9cc3-6ac496903979",
+                              "errorMsg": {
+                                "detail": "User does not have access to the contract_code: 2bd0faa7-2aba-44b4-8671-16e80db47a2df"
+                              }
+                            }
+                          ],
+                          "evaluations": []
+                        }
+                      ]
+                    }
+                  },
+                  "Credential is missing": {
+                    "value": {
+                      "detail": "invalid form submission",
+                      "errorDetails": [
+                        {
+                          "riskProfile": "cd319172-3e26-476a-9227-dfe60bd68dbd",
+                          "lineOfBusiness": "BOP",
+                          "validationErrors": [
+                            {
+                              "groupId": "8dd4037c-df21-48b7-8c45-03c4300e2c27",
+                              "questionId": "659ebffd-c587-45cd-b117-52b94fd9246a",
+                              "errorMsg": {
+                                "detail": "credentialId is required."
+                              }
+                            }
+                          ],
+                          "evaluations": []
+                        }
+                      ]
+                    }
+                  },
+                  "User does not have access to Market Credential": {
+                    "value": {
+                      "detail": "invalid form submission",
+                      "errorDetails": [
+                        {
+                          "riskProfile": "46a0248e-d5b1-4127-afb2-f43c0d2c9348",
+                          "lineOfBusiness": "BOP",
+                          "validationErrors": [
+                            {
+                              "groupId": "85765208-0e5b-49b2-8473-f58a7f174ad6",
+                              "questionId": "8aeff6fc-3366-41b1-a041-b58f2d6c9223",
+                              "errorMsg": {
+                                "detail": "User does not have access to the credential: 2bd0faa7-2aba-44b4-8671-16e80db47a2df"
+                              }
+                            }
+                          ],
+                          "evaluations": []
+                        }
+                      ]
+                    }
+                  },
+                  "User does not have access to one or more Risk Profiles": {
+                    "value": {
+                      "detail": [
+                        "user does not have permission for the submitted risk profile(s), or the risk profile(s) are no longer available: 2bd0faa7-2aba-44b4-8671-16e80db47a2df"
+                      ]
+                    }
+                  },
+                  "User submits a 'Base' Risk Profile": {
+                    "value": {
+                      "detail": [
+                        "submitted risk profile(s) are base risk profiles and cannot be submitted"
+                      ]
+                    }
+                  },
+                  "User submits a Risk Profile without a Route": {
+                    "value": {
+                      "detail": [
+                        "submitted risk profile(s) do not have a configured route"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/forms/submission/refer": {
+      "post": {
+        "tags": [
+          "Submission"
+        ],
+        "summary": "Refer Submission",
+        "description": "Endpoint to refer quotes through IDP.\n\n    Metadata:\n        - clientId: integrator's account ID, required\n        - quoteId: integrator's quote ID, required\n        - callbackUrl: integrator's callback URL, required\n\n    Market metadata:\n        - riskProfile: risk profile UUID, required\n        - marketQuoteId: carrier's quote ID, optional and can be null\n        - marketAccountId: carrier's account ID, optional and can be null\n        - contractCodeId: user's market contract code UUID, optional or required, depending on user configuration\n        - credentialId: user's market credential UUID, optional and can be null\n        - referenceIds: carrier's quote IDs for referral, optional and can be null\n\n    Field values (optional, defaults to empty list):\n        - questionId: question UUID, required\n        - value: answer value, required\n\n    Repeatable field blocks (optional, defaults to empty list):\n        - id: repeatable field block UUID (integrator-generated), required\n        - fieldBlockId: repeatable form group UUID, required\n        - parentId: parent repeatable field block UUID, required if the repeatable field block is nested, otherwise null\n        - fieldValues: list of field values within the repeatable block, required\n            - questionId: question UUID, required\n            - value: answer value, required",
+        "operationId": "refer_submission_api_v1_forms_submission_refer_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "test_submission",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Test Submission"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmissionRequestPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Submission",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubmissionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "All Risk Profiles have validation errors or are not in appetite": {
+                    "value": {
+                      "detail": "invalid form submission",
+                      "errorDetails": [
+                        {
+                          "riskProfile": "e1878571-2ccf-4c4d-a07c-e163e248a1e5",
+                          "lineOfBusiness": "BOP",
+                          "validationErrors": [
+                            {
+                              "groupId": "1388bb46-c9b7-423d-95d7-7c09aab6d2a9",
+                              "questionId": "26b9b60c-1711-460a-95cd-fc743832054d",
+                              "errorMsg": {
+                                "detail": "attribute_is_required"
+                              }
+                            }
+                          ],
+                          "evaluations": []
+                        }
+                      ]
+                    }
+                  },
+                  "Contract Code is missing": {
+                    "value": {
+                      "detail": "invalid form submission",
+                      "errorDetails": [
+                        {
+                          "riskProfile": "1c13c4a9-a46a-4987-8219-b435312670d8",
+                          "lineOfBusiness": "BOP",
+                          "validationErrors": [
+                            {
+                              "groupId": "af23ccec-57a6-4989-8e41-91e3562522b6",
+                              "questionId": "6c5924fd-3934-449d-b9b2-75fb5004cc3c",
+                              "errorMsg": {
+                                "detail": "contractCodeId is required."
+                              }
+                            }
+                          ],
+                          "evaluations": []
+                        }
+                      ]
+                    }
+                  },
+                  "User does not have access to Contract Code": {
+                    "value": {
+                      "detail": "invalid form submission",
+                      "errorDetails": [
+                        {
+                          "riskProfile": "1af59457-500a-4b93-a6c0-7802bf743961",
+                          "lineOfBusiness": "BOP",
+                          "validationErrors": [
+                            {
+                              "groupId": "196bf1f8-912d-4fff-868c-bf2aa94d6a31",
+                              "questionId": "ab38bcfd-8e29-4179-9cc3-6ac496903979",
+                              "errorMsg": {
+                                "detail": "User does not have access to the contract_code: 2bd0faa7-2aba-44b4-8671-16e80db47a2df"
+                              }
+                            }
+                          ],
+                          "evaluations": []
+                        }
+                      ]
+                    }
+                  },
+                  "Credential is missing": {
+                    "value": {
+                      "detail": "invalid form submission",
+                      "errorDetails": [
+                        {
+                          "riskProfile": "cd319172-3e26-476a-9227-dfe60bd68dbd",
+                          "lineOfBusiness": "BOP",
+                          "validationErrors": [
+                            {
+                              "groupId": "8dd4037c-df21-48b7-8c45-03c4300e2c27",
+                              "questionId": "659ebffd-c587-45cd-b117-52b94fd9246a",
+                              "errorMsg": {
+                                "detail": "credentialId is required."
+                              }
+                            }
+                          ],
+                          "evaluations": []
+                        }
+                      ]
+                    }
+                  },
+                  "User does not have access to Market Credential": {
+                    "value": {
+                      "detail": "invalid form submission",
+                      "errorDetails": [
+                        {
+                          "riskProfile": "46a0248e-d5b1-4127-afb2-f43c0d2c9348",
+                          "lineOfBusiness": "BOP",
+                          "validationErrors": [
+                            {
+                              "groupId": "85765208-0e5b-49b2-8473-f58a7f174ad6",
+                              "questionId": "8aeff6fc-3366-41b1-a041-b58f2d6c9223",
+                              "errorMsg": {
+                                "detail": "User does not have access to the credential: 2bd0faa7-2aba-44b4-8671-16e80db47a2df"
+                              }
+                            }
+                          ],
+                          "evaluations": []
+                        }
+                      ]
+                    }
+                  },
+                  "User does not have access to one or more Risk Profiles": {
+                    "value": {
+                      "detail": [
+                        "user does not have permission for the submitted risk profile(s), or the risk profile(s) are no longer available: 2bd0faa7-2aba-44b4-8671-16e80db47a2df"
+                      ]
+                    }
+                  },
+                  "User submits a 'Base' Risk Profile": {
+                    "value": {
+                      "detail": [
+                        "submitted risk profile(s) are base risk profiles and cannot be submitted"
+                      ]
+                    }
+                  },
+                  "User submits a Risk Profile without a Route": {
+                    "value": {
+                      "detail": [
+                        "submitted risk profile(s) do not have a configured route"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorMsg": {
+        "properties": {
+          "detail": {
+            "type": "string",
+            "title": "Detail"
+          },
+          "condition(s)": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Condition(S)"
+          }
+        },
+        "type": "object",
+        "required": [
+          "detail"
+        ],
+        "title": "ErrorMsg"
+      },
+      "Evaluation": {
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/EvaluationType"
+          },
+          "reasons": {
+            "items": {
+              "$ref": "#/components/schemas/Reason"
+            },
+            "type": "array",
+            "title": "Reasons"
+          }
+        },
+        "type": "object",
+        "required": [
+          "type",
+          "reasons"
+        ],
+        "title": "Evaluation"
+      },
+      "EvaluationType": {
+        "type": "string",
+        "enum": [
+          "Market",
+          "IDP Quote",
+          "IDP Bind"
+        ],
+        "title": "EvaluationType"
+      },
+      "FieldValue": {
+        "properties": {
+          "questionId": {
+            "type": "string",
+            "title": "Questionid"
+          },
+          "value": {
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "questionId",
+          "value"
+        ],
+        "title": "FieldValue"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "IDPValidationError": {
+        "properties": {
+          "groupId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Groupid"
+          },
+          "questionId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Questionid"
+          },
+          "errorMsg": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ErrorMsg"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "value": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "title": "IDPValidationError"
+      },
+      "IDPValidationWarning": {
+        "properties": {
+          "groupId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Groupid"
+          },
+          "questionId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Questionid"
+          },
+          "warningMessage": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WarningDetail"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "value": {
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "title": "IDPValidationWarning"
+      },
+      "ImpactingFactor": {
+        "properties": {
+          "attributeId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attributeid"
+          },
+          "groupId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Groupid"
+          }
+        },
+        "type": "object",
+        "title": "ImpactingFactor"
+      },
+      "Reason": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "impactingFactors": {
+            "items": {
+              "$ref": "#/components/schemas/ImpactingFactor"
+            },
+            "type": "array",
+            "title": "Impactingfactors"
+          }
+        },
+        "type": "object",
+        "required": [
+          "message",
+          "impactingFactors"
+        ],
+        "title": "Reason"
+      },
+      "RepeatableFieldBlock": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "fieldBlockId": {
+            "type": "string",
+            "title": "Fieldblockid"
+          },
+          "parentId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parentid"
+          },
+          "fieldValues": {
+            "items": {
+              "$ref": "#/components/schemas/FieldValue"
+            },
+            "type": "array",
+            "title": "Fieldvalues"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "fieldBlockId",
+          "fieldValues"
+        ],
+        "title": "RepeatableFieldBlock",
+        "description": "id: row id (i.e., building #2)\nfield_block_id: guid of the form group (IDNET repeatable group, i.e., building group)\nparent_id: guid of specific parent field block (i.e., location #3)"
+      },
+      "RequiredToSubmit": {
+        "properties": {
+          "contractCode": {
+            "type": "boolean",
+            "title": "Contractcode"
+          },
+          "username": {
+            "type": "boolean",
+            "title": "Username"
+          },
+          "password": {
+            "type": "boolean",
+            "title": "Password"
+          }
+        },
+        "type": "object",
+        "required": [
+          "contractCode",
+          "username",
+          "password"
+        ],
+        "title": "RequiredToSubmit"
+      },
+      "RiskProfile": {
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "title": "Uuid"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Type"
+          },
+          "market": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Market"
+          },
+          "marketUuid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Marketuuid"
+          },
+          "excessAndSurplus": {
+            "type": "boolean",
+            "title": "Excessandsurplus",
+            "default": false
+          },
+          "lob": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lob"
+          },
+          "childLobs": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Childlobs"
+          },
+          "inAppetite": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Inappetite",
+            "default": true
+          },
+          "bindAllowed": {
+            "type": "boolean",
+            "title": "Bindallowed"
+          },
+          "bindAppetite": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bindappetite"
+          },
+          "referAllowed": {
+            "type": "boolean",
+            "title": "Referallowed"
+          },
+          "routeType": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Routetype"
+          },
+          "requiredToSubmit": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RequiredToSubmit"
+              },
+              {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            ],
+            "title": "Requiredtosubmit"
+          },
+          "validationErrors": {
+            "items": {
+              "$ref": "#/components/schemas/IDPValidationError"
+            },
+            "type": "array",
+            "title": "Validationerrors"
+          },
+          "validationWarnings": {
+            "items": {
+              "$ref": "#/components/schemas/IDPValidationWarning"
+            },
+            "type": "array",
+            "title": "Validationwarnings"
+          },
+          "evaluations": {
+            "items": {
+              "$ref": "#/components/schemas/Evaluation"
+            },
+            "type": "array",
+            "title": "Evaluations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "uuid",
+          "name",
+          "bindAllowed",
+          "referAllowed",
+          "requiredToSubmit"
+        ],
+        "title": "RiskProfile"
+      },
+      "SubmissionMarketMetadata": {
+        "properties": {
+          "riskProfile": {
+            "type": "string",
+            "title": "Riskprofile"
+          },
+          "credentialId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Credentialid"
+          },
+          "contractCodeId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contractcodeid"
+          },
+          "marketQuoteId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Marketquoteid"
+          },
+          "externalMarketQuoteId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Externalmarketquoteid"
+          },
+          "marketAccountId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Marketaccountid"
+          },
+          "referenceIds": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Referenceids"
+          },
+          "effectiveDate": {
+            "type": "string",
+            "format": "date",
+            "title": "Effectivedate"
+          },
+          "expirationDate": {
+            "type": "string",
+            "format": "date",
+            "title": "Expirationdate"
+          }
+        },
+        "type": "object",
+        "required": [
+          "riskProfile",
+          "effectiveDate",
+          "expirationDate"
+        ],
+        "title": "SubmissionMarketMetadata"
+      },
+      "SubmissionMetadata": {
+        "properties": {
+          "clientId": {
+            "type": "string",
+            "title": "Clientid"
+          },
+          "quoteId": {
+            "type": "string",
+            "title": "Quoteid"
+          },
+          "callbackUrl": {
+            "type": "string",
+            "maxLength": 2083,
+            "minLength": 1,
+            "format": "uri",
+            "title": "Callbackurl"
+          }
+        },
+        "type": "object",
+        "required": [
+          "clientId",
+          "quoteId",
+          "callbackUrl"
+        ],
+        "title": "SubmissionMetadata"
+      },
+      "SubmissionRequestPayload": {
+        "properties": {
+          "metadata": {
+            "$ref": "#/components/schemas/SubmissionMetadata"
+          },
+          "marketMetadata": {
+            "items": {
+              "$ref": "#/components/schemas/SubmissionMarketMetadata"
+            },
+            "type": "array",
+            "title": "Marketmetadata"
+          },
+          "fieldValues": {
+            "items": {
+              "$ref": "#/components/schemas/FieldValue"
+            },
+            "type": "array",
+            "title": "Fieldvalues"
+          },
+          "repeatableFieldBlocks": {
+            "items": {
+              "$ref": "#/components/schemas/RepeatableFieldBlock"
+            },
+            "type": "array",
+            "title": "Repeatablefieldblocks"
+          }
+        },
+        "type": "object",
+        "required": [
+          "metadata",
+          "marketMetadata"
+        ],
+        "title": "SubmissionRequestPayload"
+      },
+      "SubmissionResponse": {
+        "properties": {
+          "detail": {
+            "type": "string",
+            "title": "Detail",
+            "default": "submission successful"
+          },
+          "quoteSessionId": {
+            "type": "string",
+            "title": "Quotesessionid"
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/components/schemas/IDPValidationWarning"
+            },
+            "type": "array",
+            "title": "Warnings"
+          },
+          "transactions": {
+            "items": {
+              "$ref": "#/components/schemas/SubmissionTransaction"
+            },
+            "type": "array",
+            "title": "Transactions"
+          },
+          "riskProfiles": {
+            "items": {
+              "$ref": "#/components/schemas/RiskProfile"
+            },
+            "type": "array",
+            "title": "Riskprofiles"
+          }
+        },
+        "type": "object",
+        "required": [
+          "quoteSessionId",
+          "transactions",
+          "riskProfiles"
+        ],
+        "title": "SubmissionResponse"
+      },
+      "SubmissionTransaction": {
+        "properties": {
+          "riskProfileUuid": {
+            "type": "string",
+            "title": "Riskprofileuuid"
+          },
+          "marketUuid": {
+            "type": "string",
+            "title": "Marketuuid"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "lineOfBusiness": {
+            "type": "string",
+            "title": "Lineofbusiness"
+          },
+          "timeout": {
+            "type": "integer",
+            "title": "Timeout",
+            "default": 60
+          },
+          "submissionErrorMsg": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Submissionerrormsg"
+          }
+        },
+        "type": "object",
+        "required": [
+          "riskProfileUuid",
+          "marketUuid",
+          "name",
+          "lineOfBusiness"
+        ],
+        "title": "SubmissionTransaction"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "WarningDetail": {
+        "properties": {
+          "detail": {
+            "type": "string",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "detail"
+        ],
+        "title": "WarningDetail"
+      },
+      "FastPathSubmissionRequestPayload": {
+        "properties": {
+          "metadata": {
+            "$ref": "#/components/schemas/SubmissionMetadata"
+          },
+          "marketMetadata": {
+            "items": {
+              "$ref": "#/components/schemas/SubmissionMarketMetadata"
+            },
+            "type": "array",
+            "maxItems": 1,
+            "title": "Marketmetadata"
+          },
+          "fieldValues": {
+            "items": {
+              "$ref": "#/components/schemas/FieldValue"
+            },
+            "type": "array",
+            "title": "Fieldvalues"
+          },
+          "repeatableFieldBlocks": {
+            "items": {
+              "$ref": "#/components/schemas/RepeatableFieldBlock"
+            },
+            "type": "array",
+            "title": "Repeatablefieldblocks"
+          },
+          "templateIds": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Templateids",
+            "description": "Templates will be applied in the order they are submitted, if no template ids are provided, the Ivans default template will be used",
+            "examples": [
+              [
+                "d5b72035-f8e9-47c5-8591-adec34232401",
+                "4a99c8df-39a5-4126-89d1-95b576cc1318"
+              ]
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "metadata",
+          "marketMetadata"
+        ],
+        "title": "FastPathSubmissionRequestPayload"
+      },
+      "AutoDetailResponse": {
+        "properties": {
+          "details": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/AutoFieldValueResponse"
+                },
+                {
+                  "$ref": "#/components/schemas/AutoFieldOptionsResponse"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Details",
+            "description": "List of vehicle details with labels and values"
+          }
+        },
+        "type": "object",
+        "required": [
+          "details"
+        ],
+        "title": "AutoDetailResponse",
+        "description": "Response model for Auto vehicle details."
+      },
+      "AutoFieldOptionsResponse": {
+        "properties": {
+          "guid": {
+            "type": "string",
+            "title": "Guid",
+            "description": "GUID of the vehicle attribute"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label",
+            "description": "Label of the vehicle attribute"
+          },
+          "options": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ValueOptionResponse"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Options",
+            "description": "List of unique vehicle attributes with labels and values"
+          }
+        },
+        "type": "object",
+        "required": [
+          "guid",
+          "label",
+          "options"
+        ],
+        "title": "AutoFieldOptionsResponse",
+        "description": "Response model for Auto field data with options."
+      },
+      "AutoFieldValueResponse": {
+        "properties": {
+          "guid": {
+            "type": "string",
+            "title": "Guid",
+            "description": "GUID of the vehicle attribute"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label",
+            "description": "Label of the vehicle attribute"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value",
+            "description": "Value of the vehicle attribute"
+          }
+        },
+        "type": "object",
+        "required": [
+          "guid",
+          "label"
+        ],
+        "title": "AutoFieldValueResponse",
+        "description": "Response model for Auto field data with values."
+      },
+      "ErrorResponseWithMessageOnly": {
+        "properties": {
+          "detail": {
+            "type": "string",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "detail"
+        ],
+        "title": "ErrorResponseWithMessageOnly",
+        "description": "Response for errors that have only a message."
+      },
+      "ErrorResponseWithValidationDetails": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationErrorDetail"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "detail"
+        ],
+        "title": "ErrorResponseWithValidationDetails",
+        "description": "Response for errors that have a list of validation details."
+      },
+      "ValidationErrorDetail": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "loc": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Loc"
+          },
+          "msg": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Msg"
+          },
+          "input": {
+            "title": "Input"
+          }
+        },
+        "type": "object",
+        "required": [
+          "type",
+          "loc",
+          "input"
+        ],
+        "title": "ValidationErrorDetail",
+        "description": "Validation error detail for standard Pydantic/FastAPI request validation errors."
+      },
+      "ValueOptionResponse": {
+        "properties": {
+          "label": {
+            "type": "string",
+            "title": "Label",
+            "description": "Label of the option"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Value",
+            "description": "Value of the option"
+          }
+        },
+        "type": "object",
+        "required": [
+          "label",
+          "value"
+        ],
+        "title": "ValueOptionResponse",
+        "description": "Response model for options with label and value."
+      },
+      "AdditionalDetails": {
+        "properties": {
+          "heading": {
+            "type": "string",
+            "title": "Heading"
+          },
+          "children": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/AdditionalDetails"
+                },
+                {
+                  "$ref": "#/components/schemas/ListItem"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Children"
+          }
+        },
+        "type": "object",
+        "required": [
+          "heading",
+          "children"
+        ],
+        "title": "AdditionalDetails"
+      },
+      "BaseMarketFieldField": {
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "title": "Uuid"
+          },
+          "requirementLevel": {
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "uuid",
+          "requirementLevel"
+        ],
+        "title": "BaseMarketFieldField"
+      },
+      "DefaultTemplateInfo": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "lobs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Lobs"
+          },
+          "markets": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Markets"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "description",
+          "lobs",
+          "markets"
+        ],
+        "title": "DefaultTemplateInfo"
+      },
+      "FastPathFormResponse": {
+        "properties": {
+          "defaultTemplate": {
+            "$ref": "#/components/schemas/DefaultTemplateInfo"
+          },
+          "form": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/NestedForm"
+              },
+              {
+                "$ref": "#/components/schemas/NonNestedForm"
+              }
+            ],
+            "title": "Form"
+          }
+        },
+        "type": "object",
+        "required": [
+          "defaultTemplate",
+          "form"
+        ],
+        "title": "FastPathFormResponse"
+      },
+      "FlattenedRepeatableFieldBlock": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "fieldBlockId": {
+            "type": "string",
+            "title": "Fieldblockid"
+          },
+          "parentId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parentid"
+          },
+          "fieldValues": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Fieldvalues"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "fieldBlockId",
+          "fieldValues"
+        ],
+        "title": "FlattenedRepeatableFieldBlock"
+      },
+      "ListItem": {
+        "properties": {
+          "listItem": {
+            "type": "string",
+            "title": "Listitem"
+          }
+        },
+        "type": "object",
+        "required": [
+          "listItem"
+        ],
+        "title": "ListItem"
+      },
+      "MarketFieldByRiskProfile": {
+        "properties": {
+          "market": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Market"
+          },
+          "lob": {
+            "type": "string",
+            "title": "Lob"
+          },
+          "riskProfile": {
+            "type": "string",
+            "title": "Riskprofile"
+          },
+          "fields": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/BaseMarketFieldField"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fields"
+          },
+          "repeatableGroups": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/RiskProfileRepeatableFormGroup"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Repeatablegroups",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "lob",
+          "riskProfile"
+        ],
+        "title": "MarketFieldByRiskProfile"
+      },
+      "MarketFieldByRiskProfileParent": {
+        "properties": {
+          "market": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Market"
+          },
+          "lob": {
+            "type": "string",
+            "title": "Lob"
+          },
+          "riskProfile": {
+            "type": "string",
+            "title": "Riskprofile"
+          },
+          "children": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/MarketFieldByRiskProfile"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Children"
+          }
+        },
+        "type": "object",
+        "required": [
+          "lob",
+          "riskProfile"
+        ],
+        "title": "MarketFieldByRiskProfileParent"
+      },
+      "NestedForm": {
+        "properties": {
+          "pages": {
+            "items": {
+              "$ref": "#/components/schemas/NestedFormPage"
+            },
+            "type": "array",
+            "title": "Pages"
+          },
+          "marketFields": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/MarketFieldByRiskProfile"
+                },
+                {
+                  "$ref": "#/components/schemas/MarketFieldByRiskProfileParent"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Marketfields"
+          },
+          "riskProfiles": {
+            "items": {
+              "$ref": "#/components/schemas/RiskProfile"
+            },
+            "type": "array",
+            "title": "Riskprofiles",
+            "default": []
+          },
+          "suggestedFields": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SuggestedFields"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "pages"
+        ],
+        "title": "NestedForm"
+      },
+      "NestedFormGroup": {
+        "properties": {
+          "guid": {
+            "type": "string",
+            "title": "Guid"
+          },
+          "page": {
+            "type": "string",
+            "title": "Page"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "isRepeatable": {
+            "type": "boolean",
+            "title": "Isrepeatable"
+          },
+          "repeatMinMax": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Repeatminmax"
+          },
+          "order": {
+            "type": "integer",
+            "title": "Order"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "columns": {
+            "anyOf": [
+              {
+                "items": {},
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Columns"
+          },
+          "parent": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent"
+          },
+          "parentLabel": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parentlabel"
+          },
+          "parentColumns": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parentcolumns"
+          },
+          "fields": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/SerializedRPA"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fields"
+          }
+        },
+        "type": "object",
+        "required": [
+          "guid",
+          "page",
+          "label",
+          "description",
+          "isRepeatable",
+          "repeatMinMax",
+          "order",
+          "type",
+          "parent",
+          "parentLabel"
+        ],
+        "title": "NestedFormGroup"
+      },
+      "NestedFormPage": {
+        "properties": {
+          "guid": {
+            "type": "string",
+            "title": "Guid"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "order": {
+            "type": "integer",
+            "title": "Order"
+          },
+          "groups": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/NestedFormGroup"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Groups"
+          }
+        },
+        "type": "object",
+        "required": [
+          "guid",
+          "label",
+          "description",
+          "order"
+        ],
+        "title": "NestedFormPage"
+      },
+      "NonNestedForm": {
+        "properties": {
+          "pages": {
+            "items": {
+              "$ref": "#/components/schemas/NonNestedFormPage"
+            },
+            "type": "array",
+            "title": "Pages"
+          },
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/NonNestedFormGroup"
+            },
+            "type": "array",
+            "title": "Groups"
+          },
+          "fields": {
+            "items": {
+              "$ref": "#/components/schemas/SerializedRPA"
+            },
+            "type": "array",
+            "title": "Fields"
+          },
+          "marketFields": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/MarketFieldByRiskProfile"
+                },
+                {
+                  "$ref": "#/components/schemas/MarketFieldByRiskProfileParent"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Marketfields"
+          },
+          "riskProfiles": {
+            "items": {
+              "$ref": "#/components/schemas/RiskProfile"
+            },
+            "type": "array",
+            "title": "Riskprofiles",
+            "default": []
+          },
+          "suggestedFields": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SuggestedFields"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "pages",
+          "groups",
+          "fields"
+        ],
+        "title": "NonNestedForm"
+      },
+      "NonNestedFormGroup": {
+        "properties": {
+          "guid": {
+            "type": "string",
+            "title": "Guid"
+          },
+          "page": {
+            "type": "string",
+            "title": "Page"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "isRepeatable": {
+            "type": "boolean",
+            "title": "Isrepeatable"
+          },
+          "repeatMinMax": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Repeatminmax"
+          },
+          "order": {
+            "type": "integer",
+            "title": "Order"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "columns": {
+            "anyOf": [
+              {
+                "items": {},
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Columns"
+          },
+          "parent": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent"
+          },
+          "parentLabel": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parentlabel"
+          },
+          "parentColumns": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parentcolumns"
+          },
+          "children": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/NonNestedFormGroup"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Children"
+          }
+        },
+        "type": "object",
+        "required": [
+          "guid",
+          "page",
+          "label",
+          "description",
+          "isRepeatable",
+          "repeatMinMax",
+          "order",
+          "type",
+          "parent",
+          "parentLabel"
+        ],
+        "title": "NonNestedFormGroup"
+      },
+      "NonNestedFormPage": {
+        "properties": {
+          "guid": {
+            "type": "string",
+            "title": "Guid"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "order": {
+            "type": "integer",
+            "title": "Order"
+          }
+        },
+        "type": "object",
+        "required": [
+          "guid",
+          "label",
+          "description",
+          "order"
+        ],
+        "title": "NonNestedFormPage"
+      },
+      "RequirementLevel": {
+        "type": "integer",
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "title": "RequirementLevel"
+      },
+      "RiskProfileRepeatableFormGroup": {
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "title": "Uuid"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "requirementLevel": {
+            "$ref": "#/components/schemas/RequirementLevel"
+          },
+          "conditions": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "uuid",
+          "description",
+          "requirementLevel",
+          "conditions"
+        ],
+        "title": "RiskProfileRepeatableFormGroup"
+      },
+      "SerializedRPA": {
+        "properties": {
+          "guid": {
+            "type": "string",
+            "title": "Guid"
+          },
+          "group": {
+            "type": "string",
+            "title": "Group"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "additionalDetails": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AdditionalDetails"
+              },
+              {
+                "items": {
+                  "$ref": "#/components/schemas/AdditionalDetails"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Additionaldetails"
+          },
+          "order": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Order"
+          },
+          "type": {
+            "type": "string"
+          },
+          "dataClass": {
+            "type": "string"
+          },
+          "options": {
+            "items": {
+              "$ref": "#/components/schemas/ValueListOption"
+            },
+            "type": "array",
+            "title": "Options"
+          },
+          "underwritingCategory": {
+            "$ref": "#/components/schemas/UnderwritingCategory"
+          },
+          "isAppetiteCategory": {
+            "type": "boolean",
+            "title": "Isappetitecategory"
+          },
+          "isEnhancedAppetiteCategory": {
+            "type": "boolean",
+            "title": "Isenhancedappetitecategory"
+          },
+          "isBind": {
+            "type": "boolean",
+            "title": "Isbind"
+          },
+          "isRefer": {
+            "type": "boolean",
+            "title": "Isrefer"
+          },
+          "conditions": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "actionConditions": {
+            "title": "Actionconditions"
+          },
+          "market": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Market"
+          },
+          "classificationStandardGuid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Classificationstandardguid"
+          },
+          "classCodeFilterFieldsGuids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Classcodefilterfieldsguids"
+          },
+          "unique": {
+            "type": "boolean",
+            "title": "Unique"
+          },
+          "uniqueToParent": {
+            "type": "boolean",
+            "title": "Uniquetoparent"
+          },
+          "parentAttributeGuid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parentattributeguid"
+          },
+          "minimum": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minimum"
+          },
+          "maximum": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Maximum"
+          },
+          "prefillSourceFieldGuid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prefillsourcefieldguid"
+          },
+          "isSuggestable": {
+            "type": "boolean",
+            "title": "Issuggestable"
+          },
+          "length": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Length"
+          }
+        },
+        "type": "object",
+        "required": [
+          "guid",
+          "group",
+          "label",
+          "description",
+          "additionalDetails",
+          "order",
+          "type",
+          "dataClass",
+          "options",
+          "underwritingCategory",
+          "isAppetiteCategory",
+          "isEnhancedAppetiteCategory",
+          "isBind",
+          "isRefer",
+          "market",
+          "unique",
+          "uniqueToParent",
+          "minimum",
+          "maximum",
+          "isSuggestable",
+          "length"
+        ],
+        "title": "SerializedRPA"
+      },
+      "SuggestedFields": {
+        "properties": {
+          "fieldValues": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Fieldvalues"
+          },
+          "repeatableFieldBlocks": {
+            "items": {
+              "$ref": "#/components/schemas/FlattenedRepeatableFieldBlock"
+            },
+            "type": "array",
+            "title": "Repeatablefieldblocks"
+          }
+        },
+        "type": "object",
+        "title": "SuggestedFields"
+      },
+      "UnderwritingCategory": {
+        "type": "integer",
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "title": "UnderwritingCategory"
+      },
+      "ValueListOption": {
+        "properties": {
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "label",
+          "value"
+        ],
+        "title": "ValueListOption"
+      },
+      "PassportRPA": {
+        "properties": {
+          "required": {
+            "type": "boolean",
+            "title": "Required"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "options": {
+            "items": {},
+            "type": "array",
+            "title": "Options"
+          },
+          "data_type": {
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "required": [
+          "required",
+          "name",
+          "options",
+          "data_type"
+        ],
+        "title": "PassportRPA",
+        "description": "A simplified version of RPA used for Passport"
+      },
+      "PassportRiskProfile": {
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "title": "Uuid"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "rpas": {
+            "items": {
+              "$ref": "#/components/schemas/PassportRPA"
+            },
+            "type": "array",
+            "title": "Rpas"
+          }
+        },
+        "type": "object",
+        "required": [
+          "uuid",
+          "name",
+          "rpas"
+        ],
+        "title": "PassportRiskProfile",
+        "description": "A simplified version of RiskProfile used for Passport"
+      },
+      "RiskProfileDiff": {
+        "properties": {
+          "fieldsAdded": {
+            "items": {
+              "$ref": "#/components/schemas/SerializedRPA"
+            },
+            "type": "array",
+            "title": "Fieldsadded",
+            "default": []
+          },
+          "fieldsRemoved": {
+            "items": {
+              "$ref": "#/components/schemas/SerializedRPA"
+            },
+            "type": "array",
+            "title": "Fieldsremoved",
+            "default": []
+          },
+          "repeatableGroupsAdded": {
+            "items": {
+              "$ref": "#/components/schemas/RiskProfileRepeatableFormGroup"
+            },
+            "type": "array",
+            "title": "Repeatablegroupsadded",
+            "default": []
+          },
+          "repeatableGroupsRemoved": {
+            "items": {
+              "$ref": "#/components/schemas/RiskProfileRepeatableFormGroup"
+            },
+            "type": "array",
+            "title": "Repeatablegroupsremoved",
+            "default": []
+          }
+        },
+        "type": "object",
+        "title": "RiskProfileDiff"
+      },
+      "Body_get_risk_profile_lineage_api_v1_risk_profiles_lineage_post": {
+        "properties": {
+          "risk_profile_uuids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Risk Profile Uuids",
+            "examples": [
+              [
+                "7f13057a-293d-49e3-9548-d51fe40bd5fd"
+              ]
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "risk_profile_uuids"
+        ],
+        "title": "Body_get_risk_profile_lineage_api_v1_risk_profiles_lineage_post"
+      },
+      "QuotePayload": {
+        "properties": {
+          "fieldValues": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/FieldValue"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fieldvalues"
+          },
+          "repeatableFieldBlocks": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/RepeatableFieldBlock"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Repeatablefieldblocks"
+          }
+        },
+        "type": "object",
+        "title": "QuotePayload"
+      },
+      "ClassicQuotePayload": {
+        "properties": {
+          "fieldValues": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/FieldValue"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fieldvalues"
+          },
+          "repeatableFieldBlocks": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/RepeatableFieldBlock"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Repeatablefieldblocks"
+          },
+          "lobs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Lobs"
+          },
+          "markets": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Markets"
+          }
+        },
+        "type": "object",
+        "required": [
+          "lobs",
+          "markets"
+        ],
+        "title": "ClassicQuotePayload"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "x-provenance": {
+    "method": "searched",
+    "source": "https://api.ivans.com/reference/get_basic_appetite_api_v1_forms_basic_appetite_get",
+    "generated": "2026-10-13",
+    "note": "Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored."
+  }
+}

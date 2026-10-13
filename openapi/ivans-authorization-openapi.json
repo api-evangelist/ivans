@@ -1,0 +1,145 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "authorization",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://distribution.ivansinsurance.com"
+    }
+  ],
+  "security": [
+    {
+      "sec0": []
+    }
+  ],
+  "x-readme": {
+    "headers": [],
+    "explorer-enabled": true,
+    "proxy-enabled": true
+  },
+  "paths": {
+    "/api/v1/token/": {
+      "post": {
+        "summary": "/api/v1/token/",
+        "description": "Use the provided credentials to generate a token to authenticate with the platform.",
+        "operationId": "token",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "default": "Basic {base_64}"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "grant_type": {
+                    "type": "string",
+                    "default": "password",
+                    "enum": [
+                      "password",
+                      "refresh_token"
+                    ]
+                  },
+                  "refresh_token": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "Token": {
+                  "value": {
+                    "username": "partner-name",
+                    "password": "provided-password",
+                    "grant_type": "password"
+                  }
+                },
+                "Refresh": {
+                  "value": {
+                    "refresh_token": "QMtf4r08pzjhlcBGXg4VT2vIbOyMiIcjrxdjh5wFdMRKTsUm2sErpjbIIoiHusdoxi",
+                    "client_id": "partner-name",
+                    "client_secret": "provided-password",
+                    "grant_type": "refresh_token"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Token": {
+                    "value": "{\n  \"access\": \"JhbGciOiJSUzI1NiIsIng1dCI6Ikhyb3YzSkRfZlZHRGwwRGlTcmpZTWxXX2FjMCIs\",\n  \"refresh\": \"QMtf4r08pzjhlcBGXg4VT2vIbOyMiIcjrxdjh5wFdMRKTsUm2sErpjbIIoiHusdoxi\"\n}"
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "access": {
+                      "type": "string",
+                      "example": "JhbGciOiJSUzI1NiIsIng1dCI6Ikhyb3YzSkRfZlZHRGwwRGlTcmpZTWxXX2FjMCIs"
+                    },
+                    "refresh": {
+                      "type": "string",
+                      "example": "QMtf4r08pzjhlcBGXg4VT2vIbOyMiIcjrxdjh5wFdMRKTsUm2sErpjbIIoiHusdoxi"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Result": {
+                    "value": "{}"
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": []
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "sec0": {
+        "type": "oauth2",
+        "flows": {}
+      }
+    }
+  },
+  "x-provenance": {
+    "method": "searched",
+    "source": "https://api.ivans.com/reference/token",
+    "generated": "2026-10-13",
+    "note": "Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored."
+  }
+}

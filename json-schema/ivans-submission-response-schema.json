@@ -1,0 +1,483 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/ivans/main/json-schema/ivans-submission-response-schema.json",
+  "title": "SubmissionResponse",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/ivans-distribution-platform-openapi.json#/components/schemas/SubmissionResponse",
+  "properties": {
+    "detail": {
+      "type": "string",
+      "title": "Detail",
+      "default": "submission successful"
+    },
+    "quoteSessionId": {
+      "type": "string",
+      "title": "Quotesessionid"
+    },
+    "warnings": {
+      "items": {
+        "$ref": "#/$defs/IDPValidationWarning"
+      },
+      "type": "array",
+      "title": "Warnings"
+    },
+    "transactions": {
+      "items": {
+        "$ref": "#/$defs/SubmissionTransaction"
+      },
+      "type": "array",
+      "title": "Transactions"
+    },
+    "riskProfiles": {
+      "items": {
+        "$ref": "#/$defs/RiskProfile"
+      },
+      "type": "array",
+      "title": "Riskprofiles"
+    }
+  },
+  "type": "object",
+  "required": [
+    "quoteSessionId",
+    "transactions",
+    "riskProfiles"
+  ],
+  "$defs": {
+    "ErrorMsg": {
+      "properties": {
+        "detail": {
+          "type": "string",
+          "title": "Detail"
+        },
+        "condition(s)": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Condition(S)"
+        }
+      },
+      "type": "object",
+      "required": [
+        "detail"
+      ],
+      "title": "ErrorMsg"
+    },
+    "Evaluation": {
+      "properties": {
+        "type": {
+          "$ref": "#/$defs/EvaluationType"
+        },
+        "reasons": {
+          "items": {
+            "$ref": "#/$defs/Reason"
+          },
+          "type": "array",
+          "title": "Reasons"
+        }
+      },
+      "type": "object",
+      "required": [
+        "type",
+        "reasons"
+      ],
+      "title": "Evaluation"
+    },
+    "EvaluationType": {
+      "type": "string",
+      "enum": [
+        "Market",
+        "IDP Quote",
+        "IDP Bind"
+      ],
+      "title": "EvaluationType"
+    },
+    "IDPValidationError": {
+      "properties": {
+        "groupId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Groupid"
+        },
+        "questionId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Questionid"
+        },
+        "errorMsg": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ErrorMsg"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        }
+      },
+      "type": "object",
+      "title": "IDPValidationError"
+    },
+    "IDPValidationWarning": {
+      "properties": {
+        "groupId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Groupid"
+        },
+        "questionId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Questionid"
+        },
+        "warningMessage": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WarningDetail"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "value": {
+          "title": "Value"
+        }
+      },
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "title": "IDPValidationWarning"
+    },
+    "ImpactingFactor": {
+      "properties": {
+        "attributeId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Attributeid"
+        },
+        "groupId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Groupid"
+        }
+      },
+      "type": "object",
+      "title": "ImpactingFactor"
+    },
+    "Reason": {
+      "properties": {
+        "message": {
+          "type": "string",
+          "title": "Message"
+        },
+        "impactingFactors": {
+          "items": {
+            "$ref": "#/$defs/ImpactingFactor"
+          },
+          "type": "array",
+          "title": "Impactingfactors"
+        }
+      },
+      "type": "object",
+      "required": [
+        "message",
+        "impactingFactors"
+      ],
+      "title": "Reason"
+    },
+    "RequiredToSubmit": {
+      "properties": {
+        "contractCode": {
+          "type": "boolean",
+          "title": "Contractcode"
+        },
+        "username": {
+          "type": "boolean",
+          "title": "Username"
+        },
+        "password": {
+          "type": "boolean",
+          "title": "Password"
+        }
+      },
+      "type": "object",
+      "required": [
+        "contractCode",
+        "username",
+        "password"
+      ],
+      "title": "RequiredToSubmit"
+    },
+    "RiskProfile": {
+      "properties": {
+        "uuid": {
+          "type": "string",
+          "title": "Uuid"
+        },
+        "name": {
+          "type": "string",
+          "title": "Name"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Type"
+        },
+        "market": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Market"
+        },
+        "marketUuid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Marketuuid"
+        },
+        "excessAndSurplus": {
+          "type": "boolean",
+          "title": "Excessandsurplus",
+          "default": false
+        },
+        "lob": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Lob"
+        },
+        "childLobs": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Childlobs"
+        },
+        "inAppetite": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Inappetite",
+          "default": true
+        },
+        "bindAllowed": {
+          "type": "boolean",
+          "title": "Bindallowed"
+        },
+        "bindAppetite": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Bindappetite"
+        },
+        "referAllowed": {
+          "type": "boolean",
+          "title": "Referallowed"
+        },
+        "routeType": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Routetype"
+        },
+        "requiredToSubmit": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RequiredToSubmit"
+            },
+            {
+              "additionalProperties": true,
+              "type": "object"
+            }
+          ],
+          "title": "Requiredtosubmit"
+        },
+        "validationErrors": {
+          "items": {
+            "$ref": "#/$defs/IDPValidationError"
+          },
+          "type": "array",
+          "title": "Validationerrors"
+        },
+        "validationWarnings": {
+          "items": {
+            "$ref": "#/$defs/IDPValidationWarning"
+          },
+          "type": "array",
+          "title": "Validationwarnings"
+        },
+        "evaluations": {
+          "items": {
+            "$ref": "#/$defs/Evaluation"
+          },
+          "type": "array",
+          "title": "Evaluations"
+        }
+      },
+      "type": "object",
+      "required": [
+        "uuid",
+        "name",
+        "bindAllowed",
+        "referAllowed",
+        "requiredToSubmit"
+      ],
+      "title": "RiskProfile"
+    },
+    "SubmissionTransaction": {
+      "properties": {
+        "riskProfileUuid": {
+          "type": "string",
+          "title": "Riskprofileuuid"
+        },
+        "marketUuid": {
+          "type": "string",
+          "title": "Marketuuid"
+        },
+        "name": {
+          "type": "string",
+          "title": "Name"
+        },
+        "lineOfBusiness": {
+          "type": "string",
+          "title": "Lineofbusiness"
+        },
+        "timeout": {
+          "type": "integer",
+          "title": "Timeout",
+          "default": 60
+        },
+        "submissionErrorMsg": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Submissionerrormsg"
+        }
+      },
+      "type": "object",
+      "required": [
+        "riskProfileUuid",
+        "marketUuid",
+        "name",
+        "lineOfBusiness"
+      ],
+      "title": "SubmissionTransaction"
+    },
+    "WarningDetail": {
+      "properties": {
+        "detail": {
+          "type": "string",
+          "title": "Detail"
+        }
+      },
+      "type": "object",
+      "required": [
+        "detail"
+      ],
+      "title": "WarningDetail"
+    }
+  }
+}

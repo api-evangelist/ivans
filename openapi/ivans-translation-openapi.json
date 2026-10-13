@@ -1,0 +1,2707 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "IVANS Translation API's",
+    "description": "These API's expose endpoints to manage Download Transactions.",
+    "license": {
+      "name": "Copyright (C) 2023 IVANS Insurance, All rights reserved"
+    },
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "HTTPS://dev-cloud-dl.ivansinsurance.com",
+      "description": "Server URL in UAT environment"
+    },
+    {
+      "url": "HTTPS://cloud-dl.ivansinsurance.com",
+      "description": "Server URL in Production environment"
+    }
+  ],
+  "paths": {
+    "/ivans/api/carrier/tokens": {
+      "post": {
+        "tags": [
+          "Token API"
+        ],
+        "description": "Obtain a token to be used with all download operations",
+        "operationId": "getAuthToken",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TokenReq"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenRes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ivans/api/document": {
+      "get": {
+        "tags": [
+          "Document Store API"
+        ],
+        "summary": "Fetch document file meta information",
+        "operationId": "getDocumentMetaInfo",
+        "parameters": [
+          {
+            "name": "carrierId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "documentId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentMeta"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Document Store API"
+        ],
+        "summary": "Stores document/attachments files (max allowed size 100MB)",
+        "operationId": "save",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "transactionId",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "document": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "meta": {
+                    "type": "Map",
+                    "description": "File metadata example:\n\n```json\n{\n  \"documentName\": \"value1\",\n  \"description\": \"value2\",\n  \"policyNumber\": \"value3\",\n  \"agencyId\": \"value4\",\n  \"carrierId\": \"value5\"\n}\n```"
+                  }
+                },
+                "required": [
+                  "document",
+                  "meta"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SaveResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ivans/api/benefits/csv/upload": {
+      "post": {
+        "tags": [
+          "Commission Download API"
+        ],
+        "summary": "Benefits Csv upload",
+        "operationId": "processBenefitsCsvRequest",
+        "parameters": [
+          {
+            "name": "ClientId",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "transactionId",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ErrorReturnType",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "json"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "file"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Upload of csv file",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CsvResponse"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Csv Upload Complete. FileId not available. Exchange delivery delayed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CsvResponse202"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request received",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CsvResponseJson"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization Failed"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CsvResponse422"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "CSV Conversion Service Not Available",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CsvResponse503"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ivans/api/commissiondownload": {
+      "post": {
+        "tags": [
+          "Commission Download API"
+        ],
+        "description": "Commission Download Operation",
+        "operationId": "processRequest",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "transactionId",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommissionDownloadRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommissionDownloadResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ivans/api/carrier/edocdownload": {
+      "post": {
+        "tags": [
+          "eDoc Download APIs"
+        ],
+        "description": "edoc download operation",
+        "operationId": "processRequest_2",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "transactionId",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EdocReq"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/EdocResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ivans/api/carrier/claimsdownload": {
+      "post": {
+        "tags": [
+          "Claims Download API"
+        ],
+        "description": "claims download operation",
+        "operationId": "processRequest_3",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "transactionId",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClaimsDownloadRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClaimsDownloadResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ivans/api/carrier/documentstorage": {
+      "post": {
+        "tags": [
+          "eDoc Download APIs"
+        ],
+        "description": "document storage operation",
+        "operationId": "processRequestDocument",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "transactionId",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DocumentStoreReq"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/EdocDocumentResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ivans/api/retrieve/fileId": {
+      "get": {
+        "tags": [
+          "File Id Retrieval API"
+        ],
+        "description": "Retrieve FileId",
+        "operationId": "retrieveExchangeFileId",
+        "parameters": [
+          {
+            "name": "transactionID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Exchange FileId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileIdResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization Failed",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "404": {
+            "description": "TransactionId not found",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/ivans/api/carrier/v3/translation": {
+      "post": {
+        "tags": [
+          "Policy Download APIs"
+        ],
+        "description": "v3 translation operation",
+        "operationId": "translationProcessor",
+        "parameters": [
+          {
+            "name": "projectName",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "transactionId",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "translationType",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Policy",
+                "Edoc",
+                "Claims",
+                "DirectBill"
+              ]
+            }
+          },
+          {
+            "name": "requestType",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "XML",
+                "JSON"
+              ]
+            }
+          },
+          {
+            "name": "carrierId",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "agencyId",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "claimNumber",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "policyNumber",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "returnTranslationData",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TranslationPayload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DownloadResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TokenReq": {
+        "type": "object",
+        "properties": {
+          "carrierId": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "carrierId",
+          "password"
+        ]
+      },
+      "TokenRes": {
+        "type": "object",
+        "properties": {
+          "encryptionToken": {
+            "type": "string"
+          },
+          "authToken": {
+            "type": "string"
+          }
+        }
+      },
+      "DocumentMeta": {
+        "type": "object",
+        "properties": {
+          "carrierId": {
+            "type": "string"
+          },
+          "agencyId": {
+            "type": "string"
+          },
+          "documentName": {
+            "type": "string"
+          },
+          "documentDesc": {
+            "type": "string"
+          },
+          "policyId": {
+            "type": "string"
+          },
+          "mimeType": {
+            "type": "string"
+          },
+          "documentType": {
+            "type": "string"
+          },
+          "contentSize": {
+            "type": "string"
+          },
+          "createdOn": {
+            "type": "string"
+          },
+          "lastUpdated": {
+            "type": "string"
+          }
+        }
+      },
+      "CsvResponse": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string",
+            "example": "54A365A9B3AF4EEFA4E7CE154ABFE209"
+          },
+          "message": {
+            "type": "string",
+            "example": "Csv Upload Complete"
+          },
+          "transactionStatus": {
+            "type": "string",
+            "example": "SUCCESS"
+          },
+          "exchangeFileId": {
+            "type": "string",
+            "example": "7ce6f940-fd77-419a-b656-27359ee47ff2"
+          }
+        }
+      },
+      "CsvResponse202": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string",
+            "example": "54A365A9B3AF4EEFA4E7CE154ABFE209"
+          },
+          "message": {
+            "type": "string",
+            "example": "Csv Upload Complete. FileId not available. Exchange delivery delayed"
+          },
+          "transactionStatus": {
+            "type": "string",
+            "example": "SUCCESS"
+          }
+        }
+      },
+      "CsvResponseJson": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string",
+            "example": "99A365A9B3AF4EEFA4E7CE154ABFE209"
+          },
+          "message": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            },
+            "example": {
+              "errors": [
+                {
+                  "row": 166,
+                  "column": "LineOfBusinessCode",
+                  "input": "HOSP",
+                  "msg": "Input should be 'ACCT', 'ACHE', 'AGENT', 'AGLIA', 'AGPP', 'AGPR', 'AIRC', 'APFBO', 'APKGE', 'APROD', 'ARCH', 'ART', 'AUTOB', 'AUTOP', 'AVPKG', 'BANDM', 'BMISC', 'BOAT', 'BOP', 'BOPGL', 'BOPPR', 'CAVN', 'CFIRE', 'CFRM', 'CGL', 'CNTGC', 'CPKGE', 'CPMP', 'CRIM', 'CUMBR', 'CYBER', 'DFIRE', 'DISAB', 'DNTL', 'DO', 'ELIAB', 'EMGLI', 'EO', 'EPLI', 'EQ', 'EQLIA', 'EXLIA', 'FIDTY', 'FIDUC', 'FIIBO', 'FLOOD', 'GARAG', 'HLTH', 'HOME', 'INMRC', 'INMRP', 'INTER', 'JUDCL', 'KIDRA', 'LAW', 'LGLEX', 'LICPT', 'LIFE', 'LL', 'LMORT', 'LSTIN', 'LVSTK', 'MEDIA', 'MGMLI', 'MHOME', 'MMAL', 'MOTO', 'MPL', 'MTRCR', 'NWFGR', 'OCMRC', 'OLIB', 'PHYS', 'PL', 'PLMSC', 'PPKGE', 'PPL', 'PROP', 'PRSL', 'PUBOF', 'PUMBR', 'RECV', 'RRPRL', 'SCAP', 'SFRNC', 'SMP', 'SURE', 'TRKRS', 'TRVL', 'WCMA', 'WIND', 'WORK', 'WORKP', 'WORKV', 'XWARR' or 'YACHT'"
+                }
+              ]
+            }
+          },
+          "transactionStatus": {
+            "type": "string",
+            "example": "FAILURE"
+          }
+        }
+      },
+      "CsvResponse422": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string",
+            "example": "81A365A9B3AF4EEFA4E7CE154ABFE209"
+          },
+          "message": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            },
+            "example": {
+              "detail": [
+                {
+                  "loc": [
+                    "row",
+                    2
+                  ],
+                  "msg": "Invalid Data",
+                  "type": "ZZZZZ"
+                }
+              ]
+            }
+          },
+          "transactionStatus": {
+            "type": "string",
+            "example": "FAILURE"
+          }
+        }
+      },
+      "CsvResponse503": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string",
+            "example": "81A365A9B3AF4EEFA4E7CE154ABFE209"
+          },
+          "message": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            },
+            "example": "Unexpected internal exception occurred. Please report to IVANS support"
+          },
+          "transactionStatus": {
+            "type": "string",
+            "example": "FAILURE"
+          }
+        }
+      },
+      "AddressType": {
+        "type": "object",
+        "properties": {
+          "addrtypecd": {
+            "type": "string",
+            "enum": [
+              "Billing Address",
+              "Branch Office",
+              "Contributing Address",
+              "Data Backup Storage Address",
+              "Duplicate Records Address",
+              "Furthest Terminal Address",
+              "Garaging Address",
+              "Harbor",
+              "Insured's Address",
+              "Job Site",
+              "Leader Address",
+              "Leased Building Address",
+              "Legal Address",
+              "The address at which the loss occurred.",
+              "Mailing Address",
+              "Manufacturing Address",
+              "Marina",
+              "Military Base Address",
+              "Owned Building Address",
+              "Physical Risk Address/Location",
+              "Point Of Departure Address",
+              "Point Of Destination Address",
+              "Port",
+              "Previous Address",
+              "Private Dock",
+              "Public Dock",
+              "Payroll Office",
+              "Quay",
+              "Recipient Address",
+              "Rented Building Address",
+              "Rented To Others",
+              "The claim location under which the claim is being settled.",
+              "Shipping Address",
+              "Software Backup Storage Address",
+              "Storage",
+              "Street Address",
+              "Terminal",
+              "Wharf"
+            ]
+          },
+          "addr1": {
+            "type": "string"
+          },
+          "addr2": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "stateprovcd": {
+            "type": "string",
+            "enum": [
+              "AL",
+              "AK",
+              "AZ",
+              "AR",
+              "CA",
+              "CO",
+              "CT",
+              "DC",
+              "DE",
+              "FL",
+              "GA",
+              "HI",
+              "ID",
+              "IL",
+              "IN",
+              "IA",
+              "KS",
+              "KY",
+              "LA",
+              "ME",
+              "MD",
+              "MA",
+              "MI",
+              "MN",
+              "MS",
+              "MO",
+              "MT",
+              "NE",
+              "NV",
+              "NH",
+              "NJ",
+              "NM",
+              "NY",
+              "NC",
+              "ND",
+              "OH",
+              "OK",
+              "OR",
+              "PA",
+              "PR",
+              "RI",
+              "SC",
+              "SD",
+              "TN",
+              "TX",
+              "UT",
+              "VT",
+              "VA",
+              "WA",
+              "WV",
+              "WI",
+              "WY",
+              "AB",
+              "BC",
+              "MB",
+              "NB",
+              "NL",
+              "NS",
+              "ON",
+              "PE",
+              "QC",
+              "SK",
+              "NT",
+              "NU",
+              "YT",
+              "AGU",
+              "BCN",
+              "BCS",
+              "CAM",
+              "CHH",
+              "CHP",
+              "CMX",
+              "COA",
+              "COL",
+              "DUR",
+              "GRO",
+              "GUA",
+              "HID",
+              "JAL",
+              "MEX",
+              "MIC",
+              "MOR",
+              "NAY",
+              "NLE",
+              "OAX",
+              "PUE",
+              "QUE",
+              "ROO",
+              "SIN",
+              "SLP",
+              "SON",
+              "TAB",
+              "TAM",
+              "TLA",
+              "VER",
+              "YUC",
+              "ZAC",
+              "AS",
+              "FM",
+              "GU",
+              "MH",
+              "MP",
+              "PW",
+              "VI"
+            ]
+          },
+          "postalcd": {
+            "type": "string"
+          },
+          "county": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": "string"
+          },
+          "longitude": {
+            "type": "string"
+          }
+        }
+      },
+      "CommissionDownloadRequest": {
+        "type": "object",
+        "properties": {
+          "statement": {
+            "$ref": "#/components/schemas/StatementType"
+          },
+          "companyidentification": {
+            "$ref": "#/components/schemas/Companyidentification"
+          },
+          "carrierId": {
+            "type": "string"
+          }
+        }
+      },
+      "Companyidentification": {
+        "type": "object",
+        "properties": {
+          "companyname": {
+            "type": "string"
+          },
+          "originationaddress": {
+            "type": "string",
+            "readOnly": true
+          }
+        }
+      },
+      "ContactType": {
+        "type": "object",
+        "properties": {
+          "contacttypecd": {
+            "type": "string",
+            "enum": [
+              "Billing Contact",
+              "Audit Contact",
+              "Claim Contact",
+              "Risk Manager",
+              "Executive Contact",
+              "Misc. Contact",
+              "Customer Service Rep"
+            ]
+          },
+          "personalname": {
+            "$ref": "#/components/schemas/PersonalnameType"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone": {
+            "$ref": "#/components/schemas/PhoneType"
+          },
+          "employedbyinsuredind": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Era": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "IsoChronology": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "calendarType": {
+            "type": "string"
+          }
+        }
+      },
+      "LocalDate": {
+        "type": "object",
+        "properties": {
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "month": {
+            "type": "string",
+            "enum": [
+              "JANUARY",
+              "FEBRUARY",
+              "MARCH",
+              "APRIL",
+              "MAY",
+              "JUNE",
+              "JULY",
+              "AUGUST",
+              "SEPTEMBER",
+              "OCTOBER",
+              "NOVEMBER",
+              "DECEMBER"
+            ]
+          },
+          "monthValue": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dayOfMonth": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "chronology": {
+            "$ref": "#/components/schemas/IsoChronology"
+          },
+          "dayOfWeek": {
+            "type": "string",
+            "enum": [
+              "MONDAY",
+              "TUESDAY",
+              "WEDNESDAY",
+              "THURSDAY",
+              "FRIDAY",
+              "SATURDAY",
+              "SUNDAY"
+            ]
+          },
+          "leapYear": {
+            "type": "boolean"
+          },
+          "dayOfYear": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "era": {
+            "$ref": "#/components/schemas/Era"
+          }
+        }
+      },
+      "PersonalnameType": {
+        "type": "object",
+        "properties": {
+          "firstname": {
+            "type": "string",
+            "readOnly": true
+          },
+          "middleintialname": {
+            "type": "string",
+            "readOnly": true
+          },
+          "lastname": {
+            "type": "string",
+            "readOnly": true
+          },
+          "fullname": {
+            "type": "string"
+          }
+        }
+      },
+      "PhoneType": {
+        "type": "object",
+        "properties": {
+          "phonetype": {
+            "type": "string",
+            "enum": [
+              "business",
+              "personal",
+              "cell"
+            ]
+          },
+          "phone": {
+            "type": "string"
+          },
+          "extension": {
+            "type": "string"
+          }
+        }
+      },
+      "ProducerType": {
+        "type": "object",
+        "properties": {
+          "organizationname": {
+            "type": "string",
+            "readOnly": true
+          },
+          "name": {
+            "$ref": "#/components/schemas/PersonalnameType",
+            "readOnly": true
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressType",
+            "readOnly": true
+          },
+          "npn": {
+            "type": "string",
+            "readOnly": true
+          },
+          "contractcode": {
+            "type": "string"
+          },
+          "contractsubcode": {
+            "type": "string",
+            "readOnly": true
+          },
+          "contact": {
+            "$ref": "#/components/schemas/ContactType",
+            "readOnly": true
+          }
+        }
+      },
+      "StatementType": {
+        "type": "object",
+        "properties": {
+          "producer": {
+            "$ref": "#/components/schemas/ProducerType"
+          },
+          "statementdt": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/SummaryType"
+          },
+          "transactions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TransactionType"
+            },
+            "properties": {
+              "empty": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      },
+      "SummaryType": {
+        "type": "object",
+        "properties": {
+          "totalnumitems": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "totalgrossamt": {
+            "type": "number"
+          },
+          "totalcommissionamt": {
+            "type": "number"
+          },
+          "numnonpolicyadjustment": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "totaladjustmentamt": {
+            "type": "number",
+            "readOnly": true
+          },
+          "accountdate": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          }
+        }
+      },
+      "TransactionType": {
+        "type": "object",
+        "properties": {
+          "producer": {
+            "$ref": "#/components/schemas/ProducerType",
+            "readOnly": true
+          },
+          "name": {
+            "$ref": "#/components/schemas/PersonalnameType"
+          },
+          "secondaryname": {
+            "$ref": "#/components/schemas/PersonalnameType",
+            "readOnly": true
+          },
+          "policynum": {
+            "type": "string"
+          },
+          "subpolicynum": {
+            "type": "string",
+            "readOnly": true
+          },
+          "lineofbusiness": {
+            "type": "string",
+            "enum": [
+              "ACCT",
+              "AGENT",
+              "AGLIA",
+              "AGPP",
+              "AGPR",
+              "APKGE",
+              "ARCH",
+              "AUTOB",
+              "AUTOP",
+              "BANDM",
+              "BOAT",
+              "BOP",
+              "BOPGL",
+              "BOPPR",
+              "CFIRE",
+              "CGL",
+              "CPKGE",
+              "CRIM",
+              "CUMBR",
+              "CYBER",
+              "DFIRE",
+              "DNTL",
+              "DO",
+              "EL",
+              "EO",
+              "EPLI",
+              "EQ",
+              "EQLIA",
+              "EXLIA",
+              "FIDUC",
+              "FLOOD",
+              "GARAG",
+              "HLTH",
+              "HOME",
+              "INMRC",
+              "INMRP",
+              "KIDRA",
+              "LAW",
+              "LIFE",
+              "LL",
+              "LMORT",
+              "MEDIA",
+              "MHOME",
+              "MMAL",
+              "MPL",
+              "MTRCR",
+              "MTRTK",
+              "OCMRC",
+              "PHYS",
+              "PL",
+              "PLMSC",
+              "PPKGE",
+              "PPL",
+              "PROP",
+              "PRSL",
+              "PUMBR",
+              "RECV",
+              "RRPRL",
+              "SFRNC",
+              "SMP",
+              "SURE",
+              "WIND",
+              "WORK",
+              "WORKV",
+              "YACHT"
+            ]
+          },
+          "sublineofbusiness": {
+            "type": "string",
+            "enum": [
+              "ACCT",
+              "ARCH",
+              "ARP"
+            ],
+            "readOnly": true
+          },
+          "companycode": {
+            "type": "string"
+          },
+          "transactioneffectivedt": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          },
+          "transactiontypecd": {
+            "type": "string",
+            "enum": [
+              "ADJ",
+              "OTH",
+              "PCH",
+              "NBS",
+              "RWL",
+              "XLC",
+              "XLN",
+              "TAX",
+              "FEE",
+              "STL",
+              "REI",
+              "UNC",
+              "PAD",
+              "REW",
+              "SCH"
+            ]
+          },
+          "commissiontypecd": {
+            "type": "string",
+            "enum": [
+              "Commission Item",
+              "Adjustment Item"
+            ]
+          },
+          "policyeffectivedt": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          },
+          "policyexpirationdt": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          },
+          "secondarypolicydt": {
+            "$ref": "#/components/schemas/LocalDate",
+            "readOnly": true
+          },
+          "policygrossamt": {
+            "type": "number"
+          },
+          "commissionrate": {
+            "type": "number"
+          },
+          "commissionamt": {
+            "type": "number"
+          },
+          "adjustmentamt": {
+            "type": "number",
+            "readOnly": true
+          },
+          "companyproductcd": {
+            "type": "string"
+          },
+          "producerleveltransactionind": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "agencyinsuredid": {
+            "type": "string"
+          },
+          "installmentnum": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "payplan": {
+            "type": "string"
+          },
+          "billingaccountnum": {
+            "type": "string"
+          },
+          "policyversion": {
+            "type": "string"
+          },
+          "mgacode": {
+            "type": "string"
+          },
+          "npn": {
+            "type": "string"
+          }
+        }
+      },
+      "CommissionDownloadResponse": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string",
+            "description": "Unique id for this transaction"
+          },
+          "code": {
+            "type": "string",
+            "enum": [
+              "SUCCESS",
+              "FAILURE"
+            ],
+            "example": "SUCCESS"
+          },
+          "mailbox": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Address": {
+        "type": "object",
+        "properties": {
+          "street": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "postalCd": {
+            "type": "string"
+          }
+        }
+      },
+      "Adjuster": {
+        "type": "object",
+        "properties": {
+          "partyInfo": {
+            "$ref": "#/components/schemas/GeneralPartyInfo"
+          },
+          "assignedDt": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          },
+          "adjusterId": {
+            "type": "string"
+          }
+        }
+      },
+      "AttachmentType": {
+        "type": "object",
+        "properties": {
+          "documentIdentity": {
+            "type": "string"
+          }
+        }
+      },
+      "BalanceInfoType": {
+        "type": "object",
+        "properties": {
+          "minimumDueAmt": {
+            "type": "number"
+          },
+          "totalDueAmt": {
+            "type": "number"
+          },
+          "lastPaymentDt": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          },
+          "minimumDueDt": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          }
+        }
+      },
+      "ClaimInfo": {
+        "type": "object",
+        "properties": {
+          "claimNumber": {
+            "type": "string"
+          },
+          "claimPayment": {
+            "$ref": "#/components/schemas/ClaimPaymentType"
+          },
+          "claimsStatusCd": {
+            "type": "string",
+            "enum": [
+              "O",
+              "C",
+              "S",
+              "R"
+            ]
+          },
+          "claimsStatusDt": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          },
+          "incidentDesc": {
+            "type": "string"
+          },
+          "lossDt": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          },
+          "adjusterData": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Adjuster"
+            }
+          }
+        }
+      },
+      "ClaimPaymentType": {
+        "type": "object",
+        "properties": {
+          "paymentTypeCd": {
+            "type": "string",
+            "enum": [
+              "AdjExp",
+              "DeductRecovery",
+              "LossResv",
+              "Payment",
+              "StopPay",
+              "SubrRecovery",
+              "SalvRecovery"
+            ]
+          },
+          "totalPaymentAmount": {
+            "type": "number"
+          },
+          "lossCauseCode": {
+            "type": "string",
+            "enum": [
+              "CLMD"
+            ]
+          },
+          "checkNumber": {
+            "type": "string"
+          },
+          "paymentDate": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          },
+          "paymentDesc": {
+            "type": "string"
+          }
+        }
+      },
+      "EdocReq": {
+        "type": "object",
+        "properties": {
+          "attachments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AttachmentType"
+            }
+          },
+          "remark": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RemarkTypeInner"
+            },
+            "properties": {
+              "empty": {
+                "type": "boolean"
+              }
+            }
+          },
+          "balanceInfo": {
+            "$ref": "#/components/schemas/BalanceInfoType"
+          },
+          "agencyId": {
+            "type": "string"
+          },
+          "carrierId": {
+            "type": "string"
+          },
+          "changeOrReasonDesc": {
+            "type": "string"
+          },
+          "edocTypeCd": {
+            "type": "string",
+            "enum": [
+              "ACR",
+              "ADD",
+              "ADE",
+              "ADF",
+              "ADI",
+              "ADJ",
+              "ADO",
+              "ADU",
+              "ADW",
+              "APV",
+              "ARR",
+              "BCS",
+              "BDC",
+              "BND",
+              "BRP",
+              "BRQ",
+              "BRS",
+              "BST",
+              "CLI",
+              "CLN",
+              "CLS",
+              "COL",
+              "COM",
+              "CON",
+              "CRN",
+              "CSQ",
+              "DBR",
+              "DBS",
+              "DIV",
+              "EPN",
+              "EPP",
+              "ERR",
+              "LNT",
+              "MEM",
+              "NBQ",
+              "NBS",
+              "NRA",
+              "PCH",
+              "PCQ",
+              "PMK",
+              "PMT",
+              "PNQ",
+              "POL",
+              "PRMAU",
+              "PYO",
+              "PYR",
+              "REI",
+              "RES",
+              "REV",
+              "REW",
+              "RIX",
+              "RNR",
+              "RRQ",
+              "RSN",
+              "RTA",
+              "RWL",
+              "RWQ",
+              "RWX",
+              "RWR",
+              "SBB",
+              "SBC",
+              "SBD",
+              "SBP",
+              "SBQ",
+              "SBR",
+              "SBT",
+              "SBU",
+              "XLC",
+              "XLN",
+              "XLP"
+            ]
+          },
+          "insuredInfo": {
+            "$ref": "#/components/schemas/GeneralPartyInfo"
+          },
+          "policyInfo": {
+            "$ref": "#/components/schemas/PolicyInfoType"
+          },
+          "totalPolicyTermPremiumAmt": {
+            "type": "number"
+          },
+          "totalPolicyNetChangePremAmt": {
+            "type": "number"
+          },
+          "transactionDt": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          },
+          "transactionEffectiveDt": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          },
+          "claimsData": {
+            "$ref": "#/components/schemas/ClaimInfo"
+          }
+        }
+      },
+      "GeneralPartyInfo": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/Name"
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address",
+            "readOnly": true
+          }
+        }
+      },
+      "Name": {
+        "type": "object",
+        "properties": {
+          "commercialName": {
+            "type": "string"
+          },
+          "personalFirst": {
+            "type": "string"
+          },
+          "personalLast": {
+            "type": "string"
+          },
+          "personalOther": {
+            "type": "string"
+          }
+        }
+      },
+      "PolicyInfoType": {
+        "type": "object",
+        "properties": {
+          "policyNumber": {
+            "type": "string"
+          },
+          "lobCd": {
+            "type": "string",
+            "enum": [
+              "ACCT",
+              "AGENT",
+              "AGLIA",
+              "AGPP",
+              "AGPR",
+              "APKGE",
+              "ARCH",
+              "AUTOB",
+              "AUTOP",
+              "BANDM",
+              "BOAT",
+              "BOP",
+              "BOPGL",
+              "BOPPR",
+              "CFIRE",
+              "CFRM",
+              "CGL",
+              "COMR",
+              "CPKGE",
+              "CRIM",
+              "UMBRC",
+              "CYBER",
+              "DFIRE",
+              "DNTL",
+              "DO",
+              "EL",
+              "EO",
+              "EPLI",
+              "EQ",
+              "EQLIA",
+              "EXLIA",
+              "FIDUC",
+              "FLOOD",
+              "GARAG",
+              "HLTH",
+              "HOME",
+              "INMRC",
+              "INMRP",
+              "KIDRA",
+              "LAW",
+              "LIFE",
+              "LL",
+              "LMORT",
+              "MEDIA",
+              "MHOME",
+              "MMAL",
+              "MPL",
+              "MTRCR",
+              "PHYS",
+              "PL",
+              "PLMSC",
+              "PPKGE",
+              "PPL",
+              "PROP",
+              "PRSL",
+              "UMBRP",
+              "RECV",
+              "RRPRL",
+              "SFRNC",
+              "SMP",
+              "SURE",
+              "WIND",
+              "WORK",
+              "WORKV",
+              "YACHT"
+            ]
+          },
+          "naicCd": {
+            "type": "string"
+          },
+          "npnCd": {
+            "type": "string"
+          },
+          "effectiveDt": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          },
+          "expirationDt": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          },
+          "broadLOBCd": {
+            "type": "string",
+            "enum": [
+              "P",
+              "C",
+              "B",
+              "F",
+              "S"
+            ]
+          },
+          "lobSubCd": {
+            "type": "string",
+            "enum": [
+              "GRP",
+              "INDV",
+              "NPC",
+              "NPO",
+              "NSTD",
+              "VOL",
+              "OCP",
+              "GARAG",
+              "PROF"
+            ]
+          }
+        }
+      },
+      "RemarkTypeInner": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        }
+      },
+      "Document": {
+        "type": "object",
+        "properties": {
+          "documentId": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "string",
+            "enum": [
+              "SUCCESS",
+              "FAILURE",
+              "NOTFOUND"
+            ]
+          }
+        }
+      },
+      "EdocResponse": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string",
+            "description": "Unique id for this transaction"
+          },
+          "code": {
+            "type": "string",
+            "enum": [
+              "SUCCESS",
+              "INCOMPLETE",
+              "FAILURE"
+            ],
+            "example": "SUCCESS"
+          },
+          "mailbox": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "documents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Document"
+            }
+          }
+        }
+      },
+      "AdjusterParty": {
+        "type": "object",
+        "properties": {
+          "generalPartyInfo": {
+            "$ref": "#/components/schemas/GeneralPartyInfoType"
+          },
+          "adjusterPartyInfo": {
+            "$ref": "#/components/schemas/AdjusterPartyInfo"
+          }
+        }
+      },
+      "AdjusterPartyInfo": {
+        "type": "object",
+        "properties": {
+          "assignedDt": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          },
+          "adjusterId": {
+            "type": "string"
+          },
+          "communication": {
+            "$ref": "#/components/schemas/Communication"
+          }
+        }
+      },
+      "AutolossnoticeType": {
+        "type": "object",
+        "properties": {
+          "vehiclesinvolved": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "properties": {
+              "empty": {
+                "type": "boolean"
+              }
+            }
+          },
+          "coverages": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "properties": {
+              "empty": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      },
+      "ClaimantInfo": {
+        "type": "object",
+        "properties": {
+          "claimsPartyRoleCd": {
+            "type": "string",
+            "enum": [
+              "PAYEE",
+              "CLM",
+              "DRV",
+              "ReptBy"
+            ]
+          },
+          "claimsPartyReferenceNumber": {
+            "type": "string"
+          },
+          "reportedDate": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          },
+          "involvementdesc": {
+            "type": "string"
+          }
+        }
+      },
+      "ClaimsDownloadRequest": {
+        "type": "object",
+        "properties": {
+          "claimNumber": {
+            "type": "string"
+          },
+          "producer": {
+            "$ref": "#/components/schemas/ProducerType"
+          },
+          "carrierId": {
+            "type": "string"
+          },
+          "claimsActivityCd": {
+            "type": "string",
+            "enum": [
+              "CLI",
+              "ADJ",
+              "CLN",
+              "CLS",
+              "PMT",
+              "RES"
+            ]
+          },
+          "claimStatusCd": {
+            "type": "string",
+            "enum": [
+              "O",
+              "C",
+              "R",
+              "S",
+              "OT"
+            ]
+          },
+          "claimsStatusDt": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          },
+          "claimReportedDt": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          },
+          "claimAddress": {
+            "$ref": "#/components/schemas/AddressType"
+          },
+          "litigationStatusCd": {
+            "type": "string",
+            "enum": [
+              "Active",
+              "Closed"
+            ]
+          },
+          "claimsPayment": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PaymentInfo"
+            }
+          },
+          "reserveAdjustment": {
+            "$ref": "#/components/schemas/ReserveAdjustment"
+          },
+          "lossDt": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          },
+          "incidentDescription": {
+            "type": "string"
+          },
+          "policy": {
+            "$ref": "#/components/schemas/PolicyInfo"
+          },
+          "insured": {
+            "$ref": "#/components/schemas/GeneralPartyInfoType"
+          },
+          "adjusterParties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdjusterParty"
+            }
+          },
+          "claimantParties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClaimsParty"
+            }
+          },
+          "transactionDt": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "claimstype": {
+            "type": "string"
+          },
+          "losscausecd": {
+            "type": "string"
+          },
+          "lossnotices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LossnoticeType"
+            }
+          }
+        }
+      },
+      "ClaimsParty": {
+        "type": "object",
+        "properties": {
+          "generalPartyInfo": {
+            "$ref": "#/components/schemas/GeneralPartyInfoType"
+          },
+          "claimsPartyInfo": {
+            "$ref": "#/components/schemas/ClaimantInfo"
+          },
+          "claimsinjury": {
+            "$ref": "#/components/schemas/ClaimsinjuryType"
+          }
+        }
+      },
+      "ClaimsinjuryType": {
+        "type": "object",
+        "properties": {
+          "bodypartcd": {
+            "type": "string"
+          },
+          "injurynaturecd": {
+            "type": "string"
+          },
+          "losscausecd": {
+            "type": "string"
+          }
+        }
+      },
+      "Communication": {
+        "type": "object",
+        "properties": {
+          "phone": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PhoneType"
+            }
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "CoverageselfinsuredretentionType": {
+        "type": "object",
+        "properties": {
+          "selfinsuredretentiontypecd": {
+            "type": "string"
+          },
+          "selfinsuredretentionamt": {
+            "type": "number"
+          },
+          "retentionappliestocd": {
+            "type": "string"
+          }
+        }
+      },
+      "GeneralPartyInfoType": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/PersonalnameType"
+          },
+          "commercialname": {
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressType"
+          },
+          "communication": {
+            "$ref": "#/components/schemas/Communication"
+          }
+        }
+      },
+      "LiabilitylossnoticeType": {
+        "type": "object",
+        "properties": {
+          "locationnum": {
+            "type": "string"
+          },
+          "buildingnum": {
+            "type": "string"
+          },
+          "subjectofinsurancecd": {
+            "type": "string"
+          },
+          "insuredinterestcd": {
+            "type": "string"
+          },
+          "itemdesc": {
+            "type": "string"
+          },
+          "objectlossdesc": {
+            "type": "string"
+          },
+          "whereseendesc": {
+            "type": "string"
+          },
+          "operationsdesc": {
+            "type": "string"
+          },
+          "otherexposuredesc": {
+            "type": "string"
+          },
+          "coverages": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "properties": {
+              "empty": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      },
+      "LossnoticeType": {
+        "type": "object",
+        "properties": {
+          "autoloss": {
+            "$ref": "#/components/schemas/AutolossnoticeType"
+          },
+          "liabilityloss": {
+            "$ref": "#/components/schemas/LiabilitylossnoticeType"
+          },
+          "propertyloss": {
+            "$ref": "#/components/schemas/PropertylossnoticeType"
+          },
+          "workloss": {
+            "$ref": "#/components/schemas/WorklossnoticeType"
+          }
+        }
+      },
+      "PaymentInfo": {
+        "type": "object",
+        "properties": {
+          "paymentTypeCd": {
+            "type": "string",
+            "enum": [
+              "AdjExp",
+              "Adjustment",
+              "Counter",
+              "Final",
+              "Payment",
+              "Recovery",
+              "SRecov",
+              "StopPay",
+              "Transfer",
+              "Void"
+            ]
+          },
+          "totalPaymentAmount": {
+            "type": "number"
+          },
+          "totalclaimlosspaidamt": {
+            "type": "number"
+          },
+          "checkNumber": {
+            "type": "string"
+          },
+          "paymentDt": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          },
+          "paymentDesc": {
+            "type": "string"
+          },
+          "claimsPartyReferenceIdentifier": {
+            "type": "string"
+          },
+          "losscausecd": {
+            "type": "string"
+          },
+          "payee": {
+            "$ref": "#/components/schemas/GeneralPartyInfoType"
+          },
+          "lumpsumind": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PolicyInfo": {
+        "type": "object",
+        "properties": {
+          "policyNumber": {
+            "type": "string"
+          },
+          "broadLOBCd": {
+            "type": "string",
+            "enum": [
+              "P",
+              "C",
+              "B",
+              "F",
+              "S"
+            ]
+          },
+          "lobCd": {
+            "type": "string",
+            "enum": [
+              "ACCT",
+              "AGENT",
+              "AGLIA",
+              "AGPP",
+              "AGPR",
+              "APKGE",
+              "ARCH",
+              "AUTOB",
+              "AUTOP",
+              "BANDM",
+              "BOAT",
+              "BOP",
+              "BOPGL",
+              "BOPPR",
+              "CFIRE",
+              "CGL",
+              "CPKGE",
+              "CRIM",
+              "UMBRC",
+              "CYBER",
+              "DFIRE",
+              "DNTL",
+              "DO",
+              "EL",
+              "EO",
+              "EPLI",
+              "EQ",
+              "EQLIA",
+              "EXLIA",
+              "FIDUC",
+              "FLOOD",
+              "GARAG",
+              "HLTH",
+              "HOME",
+              "INMRC",
+              "INMRP",
+              "KIDRA",
+              "LAW",
+              "LIFE",
+              "LL",
+              "LMORT",
+              "MEDIA",
+              "MHOME",
+              "MMAL",
+              "MPL",
+              "MTRCR",
+              "OCMRC",
+              "PHYS",
+              "PL",
+              "PLMSC",
+              "PPKGE",
+              "PPL",
+              "PROP",
+              "PRSL",
+              "UMBRP",
+              "RECV",
+              "RRPRL",
+              "SFRNC",
+              "SMP",
+              "SURE",
+              "WIND",
+              "WORK",
+              "WORKV",
+              "YACHT"
+            ]
+          },
+          "naicCd": {
+            "type": "string"
+          },
+          "effectiveDt": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          },
+          "expirationDt": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          }
+        }
+      },
+      "PropertylossnoticeType": {
+        "type": "object",
+        "properties": {
+          "claimproperty": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "properties": {
+              "empty": {
+                "type": "boolean"
+              }
+            }
+          },
+          "realestatetypecd": {
+            "type": "string"
+          },
+          "realestateypedesc": {
+            "type": "string"
+          },
+          "subjectofinsurancecd": {
+            "type": "string"
+          },
+          "losskindcd": {
+            "type": "string"
+          },
+          "objectlossdesc": {
+            "type": "string"
+          },
+          "damagedesc": {
+            "type": "string"
+          },
+          "otherinsuranceind": {
+            "type": "boolean"
+          },
+          "mortgageeind": {
+            "type": "boolean"
+          },
+          "occupancytypecd": {
+            "type": "string"
+          },
+          "coverageselfinsuredretention": {
+            "$ref": "#/components/schemas/CoverageselfinsuredretentionType"
+          },
+          "coverages": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "properties": {
+              "empty": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      },
+      "ReserveAdjustment": {
+        "type": "object",
+        "properties": {
+          "reserveAdjustmentAmount": {
+            "type": "number"
+          },
+          "reserveAdjustmentDt": {
+            "format": "yyyy-MM-dd",
+            "$ref": "#/components/schemas/LocalDate",
+            "example": "2025-01-01"
+          }
+        }
+      },
+      "WorklossnoticeType": {
+        "type": "object",
+        "properties": {
+          "jurisdictioncd": {
+            "type": "string"
+          },
+          "jurisdictiondesc": {
+            "type": "string"
+          },
+          "wccclaimtypecd": {
+            "type": "string"
+          },
+          "secondaryinjuryfundind": {
+            "type": "boolean"
+          },
+          "otherinsuranceind": {
+            "type": "boolean"
+          },
+          "fraudulentclaimcd": {
+            "type": "string"
+          },
+          "employeeinfo": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "properties": {
+              "empty": {
+                "type": "boolean"
+              }
+            }
+          },
+          "coverages": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "properties": {
+              "empty": {
+                "type": "boolean"
+              }
+            }
+          },
+          "vesselcallid": {
+            "type": "string"
+          },
+          "losscondition": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "properties": {
+              "empty": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      },
+      "ClaimsDownloadResponse": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string",
+            "description": "Unique id for this transaction"
+          },
+          "code": {
+            "type": "string",
+            "enum": [
+              "SUCCESS",
+              "FAILURE"
+            ],
+            "example": "SUCCESS"
+          },
+          "mailbox": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "DocumentStoreReq": {
+        "type": "object",
+        "properties": {
+          "agencyId": {
+            "type": "string"
+          },
+          "policyNumber": {
+            "type": "string"
+          },
+          "carrierId": {
+            "type": "string"
+          },
+          "documentType": {
+            "type": "string",
+            "enum": [
+              "EDOC",
+              "OCR"
+            ]
+          },
+          "documentName": {
+            "type": "string"
+          },
+          "documentDesc": {
+            "type": "string",
+            "readOnly": true
+          },
+          "mimeType": {
+            "type": "string",
+            "enum": [
+              "application/pdf",
+              "image/pict",
+              "application/excel"
+            ]
+          },
+          "document": {
+            "type": "string"
+          }
+        }
+      },
+      "EdocDocumentResponse": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string",
+            "description": "Unique id for this transaction"
+          },
+          "code": {
+            "type": "string",
+            "enum": [
+              "SUCCESS",
+              "FAILURE"
+            ],
+            "example": "SUCCESS"
+          },
+          "documentId": {
+            "type": "string",
+            "description": "id of document in repository"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "FileIdResponse": {
+        "type": "object",
+        "properties": {
+          "fileId": {
+            "type": "string",
+            "example": "7ce6f940-fd77-419a-b656-27359ee47ff2"
+          }
+        }
+      },
+      "SaveResponse": {
+        "type": "object",
+        "properties": {
+          "documentId": {
+            "type": "string"
+          }
+        }
+      },
+      "TranslationPayload": {
+        "type": "object",
+        "properties": {
+          "xmlPayload": {
+            "type": "string",
+            "description": "XML must be base64 encoded"
+          },
+          "jsonPayload": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            },
+            "properties": {
+              "empty": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      },
+      "DownloadResponse": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string",
+            "description": "Unique id for this transaction"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string",
+            "enum": [
+              "SUCCESS",
+              "FAILURE"
+            ],
+            "example": "SUCCESS"
+          }
+        }
+      }
+    }
+  },
+  "x-provenance": {
+    "method": "searched",
+    "source": "https://api.ivans.com/reference/getdocumentmetainfo",
+    "generated": "2026-10-13",
+    "note": "Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored."
+  }
+}

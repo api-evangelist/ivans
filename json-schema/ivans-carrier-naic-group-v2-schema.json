@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/ivans/main/json-schema/ivans-carrier-naic-group-v2-schema.json",
+  "title": "CarrierNaicGroupV2",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/ivans-exchange-v2-openapi.json#/components/schemas/CarrierNaicGroupV2",
+  "required": [
+    "carrierNaics"
+  ],
+  "type": "object",
+  "properties": {
+    "groupName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "carrierNaics": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/CarrierNaicV2"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "CarrierNaicV2": {
+      "required": [
+        "carrierName",
+        "naic"
+      ],
+      "type": "object",
+      "properties": {
+        "naic": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "carrierName": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

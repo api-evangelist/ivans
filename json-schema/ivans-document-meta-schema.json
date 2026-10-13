@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/ivans/main/json-schema/ivans-document-meta-schema.json",
+  "title": "DocumentMeta",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/ivans-translation-openapi.json#/components/schemas/DocumentMeta",
+  "type": "object",
+  "properties": {
+    "carrierId": {
+      "type": "string"
+    },
+    "agencyId": {
+      "type": "string"
+    },
+    "documentName": {
+      "type": "string"
+    },
+    "documentDesc": {
+      "type": "string"
+    },
+    "policyId": {
+      "type": "string"
+    },
+    "mimeType": {
+      "type": "string"
+    },
+    "documentType": {
+      "type": "string"
+    },
+    "contentSize": {
+      "type": "string"
+    },
+    "createdOn": {
+      "type": "string"
+    },
+    "lastUpdated": {
+      "type": "string"
+    }
+  }
+}

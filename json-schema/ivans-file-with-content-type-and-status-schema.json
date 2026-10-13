@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/ivans/main/json-schema/ivans-file-with-content-type-and-status-schema.json",
+  "title": "FileWithContentTypeAndStatus",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/ivans-exchange-v2-openapi.json#/components/schemas/FileWithContentTypeAndStatus",
+  "required": [
+    "classCode",
+    "contentType",
+    "fileStatus",
+    "receiveAccount",
+    "receiveUserID",
+    "sendAccount",
+    "sendUserId"
+  ],
+  "type": "object",
+  "properties": {
+    "fileStatus": {
+      "type": "string"
+    },
+    "contentType": {
+      "type": "string"
+    },
+    "fileId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "originalName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "remoteName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "statusDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "sendAccount": {
+      "type": "string"
+    },
+    "sendUserId": {
+      "type": "string"
+    },
+    "receiveAccount": {
+      "type": "string"
+    },
+    "receiveUserID": {
+      "type": "string"
+    },
+    "classCode": {
+      "type": "string"
+    },
+    "originalSize": {
+      "type": "integer",
+      "format": "int64"
+    },
+    "compressedSize": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "int64"
+    }
+  },
+  "additionalProperties": false
+}

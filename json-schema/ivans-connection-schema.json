@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/ivans/main/json-schema/ivans-connection-schema.json",
+  "title": "Connection",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/ivans-exchange-v1-openapi.json#/components/schemas/Connection",
+  "required": [
+    "agencyAccount",
+    "agencyName",
+    "carrierAccount",
+    "carrierName",
+    "feedbackCode",
+    "feedbackDisplayValue",
+    "lob",
+    "lobDescription",
+    "preferenceCode",
+    "preferenceDisplayValue"
+  ],
+  "type": "object",
+  "properties": {
+    "connectionKey": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "agencyAccount": {
+      "type": "string"
+    },
+    "agencyName": {
+      "type": "string"
+    },
+    "carrierAccount": {
+      "type": "string"
+    },
+    "carrierName": {
+      "type": "string"
+    },
+    "lob": {
+      "type": "string"
+    },
+    "lobDescription": {
+      "type": "string"
+    },
+    "active": {
+      "type": "boolean"
+    },
+    "available": {
+      "type": "boolean"
+    },
+    "preferenceCode": {
+      "type": "string"
+    },
+    "preferenceDisplayValue": {
+      "type": "string"
+    },
+    "preferenceUpdatedDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "feedbackCode": {
+      "type": "string"
+    },
+    "feedbackDisplayValue": {
+      "type": "string"
+    },
+    "feedbackUpdatedDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

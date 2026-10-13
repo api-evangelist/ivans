@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/ivans/main/json-schema/ivans-insurance-license-request-schema.json",
+  "title": "InsuranceLicenseRequest",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/ivans-identification-network-openapi.json#/components/schemas/InsuranceLicenseRequest",
+  "type": "object",
+  "properties": {
+    "licenseNumber": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The license number.",
+      "maxLength": 128
+    },
+    "type": {
+      "type": "string",
+      "description": "The type of license. Choices are: 'producer', 'broker'."
+    },
+    "subdivision": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The state or province of the license. Format is the two-letter abbreviation."
+    },
+    "licenseStatus": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The status of the license. Choices are: 'active', 'inactive', 'cancelled'."
+    },
+    "residentStatus": {
+      "type": "string",
+      "description": "The resident status of the license. Choices are: 'resident', 'non-resident'."
+    },
+    "expirationDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date",
+      "description": "The expiration date of the license. Format is 'YYYY-MM-DD'."
+    },
+    "agency": {
+      "type": "string",
+      "format": "uuid",
+      "description": "The unique ID of the agency that this license is scoped to."
+    },
+    "agencyLicensee": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uuid",
+      "description": "The unique ID of the agency that is the licensee."
+    },
+    "agentLicensee": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uuid",
+      "description": "The unique ID of the agent that is the licensee."
+    },
+    "agentsGrantedAccess": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "description": "An array of unique IDs of agents that have been granted access to the license."
+    }
+  },
+  "required": [
+    "agency",
+    "agencyLicensee",
+    "agentLicensee",
+    "agentsGrantedAccess",
+    "licenseNumber",
+    "licenseStatus",
+    "residentStatus",
+    "subdivision",
+    "type"
+  ]
+}

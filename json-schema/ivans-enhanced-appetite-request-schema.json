@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/ivans/main/json-schema/ivans-enhanced-appetite-request-schema.json",
+  "title": "EnhancedAppetiteRequest",
+  "description": "Returns enhanced appetite result and optional form.\n\nEnhanced appetite result has status for each requested combination of markets, lobs, and states.\n- If no markets are requested, appetite status is returned for all allowed markets.\n- If no states are requested, appetite status is returned for all US states.\n\nOptional form contains:\n- basic appetite fields\n- enhanced appetite fields for risk profiles in basic appetite\n- risk information fields for risk profiles in enhanced appetite\n\nViewSet: EnhancedAppetiteViewset\n\nEndpoint: /enhanced-appetite/",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/ivans-identification-network-openapi.json#/components/schemas/EnhancedAppetiteRequest",
+  "type": "object",
+  "properties": {
+    "lobs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "markets": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      }
+    },
+    "naicsIndex": {
+      "type": "string"
+    },
+    "states": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "default": null
+      },
+      "default": [
+        "AL",
+        "AK",
+        "AS",
+        "AZ",
+        "AR",
+        "AA",
+        "AE",
+        "AP",
+        "CA",
+        "CO",
+        "CT",
+        "DE",
+        "DC",
+        "FL",
+        "GA",
+        "GU",
+        "HI",
+        "ID",
+        "IL",
+        "IN",
+        "IA",
+        "KS",
+        "KY",
+        "LA",
+        "ME",
+        "MD",
+        "MA",
+        "MI",
+        "MN",
+        "MS",
+        "MO",
+        "MT",
+        "NE",
+        "NV",
+        "NH",
+        "NJ",
+        "NM",
+        "NY",
+        "NC",
+        "ND",
+        "MP",
+        "OH",
+        "OK",
+        "OR",
+        "PA",
+        "PR",
+        "RI",
+        "SC",
+        "SD",
+        "TN",
+        "TX",
+        "UT",
+        "VT",
+        "VI",
+        "VA",
+        "WA",
+        "WV",
+        "WI",
+        "WY"
+      ]
+    },
+    "fieldValues": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/FieldValuesRequest"
+      }
+    }
+  },
+  "required": [
+    "fieldValues",
+    "lobs",
+    "naicsIndex"
+  ],
+  "$defs": {
+    "FieldValuesRequest": {
+      "type": "object",
+      "properties": {
+        "questionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "questionId",
+        "value"
+      ]
+    }
+  }
+}

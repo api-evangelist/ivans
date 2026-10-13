@@ -1,0 +1,98 @@
+generated: '2026-10-13'
+method: derived
+generator: derive-problem-types.py
+source:
+- openapi/ivans-authorization-openapi.json
+- openapi/ivans-distribution-platform-openapi.json
+- openapi/ivans-exchange-v1-openapi.json
+- openapi/ivans-exchange-v2-openapi.json
+- openapi/ivans-exchange-v3-openapi.json
+- openapi/ivans-identification-network-openapi.json
+- openapi/ivans-insights-openapi.json
+- openapi/ivans-passport-openapi.json
+- openapi/ivans-translation-openapi.json
+format: custom
+envelope:
+  media_type: application/json
+  schema: ErrorFormat
+coverage:
+  operations: 203
+  statuses_declared: 10
+problems:
+- status: 400
+  title: Bad Request
+  description: The request is not formatted properly.
+  operations: 118
+  media_types:
+  - application/json
+  - text/plain
+  - text/json
+  schema: ErrorFormat
+- status: 401
+  title: Unauthorized
+  description: Invalid or Expired token.
+  operations: 143
+  media_types:
+  - application/json
+  - text/plain
+  - text/json
+  schema: ErrorFormat
+- status: 403
+  title: Forbidden
+  description: Retrieval errored due to lack of permission
+  operations: 38
+  media_types:
+  - application/json
+  - text/plain
+  - text/json
+  schema: ErrorFormat
+- status: 404
+  title: Not Found
+  description: Error if requested resource was not found
+  operations: 70
+  media_types:
+  - application/json
+  - text/plain
+  - text/json
+  schema: ErrorFormat
+- status: 406
+  title: Not Acceptable
+  description: There is an issue with the data provided.
+  operations: 1
+  media_types: []
+  schema: null
+- status: 409
+  title: Conflict
+  description: Cannot decompress corrupt or incomplete file. Remove [decompressFile] parameter to download original
+    file.
+  operations: 1
+  media_types: []
+  schema: null
+- status: 422
+  title: Unprocessable Content
+  description: Validation Error
+  operations: 23
+  media_types:
+  - application/json
+  schema: HTTPValidationError
+- status: 424
+  title: Failed Dependency
+  description: Callout to Ask Kodiak endpoint failed.
+  operations: 2
+  media_types:
+  - application/json
+  schema: naics_ak_424_response
+- status: 500
+  title: Internal Server Error
+  description: Internal server error
+  operations: 8
+  media_types:
+  - application/json
+  schema: ErrorResponseWithMessageOnly
+- status: 503
+  title: Service Unavailable
+  description: Invalid media type.
+  operations: 2
+  media_types:
+  - application/json
+  schema: CsvResponse503

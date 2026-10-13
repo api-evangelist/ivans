@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/ivans/main/json-schema/ivans-agency-response-schema.json",
+  "title": "AgencyResponse",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/ivans-exchange-v1-openapi.json#/components/schemas/AgencyResponse",
+  "required": [
+    "agencyAccount",
+    "agencyEmail",
+    "agencyName",
+    "agencyPhone",
+    "agencyPhoneExtension",
+    "alternateAgencyName",
+    "amsProductVersion",
+    "locationCity",
+    "locationState",
+    "locationStreet1",
+    "locationStreet2",
+    "locationZip",
+    "mailingCity",
+    "mailingState",
+    "mailingStreet1",
+    "mailingStreet2",
+    "mailingZip"
+  ],
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "agencyAccount": {
+      "type": "string"
+    },
+    "agencyName": {
+      "type": "string"
+    },
+    "alternateAgencyName": {
+      "type": "string"
+    },
+    "locationStreet1": {
+      "type": "string"
+    },
+    "locationStreet2": {
+      "type": "string"
+    },
+    "locationCity": {
+      "type": "string"
+    },
+    "locationState": {
+      "type": "string"
+    },
+    "locationZip": {
+      "type": "string"
+    },
+    "mailingStreet1": {
+      "type": "string"
+    },
+    "mailingStreet2": {
+      "type": "string"
+    },
+    "mailingCity": {
+      "type": "string"
+    },
+    "mailingState": {
+      "type": "string"
+    },
+    "mailingZip": {
+      "type": "string"
+    },
+    "agencyPhone": {
+      "type": "string"
+    },
+    "agencyPhoneExtension": {
+      "type": "string"
+    },
+    "agencyEmail": {
+      "type": "string"
+    },
+    "groupId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uuid"
+    },
+    "enableApiProfile": {
+      "type": "boolean"
+    },
+    "amsProductVersionId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "amsProductVersion": {
+      "type": "string",
+      "format": "uri; see <AmsVersionDetails>"
+    },
+    "enableManualAmsInfoEdit": {
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": false
+}

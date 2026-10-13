@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/ivans/main/json-schema/ivans-bookroll-request-request-schema.json",
+  "title": "BookrollRequestRequest",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/ivans-exchange-v1-openapi.json#/components/schemas/BookrollRequestRequest",
+  "required": [
+    "agencyContactEmail",
+    "agencyContactName",
+    "agencyId",
+    "bookrollType",
+    "carrierContactEmail",
+    "carrierContactName",
+    "carrierId",
+    "endDate",
+    "linesOfBusiness",
+    "naics",
+    "name",
+    "startDate"
+  ],
+  "type": "object",
+  "properties": {
+    "name": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "carrierId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "carrierContactName": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "carrierContactEmail": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "agencyId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "agencyContactName": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "agencyContactEmail": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "linesOfBusiness": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "startDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "endDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "naics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "includePackagePolicies": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "stateCodes": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "transferCode": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "agencyReferenceId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "agencyArchive": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "carrierArchive": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "bookrollType": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

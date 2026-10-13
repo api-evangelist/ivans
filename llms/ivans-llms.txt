@@ -1,0 +1,403 @@
+# Ivans Product Documentation Documentation
+
+> Product & API Documentation for the intersection of insurance and technology.
+
+## Documentation: Getting Started
+- [Welcome](https://api.ivans.com/docs/welcome.md)
+- [Ivans Distribution Platform](https://api.ivans.com/docs/getting-started-idp.md)
+
+## Documentation: Ivans Distribution Platform
+- [Getting Started with IDP APIs](https://api.ivans.com/docs/getting-started-with-idp-apis.md)
+- [FastPath](https://api.ivans.com/docs/fastpath.md)
+  - [Retrieve Forms with FastPath](https://api.ivans.com/docs/retrieve-forms-with-fastpath.md)
+- [Commercial Auto Service](https://api.ivans.com/docs/commercial-auto.md)
+  - [Auto Years](https://api.ivans.com/docs/auto-years-makes-and-models.md)
+  - [Auto Makes](https://api.ivans.com/docs/auto-makes.md)
+  - [Auto Models](https://api.ivans.com/docs/auto-models.md)
+  - [Auto Details](https://api.ivans.com/docs/auto-service.md)
+- [Authentication](https://api.ivans.com/docs/authentication.md)
+- [Partner Implementation Guide](https://api.ivans.com/docs/partner-implementation-guide.md)
+- [Ivans Distribution Platform Partner Process](https://api.ivans.com/docs/ivans-distribution-platform-partner-process.md): This page shares an overview and comparison between two paths to integrate with IDP.
+- [Setup and Configuration Endpoints](https://api.ivans.com/docs/setup-configuration-endpoints.md)
+  - [Market Credentials (Create)](https://api.ivans.com/docs/market-credentials-create-details.md)
+  - [Market Credentials (Retrieve)](https://api.ivans.com/docs/market-credentials-retrieve-details.md)
+  - [Market Configurations](https://api.ivans.com/docs/market-configurations-details.md)
+  - [Market Contract Codes (Create)](https://api.ivans.com/docs/market-contract-codes-create-details.md)
+  - [Market Contract Codes (Retrieve)](https://api.ivans.com/docs/market-contract-codes-retrieve-details.md)
+  - [All Markets](https://api.ivans.com/docs/all-markets-details.md)
+  - [All Markets (Single)](https://api.ivans.com/docs/all-markets-single-details.md)
+  - [Agency and Agency-User Registration](https://api.ivans.com/docs/agency-and-agency-user-registration.md)
+  - [Create Default Template](https://api.ivans.com/docs/create-default-template.md)
+- [Retrieve Appetite](https://api.ivans.com/docs/retrieve-appetite.md)
+  - [GET Basic Appetite](https://api.ivans.com/docs/get-basic-appetite.md)
+  - [POST Basic Appetite](https://api.ivans.com/docs/basic-appetite-details.md)
+  - [Basic Appetite Capture](https://api.ivans.com/docs/basic-appetite-capture-details.md)
+  - [Enhanced Appetite Capture](https://api.ivans.com/docs/enhanced-appetite-capture-details.md)
+- [Evaluate Conditional Logic](https://api.ivans.com/docs/evaluating-conditional-logic.md)
+- [Coalesce Questions](https://api.ivans.com/docs/coalesce-questions.md)
+- [Retrieve Class Codes](https://api.ivans.com/docs/retrieve-class-codes.md)
+- [Send Submissions](https://api.ivans.com/docs/send-submissions.md): This article reviews the request schema when submitting a quote.
+- [Receive Quotes](https://api.ivans.com/docs/receive-quotes.md): This article reviews the callbackURL response that is returned when a submission has successfully been submitted.
+- [Implement Defaults and Templates](https://api.ivans.com/docs/implement-defaults-and-templates.md)
+- [Repeating Groups](https://api.ivans.com/docs/idp-repeating-groups.md): This article reviews how repeating group and possible conditions are represented within the IDP form definition to allow for dynamic question sets based on the risk's data capture.
+- [Field Conditionals](https://api.ivans.com/docs/idp-field-conditions.md): This article reviews how field conditionals are represented within the IDP form definition to allow for dynamic question sets based on the risk's data capture.
+- [Multi-Line Submission with Market Specific Path](https://api.ivans.com/docs/multi-line-submission-market-specific.md)
+- [Multi-Line Submission with the Base Question Path](https://api.ivans.com/docs/multi-line-submission.md)
+- [Implement Package](https://api.ivans.com/docs/how-to-implement-a-new-package.md)
+- [Enums](https://api.ivans.com/docs/enums-details.md)
+- [IDP Data Types](https://api.ivans.com/docs/idp-data-types.md)
+- [Form Definition Schema](https://api.ivans.com/docs/idp-form-schema.md): This article reviews the schema for the form definition that powers the dynamic data capture question sets.
+- [Common Endpoints](https://api.ivans.com/docs/common-endpoints.md)
+  - [NAICS (Business Classification)](https://api.ivans.com/docs/naics-details.md)
+  - [is-eligible](https://api.ivans.com/docs/is-eligible.md)
+  - [Bind a Quoted Bindable Premium](https://api.ivans.com/docs/bind-a-quoted-bindable-premium.md)
+  - [Refer to Underwriter](https://api.ivans.com/docs/refer-to-underwriter.md)
+- [Quote Status Definitions](https://api.ivans.com/docs/quote-status-definitions.md)
+- [Reporting and Analytics](https://api.ivans.com/docs/idp-reporting-analytics.md)
+- [FAQ](https://api.ivans.com/docs/faq.md)
+
+## Documentation: Ivans Download & Exchange
+- [Ivans Exchange API](https://api.ivans.com/docs/getting-started-1.md)
+  - [File Transfer API](https://api.ivans.com/docs/file-transfer-api.md)
+  - [Instant Notification API](https://api.ivans.com/docs/instant-notification-api.md)
+  - [Trading Partners API](https://api.ivans.com/docs/trading-partner-api.md)
+- [Bookroll API](https://api.ivans.com/docs/bookroll-api.md)
+- [Ivans Download API](https://api.ivans.com/docs/ivans-download-apis.md)
+  - [eDocs API](https://api.ivans.com/docs/edocs-api-copy.md)
+  - [Direct Bill Commission Statements (DBCS) API](https://api.ivans.com/docs/direct-bill-commission-statements-dbcs-api.md)
+  - [Policy Download API](https://api.ivans.com/docs/policy-download-api.md)
+
+## Documentation: Ivans Marketing Insights
+- [Marketing Insights+ API Endpoints](https://api.ivans.com/docs/marketing-insights-api-endpoints.md)
+
+## Documentation: Ivans Data Model
+- [Ivans Data Model 2.0](https://api.ivans.com/docs/ivans-data-model-20.md)
+
+## APIs: Authorization
+- [/api/v1/token/](https://api.ivans.com/reference/token.md): Use the provided credentials to generate a token to authenticate with the platform.
+
+## APIs: Ivans Distribution Platform (FastIDP)
+- [Get Basic Appetite](https://api.ivans.com/reference/get_basic_appetite_api_v1_forms_basic_appetite_get.md): Returns form with basic appetite and available Risk Profiles.      Starting endpoint for IDP appetite flow.
+- [Post Basic Appetite Capture](https://api.ivans.com/reference/post_basic_appetite_capture_api_v1_basic_appetite_capture_post.md)
+- [Post Enhanced Appetite Capture](https://api.ivans.com/reference/post_enhanced_appetite_capture_api_v1_enhanced_appetite_capture_post.md)
+- [Get Base Question Set](https://api.ivans.com/reference/get_base_question_set_api_v1_forms_base_question_set_get.md): Returns Base Question Set for given LOB(s) Can optionally include Question Set for given Risk Profile(s) Nested form param will change the structure of form to the nested structure
+- [Post Base Question Set](https://api.ivans.com/reference/post_base_question_set_api_v1_forms_base_question_set_post.md): Validates answers to Base Question Set  Evaluates appetite for given Risk Profile(s) and returns combined Question Set for all valid Risk Profiles
+- [Get Fast Path Question Set](https://api.ivans.com/reference/get_fast_path_question_set_api_v1_forms_question_set_fast_path_get.md): Returns a form with a single Risk Profile for the FastPath flow.  Labels and visibility of fields are customized based on the supplied default field values template. Fields marked as `display_in_ui:…
+- [Get Risk Profile Diff](https://api.ivans.com/reference/get_risk_profile_diff_api_v1_risk_profiles_diff_get.md)
+- [Get Risk Profile Lineage](https://api.ivans.com/reference/get_risk_profile_lineage_api_v1_risk_profiles_lineage_post.md)
+- [Get Passport Risk Profiles](https://api.ivans.com/reference/get_passport_risk_profiles_api_v1_risk_profiles_passport_get.md): Fetch all Passport Risk Profiles.
+- [Get Risk Profile Json Schema](https://api.ivans.com/reference/get_risk_profile_json_schema_api_v1_risk_profiles__risk_profile_uuid__json_schema_get.md): Fetch the JSON schema for a specific risk profile.
+- [Convert Json Schema To Api Format](https://api.ivans.com/reference/convert_json_schema_to_api_format_api_v1_json_schema_to_api_post.md): Convert JSON Schema format to API format.
+- [Post Submission](https://api.ivans.com/reference/post_submission_api_v1_forms_submission_post.md): Endpoint for quote submission.      Metadata:         - clientId: integrator's account ID, required         - quoteId: integrator's quote ID, required         - callbackUrl: integrator's callback…
+- [Bind Submission](https://api.ivans.com/reference/bind_submission_api_v1_forms_submission_bind_post.md): Endpoint to bind quotes through IDP.      Metadata:         - clientId: integrator's account ID, required         - quoteId: integrator's quote ID, required         - callbackUrl: integrator's…
+- [Refer Submission](https://api.ivans.com/reference/refer_submission_api_v1_forms_submission_refer_post.md): Endpoint to refer quotes through IDP.      Metadata:         - clientId: integrator's account ID, required         - quoteId: integrator's quote ID, required         - callbackUrl: integrator's…
+- [Fast Path Submission](https://api.ivans.com/reference/fast_path_submission_api_v1_forms_submission_fast_path_post.md)
+- [Get Bind Question Set](https://api.ivans.com/reference/get_bind_question_set_api_v1_forms_bind_get.md): Returns bind questions applicable to the requested risk profile      Nested form parameter will change the structure of the form to the nested structure
+- [Get Refer Question Set](https://api.ivans.com/reference/get_refer_question_set_api_v1_forms_refer_get.md): Returns referral questions applicable to the requested risk profile.      Nested form parameter will change the structure of the form to the nested structure.
+- [Get Vehicle Data with VIN or Year, Make, Model or a combination of these](https://api.ivans.com/reference/get_auto_details_api_v1_auto_details_get.md): Retrieve vehicle details by VIN or by year, make, and model.
+- [Get unique vehicle years](https://api.ivans.com/reference/get_years_api_v1_auto_years_get.md): Retrieve unique model years for all vehicles in descending order.
+- [Get unique vehicle makes](https://api.ivans.com/reference/get_makes_api_v1_auto_makes_get.md): Retrieve unique make names for all vehicles listed alphabetically.
+- [Get unique vehicle models](https://api.ivans.com/reference/get_models_api_v1_auto_models_get.md): Retrieve unique model names for all vehicles listed alphabetically.
+
+## APIs: Identification Network
+- [/api/v1/agencies/](https://api.ivans.com/reference/agencies_list.md): Returns agencies that are accessible to the user.  Access restrictions:  - Service level users can retrieve any agency, agent, and license under their integrated application. - Admin users can…
+- [/api/v1/agencies/](https://api.ivans.com/reference/agencies_create.md): Creates a new agency.  Access restrictions:  - Only service level users can use this endpoint to register an agency. - Only service level users can set the test mode on an agency. - Non-service level…
+- [/api/v1/agencies/{id}/](https://api.ivans.com/reference/agencies_retrieve.md): Returns an agency if it is accessible to the user.  Access restrictions:  - Service level users can retrieve any agency, agent, and license under their integrated application. - Admin users can…
+- [/api/v1/agencies/{id}/](https://api.ivans.com/reference/agencies_update.md): Updates an agency if it is accessible to the user.  Access restrictions:  - Only service level and admin users can update an agency. - Service level users can update any agency under their integrated…
+- [/api/v1/agents/](https://api.ivans.com/reference/agents_list.md): Returns agents that are accessible to the user.  Access restrictions:  - Service level users can retrieve any agent and license under their integrated application. - Admin users can retrieve any…
+- [/api/v1/agents/](https://api.ivans.com/reference/agents_create.md): Creates a new agent.  Access restrictions:  - Only service level users can use this endpoint to register an agent. - Non-service level users must use the PUT endpoint instead to register an agent.
+- [/api/v1/agents/{id}/](https://api.ivans.com/reference/agents_retrieve.md): Returns an agent if it is accessible to the user.  Access restrictions:  - Service level users can retrieve any agent and license under their integrated application. - Admin users can retrieve any…
+- [/api/v1/agents/{id}/](https://api.ivans.com/reference/agents_update.md): Updates an agent if it is accessible to the user.  Access restrictions:  - Only service level and admin users can update an agent. - Service level users can update any agent under their integrated…
+- [/api/v1/all-markets/](https://api.ivans.com/reference/all_markets_list.md): Returns all markets. - Optional boolean parameter to get carrier and broker data with send accounts and icos. - Optional string parameter to match search term to carrier name. - Optional string…
+- [/api/v1/all-markets/{uuid}/](https://api.ivans.com/reference/all_markets_retrieve.md): Returns an individual market based on a given UUID.     - UUID: Universally unique identifier set for each IVANS Distribution Platform market
+- [/api/v1/basic-appetite/](https://api.ivans.com/reference/basic_appetite_create.md): Returns basic appetite result and optional form.      Basic appetite result contains status for each combination of the requested markets, lobs, and states.     - If no markets are requested,…
+- [/api/v1/basic-appetite-capture/](https://api.ivans.com/reference/basic_appetite_capture_create.md): Returns basic appetite result, form, and possible routes.      Second endpoint of the IDP appetite flow.      Basic appetite result has status for each requested combination of markets, lobs, and…
+- [/api/v1/classification-codes/](https://api.ivans.com/reference/classification_codes_create.md): Returns corresponding classification codes for a given classification standard, based on an optional NAICS index, state, and/or search term.  Note: A maximum of 100 class codes can be returned based…
+- [/api/v1/classification-codes/{uuid}/](https://api.ivans.com/reference/classification_codes_retrieve.md): Returns an individual class code based on the UUID.
+- [/api/v1/classification-standards/](https://api.ivans.com/reference/classification_standards_list.md): Returns all the classification standards. Can filter by market and LOB
+- [/api/v1/classification-standards/{external_id}/](https://api.ivans.com/reference/classification_standards_retrieve.md): Get an individual standard based on the external_id.
+- [/api/v1/enhanced-appetite/](https://api.ivans.com/reference/enhanced_appetite_create.md): Returns enhanced appetite result and optional form.      Enhanced appetite result has status for each requested combination of markets, lobs, and states.     - If no markets are requested, appetite…
+- [/api/v1/enhanced-appetite-capture/](https://api.ivans.com/reference/enhanced_appetite_capture_create.md): Returns enhanced appetite result, form, and routes.      Third endpoint in IDP appetite flow.      Enhanced appetite result has status for each requested combination of markets, lobs, and states.…
+- [/api/v1/forms/base-question-set/](https://api.ivans.com/reference/forms_base_question_set_retrieve.md): Returns Base Question Set for given LOB(s)  Can optionally include Question Set for given Risk Profile(s)  Nested form param will change the structure of form to the nested structure
+- [/api/v1/forms/base-question-set/](https://api.ivans.com/reference/forms_base_question_set_create.md): Validates answers to Base Question Set  Evaluates appetite for given Risk Profile(s) and returns combined Question Set for all valid Risk Profiles
+- [/api/v1/forms/basic-appetite/](https://api.ivans.com/reference/forms_basic_appetite_list.md): Returns form with basic appetite and possible routes.      Possible routes contain route types for each market and lob combination.      Starting endpoint for IDP appetite flow.
+- [/api/v1/forms/bind/](https://api.ivans.com/reference/forms_bind_retrieve.md): Returns bind questions applicable to the requested risk profile      Nested form parameter will change the structure of the form to the nested structure
+- [/api/v1/forms/dynamic-form/](https://api.ivans.com/reference/forms_dynamic_form_retrieve.md): Returns data-capturing form based on the LOB and Markets  Nested form param will change the structure of form to the nested structure
+- [/api/v1/forms/is-eligible/](https://api.ivans.com/reference/forms_is_eligible_create.md): Returns eligibility results for the requested risk profiles, based on the provided form answers.     Request body is comprised of form answers, and must include answers for classification (NAICS)…
+- [/api/v1/forms/question-set/](https://api.ivans.com/reference/forms_question_set_retrieve.md): Returns the question set form for the given risk profile(s) and optional parameters.
+- [/api/v1/forms/refer/](https://api.ivans.com/reference/forms_refer_retrieve.md): Returns referral questions applicable to the requested risk profile.      Nested form parameter will change the structure of the form to the nested structure.
+- [/api/v1/forms/submission/](https://api.ivans.com/reference/forms_submission_create.md): Endpoint for quote submission.      Metadata:         - clientId: integrator's account ID, required         - quoteId: integrator's quote ID, required         - callbackUrl: integrator's callback…
+- [/api/v1/forms/submission/bind/](https://api.ivans.com/reference/forms_submission_bind_create.md): Endpoint to bind quotes through IDP.      Metadata:         - clientId: integrator's account ID, required         - quoteId: integrator's quote ID, required         - callbackUrl: integrator's…
+- [/api/v1/forms/submission/refer/](https://api.ivans.com/reference/forms_submission_refer_create.md): Endpoint to refer quotes through IDP.      Metadata:         - clientId: integrator's account ID, required         - quoteId: integrator's quote ID, required         - callbackUrl: integrator's…
+- [/api/v1/forms/templates/](https://api.ivans.com/reference/forms_templates_list.md): Returns list of templates and their default field values that are accessible to the user.  Permissions: - All users can access templates owned by Ivans. - Service level users can access templates…
+- [/api/v1/forms/templates/](https://api.ivans.com/reference/forms_templates_create.md): Creates a new template.  Permissions: - Non-admin users cannot create templates. - By default, a template is scoped to the user's application, and is accessible to all agencies under the application.…
+- [/api/v1/forms/templates/{uuid}/](https://api.ivans.com/reference/forms_templates_retrieve.md): Returns individual template and its default field values.  Permissions: - All users can access templates owned by Ivans. - Service level users can access templates that are owned by their application…
+- [/api/v1/forms/templates/{uuid}/](https://api.ivans.com/reference/forms_templates_partial_update.md): Updates the template with the given UUID.  Permissions: - Non-admin users cannot update templates. - Service level users can update any template under their application. - Agency level admin users…
+- [/api/v1/forms/templates/{uuid}/](https://api.ivans.com/reference/forms_templates_destroy.md): Deletes the template with the given UUID.  Permissions: - Non-admin users cannot delete templates. - Service level users can delete any template under their application. - Agency level admin users…
+- [/api/v1/forms/templates/{uuid}/clone/](https://api.ivans.com/reference/forms_templates_clone_create.md): Creates a copy of the template with the given UUID.  Permissions: - Non-admin users cannot clone templates.  The new template will be scoped to the user's application, regardless of the source…
+- [/api/v1/geos/countries/](https://api.ivans.com/reference/geos_countries_list.md): Returns all countries and associated subdivisions.      Search parameter can be used for filtering.
+- [/api/v1/geos/countries/{uuid}/](https://api.ivans.com/reference/geos_countries_retrieve.md): Returns individual country based on the uuid.
+- [/api/v1/geos/subdivisions/](https://api.ivans.com/reference/geos_subdivisions_list.md): Search all Subdivisions
+- [/api/v1/geos/us/counties/](https://api.ivans.com/reference/geos_us_counties_list.md): Search US Counties
+- [/api/v1/geos/us/states/](https://api.ivans.com/reference/geos_us_states_list.md): Search US States
+- [/api/v1/licenses/](https://api.ivans.com/reference/licenses_list.md): Returns insurance licenses that are accessible to the user.  Access restrictions:  - Service level users can retrieve any license under their integrated application. - Admin users can retrieve any…
+- [/api/v1/licenses/](https://api.ivans.com/reference/licenses_create.md): Creates a new insurance license.  Access restrictions:  - Service level users can create licenses under any of their allowed agencies, for any allowed licensee, and assigned to any allowed agents. -…
+- [/api/v1/licenses/{uuid}/](https://api.ivans.com/reference/licenses_retrieve.md): Returns an insurance license if it is accessible to the user.  Access restrictions:  - Service level users can retrieve any license under their integrated application. - Admin users can retrieve any…
+- [/api/v1/licenses/{uuid}/](https://api.ivans.com/reference/licenses_update.md): Updates an insurance license if it is accessible to the user.  Access restrictions:  - Service level users can update any license under their integrated application. - Admin users can update any…
+- [/api/v1/lobs/](https://api.ivans.com/reference/lobs_list.md): Search Lines of Business
+- [/api/v1/market-bound-status/](https://api.ivans.com/reference/market_bound_status_create.md): •  After the quote is sold, market_bound_status will be set to mark as sold. based on the     QuoteId, QuoteSessionId and Market     •  Request body;         - quoteSessionId:             UUID…
+- [/api/v1/market-configurations/](https://api.ivans.com/reference/market_configurations_list.md): Returns market configurations that are accessible to the user. - Market configuration access depends on the user's access level, and the user's current agency's market access.
+- [/api/v1/market-configurations/](https://api.ivans.com/reference/market_configurations_create.md): Creates market configuration. - Agency is optional. If not provided, the user's current agency will be used. - Service level users can set a specific agency for the market configuration.
+- [/api/v1/market-configurations/{uuid}/](https://api.ivans.com/reference/market_configurations_retrieve.md): Returns individual market configuration based on the uuid. - User should have access to market configuration, otherwise it will return error.
+- [/api/v1/market-configurations/{uuid}/](https://api.ivans.com/reference/market_configurations_partial_update.md): Updates a market configuration.  Only service level users can update the agency.  Fields that can be updated: - lineOfBusiness: uuid - accessStructures: (multiple accepted)     - agency: uuid…
+- [/api/v1/market-configurations/{uuid}/contract-codes/](https://api.ivans.com/reference/market_configurations_contract_codes_retrieve.md): Returns market contract codes for given market configuration.
+- [/api/v1/market-configurations/{uuid}/credentials/](https://api.ivans.com/reference/market_configurations_credentials_retrieve.md): Returns market credentials for given market configuration.
+- [/api/v1/market-contract-codes/](https://api.ivans.com/reference/market_contract_codes_list.md): Returns all market contract codes that the user has access to.  Attributes that control access:  - User - single user that represents the owner of the contract code. The owner of a contract code can…
+- [/api/v1/market-contract-codes/](https://api.ivans.com/reference/market_contract_codes_create.md): Creates a market contract code.  Attributes that control access:  - User - single user that represents the owner of the contract code. The owner of a contract code can view, update, and delete the…
+- [/api/v1/market-contract-codes/{uuid}/](https://api.ivans.com/reference/market_contract_codes_retrieve.md): Returns an individual contract code.  Attributes that control access:  - User - single user that represents the owner of the contract code. The owner of a contract code can view, update, and delete…
+- [/api/v1/market-contract-codes/{uuid}/](https://api.ivans.com/reference/market_contract_codes_partial_update.md): Updates an existing market contract code.  Attributes that control access:  - User - single user that represents the owner of the contract code. The owner of a contract code can view, update, and…
+- [/api/v1/market-contract-codes/{uuid}/](https://api.ivans.com/reference/market_contract_codes_destroy.md): Deletes an existing contract code.  Access restrictions:  - If the request user is an admin, all contract codes under the user's database scope will be available to delete. - If the request user is…
+- [/api/v1/market-contract-codes/bulk-delete/](https://api.ivans.com/reference/market_contract_codes_bulk_delete_create.md): Deletes multiple existing contract codes.  Access restrictions:  - If the request user is an admin, all contract codes under the user's database scope will be available to delete. - If the request…
+- [/api/v1/market-credentials/](https://api.ivans.com/reference/market_credentials_list.md): Returns all of the market credentials that user has access to. - If a user is an admin, all credentials with the market configuration will be available to view. - If the user is not an admin, the…
+- [/api/v1/market-credentials/](https://api.ivans.com/reference/market_credentials_create.md): Creates market credential. - Non-admin user cannot set access structures on credential - User cannot create the credential for another user (forbidden)
+- [/api/v1/market-credentials/{uuid}/](https://api.ivans.com/reference/market_credentials_retrieve.md): Returns an individual credential.
+- [/api/v1/market-credentials/{uuid}/](https://api.ivans.com/reference/market_credentials_partial_update.md): Updates existing credentials.
+- [/api/v1/market-credentials/{uuid}/](https://api.ivans.com/reference/market_credentials_destroy.md): Deletes the credential based on given uuid. - Credential must be accessible by the user, otherwise it will return not found.
+- [/api/v1/market-credentials/{uuid}/secret/](https://api.ivans.com/reference/market_credentials_secret_retrieve.md): Retrieves the username/password and nickname.
+- [/api/v1/markets/](https://api.ivans.com/reference/markets_list.md): Returns the markets that the current tenant has access to through an integrated application.
+- [/api/v1/markets/{uuid}/](https://api.ivans.com/reference/markets_retrieve.md): Returns an individual market that the current tenant has access to through an integrated application.
+- [/api/v1/naics/](https://api.ivans.com/reference/naics_list.md): Returns all NAICS indexes that match a given search term. Uses Ask Kodiak's Suggest NAICS Codes endpoint.
+- [/api/v1/naics/{uuid}/](https://api.ivans.com/reference/naics_retrieve.md): Returns an individual NAICS index based on the UUID.
+- [/api/v1/naics/ak-hash-lookup/](https://api.ivans.com/reference/naics_ak_hash_lookup_create.md): Get NAICS index by AK hash
+- [/api/v1/naics-ak/](https://api.ivans.com/reference/naics_ak_list.md): Returns all NAICS indexes that match a given search term. Uses Ask Kodiak's Suggest NAICS Codes endpoint.
+- [/api/v1/naics-ak/{uuid}/](https://api.ivans.com/reference/naics_ak_retrieve.md): Returns an individual NAICS index based on the UUID.
+- [/api/v1/naics-ak/ak-hash-lookup/](https://api.ivans.com/reference/naics_ak_ak_hash_lookup_create.md): Get NAICS index by AK hash
+- [/api/v1/ncci/](https://api.ivans.com/reference/ncci_list.md): Returns four-digit NCCI codes produced by the National Council on Compensation Insurance used to classify businesses for workers' compensation insurance.
+- [/api/v1/product-releases/](https://api.ivans.com/reference/product_releases_list.md): Returns MarketAppetite for market/lob combinations that are in appetite and in effect.  Filters out products whose effective date is not in the future.  Endpoint: /product-releases/  Actions:…
+- [/api/v1/risk-profiles/](https://api.ivans.com/reference/risk_profiles_list.md): Returns risk profiles that are accessible to the user. Certain restrictions can be bypassed via permissions.
+- [/api/v1/schema/](https://api.ivans.com/reference/schema_retrieve.md): OpenApi3 schema for this API. Format can be selected via content negotiation.  - YAML: application/vnd.oai.openapi - JSON: application/vnd.oai.openapi+json
+- [/api/v1/segments/](https://api.ivans.com/reference/segments_list.md): Returns all segments
+- [/api/v1/structures/](https://api.ivans.com/reference/structures_list.md): Returns user's structures (filtered based on user tenant)
+- [/api/v1/users/](https://api.ivans.com/reference/users_list.md): Returns users related to the requesting user's current tenant.
+- [/api/v1/users/{id}/](https://api.ivans.com/reference/users_retrieve.md): Returns an individual user.
+- [/api/v1/users/{id}/](https://api.ivans.com/reference/users_partial_update.md): Updates a user's information. Only admins can update user information.
+- [/api/v1/users/files/upload/](https://api.ivans.com/reference/users_files_upload_create.md): ViewSet responsible for handling uploads and downloads for user files
+- [/api/v1/utils/enums/](https://api.ivans.com/reference/utils_enums_retrieve.md): Returns the label and value for all choice field values.
+- [/api/v1/utils/form-field-types/](https://api.ivans.com/reference/utils_form_field_types_retrieve.md): Returns information, including JSON data type, API route, and object properties, for all form field types.  jsonDataType - the JSON data type of the answer that an integrator should submit for a…
+- [/api/v1/utils/suggest/](https://api.ivans.com/reference/utils_suggest_create.md): Uses Marco Polo Synonym and Bumping services to suggest the best option for a given Attribute/RPA's value list
+- [/api/v1/utils/suggest/configuration/](https://api.ivans.com/reference/utils_suggest_configuration_create.md)
+- [/api/v1/agencies/](https://api.ivans.com/reference/agencies_list-1.md): Returns agencies that are accessible to the user.  Access restrictions:  - Service level users can retrieve any agency, agent, and license under their integrated application. - Admin users can…
+- [/api/v1/agencies/](https://api.ivans.com/reference/agencies_create-1.md): Creates a new agency.  Access restrictions:  - Only service level users can use this endpoint to register an agency. - Only service level users can set the test mode on an agency. - Non-service level…
+- [/api/v1/agencies/{id}/](https://api.ivans.com/reference/agencies_retrieve-1.md): Returns an agency if it is accessible to the user.  Access restrictions:  - Service level users can retrieve any agency, agent, and license under their integrated application. - Admin users can…
+- [/api/v1/agencies/{id}/](https://api.ivans.com/reference/agencies_update-1.md): Updates an agency if it is accessible to the user.  Access restrictions:  - Only service level and admin users can update an agency. - Service level users can update any agency under their integrated…
+- [/api/v1/agents/](https://api.ivans.com/reference/agents_list-1.md): Returns agents that are accessible to the user.  Access restrictions:  - Service level users can retrieve any agent and license under their integrated application. - Admin users can retrieve any…
+- [/api/v1/agents/](https://api.ivans.com/reference/agents_create-1.md): Creates a new agent.  Access restrictions:  - Only service level users can use this endpoint to register an agent. - Non-service level users must use the PUT endpoint instead to register an agent.
+- [/api/v1/agents/{id}/](https://api.ivans.com/reference/agents_retrieve-1.md): Returns an agent if it is accessible to the user.  Access restrictions:  - Service level users can retrieve any agent and license under their integrated application. - Admin users can retrieve any…
+- [/api/v1/agents/{id}/](https://api.ivans.com/reference/agents_update-1.md): Updates an agent if it is accessible to the user.  Access restrictions:  - Only service level and admin users can update an agent. - Service level users can update any agent under their integrated…
+- [/api/v1/all-markets/](https://api.ivans.com/reference/all_markets_list-1.md): Returns all markets. - Optional boolean parameter to get carrier and broker data with send accounts and icos. - Optional string parameter to match search term to carrier name. - Optional string…
+- [/api/v1/all-markets/{uuid}/](https://api.ivans.com/reference/all_markets_retrieve-1.md): Returns an individual market based on a given UUID.     - UUID: Universally unique identifier set for each IVANS Distribution Platform market
+- [/api/v1/basic-appetite/](https://api.ivans.com/reference/basic_appetite_create-1.md): Returns basic appetite result and optional form.      Basic appetite result contains status for each combination of the requested markets, lobs, and states.     - If no markets are requested,…
+- [/api/v1/basic-appetite-capture/](https://api.ivans.com/reference/basic_appetite_capture_create-1.md): Returns basic appetite result, form, and possible routes.      Second endpoint of the IDP appetite flow.      Basic appetite result has status for each requested combination of markets, lobs, and…
+- [/api/v1/classification-codes/](https://api.ivans.com/reference/classification_codes_create-1.md): Returns corresponding classification codes for a given classification standard, based on an optional NAICS index, state, and/or search term.  Note: A maximum of 100 class codes can be returned based…
+- [/api/v1/classification-codes/{uuid}/](https://api.ivans.com/reference/classification_codes_retrieve-1.md): Returns an individual class code based on the UUID.
+- [/api/v1/classification-standards/](https://api.ivans.com/reference/classification_standards_list-1.md): Returns all the classification standards. Can filter by market and LOB
+- [/api/v1/classification-standards/{external_id}/](https://api.ivans.com/reference/classification_standards_retrieve-1.md): Get an individual standard based on the external_id.
+- [/api/v1/enhanced-appetite/](https://api.ivans.com/reference/enhanced_appetite_create-1.md): Returns enhanced appetite result and optional form.      Enhanced appetite result has status for each requested combination of markets, lobs, and states.     - If no markets are requested, appetite…
+- [/api/v1/enhanced-appetite-capture/](https://api.ivans.com/reference/enhanced_appetite_capture_create-1.md): Returns enhanced appetite result, form, and routes.      Third endpoint in IDP appetite flow.      Enhanced appetite result has status for each requested combination of markets, lobs, and states.…
+- [/api/v1/forms/base-question-set/](https://api.ivans.com/reference/forms_base_question_set_retrieve-1.md): Returns Base Question Set for given LOB(s)  Can optionally include Question Set for given Risk Profile(s)  Nested form param will change the structure of form to the nested structure
+- [/api/v1/forms/base-question-set/](https://api.ivans.com/reference/forms_base_question_set_create-1.md): Validates answers to Base Question Set  Evaluates appetite for given Risk Profile(s) and returns combined Question Set for all valid Risk Profiles
+- [/api/v1/forms/basic-appetite/](https://api.ivans.com/reference/forms_basic_appetite_list-1.md): Returns form with basic appetite and possible routes.      Possible routes contain route types for each market and lob combination.      Starting endpoint for IDP appetite flow.
+- [/api/v1/forms/bind/](https://api.ivans.com/reference/forms_bind_retrieve-1.md): Returns bind questions applicable to the requested risk profile      Nested form parameter will change the structure of the form to the nested structure
+- [/api/v1/forms/dynamic-form/](https://api.ivans.com/reference/forms_dynamic_form_retrieve-1.md): Returns data-capturing form based on the LOB and Markets  Nested form param will change the structure of form to the nested structure
+- [/api/v1/forms/is-eligible/](https://api.ivans.com/reference/forms_is_eligible_create-1.md): Returns eligibility results for the requested risk profiles, based on the provided form answers.     Request body is comprised of form answers, and must include answers for classification (NAICS)…
+- [/api/v1/forms/question-set/](https://api.ivans.com/reference/forms_question_set_retrieve-1.md): Returns the question set form for the given risk profile(s) and optional parameters.
+- [/api/v1/forms/refer/](https://api.ivans.com/reference/forms_refer_retrieve-1.md): Returns referral questions applicable to the requested risk profile.      Nested form parameter will change the structure of the form to the nested structure.
+- [/api/v1/forms/submission/](https://api.ivans.com/reference/forms_submission_create-1.md): Endpoint for quote submission.      Metadata:         - clientId: integrator's account ID, required         - quoteId: integrator's quote ID, required         - callbackUrl: integrator's callback…
+- [/api/v1/forms/submission/bind/](https://api.ivans.com/reference/forms_submission_bind_create-1.md): Endpoint to bind quotes through IDP.      Metadata:         - clientId: integrator's account ID, required         - quoteId: integrator's quote ID, required         - callbackUrl: integrator's…
+- [/api/v1/forms/submission/refer/](https://api.ivans.com/reference/forms_submission_refer_create-1.md): Endpoint to refer quotes through IDP.      Metadata:         - clientId: integrator's account ID, required         - quoteId: integrator's quote ID, required         - callbackUrl: integrator's…
+- [/api/v1/forms/templates/](https://api.ivans.com/reference/forms_templates_list-1.md): Returns list of templates and their default field values that are accessible to the user.  Permissions: - All users can access templates owned by Ivans. - Service level users can access templates…
+- [/api/v1/forms/templates/](https://api.ivans.com/reference/forms_templates_create-1.md): Creates a new template.  Permissions: - Non-admin users cannot create templates. - By default, a template is scoped to the user's application, and is accessible to all agencies under the application.…
+- [/api/v1/forms/templates/{uuid}/](https://api.ivans.com/reference/forms_templates_retrieve-1.md): Returns individual template and its default field values.  Permissions: - All users can access templates owned by Ivans. - Service level users can access templates that are owned by their application…
+- [/api/v1/forms/templates/{uuid}/](https://api.ivans.com/reference/forms_templates_partial_update-1.md): Updates the template with the given UUID.  Permissions: - Non-admin users cannot update templates. - Service level users can update any template under their application. - Agency level admin users…
+- [/api/v1/forms/templates/{uuid}/](https://api.ivans.com/reference/forms_templates_destroy-1.md): Deletes the template with the given UUID.  Permissions: - Non-admin users cannot delete templates. - Service level users can delete any template under their application. - Agency level admin users…
+- [/api/v1/forms/templates/{uuid}/clone/](https://api.ivans.com/reference/forms_templates_clone_create-1.md): Creates a copy of the template with the given UUID.  Permissions: - Non-admin users cannot clone templates.  The new template will be scoped to the user's application, regardless of the source…
+- [/api/v1/geos/countries/](https://api.ivans.com/reference/geos_countries_list-1.md): Returns all countries and associated subdivisions.      Search parameter can be used for filtering.
+- [/api/v1/geos/countries/{uuid}/](https://api.ivans.com/reference/geos_countries_retrieve-1.md): Returns individual country based on the uuid.
+- [/api/v1/geos/subdivisions/](https://api.ivans.com/reference/geos_subdivisions_list-1.md): Search all Subdivisions
+- [/api/v1/geos/us/counties/](https://api.ivans.com/reference/geos_us_counties_list-1.md): Search US Counties
+- [/api/v1/geos/us/states/](https://api.ivans.com/reference/geos_us_states_list-1.md): Search US States
+- [/api/v1/integrated-application-control/available-risk-profiles/](https://api.ivans.com/reference/integrated_application_control_available_risk_profiles_retrieve-1.md): Returns Risk Profiles that are available to the service-level User's Integrated Application Group
+- [/api/v1/integrated-application-control/get-idm-data/](https://api.ivans.com/reference/integrated_application_control_get_idm_data_retrieve-1.md): Returns a service level user's current and available IDM versions for their integrated application
+- [/api/v1/integrated-application-control/risk-profiles/](https://api.ivans.com/reference/integrated_application_control_risk_profiles_retrieve-1.md): Returns Risk Profiles that have been assigned to the service-level User's Integrated Application
+- [/api/v1/integrated-application-control/risk-profiles/](https://api.ivans.com/reference/integrated_application_control_risk_profiles_partial_update-1.md): Service-level User can modify the Risk Profiles that are assigned to their Integrated Application
+- [/api/v1/integrated-application-control/risk-profiles/group/](https://api.ivans.com/reference/integrated_application_control_risk_profiles_group_retrieve-1.md): Returns Integrated Applications and their assigned Risk Profiles for each Integrated Application related to the service-level User's Integrated Application Group
+- [/api/v1/integrated-application-control/update-idm-data/](https://api.ivans.com/reference/integrated_application_control_update_idm_data_partial_update-1.md): Allows service level user to update IDM version for their integrated application
+- [/api/v1/licenses/](https://api.ivans.com/reference/licenses_list-1.md): Returns insurance licenses that are accessible to the user.  Access restrictions:  - Service level users can retrieve any license under their integrated application. - Admin users can retrieve any…
+- [/api/v1/licenses/](https://api.ivans.com/reference/licenses_create-1.md): Creates a new insurance license.  Access restrictions:  - Service level users can create licenses under any of their allowed agencies, for any allowed licensee, and assigned to any allowed agents. -…
+- [/api/v1/licenses/{uuid}/](https://api.ivans.com/reference/licenses_retrieve-1.md): Returns an insurance license if it is accessible to the user.  Access restrictions:  - Service level users can retrieve any license under their integrated application. - Admin users can retrieve any…
+- [/api/v1/licenses/{uuid}/](https://api.ivans.com/reference/licenses_update-1.md): Updates an insurance license if it is accessible to the user.  Access restrictions:  - Service level users can update any license under their integrated application. - Admin users can update any…
+- [/api/v1/lobs/](https://api.ivans.com/reference/lobs_list-1.md): Search Lines of Business
+- [/api/v1/market-bound-status/](https://api.ivans.com/reference/market_bound_status_create-1.md): •  After the quote is sold, market_bound_status will be set to mark as sold. based on the     QuoteId, QuoteSessionId and Market     •  Request body;         - quoteSessionId:             UUID…
+- [/api/v1/market-configurations/](https://api.ivans.com/reference/market_configurations_list-1.md): Returns market configurations that are accessible to the user. - Market configuration access depends on the user's access level, and the user's current agency's market access.
+- [/api/v1/market-configurations/](https://api.ivans.com/reference/market_configurations_create-1.md): Creates market configuration. - Agency is optional. If not provided, the user's current agency will be used. - Service level users can set a specific agency for the market configuration.
+- [/api/v1/market-configurations/{uuid}/](https://api.ivans.com/reference/market_configurations_retrieve-1.md): Returns individual market configuration based on the uuid. - User should have access to market configuration, otherwise it will return error.
+- [/api/v1/market-configurations/{uuid}/](https://api.ivans.com/reference/market_configurations_partial_update-1.md): Updates a market configuration.  Only service level users can update the agency.  Fields that can be updated: - lineOfBusiness: uuid - accessStructures: (multiple accepted)     - agency: uuid…
+- [/api/v1/market-configurations/{uuid}/contract-codes/](https://api.ivans.com/reference/market_configurations_contract_codes_retrieve-1.md): Returns market contract codes for given market configuration.
+- [/api/v1/market-configurations/{uuid}/credentials/](https://api.ivans.com/reference/market_configurations_credentials_retrieve-1.md): Returns market credentials for given market configuration.
+- [/api/v1/market-contract-codes/](https://api.ivans.com/reference/market_contract_codes_list-1.md): Returns all market contract codes that the user has access to.  Attributes that control access:  - User - single user that represents the owner of the contract code. The owner of a contract code can…
+- [/api/v1/market-contract-codes/](https://api.ivans.com/reference/market_contract_codes_create-1.md): Creates a market contract code.  Attributes that control access:  - User - single user that represents the owner of the contract code. The owner of a contract code can view, update, and delete the…
+- [/api/v1/market-contract-codes/{uuid}/](https://api.ivans.com/reference/market_contract_codes_retrieve-1.md): Returns an individual contract code.  Attributes that control access:  - User - single user that represents the owner of the contract code. The owner of a contract code can view, update, and delete…
+- [/api/v1/market-contract-codes/{uuid}/](https://api.ivans.com/reference/market_contract_codes_partial_update-1.md): Updates an existing market contract code.  Attributes that control access:  - User - single user that represents the owner of the contract code. The owner of a contract code can view, update, and…
+- [/api/v1/market-contract-codes/{uuid}/](https://api.ivans.com/reference/market_contract_codes_destroy-1.md): Deletes an existing contract code.  Access restrictions:  - If the request user is an admin, all contract codes under the user's database scope will be available to delete. - If the request user is…
+- [/api/v1/market-contract-codes/bulk-delete/](https://api.ivans.com/reference/market_contract_codes_bulk_delete_create-1.md): Deletes multiple existing contract codes.  Access restrictions:  - If the request user is an admin, all contract codes under the user's database scope will be available to delete. - If the request…
+- [/api/v1/market-credentials/](https://api.ivans.com/reference/market_credentials_list-1.md): Returns all of the market credentials that user has access to. - If a user is an admin, all credentials with the market configuration will be available to view. - If the user is not an admin, the…
+- [/api/v1/market-credentials/](https://api.ivans.com/reference/market_credentials_create-1.md): Creates market credential. - Non-admin user cannot set access structures on credential - User cannot create the credential for another user (forbidden)
+- [/api/v1/market-credentials/{uuid}/](https://api.ivans.com/reference/market_credentials_retrieve-1.md): Returns an individual credential.
+- [/api/v1/market-credentials/{uuid}/](https://api.ivans.com/reference/market_credentials_partial_update-1.md): Updates existing credentials.
+- [/api/v1/market-credentials/{uuid}/](https://api.ivans.com/reference/market_credentials_destroy-1.md): Deletes the credential based on given uuid. - Credential must be accessible by the user, otherwise it will return not found.
+- [/api/v1/market-credentials/{uuid}/secret/](https://api.ivans.com/reference/market_credentials_secret_retrieve-1.md): Retrieves the username/password and nickname.
+- [/api/v1/markets/](https://api.ivans.com/reference/markets_list-1.md): Returns the markets that the current tenant has access to through an integrated application.
+- [/api/v1/markets/{uuid}/](https://api.ivans.com/reference/markets_retrieve-1.md): Returns an individual market that the current tenant has access to through an integrated application.
+- [/api/v1/naics/](https://api.ivans.com/reference/naics_list-1.md): Returns all NAICS indexes that match a given search term. Uses Ask Kodiak's Suggest NAICS Codes endpoint.
+- [/api/v1/naics/{uuid}/](https://api.ivans.com/reference/naics_retrieve-1.md): Returns an individual NAICS index based on the UUID.
+- [/api/v1/naics/ak-hash-lookup/](https://api.ivans.com/reference/naics_ak_hash_lookup_create-1.md): Get NAICS index by AK hash
+- [/api/v1/naics-ak/](https://api.ivans.com/reference/naics_ak_list-1.md): Returns all NAICS indexes that match a given search term. Uses Ask Kodiak's Suggest NAICS Codes endpoint.
+- [/api/v1/naics-ak/{uuid}/](https://api.ivans.com/reference/naics_ak_retrieve-1.md): Returns an individual NAICS index based on the UUID.
+- [/api/v1/naics-ak/ak-hash-lookup/](https://api.ivans.com/reference/naics_ak_ak_hash_lookup_create-1.md): Get NAICS index by AK hash
+- [/api/v1/ncci/](https://api.ivans.com/reference/ncci_list-1.md): Returns four-digit NCCI codes produced by the National Council on Compensation Insurance used to classify businesses for workers' compensation insurance.
+- [/api/v1/product-releases/](https://api.ivans.com/reference/product_releases_list-1.md): Returns MarketAppetite for market/lob combinations that are in appetite and in effect.  Filters out products whose effective date is not in the future.  Endpoint: /product-releases/  Actions:…
+- [/api/v1/risk-profiles/](https://api.ivans.com/reference/risk_profiles_list-1.md): Returns risk profiles that are accessible to the user. Certain restrictions can be bypassed via permissions.
+- [/api/v1/schema/](https://api.ivans.com/reference/schema_retrieve-1.md): OpenApi3 schema for this API. Format can be selected via content negotiation.  - YAML: application/vnd.oai.openapi - JSON: application/vnd.oai.openapi+json
+- [/api/v1/structures/](https://api.ivans.com/reference/structures_list-1.md): Returns user's structures (filtered based on user tenant)
+- [/api/v1/users/](https://api.ivans.com/reference/users_list-1.md): Returns users related to the requesting user's current tenant.
+- [/api/v1/users/{id}/](https://api.ivans.com/reference/users_retrieve-1.md): Returns an individual user.
+- [/api/v1/users/{id}/](https://api.ivans.com/reference/users_partial_update-1.md): Updates a user's information. Only admins can update user information.
+- [/api/v1/users/files/upload/](https://api.ivans.com/reference/users_files_upload_create-1.md): ViewSet responsible for handling uploads and downloads for user files
+- [/api/v1/utils/enums/](https://api.ivans.com/reference/utils_enums_retrieve-1.md): Returns the label and value for all choice field values.
+- [/api/v1/utils/form-field-types/](https://api.ivans.com/reference/utils_form_field_types_retrieve-1.md): Returns information, including JSON data type, API route, and object properties, for all form field types.  jsonDataType - the JSON data type of the answer that an integrator should submit for a…
+- [/api/v1/utils/suggest/](https://api.ivans.com/reference/utils_suggest_create-1.md): Uses Marco Polo Synonym and Bumping services to suggest the best option for a given Attribute/RPA's value list
+- [/api/v1/utils/suggest/configuration/](https://api.ivans.com/reference/utils_suggest_configuration_create-1.md)
+
+## APIs: IVANS Exchange API Docs
+- [Gets list of agencies in the IVANS system](https://api.ivans.com/reference/get_api-agencies-1.md)
+- [Gets the list of management system products for a management system provider](https://api.ivans.com/reference/get_api-amsproviders-providerid-amsproducts-1.md)
+- [Gets list of all Management System Providers for the IVANS Download product](https://api.ivans.com/reference/get_api-amsproviders-1.md)
+- [Gets all Management System Versions for product of specified id](https://api.ivans.com/reference/get_api-amsproducts-amsproductid-amsversions.md)
+- [Gets details about a ManagementSystemVersion](https://api.ivans.com/reference/get_api-amsversions-versionid-1.md)
+- [Create a bookroll request.](https://api.ivans.com/reference/createbookrollrequest-1.md)
+- [Retrieve JSON - formatted configuration information about this API including URIs to documentation and the IVANS authentication endpoint.](https://api.ivans.com/reference/get_api-configuration.md): Retrieve JSON - formatted configuration information about this API including URIs to documentation and the IVANS authentication endpoint.
+- [Gets static list of connection codes](https://api.ivans.com/reference/get_api-connectioncodes-1.md)
+- [Gets static list of connection LOBs](https://api.ivans.com/reference/get_api-connectionlobs-1.md)
+- [Update connection information](https://api.ivans.com/reference/put_api-connections-connectionkey.md): Update connection information for a given connection ID. Updateable fields: PreferenceCode, FeedbackCode.              Updateable fields: NewPreferenceCode, NewFeedbackCode.
+- [Retrieve connection information for a given organization](https://api.ivans.com/reference/get_api-organizations-accountcode-connections.md): Get connection information for a given organization
+- [Retrieve connection information for a given organization and line of business](https://api.ivans.com/reference/get_api-organizations-accountcode-connections-connectionkey.md): Get connection information for a given organization partnership and line of business.
+- [Retrieve a list of contents for a given file](https://api.ivans.com/reference/get_api-files-id-items.md): Retrieve a list of the contents of the file specified by the id parameter. This is a JSON-formatted collection with each object containing detailed information on a single data item in the file.
+- [Retrieve a list of metadata contents for a given file](https://api.ivans.com/reference/get_api-files-id-items-index.md): Retrieve metadata for the contents of the file specified by the id parameter, at the index specified by the index parameter. Indexes are one-based. This is a JSON-formatted object containing…
+- [Retrieve a list of metadata contents for a given file](https://api.ivans.com/reference/get_api-files-id-transaction-transid.md): Retrieve metadata for the contents of the file specified by the id parameter, at the index specified by the index parameter. Indexes are one-based. This is a JSON-formatted object containing…
+- [Retrieve a list of all files that match the query string](https://api.ivans.com/reference/get_api-files.md): Retrieve a list of all files that match the query string? criteria provided in the URI using an account-mailboxId pairing. This is a JSON-formatted collection with each object containing detailed…
+- [Send a file to one of your trading partners](https://api.ivans.com/reference/post_api-files.md): Send a file to a recipient that is one of your trading partners. There is a required header and an optional header with this request: the required header is for file metadata which includes the…
+- [Retrieve a given file](https://api.ivans.com/reference/get_api-files-id.md): Download a file sent to you using the fileId.
+- [Retrieve the history of a given file](https://api.ivans.com/reference/get_api-files-id-history.md): Get the history of a file using the fileId.
+- [Retrieve the metadata of a given file](https://api.ivans.com/reference/get_api-files-id-metadata.md): Retrieves a file's meta data by utilizing the fileId.
+- [Update the status of a given file to RECEIVED](https://api.ivans.com/reference/put_api-files-id-received.md): Set the status of a file to RECEIVED using the fileId. The retrieved file then moves from the recipient's Inbox to Received and from the sender's Outbox to Sent. Execute this call only after the file…
+- [Update the status of a given file](https://api.ivans.com/reference/put_api-files-id-status.md): Change the status of a file to the specified status.
+- [Change the mailbox password](https://api.ivans.com/reference/post_api-mailboxes-id-changepassword.md): Change account mailbox password.
+- [Retrieve notification configuration settings for a given mailbox](https://api.ivans.com/reference/get_api-mailboxes-id-notifyconfigs.md): Get all notification configuration settings for a mailbox. {id} is in the format "account.mailboxId"
+- [Retrieve a list of mailboxes. This includes all mailboxes that the
+logged-in client is allowed to access in ECS.](https://api.ivans.com/reference/get_api-mailboxes.md)
+- [Get Mailboxes list by OrganizationId"](https://api.ivans.com/reference/get_api-organizations-organizationid-mailboxes.md)
+- [Gets a list of Carrier-to-NAIC mappings.](https://api.ivans.com/reference/get_api-naic.md)
+- [Gets a NAIC mapping by NAIC.](https://api.ivans.com/reference/get_api-naic-naiccode.md)
+- [Retrieve a notification configuration for a given consumer info id](https://api.ivans.com/reference/getnotifyconfig.md): Get a notification configuration by ID.
+- [Update the notification configuration settings for a given consumer info id](https://api.ivans.com/reference/put_api-notifyconfigs-consumerinfoid.md): Update the notification configuration settings by ID. The delay, maxFileListSize, consumerPackage, and headers properties can be updated.
+- [Removes notification configuration for a given consumer info id](https://api.ivans.com/reference/delete_api-notifyconfigs-consumerinfoid.md): De-registers a notification configuration by deleting it by ID.
+- [Register a mailbox for notifications](https://api.ivans.com/reference/post_api-notifyconfigs.md): Register a mailbox for notifications.
+- [Retrieve a list of trading partners](https://api.ivans.com/reference/getpartners.md): Retrieve a list of trading partners. This is a JSON-formatted collection with each object containing an encoded identifier for a single trading partner. It will contain all members of all trading…
+- [Create a trading partnership](https://api.ivans.com/reference/postpartner.md): Create a new Trading Partnership between two mailboxes.
+- [Retrieve the details of a given partnership](https://api.ivans.com/reference/getpartner.md): Retrieve a JSON object with the details of one of your trading partners with this id. Requires that the caller’s organization be configured in IVANS Exchange to support trading partner management.
+- [Removes a trading partnership](https://api.ivans.com/reference/deletepartner.md): Delete a trading partnership.
+- [Add a producer code to a given partnership](https://api.ivans.com/reference/postproducerbyorg.md): Add a new Producer code to an agency that is one of your trading partners. Requires that the caller’s organization be configured in IVANS Exchange to support Remote Location Manager information.
+- [Retrieve the details of a given producer code](https://api.ivans.com/reference/getproducerbyorg.md): Retrieve a JSON object with the details on a Producer code currently assigned to an agency that is one of your trading partners. Requires that the caller’s organization be configured in IVANS…
+- [Update the information for a given producer code](https://api.ivans.com/reference/putproducerbyorg.md): Update Producer information for an agency that is one of your trading partners. Requires that the caller’s organization be configured in IVANS Exchange to support Remote Location Manager information.
+- [Remove a producer code](https://api.ivans.com/reference/deleteproducerbyorg.md): Delete a Producer for an agency that is one of your trading partners. Requires that the caller’s organization be configured in IVANS Exchange to support Remote Location Manager information.
+- [Transfer specified producer code to a different agency under the same carrier.](https://api.ivans.com/reference/transferproducer.md): Transfer Producer information for an agency that is one of your trading partners. Requires that the caller’s organization be configured in IVANS Exchange to support Remote Location Manager…
+- [Retrieve an array of JSON objects with the Producers currently assigned to an agency that
+is one of your trading partners. Requires that the caller’s organization be configured in
+IVANS Exchange to support Remote Location Manager information.
+Optional Agency Account and Company Account parameter for filtering.](https://api.ivans.com/reference/getproducers.md)
+- [Add a producer code to a given partnership](https://api.ivans.com/reference/postproducer.md): Add a new Producer code to an agency that is one of your trading partners. Requires that the caller’s organization be configured in IVANS Exchange to support Remote Location Manager information.
+- [Retrieve the details of a given producer code](https://api.ivans.com/reference/getproducerbyid.md): Retrieve a JSON object with the details on a Producer code currently assigned to an agency that is one of your trading partners. Requires that the caller’s organization be configured in IVANS…
+- [Update the information for a given producer code](https://api.ivans.com/reference/putproducer.md): Update Producer information for an agency that is one of your trading partners. Requires that the caller’s organization be configured in IVANS Exchange to support Remote Location Manager information.
+- [Patch the information for a given producer code](https://api.ivans.com/reference/patchproducer.md): Patch Producer information for an agency that is one of your trading partners. Requires that the caller’s organization be configured in IVANS Exchange to support Remote Location Manager information.
+- [Remove a producer code](https://api.ivans.com/reference/deleteproducer.md): Delete a Producer for an agency that is one of your trading partners. Requires that the caller’s organization be configured in IVANS Exchange to support Remote Location Manager information.
+- [Retrieve a JSON - formatted collection of available mailbox routes in the format "account.mailboxId".](https://api.ivans.com/reference/get_api-routes.md)
+- [Retrieve a JSON - formatted collection of trading partners in the format "account.mailboxId".](https://api.ivans.com/reference/get_api-mailboxes-id-routes.md)
+- [Gets the static list of user types/roles](https://api.ivans.com/reference/get_api-usertypes-1.md)
+- [Add a new eServicng Carrier Product](https://api.ivans.com/reference/postcarrierproduct.md): Add a new eServicng (TS/Warp) Carrier Product.
+- [Updates an eServicing Carrier Product](https://api.ivans.com/reference/putcarrierproduct.md): Updates an eServicing (TS/Warp) Carrier Product.
+- [Retrieves a list of eServicing Carrier Products](https://api.ivans.com/reference/getcarrierproduct.md): Get a Warp Carrier Product
+- [Add a Warp Client Command](https://api.ivans.com/reference/postclientcommand.md): Add a Warp Client Command
+- [Updates a Warp Client Command](https://api.ivans.com/reference/putclientcommandfromclients.md): Updates a Warp Client Command
+- [Updates a Warp Client Command](https://api.ivans.com/reference/putclientcommandfromclientcommands.md): Updates a Warp Client Command
+- [Retrieves a list of commands for a client](https://api.ivans.com/reference/getclientcommand.md): Get list of Warp Commands for a client
+- [Retrieves a list of transactions types configured for a carrier](https://api.ivans.com/reference/gettransactiontypes.md): Retrieve a JSON object with the list of Warp transaction types a client (ToIDIVANS) has configured for carrier (NAIC)
+- [Adds new Warp Command](https://api.ivans.com/reference/postcommand.md): Adds new Warp Command
+- [Updates a Warp Command](https://api.ivans.com/reference/putcommand.md): Updates a Warp Command
+- [Retrieves a Warp Command](https://api.ivans.com/reference/getcommand.md): Get a Warp Command
+- [Retrieves debug files for a given client](https://api.ivans.com/reference/getwarpdebuglist-2.md): Get a Warp Debugs by Client ID
+- [Add a new Warp NAIC Product.](https://api.ivans.com/reference/postnaicproduct-2.md): Add a new Warp NAIC Product.
+- [Updates a Warp NAIC Product](https://api.ivans.com/reference/putnaicproduct-2.md): Updates a Warp NAIC Product
+- [Removes an NAIC from a Product](https://api.ivans.com/reference/deletenaic-2.md): Delete an NAIC from a Product
+- [Retrieves a list of NAIC for a Product](https://api.ivans.com/reference/getnaiclist-2.md): Get a Warp NAIC list for a Product
+- [Retrieves a list of Products for a NAIC](https://api.ivans.com/reference/getproduct.md): Get a Product for a NAIC
+- [Sends a Warp request to the server](https://api.ivans.com/reference/post_api-warptransaction-clientid.md): Sends a Warp request to the server
+
+## APIs: IVANS Exchange API Docs V2
+- [Retrieve a list of all files that match the query string](https://api.ivans.com/reference/get_api-v2-files.md): Retrieve a paginated list of all files that match the query string? criteria provided in the URI using an account-mailboxId pairing. This is a JSON-formatted collection with each object containing…
+- [Retrieve a given file](https://api.ivans.com/reference/get_api-v2-files-id.md): Download a file sent to you using the fileId.
+- [Update the information for a given producer code](https://api.ivans.com/reference/putproducerbyorgv2.md): Update Producer information for an agency that is one of your trading partners. Requires that the caller’s organization be configured in IVANS Exchange to support Remote Location Manager information.
+- [Gets a list of Carrier-to-NAIC mappings.](https://api.ivans.com/reference/get_api-v2-naic.md)
+- [Gets a NAIC mapping by NAIC.](https://api.ivans.com/reference/get_api-v2-naic-naiccode.md)
+- [Retrieve a list of trading partners. This is a JSON-formatted collection with each object
+containing an encoded identifier for a single trading partner. These identifiers are accepted
+by other actions available from /Partners endpoints. If no parameters are passed then all
+trading partnerships with lead accounts that the user has access to are returned. Parameters
+are used to filter through these trading partnerships.](https://api.ivans.com/reference/get_api-v2-partners.md)
+
+## APIs: IVANS Exchange API Docs V3
+- [Retrieve a list of all files that match the query string](https://api.ivans.com/reference/get_api-v3-files.md): Retrieve a paginated list of all files that match the query string criteria provided in the URI using an account-mailboxId pairing. This is a JSON-formatted collection with each object containing…
+- [Retrieve a count of all files that match the query string](https://api.ivans.com/reference/get_api-v3-files-filecount.md): Retrieve a count of all files that match the query string criteria provided in the URI using an account-mailboxId pairing. Class code may be provided to filter by class code. This endpoint accepts…
+
+## APIs: IVANS Translation API's
+- [Fetch document file meta information](https://api.ivans.com/reference/getdocumentmetainfo.md)
+- [Stores document/attachments files (max allowed size 100MB)](https://api.ivans.com/reference/save.md)
+- [/ivans/api/commissiondownload](https://api.ivans.com/reference/processrequest.md): Commission Download Operation
+- [Benefits Csv upload](https://api.ivans.com/reference/processbenefitscsvrequest.md)
+- [/ivans/api/carrier/v3/translation](https://api.ivans.com/reference/translationprocessor.md): v3 translation operation
+- [/ivans/api/carrier/tokens](https://api.ivans.com/reference/getauthtoken.md): Obtain a token to be used with all download operations
+- [/ivans/api/carrier/edocdownload](https://api.ivans.com/reference/processrequest_2.md): edoc download operation
+- [/ivans/api/carrier/documentstorage](https://api.ivans.com/reference/processrequestdocument.md): document storage operation
+- [/ivans/api/carrier/claimsdownload](https://api.ivans.com/reference/processrequest_3.md): claims download operation
+- [/ivans/api/retrieve/fileId](https://api.ivans.com/reference/retrieveexchangefileid.md): Retrieve FileId
+
+## APIs: Ivans Download APIs
+- [Getting Started With Your API](https://api.ivans.com/reference/getting-started-with-your-api-4.md): This page will help you get started with Ivans Download APIs.
+
+## APIs: IVANS INSIGHTS
+- [Task Status](https://api.ivans.com/reference/task_status_api_v1_looker_task_status_post.md)
+- [Schedule Export](https://api.ivans.com/reference/schedule_export_api_v1_looker_schedule_export_post.md)
+
+## APIs: Ivans Passport
+- [Auth0 Token](https://api.ivans.com/reference/auth0_token_api_v1_identity_auth0_token__post.md)
+
+## Announcements
+- [Bookroll API | August 2026](https://api.ivans.com/changelog/bookroll-api-august-2026.md)
+- [Bookroll API | June 2026](https://api.ivans.com/changelog/bookroll-api-june-2026.md)
+- [Distribution Platform | February 2025](https://api.ivans.com/changelog/distribution-platform-february-2025.md)
+- [Distribution Platform | January 2025](https://api.ivans.com/changelog/distribution-platform-january-2025.md)
+- [Distribution Platform | Carrier Dashboards Jun. 28th, 2024](https://api.ivans.com/changelog/distribution-platform-carrier-dashbords-jun-28th-2024.md)
+- [Ask Kodiak - Dec. 12th, 2023](https://api.ivans.com/changelog/ask-kodiak-enabling-idp-only-shared-products.md)
+- [Ask Kodiak's New NAICS 2022](https://api.ivans.com/changelog/ask-kodiaks-new-naics-2022.md)
+- [Distribution Platform | Updates for Sep. 5, 2023](https://api.ivans.com/changelog/distribution-platform-updates-for-sep-5-2023.md)
+- [Distribution Platform | Updates for Jun. 2, 2023](https://api.ivans.com/changelog/distribution-platform-updates-for-jun-2-2023.md)
+- [Distribution Platform | Updates for Sept. 28th 2022](https://api.ivans.com/changelog/distribution-platform-updates-for-sept-27th.md)

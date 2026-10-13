@@ -1,0 +1,390 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/ivans/main/json-schema/ivans-risk-profile-diff-schema.json",
+  "title": "RiskProfileDiff",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/ivans-distribution-platform-openapi.json#/components/schemas/RiskProfileDiff",
+  "properties": {
+    "fieldsAdded": {
+      "items": {
+        "$ref": "#/$defs/SerializedRPA"
+      },
+      "type": "array",
+      "title": "Fieldsadded",
+      "default": []
+    },
+    "fieldsRemoved": {
+      "items": {
+        "$ref": "#/$defs/SerializedRPA"
+      },
+      "type": "array",
+      "title": "Fieldsremoved",
+      "default": []
+    },
+    "repeatableGroupsAdded": {
+      "items": {
+        "$ref": "#/$defs/RiskProfileRepeatableFormGroup"
+      },
+      "type": "array",
+      "title": "Repeatablegroupsadded",
+      "default": []
+    },
+    "repeatableGroupsRemoved": {
+      "items": {
+        "$ref": "#/$defs/RiskProfileRepeatableFormGroup"
+      },
+      "type": "array",
+      "title": "Repeatablegroupsremoved",
+      "default": []
+    }
+  },
+  "type": "object",
+  "$defs": {
+    "AdditionalDetails": {
+      "properties": {
+        "heading": {
+          "type": "string",
+          "title": "Heading"
+        },
+        "children": {
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/AdditionalDetails"
+              },
+              {
+                "$ref": "#/$defs/ListItem"
+              }
+            ]
+          },
+          "type": "array",
+          "title": "Children"
+        }
+      },
+      "type": "object",
+      "required": [
+        "heading",
+        "children"
+      ],
+      "title": "AdditionalDetails"
+    },
+    "ListItem": {
+      "properties": {
+        "listItem": {
+          "type": "string",
+          "title": "Listitem"
+        }
+      },
+      "type": "object",
+      "required": [
+        "listItem"
+      ],
+      "title": "ListItem"
+    },
+    "RequirementLevel": {
+      "type": "integer",
+      "enum": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "title": "RequirementLevel"
+    },
+    "RiskProfileRepeatableFormGroup": {
+      "properties": {
+        "uuid": {
+          "type": "string",
+          "title": "Uuid"
+        },
+        "description": {
+          "type": "string",
+          "title": "Description"
+        },
+        "requirementLevel": {
+          "$ref": "#/$defs/RequirementLevel"
+        },
+        "conditions": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "type": "object",
+      "required": [
+        "uuid",
+        "description",
+        "requirementLevel",
+        "conditions"
+      ],
+      "title": "RiskProfileRepeatableFormGroup"
+    },
+    "SerializedRPA": {
+      "properties": {
+        "guid": {
+          "type": "string",
+          "title": "Guid"
+        },
+        "group": {
+          "type": "string",
+          "title": "Group"
+        },
+        "label": {
+          "type": "string",
+          "title": "Label"
+        },
+        "description": {
+          "type": "string",
+          "title": "Description"
+        },
+        "additionalDetails": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AdditionalDetails"
+            },
+            {
+              "items": {
+                "$ref": "#/$defs/AdditionalDetails"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Additionaldetails"
+        },
+        "order": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Order"
+        },
+        "type": {
+          "type": "string"
+        },
+        "dataClass": {
+          "type": "string"
+        },
+        "options": {
+          "items": {
+            "$ref": "#/$defs/ValueListOption"
+          },
+          "type": "array",
+          "title": "Options"
+        },
+        "underwritingCategory": {
+          "$ref": "#/$defs/UnderwritingCategory"
+        },
+        "isAppetiteCategory": {
+          "type": "boolean",
+          "title": "Isappetitecategory"
+        },
+        "isEnhancedAppetiteCategory": {
+          "type": "boolean",
+          "title": "Isenhancedappetitecategory"
+        },
+        "isBind": {
+          "type": "boolean",
+          "title": "Isbind"
+        },
+        "isRefer": {
+          "type": "boolean",
+          "title": "Isrefer"
+        },
+        "conditions": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "actionConditions": {
+          "title": "Actionconditions"
+        },
+        "market": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Market"
+        },
+        "classificationStandardGuid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Classificationstandardguid"
+        },
+        "classCodeFilterFieldsGuids": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Classcodefilterfieldsguids"
+        },
+        "unique": {
+          "type": "boolean",
+          "title": "Unique"
+        },
+        "uniqueToParent": {
+          "type": "boolean",
+          "title": "Uniquetoparent"
+        },
+        "parentAttributeGuid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Parentattributeguid"
+        },
+        "minimum": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Minimum"
+        },
+        "maximum": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Maximum"
+        },
+        "prefillSourceFieldGuid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Prefillsourcefieldguid"
+        },
+        "isSuggestable": {
+          "type": "boolean",
+          "title": "Issuggestable"
+        },
+        "length": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Length"
+        }
+      },
+      "type": "object",
+      "required": [
+        "guid",
+        "group",
+        "label",
+        "description",
+        "additionalDetails",
+        "order",
+        "type",
+        "dataClass",
+        "options",
+        "underwritingCategory",
+        "isAppetiteCategory",
+        "isEnhancedAppetiteCategory",
+        "isBind",
+        "isRefer",
+        "market",
+        "unique",
+        "uniqueToParent",
+        "minimum",
+        "maximum",
+        "isSuggestable",
+        "length"
+      ],
+      "title": "SerializedRPA"
+    },
+    "UnderwritingCategory": {
+      "type": "integer",
+      "enum": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "title": "UnderwritingCategory"
+    },
+    "ValueListOption": {
+      "properties": {
+        "label": {
+          "type": "string",
+          "title": "Label"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Value"
+        }
+      },
+      "type": "object",
+      "required": [
+        "label",
+        "value"
+      ],
+      "title": "ValueListOption"
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/ivans/main/json-schema/ivans-auto-field-options-response-schema.json",
+  "title": "AutoFieldOptionsResponse",
+  "description": "Response model for Auto field data with options.",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/ivans-distribution-platform-openapi.json#/components/schemas/AutoFieldOptionsResponse",
+  "properties": {
+    "guid": {
+      "type": "string",
+      "title": "Guid",
+      "description": "GUID of the vehicle attribute"
+    },
+    "label": {
+      "type": "string",
+      "title": "Label",
+      "description": "Label of the vehicle attribute"
+    },
+    "options": {
+      "items": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/ValueOptionResponse"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "type": "array",
+      "title": "Options",
+      "description": "List of unique vehicle attributes with labels and values"
+    }
+  },
+  "type": "object",
+  "required": [
+    "guid",
+    "label",
+    "options"
+  ],
+  "$defs": {
+    "ValueOptionResponse": {
+      "properties": {
+        "label": {
+          "type": "string",
+          "title": "Label",
+          "description": "Label of the option"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Value",
+          "description": "Value of the option"
+        }
+      },
+      "type": "object",
+      "required": [
+        "label",
+        "value"
+      ],
+      "title": "ValueOptionResponse",
+      "description": "Response model for options with label and value."
+    }
+  }
+}

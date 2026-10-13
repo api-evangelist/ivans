@@ -1,23 +1,262 @@
 aid: ivans
 name: IVANS
-description: 'IVANS is a company surfaced via the API Evangelist harvest backlog (source: market-layer-gap)
-  and added to the network as a stub for full-pipeline profiling.'
+image: https://www.ivans.com/globalassets/all-images/ivans-press-release-1200x630.png
+description: IVANS (Ivans Insurance Solutions) connects insurance carriers, MGAs and agencies with data exchange, download,
+  distribution and market-access products. Its developer portal at api.ivans.com publishes REST API references for the Ivans
+  Distribution Platform (FastIDP), Identification Network, IVANS Exchange (v1-v3), Translation, Download, Insights and Passport,
+  with OAuth token-based authentication.
 url: https://raw.githubusercontent.com/api-evangelist/ivans/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:market-layer-gap
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-10-13 (local-v5; was harvest)
 specificationVersion: '0.20'
 created: '2026-10-13'
 modified: '2026-10-13'
 tags:
 - Company
-apis: []
+- Insurance
+- Data Exchange
+- Insurance Distribution
+- Agencies
+- Carriers
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: AgenticAccess
+  url: agentic-access/ivans-agentic-access.yml
+- type: Spectral
+  url: rules/ivans-rules.yml
+- type: JSONLD
+  url: json-ld/ivans-context.jsonld
+- type: Vocabulary
+  url: vocabulary/ivans-vocabulary.yml
+- type: DataModel
+  url: data-model/ivans-data-model.yml
+- type: Compliance
+  url: https://www.ivans.com/security
+- type: Security
+  url: security/ivans-vulnerability-disclosure.yml
+- type: ErrorCatalog
+  url: errors/ivans-problem-types.yml
+- type: Conformance
+  url: conformance/ivans-conformance.yml
+- type: LLMsTxt
+  url: llms/ivans-llms.txt
+- type: SecurityTxt
+  url: well-known/ivans-status-security.txt
+- type: WellKnown
+  url: well-known/ivans-well-known.yml
+- type: Hosts
+  url: hosts/ivans-hosts.yml
+- type: Vendors
+  url: vendors/ivans-vendors.yml
+- type: OAuthScopes
+  url: scopes/ivans-scopes.yml
+- type: Authentication
+  url: authentication/ivans-authentication.yml
+- type: TrustCenter
+  url: security/ivans-trust-center.yml
+- type: VulnerabilityDisclosure
+  url: security/ivans-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/ivans-domain-security.yml
 - type: Website
   url: https://www.ivans.com
+- type: DeveloperPortal
+  url: https://api.ivans.com/
+- type: Documentation
+  url: https://api.ivans.com/docs
+- type: GettingStarted
+  url: https://api.ivans.com/docs/welcome
+- type: APIReference
+  url: https://api.ivans.com/reference
+- type: ChangeLog
+  url: https://api.ivans.com/changelog
+- type: Blog
+  url: https://www.ivans.com/blog/
+- type: StatusPage
+  url: https://status.ivans.com/
+- type: Login
+  url: https://api.ivans.com/login?redirect_uri=/
+- type: PrivacyPolicy
+  url: https://www.ivans.com/privacy-policy/
+- type: TermsOfService
+  url: https://www.ivans.com/terms-of-use/
+- type: Authentication
+  url: https://api.ivans.com/docs/authentication
+apis:
+- aid: ivans:ivans-identification-network
+  name: Identification Network API
+  description: IVANS Identification Network API
+  humanURL: https://api.ivans.com/reference/agencies_list
+  tags:
+  - Insurance
+  properties:
+  - type: OpenAPI
+    url: openapi/ivans-identification-network-openapi.json
+  - type: APIReference
+    url: https://api.ivans.com/reference/agencies_list
+  - type: JSONSchema
+    url: json-schema/ivans-risk-profile-read-only-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-insurance-license-request-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-enhanced-appetite-request-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-agent-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-basic-appetite-request-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-agent-write-request-schema.json
+  baseURL: https://distribution-staging.ivansinsurance.com
+- aid: ivans:ivans-passport
+  name: Ivans Passport API
+  description: Middleware for Ivans Identity
+  humanURL: https://api.ivans.com/reference/auth0_token_api_v1_identity_auth0_token__post
+  tags:
+  - Insurance
+  properties:
+  - type: OpenAPI
+    url: openapi/ivans-passport-openapi.json
+  - type: APIReference
+    url: https://api.ivans.com/reference/auth0_token_api_v1_identity_auth0_token__post
+  - type: JSONSchema
+    url: json-schema/ivans-body-auth0-token-api-v1-identity-auth0-token-post-schema.json
+  baseURL: https://passport.ivans.com
+- aid: ivans:ivans-distribution-platform
+  name: Ivans Distribution Platform (FastIDP) API
+  description: APIs for serving carrier forms, appetite, and validation
+  humanURL: https://api.ivans.com/reference/get_basic_appetite_api_v1_forms_basic_appetite_get
+  tags:
+  - Insurance
+  properties:
+  - type: OpenAPI
+    url: openapi/ivans-distribution-platform-openapi.json
+  - type: APIReference
+    url: https://api.ivans.com/reference/get_basic_appetite_api_v1_forms_basic_appetite_get
+  - type: JSONSchema
+    url: json-schema/ivans-fast-path-submission-request-payload-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-risk-profile-diff-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-submission-response-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-auto-field-options-response-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-classic-quote-payload-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-submission-request-payload-schema.json
+- aid: ivans:ivans-exchange-v1
+  name: IVANS Exchange API v1
+  description: IVANS Exchange API v1 published by IVANS on its developer portal.
+  humanURL: https://api.ivans.com/reference/get_api-agencies-1
+  tags:
+  - Insurance
+  properties:
+  - type: OpenAPI
+    url: openapi/ivans-exchange-v1-openapi.json
+  - type: APIReference
+    url: https://api.ivans.com/reference/get_api-agencies-1
+  - type: JSONSchema
+    url: json-schema/ivans-file-content-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-bookroll-request-request-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-agency-response-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-consumer-info-registration-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-connection-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-file-metadata-schema.json
+- aid: ivans:ivans-exchange-v2
+  name: IVANS Exchange API v2
+  description: IVANS Exchange API v2 published by IVANS on its developer portal.
+  humanURL: https://api.ivans.com/reference/get_api-v2-files
+  tags:
+  - Insurance
+  properties:
+  - type: OpenAPI
+    url: openapi/ivans-exchange-v2-openapi.json
+  - type: APIReference
+    url: https://api.ivans.com/reference/get_api-v2-files
+  - type: JSONSchema
+    url: json-schema/ivans-file-with-content-type-and-status-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-producer-update-request-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-partner-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-carrier-naic-group-v2-schema.json
+- aid: ivans:ivans-exchange-v3
+  name: IVANS Exchange API v3
+  description: IVANS Exchange API v3 published by IVANS on its developer portal.
+  humanURL: https://api.ivans.com/reference/get_api-v3-files
+  tags:
+  - Insurance
+  properties:
+  - type: OpenAPI
+    url: openapi/ivans-exchange-v3-openapi.json
+  - type: APIReference
+    url: https://api.ivans.com/reference/get_api-v3-files
+  - type: JSONSchema
+    url: json-schema/ivans-file-paginated-filtered-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-record-count-result-schema.json
+- aid: ivans:ivans-translation
+  name: IVANS Translation API
+  description: These API's expose endpoints to manage Download Transactions.
+  humanURL: https://api.ivans.com/reference/getdocumentmetainfo
+  tags:
+  - Insurance
+  properties:
+  - type: OpenAPI
+    url: openapi/ivans-translation-openapi.json
+  - type: APIReference
+    url: https://api.ivans.com/reference/getdocumentmetainfo
+  - type: JSONSchema
+    url: json-schema/ivans-claims-download-request-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-edoc-req-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-document-store-req-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-document-meta-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-edoc-response-schema.json
+  - type: JSONSchema
+    url: json-schema/ivans-csv-response-schema.json
+  baseURL: https://cloud-dl.ivansinsurance.com
+- aid: ivans:ivans-insights
+  name: IVANS Insights API
+  description: IVANS Insights API published by IVANS on its developer portal.
+  humanURL: https://api.ivans.com/reference/task_status_api_v1_looker_task_status_post
+  tags:
+  - Insurance
+  properties:
+  - type: OpenAPI
+    url: openapi/ivans-insights-openapi.json
+  - type: APIReference
+    url: https://api.ivans.com/reference/task_status_api_v1_looker_task_status_post
+  baseURL: https://api.looker.ivans.com
+- aid: ivans:ivans-authorization
+  name: Authorization API
+  description: Authorization API published by IVANS on its developer portal.
+  humanURL: https://api.ivans.com/reference/token
+  tags:
+  - Insurance
+  properties:
+  - type: OpenAPI
+    url: openapi/ivans-authorization-openapi.json
+  - type: APIReference
+    url: https://api.ivans.com/reference/token
+  baseURL: https://distribution.ivansinsurance.com
+x-enrichment:
+  date: '2026-10-13'
+  status: enriched
+  artifacts_added: 20
+  pass: local-v5

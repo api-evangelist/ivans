@@ -1,0 +1,233 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/ivans/main/json-schema/ivans-fast-path-submission-request-payload-schema.json",
+  "title": "FastPathSubmissionRequestPayload",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/ivans-distribution-platform-openapi.json#/components/schemas/FastPathSubmissionRequestPayload",
+  "properties": {
+    "metadata": {
+      "$ref": "#/$defs/SubmissionMetadata"
+    },
+    "marketMetadata": {
+      "items": {
+        "$ref": "#/$defs/SubmissionMarketMetadata"
+      },
+      "type": "array",
+      "maxItems": 1,
+      "title": "Marketmetadata"
+    },
+    "fieldValues": {
+      "items": {
+        "$ref": "#/$defs/FieldValue"
+      },
+      "type": "array",
+      "title": "Fieldvalues"
+    },
+    "repeatableFieldBlocks": {
+      "items": {
+        "$ref": "#/$defs/RepeatableFieldBlock"
+      },
+      "type": "array",
+      "title": "Repeatablefieldblocks"
+    },
+    "templateIds": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Templateids",
+      "description": "Templates will be applied in the order they are submitted, if no template ids are provided, the Ivans default template will be used"
+    }
+  },
+  "type": "object",
+  "required": [
+    "metadata",
+    "marketMetadata"
+  ],
+  "$defs": {
+    "FieldValue": {
+      "properties": {
+        "questionId": {
+          "type": "string",
+          "title": "Questionid"
+        },
+        "value": {
+          "title": "Value"
+        }
+      },
+      "type": "object",
+      "required": [
+        "questionId",
+        "value"
+      ],
+      "title": "FieldValue"
+    },
+    "RepeatableFieldBlock": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Id"
+        },
+        "fieldBlockId": {
+          "type": "string",
+          "title": "Fieldblockid"
+        },
+        "parentId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Parentid"
+        },
+        "fieldValues": {
+          "items": {
+            "$ref": "#/$defs/FieldValue"
+          },
+          "type": "array",
+          "title": "Fieldvalues"
+        }
+      },
+      "type": "object",
+      "required": [
+        "id",
+        "fieldBlockId",
+        "fieldValues"
+      ],
+      "title": "RepeatableFieldBlock",
+      "description": "id: row id (i.e., building #2)\nfield_block_id: guid of the form group (IDNET repeatable group, i.e., building group)\nparent_id: guid of specific parent field block (i.e., location #3)"
+    },
+    "SubmissionMarketMetadata": {
+      "properties": {
+        "riskProfile": {
+          "type": "string",
+          "title": "Riskprofile"
+        },
+        "credentialId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Credentialid"
+        },
+        "contractCodeId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Contractcodeid"
+        },
+        "marketQuoteId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Marketquoteid"
+        },
+        "externalMarketQuoteId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Externalmarketquoteid"
+        },
+        "marketAccountId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Marketaccountid"
+        },
+        "referenceIds": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Referenceids"
+        },
+        "effectiveDate": {
+          "type": "string",
+          "format": "date",
+          "title": "Effectivedate"
+        },
+        "expirationDate": {
+          "type": "string",
+          "format": "date",
+          "title": "Expirationdate"
+        }
+      },
+      "type": "object",
+      "required": [
+        "riskProfile",
+        "effectiveDate",
+        "expirationDate"
+      ],
+      "title": "SubmissionMarketMetadata"
+    },
+    "SubmissionMetadata": {
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "title": "Clientid"
+        },
+        "quoteId": {
+          "type": "string",
+          "title": "Quoteid"
+        },
+        "callbackUrl": {
+          "type": "string",
+          "maxLength": 2083,
+          "minLength": 1,
+          "format": "uri",
+          "title": "Callbackurl"
+        }
+      },
+      "type": "object",
+      "required": [
+        "clientId",
+        "quoteId",
+        "callbackUrl"
+      ],
+      "title": "SubmissionMetadata"
+    }
+  }
+}

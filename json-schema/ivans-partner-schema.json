@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/ivans/main/json-schema/ivans-partner-schema.json",
+  "title": "Partner",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/ivans-exchange-v2-openapi.json#/components/schemas/Partner",
+  "required": [
+    "followAccount",
+    "followUserId",
+    "leadAccount",
+    "leadUserId",
+    "partnerId",
+    "tprSetName"
+  ],
+  "type": "object",
+  "properties": {
+    "tprSetId": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "leadAccount": {
+      "type": "string"
+    },
+    "leadUserId": {
+      "type": "string"
+    },
+    "followAccount": {
+      "type": "string"
+    },
+    "followUserId": {
+      "type": "string"
+    },
+    "partnerId": {
+      "type": "string"
+    },
+    "tprSetName": {
+      "type": "string"
+    },
+    "ibmMachineAddress": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/ivans/main/json-schema/ivans-body-auth0-token-api-v1-identity-auth0-token-post-schema.json",
+  "title": "Body_auth0_token_api_v1_identity_auth0_token__post",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/ivans-passport-openapi.json#/components/schemas/Body_auth0_token_api_v1_identity_auth0_token__post",
+  "properties": {
+    "client_id": {
+      "type": "string",
+      "title": "Client Id"
+    },
+    "client_secret": {
+      "type": "string",
+      "title": "Client Secret"
+    },
+    "email": {
+      "type": "string",
+      "title": "Email"
+    },
+    "password": {
+      "type": "string",
+      "title": "Password"
+    }
+  },
+  "type": "object",
+  "required": [
+    "client_id",
+    "client_secret"
+  ]
+}

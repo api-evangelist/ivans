@@ -1,0 +1,959 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/ivans/main/json-schema/ivans-claims-download-request-schema.json",
+  "title": "ClaimsDownloadRequest",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/ivans-translation-openapi.json#/components/schemas/ClaimsDownloadRequest",
+  "type": "object",
+  "properties": {
+    "claimNumber": {
+      "type": "string"
+    },
+    "producer": {
+      "$ref": "#/$defs/ProducerType"
+    },
+    "carrierId": {
+      "type": "string"
+    },
+    "claimsActivityCd": {
+      "type": "string",
+      "enum": [
+        "CLI",
+        "ADJ",
+        "CLN",
+        "CLS",
+        "PMT",
+        "RES"
+      ]
+    },
+    "claimStatusCd": {
+      "type": "string",
+      "enum": [
+        "O",
+        "C",
+        "R",
+        "S",
+        "OT"
+      ]
+    },
+    "claimsStatusDt": {
+      "format": "yyyy-MM-dd",
+      "$ref": "#/$defs/LocalDate"
+    },
+    "claimReportedDt": {
+      "format": "yyyy-MM-dd",
+      "$ref": "#/$defs/LocalDate"
+    },
+    "claimAddress": {
+      "$ref": "#/$defs/AddressType"
+    },
+    "litigationStatusCd": {
+      "type": "string",
+      "enum": [
+        "Active",
+        "Closed"
+      ]
+    },
+    "claimsPayment": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/PaymentInfo"
+      }
+    },
+    "reserveAdjustment": {
+      "$ref": "#/$defs/ReserveAdjustment"
+    },
+    "lossDt": {
+      "format": "yyyy-MM-dd",
+      "$ref": "#/$defs/LocalDate"
+    },
+    "incidentDescription": {
+      "type": "string"
+    },
+    "policy": {
+      "$ref": "#/$defs/PolicyInfo"
+    },
+    "insured": {
+      "$ref": "#/$defs/GeneralPartyInfoType"
+    },
+    "adjusterParties": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AdjusterParty"
+      }
+    },
+    "claimantParties": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ClaimsParty"
+      }
+    },
+    "transactionDt": {
+      "format": "yyyy-MM-dd",
+      "$ref": "#/$defs/LocalDate"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "claimstype": {
+      "type": "string"
+    },
+    "losscausecd": {
+      "type": "string"
+    },
+    "lossnotices": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/LossnoticeType"
+      }
+    }
+  },
+  "$defs": {
+    "AddressType": {
+      "type": "object",
+      "properties": {
+        "addrtypecd": {
+          "type": "string",
+          "enum": [
+            "Billing Address",
+            "Branch Office",
+            "Contributing Address",
+            "Data Backup Storage Address",
+            "Duplicate Records Address",
+            "Furthest Terminal Address",
+            "Garaging Address",
+            "Harbor",
+            "Insured's Address",
+            "Job Site",
+            "Leader Address",
+            "Leased Building Address",
+            "Legal Address",
+            "The address at which the loss occurred.",
+            "Mailing Address",
+            "Manufacturing Address",
+            "Marina",
+            "Military Base Address",
+            "Owned Building Address",
+            "Physical Risk Address/Location",
+            "Point Of Departure Address",
+            "Point Of Destination Address",
+            "Port",
+            "Previous Address",
+            "Private Dock",
+            "Public Dock",
+            "Payroll Office",
+            "Quay",
+            "Recipient Address",
+            "Rented Building Address",
+            "Rented To Others",
+            "The claim location under which the claim is being settled.",
+            "Shipping Address",
+            "Software Backup Storage Address",
+            "Storage",
+            "Street Address",
+            "Terminal",
+            "Wharf"
+          ]
+        },
+        "addr1": {
+          "type": "string"
+        },
+        "addr2": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "stateprovcd": {
+          "type": "string",
+          "enum": [
+            "AL",
+            "AK",
+            "AZ",
+            "AR",
+            "CA",
+            "CO",
+            "CT",
+            "DC",
+            "DE",
+            "FL",
+            "GA",
+            "HI",
+            "ID",
+            "IL",
+            "IN",
+            "IA",
+            "KS",
+            "KY",
+            "LA",
+            "ME",
+            "MD",
+            "MA",
+            "MI",
+            "MN",
+            "MS",
+            "MO",
+            "MT",
+            "NE",
+            "NV",
+            "NH",
+            "NJ",
+            "NM",
+            "NY",
+            "NC",
+            "ND",
+            "OH",
+            "OK",
+            "OR",
+            "PA",
+            "PR",
+            "RI",
+            "SC",
+            "SD",
+            "TN",
+            "TX",
+            "UT",
+            "VT",
+            "VA",
+            "WA",
+            "WV",
+            "WI",
+            "WY",
+            "AB",
+            "BC",
+            "MB",
+            "NB",
+            "NL",
+            "NS",
+            "ON",
+            "PE",
+            "QC",
+            "SK",
+            "NT",
+            "NU",
+            "YT",
+            "AGU",
+            "BCN",
+            "BCS",
+            "CAM",
+            "CHH",
+            "CHP",
+            "CMX",
+            "COA",
+            "COL",
+            "DUR",
+            "GRO",
+            "GUA",
+            "HID",
+            "JAL",
+            "MEX",
+            "MIC",
+            "MOR",
+            "NAY",
+            "NLE",
+            "OAX",
+            "PUE",
+            "QUE",
+            "ROO",
+            "SIN",
+            "SLP",
+            "SON",
+            "TAB",
+            "TAM",
+            "TLA",
+            "VER",
+            "YUC",
+            "ZAC",
+            "AS",
+            "FM",
+            "GU",
+            "MH",
+            "MP",
+            "PW",
+            "VI"
+          ]
+        },
+        "postalcd": {
+          "type": "string"
+        },
+        "county": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "latitude": {
+          "type": "string"
+        },
+        "longitude": {
+          "type": "string"
+        }
+      }
+    },
+    "AdjusterParty": {
+      "type": "object",
+      "properties": {
+        "generalPartyInfo": {
+          "$ref": "#/$defs/GeneralPartyInfoType"
+        },
+        "adjusterPartyInfo": {
+          "$ref": "#/$defs/AdjusterPartyInfo"
+        }
+      }
+    },
+    "AdjusterPartyInfo": {
+      "type": "object",
+      "properties": {
+        "assignedDt": {
+          "format": "yyyy-MM-dd",
+          "$ref": "#/$defs/LocalDate"
+        },
+        "adjusterId": {
+          "type": "string"
+        },
+        "communication": {
+          "$ref": "#/$defs/Communication"
+        }
+      }
+    },
+    "AutolossnoticeType": {
+      "type": "object",
+      "properties": {
+        "vehiclesinvolved": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "properties": {
+            "empty": {
+              "type": "boolean"
+            }
+          }
+        },
+        "coverages": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "properties": {
+            "empty": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "ClaimantInfo": {
+      "type": "object",
+      "properties": {
+        "claimsPartyRoleCd": {
+          "type": "string",
+          "enum": [
+            "PAYEE",
+            "CLM",
+            "DRV",
+            "ReptBy"
+          ]
+        },
+        "claimsPartyReferenceNumber": {
+          "type": "string"
+        },
+        "reportedDate": {
+          "format": "yyyy-MM-dd",
+          "$ref": "#/$defs/LocalDate"
+        },
+        "involvementdesc": {
+          "type": "string"
+        }
+      }
+    },
+    "ClaimsParty": {
+      "type": "object",
+      "properties": {
+        "generalPartyInfo": {
+          "$ref": "#/$defs/GeneralPartyInfoType"
+        },
+        "claimsPartyInfo": {
+          "$ref": "#/$defs/ClaimantInfo"
+        },
+        "claimsinjury": {
+          "$ref": "#/$defs/ClaimsinjuryType"
+        }
+      }
+    },
+    "ClaimsinjuryType": {
+      "type": "object",
+      "properties": {
+        "bodypartcd": {
+          "type": "string"
+        },
+        "injurynaturecd": {
+          "type": "string"
+        },
+        "losscausecd": {
+          "type": "string"
+        }
+      }
+    },
+    "Communication": {
+      "type": "object",
+      "properties": {
+        "phone": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PhoneType"
+          }
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "ContactType": {
+      "type": "object",
+      "properties": {
+        "contacttypecd": {
+          "type": "string",
+          "enum": [
+            "Billing Contact",
+            "Audit Contact",
+            "Claim Contact",
+            "Risk Manager",
+            "Executive Contact",
+            "Misc. Contact",
+            "Customer Service Rep"
+          ]
+        },
+        "personalname": {
+          "$ref": "#/$defs/PersonalnameType"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "$ref": "#/$defs/PhoneType"
+        },
+        "employedbyinsuredind": {
+          "type": "boolean"
+        }
+      }
+    },
+    "CoverageselfinsuredretentionType": {
+      "type": "object",
+      "properties": {
+        "selfinsuredretentiontypecd": {
+          "type": "string"
+        },
+        "selfinsuredretentionamt": {
+          "type": "number"
+        },
+        "retentionappliestocd": {
+          "type": "string"
+        }
+      }
+    },
+    "Era": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "GeneralPartyInfoType": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/PersonalnameType"
+        },
+        "commercialname": {
+          "type": "string"
+        },
+        "address": {
+          "$ref": "#/$defs/AddressType"
+        },
+        "communication": {
+          "$ref": "#/$defs/Communication"
+        }
+      }
+    },
+    "IsoChronology": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "calendarType": {
+          "type": "string"
+        }
+      }
+    },
+    "LiabilitylossnoticeType": {
+      "type": "object",
+      "properties": {
+        "locationnum": {
+          "type": "string"
+        },
+        "buildingnum": {
+          "type": "string"
+        },
+        "subjectofinsurancecd": {
+          "type": "string"
+        },
+        "insuredinterestcd": {
+          "type": "string"
+        },
+        "itemdesc": {
+          "type": "string"
+        },
+        "objectlossdesc": {
+          "type": "string"
+        },
+        "whereseendesc": {
+          "type": "string"
+        },
+        "operationsdesc": {
+          "type": "string"
+        },
+        "otherexposuredesc": {
+          "type": "string"
+        },
+        "coverages": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "properties": {
+            "empty": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "LocalDate": {
+      "type": "object",
+      "properties": {
+        "year": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "month": {
+          "type": "string",
+          "enum": [
+            "JANUARY",
+            "FEBRUARY",
+            "MARCH",
+            "APRIL",
+            "MAY",
+            "JUNE",
+            "JULY",
+            "AUGUST",
+            "SEPTEMBER",
+            "OCTOBER",
+            "NOVEMBER",
+            "DECEMBER"
+          ]
+        },
+        "monthValue": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "dayOfMonth": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "chronology": {
+          "$ref": "#/$defs/IsoChronology"
+        },
+        "dayOfWeek": {
+          "type": "string",
+          "enum": [
+            "MONDAY",
+            "TUESDAY",
+            "WEDNESDAY",
+            "THURSDAY",
+            "FRIDAY",
+            "SATURDAY",
+            "SUNDAY"
+          ]
+        },
+        "leapYear": {
+          "type": "boolean"
+        },
+        "dayOfYear": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "era": {
+          "$ref": "#/$defs/Era"
+        }
+      }
+    },
+    "LossnoticeType": {
+      "type": "object",
+      "properties": {
+        "autoloss": {
+          "$ref": "#/$defs/AutolossnoticeType"
+        },
+        "liabilityloss": {
+          "$ref": "#/$defs/LiabilitylossnoticeType"
+        },
+        "propertyloss": {
+          "$ref": "#/$defs/PropertylossnoticeType"
+        },
+        "workloss": {
+          "$ref": "#/$defs/WorklossnoticeType"
+        }
+      }
+    },
+    "PaymentInfo": {
+      "type": "object",
+      "properties": {
+        "paymentTypeCd": {
+          "type": "string",
+          "enum": [
+            "AdjExp",
+            "Adjustment",
+            "Counter",
+            "Final",
+            "Payment",
+            "Recovery",
+            "SRecov",
+            "StopPay",
+            "Transfer",
+            "Void"
+          ]
+        },
+        "totalPaymentAmount": {
+          "type": "number"
+        },
+        "totalclaimlosspaidamt": {
+          "type": "number"
+        },
+        "checkNumber": {
+          "type": "string"
+        },
+        "paymentDt": {
+          "format": "yyyy-MM-dd",
+          "$ref": "#/$defs/LocalDate"
+        },
+        "paymentDesc": {
+          "type": "string"
+        },
+        "claimsPartyReferenceIdentifier": {
+          "type": "string"
+        },
+        "losscausecd": {
+          "type": "string"
+        },
+        "payee": {
+          "$ref": "#/$defs/GeneralPartyInfoType"
+        },
+        "lumpsumind": {
+          "type": "boolean"
+        }
+      }
+    },
+    "PersonalnameType": {
+      "type": "object",
+      "properties": {
+        "firstname": {
+          "type": "string",
+          "readOnly": true
+        },
+        "middleintialname": {
+          "type": "string",
+          "readOnly": true
+        },
+        "lastname": {
+          "type": "string",
+          "readOnly": true
+        },
+        "fullname": {
+          "type": "string"
+        }
+      }
+    },
+    "PhoneType": {
+      "type": "object",
+      "properties": {
+        "phonetype": {
+          "type": "string",
+          "enum": [
+            "business",
+            "personal",
+            "cell"
+          ]
+        },
+        "phone": {
+          "type": "string"
+        },
+        "extension": {
+          "type": "string"
+        }
+      }
+    },
+    "PolicyInfo": {
+      "type": "object",
+      "properties": {
+        "policyNumber": {
+          "type": "string"
+        },
+        "broadLOBCd": {
+          "type": "string",
+          "enum": [
+            "P",
+            "C",
+            "B",
+            "F",
+            "S"
+          ]
+        },
+        "lobCd": {
+          "type": "string",
+          "enum": [
+            "ACCT",
+            "AGENT",
+            "AGLIA",
+            "AGPP",
+            "AGPR",
+            "APKGE",
+            "ARCH",
+            "AUTOB",
+            "AUTOP",
+            "BANDM",
+            "BOAT",
+            "BOP",
+            "BOPGL",
+            "BOPPR",
+            "CFIRE",
+            "CGL",
+            "CPKGE",
+            "CRIM",
+            "UMBRC",
+            "CYBER",
+            "DFIRE",
+            "DNTL",
+            "DO",
+            "EL",
+            "EO",
+            "EPLI",
+            "EQ",
+            "EQLIA",
+            "EXLIA",
+            "FIDUC",
+            "FLOOD",
+            "GARAG",
+            "HLTH",
+            "HOME",
+            "INMRC",
+            "INMRP",
+            "KIDRA",
+            "LAW",
+            "LIFE",
+            "LL",
+            "LMORT",
+            "MEDIA",
+            "MHOME",
+            "MMAL",
+            "MPL",
+            "MTRCR",
+            "OCMRC",
+            "PHYS",
+            "PL",
+            "PLMSC",
+            "PPKGE",
+            "PPL",
+            "PROP",
+            "PRSL",
+            "UMBRP",
+            "RECV",
+            "RRPRL",
+            "SFRNC",
+            "SMP",
+            "SURE",
+            "WIND",
+            "WORK",
+            "WORKV",
+            "YACHT"
+          ]
+        },
+        "naicCd": {
+          "type": "string"
+        },
+        "effectiveDt": {
+          "format": "yyyy-MM-dd",
+          "$ref": "#/$defs/LocalDate"
+        },
+        "expirationDt": {
+          "format": "yyyy-MM-dd",
+          "$ref": "#/$defs/LocalDate"
+        }
+      }
+    },
+    "ProducerType": {
+      "type": "object",
+      "properties": {
+        "organizationname": {
+          "type": "string",
+          "readOnly": true
+        },
+        "name": {
+          "$ref": "#/$defs/PersonalnameType",
+          "readOnly": true
+        },
+        "address": {
+          "$ref": "#/$defs/AddressType",
+          "readOnly": true
+        },
+        "npn": {
+          "type": "string",
+          "readOnly": true
+        },
+        "contractcode": {
+          "type": "string"
+        },
+        "contractsubcode": {
+          "type": "string",
+          "readOnly": true
+        },
+        "contact": {
+          "$ref": "#/$defs/ContactType",
+          "readOnly": true
+        }
+      }
+    },
+    "PropertylossnoticeType": {
+      "type": "object",
+      "properties": {
+        "claimproperty": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "properties": {
+            "empty": {
+              "type": "boolean"
+            }
+          }
+        },
+        "realestatetypecd": {
+          "type": "string"
+        },
+        "realestateypedesc": {
+          "type": "string"
+        },
+        "subjectofinsurancecd": {
+          "type": "string"
+        },
+        "losskindcd": {
+          "type": "string"
+        },
+        "objectlossdesc": {
+          "type": "string"
+        },
+        "damagedesc": {
+          "type": "string"
+        },
+        "otherinsuranceind": {
+          "type": "boolean"
+        },
+        "mortgageeind": {
+          "type": "boolean"
+        },
+        "occupancytypecd": {
+          "type": "string"
+        },
+        "coverageselfinsuredretention": {
+          "$ref": "#/$defs/CoverageselfinsuredretentionType"
+        },
+        "coverages": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "properties": {
+            "empty": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "ReserveAdjustment": {
+      "type": "object",
+      "properties": {
+        "reserveAdjustmentAmount": {
+          "type": "number"
+        },
+        "reserveAdjustmentDt": {
+          "format": "yyyy-MM-dd",
+          "$ref": "#/$defs/LocalDate"
+        }
+      }
+    },
+    "WorklossnoticeType": {
+      "type": "object",
+      "properties": {
+        "jurisdictioncd": {
+          "type": "string"
+        },
+        "jurisdictiondesc": {
+          "type": "string"
+        },
+        "wccclaimtypecd": {
+          "type": "string"
+        },
+        "secondaryinjuryfundind": {
+          "type": "boolean"
+        },
+        "otherinsuranceind": {
+          "type": "boolean"
+        },
+        "fraudulentclaimcd": {
+          "type": "string"
+        },
+        "employeeinfo": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "properties": {
+            "empty": {
+              "type": "boolean"
+            }
+          }
+        },
+        "coverages": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "properties": {
+            "empty": {
+              "type": "boolean"
+            }
+          }
+        },
+        "vesselcallid": {
+          "type": "string"
+        },
+        "losscondition": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "properties": {
+            "empty": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    }
+  }
+}

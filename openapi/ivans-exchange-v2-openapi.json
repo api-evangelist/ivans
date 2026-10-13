@@ -1,0 +1,826 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "IVANS Exchange API Docs V2",
+    "version": "v2"
+  },
+  "tags": [
+    {
+      "name": "Files"
+    }
+  ],
+  "paths": {
+    "/api/v2/Files/{id}": {
+      "get": {
+        "tags": [
+          "Files"
+        ],
+        "summary": "Retrieve a given file",
+        "description": "Download a file sent to you using the fileId.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the file to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "decompressFile",
+            "in": "query",
+            "description": "When true file is returned uncompressed if in ZIP or COMMPRESS format, otherwise it will be returned as is",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "Tells the translation service which format to translate to.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation."
+          },
+          "400": {
+            "description": "The request is not formatted properly."
+          },
+          "401": {
+            "description": "User not authorized to view this resource."
+          },
+          "403": {
+            "description": "Forbidden - Requires the following scope: file_transfer",
+            "headers": {
+              "WWW-Authenticate": {
+                "description": "Bearer error=\"insufficient_scope\"",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "insufficient_scope"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "File ID was not found."
+          },
+          "406": {
+            "description": "There is an issue with the data provided."
+          },
+          "409": {
+            "description": "Cannot decompress corrupt or incomplete file. Remove [decompressFile] parameter to download original file."
+          }
+        },
+        "security": [
+          {}
+        ],
+        "x-required-scopes": [
+          "file_transfer"
+        ]
+      }
+    },
+    "/api/v2/Files": {
+      "get": {
+        "tags": [
+          "Files"
+        ],
+        "summary": "Retrieve a list of all files that match the query string",
+        "description": "Retrieve a paginated list of all files that match the query string? criteria provided in the URI using an account-mailboxId pairing. This is a JSON-formatted collection with each object containing detailed information on a single file. Class code may be provided to filter by class code. This endpoint accepts headers used to identify the recipient's Agency Management System, Operating System, and optional information unique to this recipient. Files are retrieved on a page by page basis determined by page and pageSize.",
+        "parameters": [
+          {
+            "name": "account",
+            "in": "query",
+            "description": "The organization account code of Agency or Carrier. Starting from 'Y...' for agency.",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "The ID of the user.",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "name": "classcode",
+            "in": "query",
+            "description": "The classcode single value can be as: AIDOWN, AIUP, etc. Used as an optional filter.",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "name": "statuscode",
+            "in": "query",
+            "description": "The type of files received. May be either 'inbox' or 'received'. Defaults to 'inbox' if not used.",
+            "schema": {
+              "type": "string",
+              "default": "inbox"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "The page being requested. If page is not provided, the default is 1.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pagesize",
+            "in": "query",
+            "description": "The page size, with a lower limit of 25 and an upper limit of 500. If pageSize isn't provided, the default is 25.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 25
+            }
+          },
+          {
+            "name": "X-IVANS-Vendor-Company",
+            "in": "header",
+            "description": "Creator of agency management system",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-IVANS-Vendor-Product",
+            "in": "header",
+            "description": "Name of agency management system",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-IVANS-Vendor-Version",
+            "in": "header",
+            "description": "Agency management system version",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-IVANS-Vendor-Customer-Data",
+            "in": "header",
+            "description": "Caller specific data",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-IVANS-Client-Operating-System",
+            "in": "header",
+            "description": "Caller operating system",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-IVANS-Client-Instance-Id",
+            "in": "header",
+            "description": "Guid representing caller. (Note: this GUID must be associated only with this caller and must be the same each time this call is made; it may never change once assigned)",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation.",
+            "headers": {
+              "First": {
+                "description": "Pagination First Page URL",
+                "schema": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "Next": {
+                "description": "Pagination Next Page URL",
+                "schema": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "Prev": {
+                "description": "Pagination Previous Page URL",
+                "schema": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "Last": {
+                "description": "Pagination Last Page URL",
+                "schema": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "Record-Count": {
+                "description": "Total Record Count",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FileWithContentTypeAndStatus"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FileWithContentTypeAndStatus"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FileWithContentTypeAndStatus"
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No files were found for the given parameters."
+          },
+          "400": {
+            "description": "The request is not formatted properly."
+          },
+          "401": {
+            "description": "User not authorized to view this resource."
+          },
+          "403": {
+            "description": "Forbidden - Requires the following scope: file_transfer",
+            "headers": {
+              "WWW-Authenticate": {
+                "description": "Bearer error=\"insufficient_scope\"",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "insufficient_scope"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {}
+        ],
+        "x-required-scopes": [
+          "file_transfer"
+        ]
+      }
+    },
+    "/api/v2/NAIC/{naicCode}": {
+      "get": {
+        "tags": [
+          "NAIC"
+        ],
+        "summary": "Gets a NAIC mapping by NAIC.",
+        "parameters": [
+          {
+            "name": "naicCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarrierNaicGroupV2"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarrierNaicGroupV2"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CarrierNaicGroupV2"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {}
+        ]
+      }
+    },
+    "/api/v2/NAIC": {
+      "get": {
+        "tags": [
+          "NAIC"
+        ],
+        "summary": "Gets a list of Carrier-to-NAIC mappings.",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CarrierNaicGroupV2"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CarrierNaicGroupV2"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CarrierNaicGroupV2"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {}
+        ]
+      }
+    },
+    "/api/v2/Partners": {
+      "get": {
+        "tags": [
+          "Trading Partners"
+        ],
+        "summary": "Retrieve a list of trading partners. This is a JSON-formatted collection with each object\ncontaining an encoded identifier for a single trading partner. These identifiers are accepted\nby other actions available from /Partners endpoints. If no parameters are passed then all\ntrading partnerships with lead accounts that the user has access to are returned. Parameters\nare used to filter through these trading partnerships.",
+        "parameters": [
+          {
+            "name": "leadAccounts",
+            "in": "query",
+            "description": "Filter: Accounts the user must have access to.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "leadUserIDs",
+            "in": "query",
+            "description": "Filter: Mailbox userids that belong to accounts the user has access to.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "followAccounts",
+            "in": "query",
+            "description": "Filter: Accounts on the other end of the partnerships.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "followUserIDs",
+            "in": "query",
+            "description": "Filter: Mailbox userids that belong to accounts the user has access to.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Partner"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Partner"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Partner"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request is not formatted properly."
+          },
+          "401": {
+            "description": "User not authorized to view this resource."
+          },
+          "403": {
+            "description": "Forbidden - Requires one of these scopes: trading_partners, exchange",
+            "headers": {
+              "WWW-Authenticate": {
+                "description": "Bearer error=\"insufficient_scope\"",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "insufficient_scope"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {}
+        ],
+        "x-required-scopes": [
+          "trading_partners",
+          "exchange"
+        ]
+      }
+    },
+    "/api/v2/Organizations/{accountCode}/Producers/{producerCode}": {
+      "put": {
+        "tags": [
+          "Producers"
+        ],
+        "summary": "Update the information for a given producer code",
+        "description": "Update Producer information for an agency that is one of your trading partners. Requires that the caller\u2019s organization be configured in IVANS Exchange to support Remote Location Manager information.",
+        "operationId": "PutProducerByOrgV2",
+        "parameters": [
+          {
+            "name": "accountCode",
+            "in": "path",
+            "description": "The organization account code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "producerCode",
+            "in": "path",
+            "description": "The producer code.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The producer information.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProducerUpdateRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProducerUpdateRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProducerUpdateRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProducerUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation."
+          },
+          "400": {
+            "description": "The request is not formatted properly."
+          },
+          "401": {
+            "description": "User not authorized to view this resource."
+          },
+          "403": {
+            "description": "Forbidden - Requires the following scope: producers",
+            "headers": {
+              "WWW-Authenticate": {
+                "description": "Bearer error=\"insufficient_scope\"",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "insufficient_scope"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {}
+        ],
+        "x-required-scopes": [
+          "producers"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "FileWithContentTypeAndStatus": {
+        "required": [
+          "classCode",
+          "contentType",
+          "fileStatus",
+          "receiveAccount",
+          "receiveUserID",
+          "sendAccount",
+          "sendUserId"
+        ],
+        "type": "object",
+        "properties": {
+          "fileStatus": {
+            "type": "string"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "fileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "originalName": {
+            "type": "string",
+            "nullable": true
+          },
+          "remoteName": {
+            "type": "string",
+            "nullable": true
+          },
+          "statusDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "sendAccount": {
+            "type": "string"
+          },
+          "sendUserId": {
+            "type": "string"
+          },
+          "receiveAccount": {
+            "type": "string"
+          },
+          "receiveUserID": {
+            "type": "string"
+          },
+          "classCode": {
+            "type": "string"
+          },
+          "originalSize": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "compressedSize": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CarrierNaicGroupV2": {
+        "required": [
+          "carrierNaics"
+        ],
+        "type": "object",
+        "properties": {
+          "groupName": {
+            "type": "string",
+            "nullable": true
+          },
+          "carrierNaics": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CarrierNaicV2"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "CarrierNaicV2": {
+        "required": [
+          "carrierName",
+          "naic"
+        ],
+        "type": "object",
+        "properties": {
+          "naic": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "carrierName": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Partner": {
+        "required": [
+          "followAccount",
+          "followUserId",
+          "leadAccount",
+          "leadUserId",
+          "partnerId",
+          "tprSetName"
+        ],
+        "type": "object",
+        "properties": {
+          "tprSetId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "leadAccount": {
+            "type": "string"
+          },
+          "leadUserId": {
+            "type": "string"
+          },
+          "followAccount": {
+            "type": "string"
+          },
+          "followUserId": {
+            "type": "string"
+          },
+          "partnerId": {
+            "type": "string"
+          },
+          "tprSetName": {
+            "type": "string"
+          },
+          "ibmMachineAddress": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProducerUpdateRequest": {
+        "required": [
+          "initialLoadCode"
+        ],
+        "type": "object",
+        "properties": {
+          "companyAccount": {
+            "type": "string",
+            "nullable": true
+          },
+          "producerCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "contractNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "participantCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "other1": {
+            "type": "string",
+            "nullable": true
+          },
+          "other2": {
+            "type": "string",
+            "nullable": true
+          },
+          "other3": {
+            "type": "string",
+            "nullable": true
+          },
+          "other4": {
+            "type": "string",
+            "nullable": true
+          },
+          "other5": {
+            "type": "string",
+            "nullable": true
+          },
+          "initialLoadCode": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "x-provenance": {
+    "method": "searched",
+    "source": "https://api.ivans.com/reference/get_api-v2-files",
+    "generated": "2026-10-13",
+    "note": "Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored."
+  }
+}

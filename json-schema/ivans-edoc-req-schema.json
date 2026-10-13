@@ -1,0 +1,505 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/ivans/main/json-schema/ivans-edoc-req-schema.json",
+  "title": "EdocReq",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/ivans-translation-openapi.json#/components/schemas/EdocReq",
+  "type": "object",
+  "properties": {
+    "attachments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AttachmentType"
+      }
+    },
+    "remark": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/RemarkTypeInner"
+      },
+      "properties": {
+        "empty": {
+          "type": "boolean"
+        }
+      }
+    },
+    "balanceInfo": {
+      "$ref": "#/$defs/BalanceInfoType"
+    },
+    "agencyId": {
+      "type": "string"
+    },
+    "carrierId": {
+      "type": "string"
+    },
+    "changeOrReasonDesc": {
+      "type": "string"
+    },
+    "edocTypeCd": {
+      "type": "string",
+      "enum": [
+        "ACR",
+        "ADD",
+        "ADE",
+        "ADF",
+        "ADI",
+        "ADJ",
+        "ADO",
+        "ADU",
+        "ADW",
+        "APV",
+        "ARR",
+        "BCS",
+        "BDC",
+        "BND",
+        "BRP",
+        "BRQ",
+        "BRS",
+        "BST",
+        "CLI",
+        "CLN",
+        "CLS",
+        "COL",
+        "COM",
+        "CON",
+        "CRN",
+        "CSQ",
+        "DBR",
+        "DBS",
+        "DIV",
+        "EPN",
+        "EPP",
+        "ERR",
+        "LNT",
+        "MEM",
+        "NBQ",
+        "NBS",
+        "NRA",
+        "PCH",
+        "PCQ",
+        "PMK",
+        "PMT",
+        "PNQ",
+        "POL",
+        "PRMAU",
+        "PYO",
+        "PYR",
+        "REI",
+        "RES",
+        "REV",
+        "REW",
+        "RIX",
+        "RNR",
+        "RRQ",
+        "RSN",
+        "RTA",
+        "RWL",
+        "RWQ",
+        "RWX",
+        "RWR",
+        "SBB",
+        "SBC",
+        "SBD",
+        "SBP",
+        "SBQ",
+        "SBR",
+        "SBT",
+        "SBU",
+        "XLC",
+        "XLN",
+        "XLP"
+      ]
+    },
+    "insuredInfo": {
+      "$ref": "#/$defs/GeneralPartyInfo"
+    },
+    "policyInfo": {
+      "$ref": "#/$defs/PolicyInfoType"
+    },
+    "totalPolicyTermPremiumAmt": {
+      "type": "number"
+    },
+    "totalPolicyNetChangePremAmt": {
+      "type": "number"
+    },
+    "transactionDt": {
+      "format": "yyyy-MM-dd",
+      "$ref": "#/$defs/LocalDate"
+    },
+    "transactionEffectiveDt": {
+      "format": "yyyy-MM-dd",
+      "$ref": "#/$defs/LocalDate"
+    },
+    "claimsData": {
+      "$ref": "#/$defs/ClaimInfo"
+    }
+  },
+  "$defs": {
+    "Address": {
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "postalCd": {
+          "type": "string"
+        }
+      }
+    },
+    "Adjuster": {
+      "type": "object",
+      "properties": {
+        "partyInfo": {
+          "$ref": "#/$defs/GeneralPartyInfo"
+        },
+        "assignedDt": {
+          "format": "yyyy-MM-dd",
+          "$ref": "#/$defs/LocalDate"
+        },
+        "adjusterId": {
+          "type": "string"
+        }
+      }
+    },
+    "AttachmentType": {
+      "type": "object",
+      "properties": {
+        "documentIdentity": {
+          "type": "string"
+        }
+      }
+    },
+    "BalanceInfoType": {
+      "type": "object",
+      "properties": {
+        "minimumDueAmt": {
+          "type": "number"
+        },
+        "totalDueAmt": {
+          "type": "number"
+        },
+        "lastPaymentDt": {
+          "format": "yyyy-MM-dd",
+          "$ref": "#/$defs/LocalDate"
+        },
+        "minimumDueDt": {
+          "format": "yyyy-MM-dd",
+          "$ref": "#/$defs/LocalDate"
+        }
+      }
+    },
+    "ClaimInfo": {
+      "type": "object",
+      "properties": {
+        "claimNumber": {
+          "type": "string"
+        },
+        "claimPayment": {
+          "$ref": "#/$defs/ClaimPaymentType"
+        },
+        "claimsStatusCd": {
+          "type": "string",
+          "enum": [
+            "O",
+            "C",
+            "S",
+            "R"
+          ]
+        },
+        "claimsStatusDt": {
+          "format": "yyyy-MM-dd",
+          "$ref": "#/$defs/LocalDate"
+        },
+        "incidentDesc": {
+          "type": "string"
+        },
+        "lossDt": {
+          "format": "yyyy-MM-dd",
+          "$ref": "#/$defs/LocalDate"
+        },
+        "adjusterData": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Adjuster"
+          }
+        }
+      }
+    },
+    "ClaimPaymentType": {
+      "type": "object",
+      "properties": {
+        "paymentTypeCd": {
+          "type": "string",
+          "enum": [
+            "AdjExp",
+            "DeductRecovery",
+            "LossResv",
+            "Payment",
+            "StopPay",
+            "SubrRecovery",
+            "SalvRecovery"
+          ]
+        },
+        "totalPaymentAmount": {
+          "type": "number"
+        },
+        "lossCauseCode": {
+          "type": "string",
+          "enum": [
+            "CLMD"
+          ]
+        },
+        "checkNumber": {
+          "type": "string"
+        },
+        "paymentDate": {
+          "format": "yyyy-MM-dd",
+          "$ref": "#/$defs/LocalDate"
+        },
+        "paymentDesc": {
+          "type": "string"
+        }
+      }
+    },
+    "Era": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "GeneralPartyInfo": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/Name"
+        },
+        "address": {
+          "$ref": "#/$defs/Address",
+          "readOnly": true
+        }
+      }
+    },
+    "IsoChronology": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "calendarType": {
+          "type": "string"
+        }
+      }
+    },
+    "LocalDate": {
+      "type": "object",
+      "properties": {
+        "year": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "month": {
+          "type": "string",
+          "enum": [
+            "JANUARY",
+            "FEBRUARY",
+            "MARCH",
+            "APRIL",
+            "MAY",
+            "JUNE",
+            "JULY",
+            "AUGUST",
+            "SEPTEMBER",
+            "OCTOBER",
+            "NOVEMBER",
+            "DECEMBER"
+          ]
+        },
+        "monthValue": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "dayOfMonth": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "chronology": {
+          "$ref": "#/$defs/IsoChronology"
+        },
+        "dayOfWeek": {
+          "type": "string",
+          "enum": [
+            "MONDAY",
+            "TUESDAY",
+            "WEDNESDAY",
+            "THURSDAY",
+            "FRIDAY",
+            "SATURDAY",
+            "SUNDAY"
+          ]
+        },
+        "leapYear": {
+          "type": "boolean"
+        },
+        "dayOfYear": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "era": {
+          "$ref": "#/$defs/Era"
+        }
+      }
+    },
+    "Name": {
+      "type": "object",
+      "properties": {
+        "commercialName": {
+          "type": "string"
+        },
+        "personalFirst": {
+          "type": "string"
+        },
+        "personalLast": {
+          "type": "string"
+        },
+        "personalOther": {
+          "type": "string"
+        }
+      }
+    },
+    "PolicyInfoType": {
+      "type": "object",
+      "properties": {
+        "policyNumber": {
+          "type": "string"
+        },
+        "lobCd": {
+          "type": "string",
+          "enum": [
+            "ACCT",
+            "AGENT",
+            "AGLIA",
+            "AGPP",
+            "AGPR",
+            "APKGE",
+            "ARCH",
+            "AUTOB",
+            "AUTOP",
+            "BANDM",
+            "BOAT",
+            "BOP",
+            "BOPGL",
+            "BOPPR",
+            "CFIRE",
+            "CFRM",
+            "CGL",
+            "COMR",
+            "CPKGE",
+            "CRIM",
+            "UMBRC",
+            "CYBER",
+            "DFIRE",
+            "DNTL",
+            "DO",
+            "EL",
+            "EO",
+            "EPLI",
+            "EQ",
+            "EQLIA",
+            "EXLIA",
+            "FIDUC",
+            "FLOOD",
+            "GARAG",
+            "HLTH",
+            "HOME",
+            "INMRC",
+            "INMRP",
+            "KIDRA",
+            "LAW",
+            "LIFE",
+            "LL",
+            "LMORT",
+            "MEDIA",
+            "MHOME",
+            "MMAL",
+            "MPL",
+            "MTRCR",
+            "PHYS",
+            "PL",
+            "PLMSC",
+            "PPKGE",
+            "PPL",
+            "PROP",
+            "PRSL",
+            "UMBRP",
+            "RECV",
+            "RRPRL",
+            "SFRNC",
+            "SMP",
+            "SURE",
+            "WIND",
+            "WORK",
+            "WORKV",
+            "YACHT"
+          ]
+        },
+        "naicCd": {
+          "type": "string"
+        },
+        "npnCd": {
+          "type": "string"
+        },
+        "effectiveDt": {
+          "format": "yyyy-MM-dd",
+          "$ref": "#/$defs/LocalDate"
+        },
+        "expirationDt": {
+          "format": "yyyy-MM-dd",
+          "$ref": "#/$defs/LocalDate"
+        },
+        "broadLOBCd": {
+          "type": "string",
+          "enum": [
+            "P",
+            "C",
+            "B",
+            "F",
+            "S"
+          ]
+        },
+        "lobSubCd": {
+          "type": "string",
+          "enum": [
+            "GRP",
+            "INDV",
+            "NPC",
+            "NPO",
+            "NSTD",
+            "VOL",
+            "OCP",
+            "GARAG",
+            "PROF"
+          ]
+        }
+      }
+    },
+    "RemarkTypeInner": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1299 @@
+{
+  "@context": {
+    "@vocab": "https://ivans.com/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "ivans": "https://ivans.com/schema#",
+    "ErrorMsg": "ivans:ErrorMsg",
+    "detail": {
+      "@id": "ivans:detail",
+      "@type": "xsd:string"
+    },
+    "Evaluation": "ivans:Evaluation",
+    "type": {
+      "@id": "ivans:type",
+      "@type": "@id"
+    },
+    "reasons": {
+      "@id": "ivans:reasons",
+      "@container": "@list"
+    },
+    "EvaluationType": "ivans:EvaluationType",
+    "FieldValue": "ivans:FieldValue",
+    "questionId": {
+      "@id": "ivans:questionId",
+      "@type": "xsd:string"
+    },
+    "value": {
+      "@id": "ivans:value"
+    },
+    "HTTPValidationError": "ivans:HTTPValidationError",
+    "IDPValidationError": "ivans:IDPValidationError",
+    "groupId": {
+      "@id": "ivans:groupId"
+    },
+    "errorMsg": {
+      "@id": "ivans:errorMsg"
+    },
+    "IDPValidationWarning": "ivans:IDPValidationWarning",
+    "warningMessage": {
+      "@id": "ivans:warningMessage"
+    },
+    "ImpactingFactor": "ivans:ImpactingFactor",
+    "attributeId": {
+      "@id": "ivans:attributeId"
+    },
+    "Reason": "ivans:Reason",
+    "message": {
+      "@id": "ivans:message",
+      "@type": "xsd:string"
+    },
+    "impactingFactors": {
+      "@id": "ivans:impactingFactors",
+      "@container": "@list"
+    },
+    "RepeatableFieldBlock": "ivans:RepeatableFieldBlock",
+    "id": {
+      "@id": "ivans:id",
+      "@type": "xsd:string"
+    },
+    "fieldBlockId": {
+      "@id": "ivans:fieldBlockId",
+      "@type": "xsd:string"
+    },
+    "parentId": {
+      "@id": "ivans:parentId"
+    },
+    "fieldValues": {
+      "@id": "ivans:fieldValues",
+      "@container": "@list"
+    },
+    "RequiredToSubmit": "ivans:RequiredToSubmit",
+    "contractCode": {
+      "@id": "ivans:contractCode",
+      "@type": "xsd:boolean"
+    },
+    "username": {
+      "@id": "ivans:username",
+      "@type": "xsd:boolean"
+    },
+    "password": {
+      "@id": "ivans:password",
+      "@type": "xsd:boolean"
+    },
+    "RiskProfile": "ivans:RiskProfile",
+    "uuid": {
+      "@id": "ivans:uuid",
+      "@type": "xsd:string"
+    },
+    "name": {
+      "@id": "ivans:name",
+      "@type": "xsd:string"
+    },
+    "market": {
+      "@id": "ivans:market"
+    },
+    "marketUuid": {
+      "@id": "ivans:marketUuid"
+    },
+    "excessAndSurplus": {
+      "@id": "ivans:excessAndSurplus",
+      "@type": "xsd:boolean"
+    },
+    "lob": {
+      "@id": "ivans:lob"
+    },
+    "childLobs": {
+      "@id": "ivans:childLobs"
+    },
+    "inAppetite": {
+      "@id": "ivans:inAppetite"
+    },
+    "bindAllowed": {
+      "@id": "ivans:bindAllowed",
+      "@type": "xsd:boolean"
+    },
+    "bindAppetite": {
+      "@id": "ivans:bindAppetite"
+    },
+    "referAllowed": {
+      "@id": "ivans:referAllowed",
+      "@type": "xsd:boolean"
+    },
+    "routeType": {
+      "@id": "ivans:routeType"
+    },
+    "requiredToSubmit": {
+      "@id": "ivans:requiredToSubmit"
+    },
+    "validationErrors": {
+      "@id": "ivans:validationErrors",
+      "@container": "@list"
+    },
+    "validationWarnings": {
+      "@id": "ivans:validationWarnings",
+      "@container": "@list"
+    },
+    "evaluations": {
+      "@id": "ivans:evaluations",
+      "@container": "@list"
+    },
+    "SubmissionMarketMetadata": "ivans:SubmissionMarketMetadata",
+    "riskProfile": {
+      "@id": "ivans:riskProfile",
+      "@type": "xsd:string"
+    },
+    "credentialId": {
+      "@id": "ivans:credentialId"
+    },
+    "contractCodeId": {
+      "@id": "ivans:contractCodeId"
+    },
+    "marketQuoteId": {
+      "@id": "ivans:marketQuoteId"
+    },
+    "externalMarketQuoteId": {
+      "@id": "ivans:externalMarketQuoteId"
+    },
+    "marketAccountId": {
+      "@id": "ivans:marketAccountId"
+    },
+    "referenceIds": {
+      "@id": "ivans:referenceIds"
+    },
+    "effectiveDate": {
+      "@id": "ivans:effectiveDate",
+      "@type": "xsd:date"
+    },
+    "expirationDate": {
+      "@id": "ivans:expirationDate",
+      "@type": "xsd:date"
+    },
+    "SubmissionMetadata": "ivans:SubmissionMetadata",
+    "clientId": {
+      "@id": "ivans:clientId",
+      "@type": "xsd:string"
+    },
+    "quoteId": {
+      "@id": "ivans:quoteId",
+      "@type": "xsd:string"
+    },
+    "callbackUrl": {
+      "@id": "ivans:callbackUrl",
+      "@type": "@id"
+    },
+    "SubmissionRequestPayload": "ivans:SubmissionRequestPayload",
+    "metadata": {
+      "@id": "ivans:metadata",
+      "@type": "@id"
+    },
+    "marketMetadata": {
+      "@id": "ivans:marketMetadata",
+      "@container": "@list"
+    },
+    "repeatableFieldBlocks": {
+      "@id": "ivans:repeatableFieldBlocks",
+      "@container": "@list"
+    },
+    "SubmissionResponse": "ivans:SubmissionResponse",
+    "quoteSessionId": {
+      "@id": "ivans:quoteSessionId",
+      "@type": "xsd:string"
+    },
+    "warnings": {
+      "@id": "ivans:warnings",
+      "@container": "@list"
+    },
+    "transactions": {
+      "@id": "ivans:transactions",
+      "@container": "@list"
+    },
+    "riskProfiles": {
+      "@id": "ivans:riskProfiles",
+      "@container": "@list"
+    },
+    "SubmissionTransaction": "ivans:SubmissionTransaction",
+    "riskProfileUuid": {
+      "@id": "ivans:riskProfileUuid",
+      "@type": "xsd:string"
+    },
+    "lineOfBusiness": {
+      "@id": "ivans:lineOfBusiness",
+      "@type": "xsd:string"
+    },
+    "timeout": {
+      "@id": "ivans:timeout",
+      "@type": "xsd:integer"
+    },
+    "submissionErrorMsg": {
+      "@id": "ivans:submissionErrorMsg"
+    },
+    "ValidationError": "ivans:ValidationError",
+    "loc": {
+      "@id": "ivans:loc",
+      "@container": "@list"
+    },
+    "msg": {
+      "@id": "ivans:msg",
+      "@type": "xsd:string"
+    },
+    "input": {
+      "@id": "ivans:input"
+    },
+    "ctx": {
+      "@id": "ivans:ctx"
+    },
+    "WarningDetail": "ivans:WarningDetail",
+    "FastPathSubmissionRequestPayload": "ivans:FastPathSubmissionRequestPayload",
+    "templateIds": {
+      "@id": "ivans:templateIds"
+    },
+    "AutoDetailResponse": "ivans:AutoDetailResponse",
+    "details": {
+      "@id": "ivans:details",
+      "@container": "@list"
+    },
+    "AutoFieldOptionsResponse": "ivans:AutoFieldOptionsResponse",
+    "guid": {
+      "@id": "ivans:guid",
+      "@type": "xsd:string"
+    },
+    "label": {
+      "@id": "ivans:label",
+      "@type": "xsd:string"
+    },
+    "options": {
+      "@id": "ivans:options",
+      "@container": "@list"
+    },
+    "AutoFieldValueResponse": "ivans:AutoFieldValueResponse",
+    "ErrorResponseWithMessageOnly": "ivans:ErrorResponseWithMessageOnly",
+    "ErrorResponseWithValidationDetails": "ivans:ErrorResponseWithValidationDetails",
+    "ValidationErrorDetail": "ivans:ValidationErrorDetail",
+    "ValueOptionResponse": "ivans:ValueOptionResponse",
+    "AdditionalDetails": "ivans:AdditionalDetails",
+    "heading": {
+      "@id": "ivans:heading",
+      "@type": "xsd:string"
+    },
+    "children": {
+      "@id": "ivans:children",
+      "@container": "@list"
+    },
+    "BaseMarketFieldField": "ivans:BaseMarketFieldField",
+    "requirementLevel": {
+      "@id": "ivans:requirementLevel",
+      "@type": "xsd:string"
+    },
+    "DefaultTemplateInfo": "ivans:DefaultTemplateInfo",
+    "description": {
+      "@id": "ivans:description",
+      "@type": "xsd:string"
+    },
+    "lobs": {
+      "@id": "ivans:lobs",
+      "@container": "@list"
+    },
+    "markets": {
+      "@id": "ivans:markets",
+      "@container": "@list"
+    },
+    "FastPathFormResponse": "ivans:FastPathFormResponse",
+    "defaultTemplate": {
+      "@id": "ivans:defaultTemplate",
+      "@type": "@id"
+    },
+    "form": {
+      "@id": "ivans:form"
+    },
+    "FlattenedRepeatableFieldBlock": "ivans:FlattenedRepeatableFieldBlock",
+    "ListItem": "ivans:ListItem",
+    "listItem": {
+      "@id": "ivans:listItem",
+      "@type": "xsd:string"
+    },
+    "MarketFieldByRiskProfile": "ivans:MarketFieldByRiskProfile",
+    "fields": {
+      "@id": "ivans:fields"
+    },
+    "repeatableGroups": {
+      "@id": "ivans:repeatableGroups"
+    },
+    "MarketFieldByRiskProfileParent": "ivans:MarketFieldByRiskProfileParent",
+    "NestedForm": "ivans:NestedForm",
+    "pages": {
+      "@id": "ivans:pages",
+      "@container": "@list"
+    },
+    "marketFields": {
+      "@id": "ivans:marketFields",
+      "@container": "@list"
+    },
+    "suggestedFields": {
+      "@id": "ivans:suggestedFields"
+    },
+    "NestedFormGroup": "ivans:NestedFormGroup",
+    "page": {
+      "@id": "ivans:page",
+      "@type": "xsd:string"
+    },
+    "isRepeatable": {
+      "@id": "ivans:isRepeatable",
+      "@type": "xsd:boolean"
+    },
+    "repeatMinMax": {
+      "@id": "ivans:repeatMinMax"
+    },
+    "order": {
+      "@id": "ivans:order",
+      "@type": "xsd:integer"
+    },
+    "columns": {
+      "@id": "ivans:columns"
+    },
+    "parent": {
+      "@id": "ivans:parent"
+    },
+    "parentLabel": {
+      "@id": "ivans:parentLabel"
+    },
+    "parentColumns": {
+      "@id": "ivans:parentColumns"
+    },
+    "NestedFormPage": "ivans:NestedFormPage",
+    "groups": {
+      "@id": "ivans:groups"
+    },
+    "NonNestedForm": "ivans:NonNestedForm",
+    "NonNestedFormGroup": "ivans:NonNestedFormGroup",
+    "NonNestedFormPage": "ivans:NonNestedFormPage",
+    "RequirementLevel": "ivans:RequirementLevel",
+    "RiskProfileRepeatableFormGroup": "ivans:RiskProfileRepeatableFormGroup",
+    "conditions": {
+      "@id": "ivans:conditions"
+    },
+    "SerializedRPA": "ivans:SerializedRPA",
+    "group": {
+      "@id": "ivans:group",
+      "@type": "xsd:string"
+    },
+    "additionalDetails": {
+      "@id": "ivans:additionalDetails"
+    },
+    "dataClass": {
+      "@id": "ivans:dataClass",
+      "@type": "xsd:string"
+    },
+    "underwritingCategory": {
+      "@id": "ivans:underwritingCategory",
+      "@type": "@id"
+    },
+    "isAppetiteCategory": {
+      "@id": "ivans:isAppetiteCategory",
+      "@type": "xsd:boolean"
+    },
+    "isEnhancedAppetiteCategory": {
+      "@id": "ivans:isEnhancedAppetiteCategory",
+      "@type": "xsd:boolean"
+    },
+    "isBind": {
+      "@id": "ivans:isBind",
+      "@type": "xsd:boolean"
+    },
+    "isRefer": {
+      "@id": "ivans:isRefer",
+      "@type": "xsd:boolean"
+    },
+    "actionConditions": {
+      "@id": "ivans:actionConditions"
+    },
+    "classificationStandardGuid": {
+      "@id": "ivans:classificationStandardGuid"
+    },
+    "classCodeFilterFieldsGuids": {
+      "@id": "ivans:classCodeFilterFieldsGuids"
+    },
+    "unique": {
+      "@id": "ivans:unique",
+      "@type": "xsd:boolean"
+    },
+    "uniqueToParent": {
+      "@id": "ivans:uniqueToParent",
+      "@type": "xsd:boolean"
+    },
+    "parentAttributeGuid": {
+      "@id": "ivans:parentAttributeGuid"
+    },
+    "minimum": {
+      "@id": "ivans:minimum"
+    },
+    "maximum": {
+      "@id": "ivans:maximum"
+    },
+    "prefillSourceFieldGuid": {
+      "@id": "ivans:prefillSourceFieldGuid"
+    },
+    "isSuggestable": {
+      "@id": "ivans:isSuggestable",
+      "@type": "xsd:boolean"
+    },
+    "length": {
+      "@id": "ivans:length"
+    },
+    "SuggestedFields": "ivans:SuggestedFields",
+    "UnderwritingCategory": "ivans:UnderwritingCategory",
+    "ValueListOption": "ivans:ValueListOption",
+    "PassportRPA": "ivans:PassportRPA",
+    "required": {
+      "@id": "ivans:required",
+      "@type": "xsd:boolean"
+    },
+    "data_type": {
+      "@id": "ivans:data_type",
+      "@type": "xsd:string"
+    },
+    "PassportRiskProfile": "ivans:PassportRiskProfile",
+    "rpas": {
+      "@id": "ivans:rpas",
+      "@container": "@list"
+    },
+    "RiskProfileDiff": "ivans:RiskProfileDiff",
+    "fieldsAdded": {
+      "@id": "ivans:fieldsAdded",
+      "@container": "@list"
+    },
+    "fieldsRemoved": {
+      "@id": "ivans:fieldsRemoved",
+      "@container": "@list"
+    },
+    "repeatableGroupsAdded": {
+      "@id": "ivans:repeatableGroupsAdded",
+      "@container": "@list"
+    },
+    "repeatableGroupsRemoved": {
+      "@id": "ivans:repeatableGroupsRemoved",
+      "@container": "@list"
+    },
+    "Body_get_risk_profile_lineage_api_v1_risk_profiles_lineage_post": "ivans:Body_get_risk_profile_lineage_api_v1_risk_profiles_lineage_post",
+    "risk_profile_uuids": {
+      "@id": "ivans:risk_profile_uuids",
+      "@container": "@list"
+    },
+    "QuotePayload": "ivans:QuotePayload",
+    "ClassicQuotePayload": "ivans:ClassicQuotePayload",
+    "BookrollRequestRequest": "ivans:BookrollRequestRequest",
+    "carrierId": {
+      "@id": "ivans:carrierId",
+      "@type": "xsd:string"
+    },
+    "carrierContactName": {
+      "@id": "ivans:carrierContactName",
+      "@type": "xsd:string"
+    },
+    "carrierContactEmail": {
+      "@id": "ivans:carrierContactEmail",
+      "@type": "xsd:string"
+    },
+    "agencyId": {
+      "@id": "ivans:agencyId",
+      "@type": "xsd:string"
+    },
+    "agencyContactName": {
+      "@id": "ivans:agencyContactName",
+      "@type": "xsd:string"
+    },
+    "agencyContactEmail": {
+      "@id": "ivans:agencyContactEmail",
+      "@type": "xsd:string"
+    },
+    "linesOfBusiness": {
+      "@id": "ivans:linesOfBusiness",
+      "@container": "@list"
+    },
+    "startDate": {
+      "@id": "ivans:startDate",
+      "@type": "xsd:dateTime"
+    },
+    "endDate": {
+      "@id": "ivans:endDate",
+      "@type": "xsd:dateTime"
+    },
+    "naics": {
+      "@id": "ivans:naics",
+      "@container": "@list"
+    },
+    "includePackagePolicies": {
+      "@id": "ivans:includePackagePolicies",
+      "@type": "xsd:boolean"
+    },
+    "stateCodes": {
+      "@id": "ivans:stateCodes",
+      "@container": "@list"
+    },
+    "transferCode": {
+      "@id": "ivans:transferCode",
+      "@type": "xsd:string"
+    },
+    "agencyReferenceId": {
+      "@id": "ivans:agencyReferenceId",
+      "@type": "xsd:string"
+    },
+    "agencyArchive": {
+      "@id": "ivans:agencyArchive",
+      "@type": "xsd:boolean"
+    },
+    "carrierArchive": {
+      "@id": "ivans:carrierArchive",
+      "@type": "xsd:boolean"
+    },
+    "bookrollType": {
+      "@id": "ivans:bookrollType",
+      "@type": "xsd:string"
+    },
+    "ConsumerInfo": "ivans:ConsumerInfo",
+    "consumerInfoId": {
+      "@id": "ivans:consumerInfoId",
+      "@type": "xsd:integer"
+    },
+    "account": {
+      "@id": "ivans:account",
+      "@type": "xsd:string"
+    },
+    "userId": {
+      "@id": "ivans:userId",
+      "@type": "xsd:string"
+    },
+    "delay": {
+      "@id": "ivans:delay",
+      "@type": "xsd:integer"
+    },
+    "maxFileListSize": {
+      "@id": "ivans:maxFileListSize",
+      "@type": "xsd:integer"
+    },
+    "consumerPackage": {
+      "@id": "ivans:consumerPackage",
+      "@type": "xsd:string"
+    },
+    "endpoint": {
+      "@id": "ivans:endpoint",
+      "@type": "xsd:string"
+    },
+    "headers": {
+      "@id": "ivans:headers"
+    },
+    "AgencyResponse": "ivans:AgencyResponse",
+    "agencyAccount": {
+      "@id": "ivans:agencyAccount",
+      "@type": "xsd:string"
+    },
+    "agencyName": {
+      "@id": "ivans:agencyName",
+      "@type": "xsd:string"
+    },
+    "alternateAgencyName": {
+      "@id": "ivans:alternateAgencyName",
+      "@type": "xsd:string"
+    },
+    "locationStreet1": {
+      "@id": "ivans:locationStreet1",
+      "@type": "xsd:string"
+    },
+    "locationStreet2": {
+      "@id": "ivans:locationStreet2",
+      "@type": "xsd:string"
+    },
+    "locationCity": {
+      "@id": "ivans:locationCity",
+      "@type": "xsd:string"
+    },
+    "locationState": {
+      "@id": "ivans:locationState",
+      "@type": "xsd:string"
+    },
+    "locationZip": {
+      "@id": "ivans:locationZip",
+      "@type": "xsd:string"
+    },
+    "mailingStreet1": {
+      "@id": "ivans:mailingStreet1",
+      "@type": "xsd:string"
+    },
+    "mailingStreet2": {
+      "@id": "ivans:mailingStreet2",
+      "@type": "xsd:string"
+    },
+    "mailingCity": {
+      "@id": "ivans:mailingCity",
+      "@type": "xsd:string"
+    },
+    "mailingState": {
+      "@id": "ivans:mailingState",
+      "@type": "xsd:string"
+    },
+    "mailingZip": {
+      "@id": "ivans:mailingZip",
+      "@type": "xsd:string"
+    },
+    "agencyPhone": {
+      "@id": "ivans:agencyPhone",
+      "@type": "xsd:string"
+    },
+    "agencyPhoneExtension": {
+      "@id": "ivans:agencyPhoneExtension",
+      "@type": "xsd:string"
+    },
+    "agencyEmail": {
+      "@id": "ivans:agencyEmail",
+      "@type": "xsd:string"
+    },
+    "enableApiProfile": {
+      "@id": "ivans:enableApiProfile",
+      "@type": "xsd:boolean"
+    },
+    "amsProductVersionId": {
+      "@id": "ivans:amsProductVersionId",
+      "@type": "xsd:string"
+    },
+    "amsProductVersion": {
+      "@id": "ivans:amsProductVersion",
+      "@type": "xsd:string"
+    },
+    "enableManualAmsInfoEdit": {
+      "@id": "ivans:enableManualAmsInfoEdit",
+      "@type": "xsd:boolean"
+    },
+    "ErrorFormat": "ivans:ErrorFormat",
+    "status": {
+      "@id": "ivans:status",
+      "@type": "xsd:integer"
+    },
+    "traceId": {
+      "@id": "ivans:traceId",
+      "@type": "xsd:string"
+    },
+    "AmsVersion": "ivans:AmsVersion",
+    "sortOrder": {
+      "@id": "ivans:sortOrder",
+      "@type": "xsd:integer"
+    },
+    "AmsProviderResponse": "ivans:AmsProviderResponse",
+    "shortName": {
+      "@id": "ivans:shortName",
+      "@type": "xsd:string"
+    },
+    "active": {
+      "@id": "ivans:active",
+      "@type": "xsd:boolean"
+    },
+    "amsProducts": {
+      "@id": "ivans:amsProducts",
+      "@type": "xsd:string"
+    },
+    "AmsProductResponse": "ivans:AmsProductResponse",
+    "amsVersions": {
+      "@id": "ivans:amsVersions",
+      "@type": "xsd:string"
+    },
+    "AmsVersionDetails": "ivans:AmsVersionDetails",
+    "versionName": {
+      "@id": "ivans:versionName",
+      "@type": "xsd:string"
+    },
+    "productName": {
+      "@id": "ivans:productName",
+      "@type": "xsd:string"
+    },
+    "amsName": {
+      "@id": "ivans:amsName",
+      "@type": "xsd:string"
+    },
+    "ConnectionCode": "ivans:ConnectionCode",
+    "abbreviation": {
+      "@id": "ivans:abbreviation",
+      "@type": "xsd:string"
+    },
+    "usesColorCodes": {
+      "@id": "ivans:usesColorCodes",
+      "@type": "xsd:boolean"
+    },
+    "ConnectionLob": "ivans:ConnectionLob",
+    "transactionType": {
+      "@id": "ivans:transactionType",
+      "@type": "xsd:string"
+    },
+    "mapping": {
+      "@id": "ivans:mapping",
+      "@type": "xsd:string"
+    },
+    "FileHistoryResponse": "ivans:FileHistoryResponse",
+    "fileId": {
+      "@id": "ivans:fileId",
+      "@type": "xsd:string"
+    },
+    "eventTime": {
+      "@id": "ivans:eventTime",
+      "@type": "xsd:dateTime"
+    },
+    "comment": {
+      "@id": "ivans:comment",
+      "@type": "xsd:string"
+    },
+    "action": {
+      "@id": "ivans:action",
+      "@type": "xsd:string"
+    },
+    "transactingMailbox": {
+      "@id": "ivans:transactingMailbox",
+      "@type": "xsd:string"
+    },
+    "FileContent": "ivans:FileContent",
+    "index": {
+      "@id": "ivans:index",
+      "@type": "xsd:integer"
+    },
+    "contentCode": {
+      "@id": "ivans:contentCode",
+      "@type": "xsd:string"
+    },
+    "policyNumber": {
+      "@id": "ivans:policyNumber",
+      "@type": "xsd:string"
+    },
+    "claimNumber": {
+      "@id": "ivans:claimNumber",
+      "@type": "xsd:string"
+    },
+    "claimType": {
+      "@id": "ivans:claimType",
+      "@type": "xsd:string"
+    },
+    "broadLob": {
+      "@id": "ivans:broadLob",
+      "@type": "xsd:string"
+    },
+    "cycle": {
+      "@id": "ivans:cycle",
+      "@type": "xsd:string"
+    },
+    "naic": {
+      "@id": "ivans:naic",
+      "@type": "xsd:string"
+    },
+    "producerCode": {
+      "@id": "ivans:producerCode",
+      "@type": "xsd:string"
+    },
+    "insuredName": {
+      "@id": "ivans:insuredName",
+      "@type": "xsd:string"
+    },
+    "transactionEffectiveDate": {
+      "@id": "ivans:transactionEffectiveDate",
+      "@type": "xsd:dateTime"
+    },
+    "transactionResponseDate": {
+      "@id": "ivans:transactionResponseDate",
+      "@type": "xsd:dateTime"
+    },
+    "lossDate": {
+      "@id": "ivans:lossDate",
+      "@type": "xsd:dateTime"
+    },
+    "generationDate": {
+      "@id": "ivans:generationDate",
+      "@type": "xsd:dateTime"
+    },
+    "sessionId": {
+      "@id": "ivans:sessionId",
+      "@type": "xsd:string"
+    },
+    "attachId": {
+      "@id": "ivans:attachId",
+      "@type": "xsd:string"
+    },
+    "attachCount": {
+      "@id": "ivans:attachCount",
+      "@type": "xsd:integer"
+    },
+    "FileMetadata": "ivans:FileMetadata",
+    "contentType": {
+      "@id": "ivans:contentType",
+      "@type": "xsd:string"
+    },
+    "contentFormat": {
+      "@id": "ivans:contentFormat",
+      "@type": "xsd:string"
+    },
+    "complete": {
+      "@id": "ivans:complete",
+      "@type": "xsd:boolean"
+    },
+    "fileStatus": {
+      "@id": "ivans:fileStatus",
+      "@type": "xsd:string"
+    },
+    "originalName": {
+      "@id": "ivans:originalName",
+      "@type": "xsd:string"
+    },
+    "remoteName": {
+      "@id": "ivans:remoteName",
+      "@type": "xsd:string"
+    },
+    "statusDate": {
+      "@id": "ivans:statusDate",
+      "@type": "xsd:dateTime"
+    },
+    "sendAccount": {
+      "@id": "ivans:sendAccount",
+      "@type": "xsd:string"
+    },
+    "sendUserId": {
+      "@id": "ivans:sendUserId",
+      "@type": "xsd:string"
+    },
+    "receiveAccount": {
+      "@id": "ivans:receiveAccount",
+      "@type": "xsd:string"
+    },
+    "receiveUserID": {
+      "@id": "ivans:receiveUserID",
+      "@type": "xsd:string"
+    },
+    "classCode": {
+      "@id": "ivans:classCode",
+      "@type": "xsd:string"
+    },
+    "originalSize": {
+      "@id": "ivans:originalSize",
+      "@type": "xsd:integer"
+    },
+    "compressedSize": {
+      "@id": "ivans:compressedSize",
+      "@type": "xsd:integer"
+    },
+    "FileWithStatus": "ivans:FileWithStatus",
+    "Route": "ivans:Route",
+    "fileRoute": {
+      "@id": "ivans:fileRoute",
+      "@type": "xsd:string"
+    },
+    "partnerRouteCount": {
+      "@id": "ivans:partnerRouteCount",
+      "@type": "xsd:integer"
+    },
+    "MailboxSummary": "ivans:MailboxSummary",
+    "userID": {
+      "@id": "ivans:userID",
+      "@type": "xsd:string"
+    },
+    "accountType": {
+      "@id": "ivans:accountType",
+      "@type": "xsd:string"
+    },
+    "isBookrollMailbox": {
+      "@id": "ivans:isBookrollMailbox",
+      "@type": "xsd:boolean"
+    },
+    "canAddOrRemovePartnerships": {
+      "@id": "ivans:canAddOrRemovePartnerships",
+      "@type": "xsd:boolean"
+    },
+    "MailboxSummaryPaginatedResultList": "ivans:MailboxSummaryPaginatedResultList",
+    "data": {
+      "@id": "ivans:data",
+      "@container": "@list"
+    },
+    "totalCount": {
+      "@id": "ivans:totalCount",
+      "@type": "xsd:integer"
+    },
+    "CarrierNaic": "ivans:CarrierNaic",
+    "carrierName": {
+      "@id": "ivans:carrierName",
+      "@type": "xsd:string"
+    },
+    "CarrierNaicGroup": "ivans:CarrierNaicGroup",
+    "groupName": {
+      "@id": "ivans:groupName",
+      "@type": "xsd:string"
+    },
+    "carrierNaics": {
+      "@id": "ivans:carrierNaics",
+      "@container": "@list"
+    },
+    "Connection": "ivans:Connection",
+    "connectionKey": {
+      "@id": "ivans:connectionKey",
+      "@type": "xsd:integer"
+    },
+    "carrierAccount": {
+      "@id": "ivans:carrierAccount",
+      "@type": "xsd:string"
+    },
+    "lobDescription": {
+      "@id": "ivans:lobDescription",
+      "@type": "xsd:string"
+    },
+    "available": {
+      "@id": "ivans:available",
+      "@type": "xsd:boolean"
+    },
+    "preferenceCode": {
+      "@id": "ivans:preferenceCode",
+      "@type": "xsd:string"
+    },
+    "preferenceDisplayValue": {
+      "@id": "ivans:preferenceDisplayValue",
+      "@type": "xsd:string"
+    },
+    "preferenceUpdatedDate": {
+      "@id": "ivans:preferenceUpdatedDate",
+      "@type": "xsd:dateTime"
+    },
+    "feedbackCode": {
+      "@id": "ivans:feedbackCode",
+      "@type": "xsd:string"
+    },
+    "feedbackDisplayValue": {
+      "@id": "ivans:feedbackDisplayValue",
+      "@type": "xsd:string"
+    },
+    "feedbackUpdatedDate": {
+      "@id": "ivans:feedbackUpdatedDate",
+      "@type": "xsd:dateTime"
+    },
+    "OrganizationMailbox": "ivans:OrganizationMailbox",
+    "badLoginAttempts": {
+      "@id": "ivans:badLoginAttempts",
+      "@type": "xsd:integer"
+    },
+    "ibmMachineAddress": {
+      "@id": "ivans:ibmMachineAddress",
+      "@type": "xsd:string"
+    },
+    "migratedToMembership": {
+      "@id": "ivans:migratedToMembership",
+      "@type": "xsd:boolean"
+    },
+    "UserType": "ivans:UserType",
+    "Partner": "ivans:Partner",
+    "tprSetId": {
+      "@id": "ivans:tprSetId",
+      "@type": "xsd:integer"
+    },
+    "leadAccount": {
+      "@id": "ivans:leadAccount",
+      "@type": "xsd:string"
+    },
+    "leadUserId": {
+      "@id": "ivans:leadUserId",
+      "@type": "xsd:string"
+    },
+    "followAccount": {
+      "@id": "ivans:followAccount",
+      "@type": "xsd:string"
+    },
+    "followUserId": {
+      "@id": "ivans:followUserId",
+      "@type": "xsd:string"
+    },
+    "partnerId": {
+      "@id": "ivans:partnerId",
+      "@type": "xsd:string"
+    },
+    "tprSetName": {
+      "@id": "ivans:tprSetName",
+      "@type": "xsd:string"
+    },
+    "Producer": "ivans:Producer",
+    "agencyUserId": {
+      "@id": "ivans:agencyUserId",
+      "@type": "xsd:string"
+    },
+    "companyAccount": {
+      "@id": "ivans:companyAccount",
+      "@type": "xsd:string"
+    },
+    "contractNumber": {
+      "@id": "ivans:contractNumber",
+      "@type": "xsd:string"
+    },
+    "participantCode": {
+      "@id": "ivans:participantCode",
+      "@type": "xsd:string"
+    },
+    "other1": {
+      "@id": "ivans:other1",
+      "@type": "xsd:string"
+    },
+    "other2": {
+      "@id": "ivans:other2",
+      "@type": "xsd:string"
+    },
+    "other3": {
+      "@id": "ivans:other3",
+      "@type": "xsd:string"
+    },
+    "other4": {
+      "@id": "ivans:other4",
+      "@type": "xsd:string"
+    },
+    "other5": {
+      "@id": "ivans:other5",
+      "@type": "xsd:string"
+    },
+    "initialLoadCode": {
+      "@id": "ivans:initialLoadCode",
+      "@type": "xsd:string"
+    },
+    "ProducerPatchRequest": "ivans:ProducerPatchRequest",
+    "FileRequest": "ivans:FileRequest",
+    "receiveUserId": {
+      "@id": "ivans:receiveUserId",
+      "@type": "xsd:string"
+    },
+    "PostFilesResponse": "ivans:PostFilesResponse",
+    "MailboxPassword": "ivans:MailboxPassword",
+    "newPassword": {
+      "@id": "ivans:newPassword",
+      "@type": "xsd:string"
+    },
+    "ConsumerInfoRegistration": "ivans:ConsumerInfoRegistration",
+    "WarpExchCarrierProductCreateRequest": "ivans:WarpExchCarrierProductCreateRequest",
+    "productId": {
+      "@id": "ivans:productId",
+      "@type": "xsd:string"
+    },
+    "objectType": {
+      "@id": "ivans:objectType",
+      "@type": "xsd:string"
+    },
+    "admin": {
+      "@id": "ivans:admin",
+      "@type": "xsd:string"
+    },
+    "ivansId": {
+      "@id": "ivans:ivansId",
+      "@type": "xsd:string"
+    },
+    "country": {
+      "@id": "ivans:country",
+      "@type": "xsd:string"
+    },
+    "WarpExchClientCommand": "ivans:WarpExchClientCommand",
+    "commandID": {
+      "@id": "ivans:commandID",
+      "@type": "xsd:string"
+    },
+    "fromIDWARP": {
+      "@id": "ivans:fromIDWARP",
+      "@type": "xsd:string"
+    },
+    "WarpExchCommand": "ivans:WarpExchCommand",
+    "productID": {
+      "@id": "ivans:productID",
+      "@type": "xsd:string"
+    },
+    "WarpExchNaicProduct": "ivans:WarpExchNaicProduct",
+    "PartnerPostResponse": "ivans:PartnerPostResponse",
+    "leadRoute": {
+      "@id": "ivans:leadRoute",
+      "@type": "xsd:string"
+    },
+    "followRoute": {
+      "@id": "ivans:followRoute",
+      "@type": "xsd:string"
+    },
+    "ProducerV3CreateRequest": "ivans:ProducerV3CreateRequest",
+    "ProducerCreateRequest": "ivans:ProducerCreateRequest",
+    "ConnectionRequest": "ivans:ConnectionRequest",
+    "FileStatus": "ivans:FileStatus",
+    "ConsumerInfoUpdate": "ivans:ConsumerInfoUpdate",
+    "WarpExchCarrierProduct": "ivans:WarpExchCarrierProduct",
+    "ivansid": {
+      "@id": "ivans:ivansid",
+      "@type": "xsd:string"
+    },
+    "ProducerV3UpdateRequest": "ivans:ProducerV3UpdateRequest",
+    "ProducerUpdateRequest": "ivans:ProducerUpdateRequest",
+    "ProducerTransferRequest": "ivans:ProducerTransferRequest",
+    "fromAgencyAccount": {
+      "@id": "ivans:fromAgencyAccount",
+      "@type": "xsd:string"
+    },
+    "fromAgencyUserId": {
+      "@id": "ivans:fromAgencyUserId",
+      "@type": "xsd:string"
+    },
+    "toAgencyAccount": {
+      "@id": "ivans:toAgencyAccount",
+      "@type": "xsd:string"
+    },
+    "toAgencyUserId": {
+      "@id": "ivans:toAgencyUserId",
+      "@type": "xsd:string"
+    },
+    "FileWithContentTypeAndStatus": "ivans:FileWithContentTypeAndStatus",
+    "CarrierNaicGroupV2": "ivans:CarrierNaicGroupV2",
+    "CarrierNaicV2": "ivans:CarrierNaicV2",
+    "RecordCountResult": "ivans:RecordCountResult",
+    "recordCount": {
+      "@id": "ivans:recordCount",
+      "@type": "xsd:integer"
+    },
+    "FilePaginatedFiltered": "ivans:FilePaginatedFiltered",
+    "sentDate": {
+      "@id": "ivans:sentDate",
+      "@type": "xsd:dateTime"
+    },
+    "receivedDate": {
+      "@id": "ivans:receivedDate",
+      "@type": "xsd:dateTime"
+    },
+    "originDate": {
+      "@id": "ivans:originDate",
+      "@type": "xsd:dateTime"
+    },
+    "attachSize": {
+      "@id": "ivans:attachSize",
+      "@type": "xsd:integer"
+    },
+    "producer": {
+      "@id": "ivans:producer",
+      "@type": "xsd:string"
+    },
+    "receiveAccountName": {
+      "@id": "ivans:receiveAccountName",
+      "@type": "xsd:string"
+    },
+    "sendAccountName": {
+      "@id": "ivans:sendAccountName",
+      "@type": "xsd:string"
+    },
+    "transactionCount": {
+      "@id": "ivans:transactionCount",
+      "@type": "xsd:integer"
+    },
+    "billable": {
+      "@id": "ivans:billable",
+      "@type": "xsd:boolean"
+    },
+    "isSPR": {
+      "@id": "ivans:isSPR",
+      "@type": "xsd:boolean"
+    },
+    "AgencyTenantWriteRequest": "ivans:AgencyTenantWriteRequest",
+    "externalId": {
+      "@id": "ivans:externalId",
+      "@type": "xsd:string"
+    },
+    "npn": {
+      "@id": "ivans:npn",
+      "@type": "xsd:string"
+    },
+    "isActive": {
+      "@id": "ivans:isActive",
+      "@type": "xsd:boolean"
+    },
+    "testMode": {
+      "@id": "ivans:testMode",
+      "@type": "xsd:boolean"
+    },
+    "agency_create": "ivans:agency_create",
+    "agency_list": "ivans:agency_list",
+    "agency_retrieve": "ivans:agency_retrieve",
+    "agency_update": "ivans:agency_update",
+    "AgentDetail": "ivans:AgentDetail",
+    "agency": {
+      "@id": "ivans:agency",
+      "@type": "xsd:string"
+    },
+    "firstName": {
+      "@id": "ivans:firstName",
+      "@type": "xsd:string"
+    },
+    "middleName": {
+      "@id": "ivans:middleName",
+      "@type": "xsd:string"
+    },
+    "lastName": {
+      "@id": "ivans:lastName",
+      "@type": "xsd:string"
+    },
+    "email": {
+      "@id": "ivans:email",
+      "@type": "xsd:string"
+    },
+    "isAdmin": {
+      "@id": "ivans:isAdmin",
+      "@type": "xsd:boolean"
+    },
+    "isProducer": {
+      "@id": "ivans:isProducer",
+      "@type": "xsd:boolean"
+    },
+    "AgentWriteRequest": "ivans:AgentWriteRequest",
+    "agent_create": "ivans:agent_create",
+    "agent_list": "ivans:agent_list",
+    "agent_retrieve": "ivans:agent_retrieve",
+    "agent_update": "ivans:agent_update",
+    "UniversalMarketList": "ivans:UniversalMarketList",
+    "displayName": {
+      "@id": "ivans:displayName",
+      "@type": "xsd:string"
+    },
+    "notes": {
+      "@id": "ivans:notes",
+      "@type": "xsd:string"
+    },
+    "logo": {
+      "@id": "ivans:logo",
+      "@type": "@id"
+    },
+    "akGroupId": {
+      "@id": "ivans:akGroupId",
+      "@type": "xsd:string"
+    },
+    "universal_market_detail_not_found": "ivans:universal_market_detail_not_found",
+    "BasicAppetiteCaptureRequest": "ivans:BasicAppetiteCaptureRequest",
+    "FieldValuesRequest": "ivans:FieldValuesRequest",
+    "basic_appetite_capture_invalid_body_request": "ivans:basic_appetite_capture_invalid_body_request",
+    "BasicAppetiteRequest": "ivans:BasicAppetiteRequest",
+    "naicsIndex": {
+      "@id": "ivans:naicsIndex",
+      "@type": "xsd:string"
+    },
+    "states": {
+      "@id": "ivans:states",
+      "@container": "@list"
+    },
+    "basic_appetite_invalid_body_request": "ivans:basic_appetite_invalid_body_request",
+    "ClassificationCodeDetail": "ivans:ClassificationCodeDetail",
+    "persistentId": {
+      "@id": "ivans:persistentId",
+      "@type": "xsd:string"
+    },
+    "code": {
+      "@id": "ivans:code",
+      "@type": "xsd:string"
+    },
+    "standard": {
+      "@id": "ivans:standard",
+      "@type": "@id"
+    }
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "IVANS API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects IVANS's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-13) from openapi/ivans-authorization-openapi.json, openapi/ivans-distribution-platform-openapi.json, openapi/ivans-exchange-v1-openapi.json.",
+  "dcterms:created": "2026-10-13",
+  "dcterms:source": [
+    "openapi/ivans-authorization-openapi.json",
+    "openapi/ivans-distribution-platform-openapi.json",
+    "openapi/ivans-exchange-v1-openapi.json",
+    "openapi/ivans-exchange-v2-openapi.json",
+    "openapi/ivans-exchange-v3-openapi.json"
+  ]
+}

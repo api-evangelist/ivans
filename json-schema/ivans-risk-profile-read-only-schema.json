@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/ivans/main/json-schema/ivans-risk-profile-read-only-schema.json",
+  "title": "RiskProfileReadOnly",
+  "description": "Serializes read-only fields for risk profiles.\n\nViewSet: RiskProfileViewSet\n\nEndpoint: GET /risk-profiles/",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/ivans-identification-network-openapi.json#/components/schemas/RiskProfileReadOnly",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "readOnly": true
+    },
+    "uuid": {
+      "type": "string",
+      "format": "uuid",
+      "readOnly": true
+    },
+    "description": {
+      "type": "string",
+      "readOnly": true
+    },
+    "type": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/TypeEnum"
+        }
+      ],
+      "readOnly": true,
+      "description": "Type of risk profile. Base represents a base question set with a line of business. Monoline represents a carrier question set with a product and route configuration. Package represents a carrier question set with a product, route configuration, and related risk profile children. Bundle represents a carrier question set with a market and related risk profile children."
+    },
+    "version": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "readOnly": true,
+      "description": "Version number for a risk profile. A newly created risk profile's version is null, and will be set automatically when the risk profile is locked. The version number starts at 1 and increments by 1 based on existing risk profiles with matching market, line of business, product, route, and children."
+    },
+    "isAvailable": {
+      "type": "boolean",
+      "readOnly": true,
+      "description": "Indicates whether the risk profile has no issues after testing and is available to quote from. Set this via admin action on the list page (subject to permission)."
+    },
+    "isLatest": {
+      "type": "boolean",
+      "readOnly": true,
+      "description": "Indicates whether this risk profile is the latest version. For bookkeeping purposes only - not used for business logic.Set this via admin action on the list page (subject to permission)."
+    },
+    "lineOfBusiness": {
+      "$ref": "#/$defs/LineOfBusiness"
+    },
+    "product": {
+      "$ref": "#/$defs/ProductReadOnly"
+    },
+    "routeConfiguration": {
+      "$ref": "#/$defs/RouteConfigurationReadOnly"
+    }
+  },
+  "required": [
+    "description",
+    "isAvailable",
+    "isLatest",
+    "lineOfBusiness",
+    "name",
+    "product",
+    "routeConfiguration",
+    "type",
+    "uuid",
+    "version"
+  ],
+  "$defs": {
+    "LineOfBusiness": {
+      "type": "object",
+      "properties": {
+        "uuid": {
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "code": {
+          "type": "string",
+          "maxLength": 32
+        }
+      },
+      "required": [
+        "code",
+        "name",
+        "uuid"
+      ]
+    },
+    "MarketSimple": {
+      "type": "object",
+      "description": "Serializes subset of read-only fields for Market.\n\nViewSet: RiskProfileViewSet\n\nEndpoint: GET /risk-profiles/",
+      "properties": {
+        "uuid": {
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "name",
+        "uuid"
+      ]
+    },
+    "ProductReadOnly": {
+      "type": "object",
+      "description": "Serializes subset of read-only fields for Product.\n\nViewSet: RiskProfileViewSet\n\nEndpoint: GET /risk-profiles/",
+      "properties": {
+        "market": {
+          "$ref": "#/$defs/MarketSimple"
+        },
+        "lineOfBusiness": {
+          "$ref": "#/$defs/LineOfBusiness"
+        }
+      },
+      "required": [
+        "lineOfBusiness",
+        "market"
+      ]
+    },
+    "RouteConfigurationReadOnly": {
+      "type": "object",
+      "description": "Serializes subset of read-only fields for RouteConfiguration.\n\nViewSet: RiskProfileViewSet\n\nEndpoint: GET /risk-profiles/",
+      "properties": {
+        "description": {
+          "type": "string",
+          "readOnly": true
+        },
+        "routeType": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "description",
+        "routeType"
+      ]
+    },
+    "TypeEnum": {
+      "enum": [
+        "Base",
+        "Monoline",
+        "Package",
+        "Bundle"
+      ],
+      "type": "string"
+    }
+  }
+}

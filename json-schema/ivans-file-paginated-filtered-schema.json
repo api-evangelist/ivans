@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/ivans/main/json-schema/ivans-file-paginated-filtered-schema.json",
+  "title": "FilePaginatedFiltered",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/ivans-exchange-v3-openapi.json#/components/schemas/FilePaginatedFiltered",
+  "required": [
+    "classCode",
+    "contentFormat",
+    "contentType",
+    "fileStatus",
+    "receiveAccount",
+    "receiveAccountName",
+    "receiveUserID",
+    "sendAccount",
+    "sendAccountName",
+    "sendUserId"
+  ],
+  "type": "object",
+  "properties": {
+    "sentDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "receivedDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "originDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "contentFormat": {
+      "type": "string"
+    },
+    "attachCount": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "attachSize": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "producer": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "agencyId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "receiveAccountName": {
+      "type": "string"
+    },
+    "sendAccountName": {
+      "type": "string"
+    },
+    "transactionCount": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "int32"
+    },
+    "billable": {
+      "type": "boolean"
+    },
+    "isSPR": {
+      "type": "boolean"
+    },
+    "fileStatus": {
+      "type": "string"
+    },
+    "contentType": {
+      "type": "string"
+    },
+    "fileId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "originalName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "remoteName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "statusDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "sendAccount": {
+      "type": "string"
+    },
+    "sendUserId": {
+      "type": "string"
+    },
+    "receiveAccount": {
+      "type": "string"
+    },
+    "receiveUserID": {
+      "type": "string"
+    },
+    "classCode": {
+      "type": "string"
+    },
+    "originalSize": {
+      "type": "integer",
+      "format": "int32"
+    },
+    "compressedSize": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "int32"
+    }
+  },
+  "additionalProperties": false
+}
