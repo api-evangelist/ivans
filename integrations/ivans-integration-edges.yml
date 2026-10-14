@@ -1,16 +1,40 @@
 generated: '2026-10-13'
-method: none
+method: searched
 source:
 - https://zapier.com/apps/ivans/integrations
 - https://n8n.io/integrations/ivans/
 - https://composio.dev/toolkits/ivans
 - https://monid.ai/tools/ivans
 checked:
+- guidewire/integrations/guidewire-integration-edges.yml
 - https://composio.dev/toolkits/ivans
 - https://monid.ai/tools/ivans
 - https://n8n.io/integrations/ivans/
 - https://zapier.com/apps/ivans/integrations
 summary: null
 marketplace_apps: []
-edges: []
+edges:
+- partner_name: Guidewire (own)
+  partner: guidewire
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://marketplace.guidewire.com/product/01t3n00000SxEPXAA3/01t3n00000SxEPXAA3
+  mirror_of: guidewire/integrations/guidewire-integration-edges.yml
+  apps:
+  - IVANS Accelerator for Download Data Extractor for InsuranceNow
+  - Ivans Data Exchange Accelerator for ClaimCenter
+  - Ivans Data Exchange Accelerator for PolicyCenter
+  - IVANS Data Exchange Accelerator for BillingCenter
+  listing_count: 4
+  detected: '2026-10-14'
+  detected_by: mirror-platform-listings.py
+  category: Accelerator; Distribution & Producer Management; InsuranceNow
+  badges:
+  - Ready for Guidewire
+  - 'Partner tier: Growth'
 templates: []
