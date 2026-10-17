@@ -1,0 +1,1271 @@
+openapi: 3.2.0
+info:
+  title: Ivans Distribution Platform FastPath Flow API
+  description: APIs for serving carrier forms, appetite, and validation
+  version: 0.1.0
+tags:
+- name: FastPath Flow
+paths:
+  /api/v1/forms/question-set/fast-path:
+    get:
+      tags:
+      - FastPath Flow
+      summary: Get Fast Path Question Set
+      description: 'Returns a form with a single Risk Profile for the FastPath flow.
+
+
+        Labels and visibility of fields are customized based on the supplied default field values template.
+
+        Fields marked as `display_in_ui: hide` in the template are removed from the form.
+
+        Fields with an `integrator_label` in the template will have their labels replaced.'
+      operationId: get_fast_path_question_set_api_v1_forms_question_set_fast_path_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: nested
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Nested
+      - name: template_id
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: Template uuid
+          title: Template Id
+        description: Template uuid
+      - name: risk_profile
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: Risk Profile uuid
+          title: Risk Profile
+        description: Risk Profile uuid
+      - name: naics_index
+        in: query
+        required: false
+        schema:
+          type: string
+          description: NAICS code uuid
+          title: Naics Index
+        description: NAICS code uuid
+      - name: states
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            minLength: 2
+            maxLength: 2
+            pattern: ^[A-Z]{2}$
+          description: List of two letter state codes
+          title: States
+        description: List of two letter state codes
+      responses:
+        '200':
+          description: Successful retrieval of FastPath question set
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FastPathFormResponse'
+              examples:
+                Non-Nested Response:
+                  value:
+                    defaultTemplate:
+                      name: My FastPath Template
+                      description: A pre-configured template for BOP submissions
+                      lobs:
+                      - BOP
+                      markets:
+                      - 20cd4728-f7d2-4c6b-aafb-ab21e3af043c
+                    form:
+                      pages:
+                      - guid: eadee9a5-f15a-402f-96cf-183634001d29
+                        label: Agency Information
+                        description: ''
+                        order: -1
+                      - guid: 8000a6d0-3000-4ac0-9fb6-306747456877
+                        label: Appetite
+                        description: ''
+                        order: 0
+                      - guid: b93e8523-e4bd-434c-96a1-a7acbf7918df
+                        label: Applicant Information
+                        description: ''
+                        order: 1
+                      - guid: 035fe20d-4b88-42d1-9f67-6c09294281a5
+                        label: Risk Information
+                        description: ''
+                        order: 2
+                      - guid: bd2a6701-480b-450a-b89c-501e84c5e664
+                        label: Policy Wide
+                        description: ''
+                        order: 3
+                      groups:
+                      - guid: 78c6f816-968f-48a8-b74d-4a107d044e84
+                        page: 8000a6d0-3000-4ac0-9fb6-306747456877
+                        label: Classification & Primary State
+                        description: ''
+                        isRepeatable: false
+                        repeatMinMax: ''
+                        order: 1
+                        type: normal
+                        columns: []
+                        parentColumns: []
+                        children: []
+                      - guid: 37877f81-0239-487e-93d0-2cc0f97a2c33
+                        page: 035fe20d-4b88-42d1-9f67-6c09294281a5
+                        label: Location
+                        description: ''
+                        isRepeatable: true
+                        repeatMinMax: 800c6507-cbcb-45da-8339-d4a0d14da02f
+                        order: 1
+                        type: normal
+                        columns:
+                        - guid: 5637ffd5-2c09-4097-803a-5f3961525f2f
+                        - guid: fd44fe00-86f7-46c9-be8b-4a3e2433aa09
+                        - guid: 5de49646-a1e6-4aee-91c5-9e2f4190f562
+                        parentColumns: []
+                        children:
+                        - guid: 53b9b5f5-debe-4cb9-8c72-287136f7ba6c
+                          page: 035fe20d-4b88-42d1-9f67-6c09294281a5
+                          label: Building
+                          description: ''
+                          isRepeatable: true
+                          repeatMinMax: ''
+                          order: 2
+                          type: normal
+                          columns:
+                          - guid: 48d15f9c-09c0-4f67-9eec-d5a5d8f89ee0
+                          - guid: 314bce56-b29f-429b-b4f6-f01da6184fa5
+                          parent: 37877f81-0239-487e-93d0-2cc0f97a2c33
+                          parentLabel: Location
+                          parentColumns:
+                          - guid: 5637ffd5-2c09-4097-803a-5f3961525f2f
+                          children: []
+                      fields:
+                      - guid: f23c0847-1fce-4627-8744-b69bfdfa7b47
+                        group: 78c6f816-968f-48a8-b74d-4a107d044e84
+                        label: Classification
+                        description: ''
+                        order: 1
+                        type: naics
+                        dataClass: Public
+                        options: []
+                        underwritingCategory: Basic Appetite
+                        isAppetiteCategory: true
+                        isEnhancedAppetiteCategory: false
+                        isBind: false
+                        isRefer: false
+                        classCodeFilterFieldsGuids: []
+                        unique: false
+                        uniqueToParent: false
+                        isSuggestable: false
+                      - guid: 5637ffd5-2c09-4097-803a-5f3961525f2f
+                        group: 37877f81-0239-487e-93d0-2cc0f97a2c33
+                        label: 'Location #'
+                        description: ''
+                        order: 1
+                        type: number
+                        dataClass: Public
+                        options: []
+                        underwritingCategory: Risk Information
+                        isAppetiteCategory: false
+                        isEnhancedAppetiteCategory: false
+                        isBind: false
+                        isRefer: false
+                        classCodeFilterFieldsGuids: []
+                        unique: true
+                        uniqueToParent: false
+                        minimum: 1
+                        maximum: 1000
+                        isSuggestable: false
+                      - guid: 48d15f9c-09c0-4f67-9eec-d5a5d8f89ee0
+                        group: 53b9b5f5-debe-4cb9-8c72-287136f7ba6c
+                        label: 'Building #'
+                        description: ''
+                        order: 1
+                        type: number
+                        dataClass: Public
+                        options: []
+                        underwritingCategory: Risk Information
+                        isAppetiteCategory: false
+                        isEnhancedAppetiteCategory: false
+                        isBind: false
+                        isRefer: false
+                        classCodeFilterFieldsGuids: []
+                        unique: false
+                        uniqueToParent: true
+                        minimum: 1
+                        maximum: 1000
+                        isSuggestable: false
+                      marketFields:
+                      - market: Coterie
+                        lob: BOP
+                        riskProfile: be3a292c-f644-4b98-9a04-19bd53433dcb
+                        fields:
+                        - uuid: f23c0847-1fce-4627-8744-b69bfdfa7b47
+                          requirementLevel: Required
+                        - uuid: 5637ffd5-2c09-4097-803a-5f3961525f2f
+                          requirementLevel: Required
+                        - uuid: 48d15f9c-09c0-4f67-9eec-d5a5d8f89ee0
+                          requirementLevel: Required
+                        repeatableGroups:
+                        - uuid: 37877f81-0239-487e-93d0-2cc0f97a2c33
+                          description: ''
+                          requirementLevel: Required
+                        - uuid: 53b9b5f5-debe-4cb9-8c72-287136f7ba6c
+                          description: ''
+                          requirementLevel: Required
+                Nested Response:
+                  value:
+                    defaultTemplate:
+                      name: My FastPath Template
+                      description: A pre-configured template for BOP submissions
+                      lobs:
+                      - BOP
+                      markets:
+                      - 20cd4728-f7d2-4c6b-aafb-ab21e3af043c
+                    form:
+                      pages:
+                      - guid: eadee9a5-f15a-402f-96cf-183634001d29
+                        label: Agency Information
+                        description: ''
+                        order: -1
+                        groups: []
+                      - guid: 8000a6d0-3000-4ac0-9fb6-306747456877
+                        label: Appetite
+                        description: ''
+                        order: 0
+                        groups:
+                        - guid: 78c6f816-968f-48a8-b74d-4a107d044e84
+                          page: 8000a6d0-3000-4ac0-9fb6-306747456877
+                          label: Classification & Primary State
+                          description: ''
+                          isRepeatable: false
+                          repeatMinMax: ''
+                          order: 1
+                          type: normal
+                          columns: []
+                          parentColumns: []
+                          children: []
+                          fields:
+                          - guid: f23c0847-1fce-4627-8744-b69bfdfa7b47
+                            group: 78c6f816-968f-48a8-b74d-4a107d044e84
+                            label: Classification
+                            description: ''
+                            order: 1
+                            type: naics
+                            dataClass: Public
+                            options: []
+                            underwritingCategory: Basic Appetite
+                            isAppetiteCategory: true
+                            isEnhancedAppetiteCategory: false
+                            isBind: false
+                            isRefer: false
+                            classCodeFilterFieldsGuids: []
+                            unique: false
+                            uniqueToParent: false
+                            isSuggestable: false
+                      - guid: b93e8523-e4bd-434c-96a1-a7acbf7918df
+                        label: Applicant Information
+                        description: ''
+                        order: 1
+                        groups: []
+                      - guid: 035fe20d-4b88-42d1-9f67-6c09294281a5
+                        label: Risk Information
+                        description: ''
+                        order: 2
+                        groups:
+                        - guid: 37877f81-0239-487e-93d0-2cc0f97a2c33
+                          page: 035fe20d-4b88-42d1-9f67-6c09294281a5
+                          label: Location
+                          description: ''
+                          isRepeatable: true
+                          repeatMinMax: 800c6507-cbcb-45da-8339-d4a0d14da02f
+                          order: 1
+                          type: normal
+                          columns:
+                          - guid: 5637ffd5-2c09-4097-803a-5f3961525f2f
+                          - guid: fd44fe00-86f7-46c9-be8b-4a3e2433aa09
+                          - guid: 5de49646-a1e6-4aee-91c5-9e2f4190f562
+                          parentColumns: []
+                          children:
+                          - guid: 53b9b5f5-debe-4cb9-8c72-287136f7ba6c
+                            page: 035fe20d-4b88-42d1-9f67-6c09294281a5
+                            label: Building
+                            description: ''
+                            isRepeatable: true
+                            repeatMinMax: ''
+                            order: 2
+                            type: normal
+                            columns:
+                            - guid: 48d15f9c-09c0-4f67-9eec-d5a5d8f89ee0
+                            - guid: 314bce56-b29f-429b-b4f6-f01da6184fa5
+                            parent: 37877f81-0239-487e-93d0-2cc0f97a2c33
+                            parentLabel: Location
+                            parentColumns:
+                            - guid: 5637ffd5-2c09-4097-803a-5f3961525f2f
+                            children: []
+                          fields:
+                          - guid: 5637ffd5-2c09-4097-803a-5f3961525f2f
+                            group: 37877f81-0239-487e-93d0-2cc0f97a2c33
+                            label: 'Location #'
+                            description: ''
+                            order: 1
+                            type: number
+                            dataClass: Public
+                            options: []
+                            underwritingCategory: Risk Information
+                            isAppetiteCategory: false
+                            isEnhancedAppetiteCategory: false
+                            isBind: false
+                            isRefer: false
+                            classCodeFilterFieldsGuids: []
+                            unique: true
+                            uniqueToParent: false
+                            minimum: 1
+                            maximum: 1000
+                            isSuggestable: false
+                      - guid: bd2a6701-480b-450a-b89c-501e84c5e664
+                        label: Policy Wide
+                        description: ''
+                        order: 3
+                        groups: []
+                      marketFields:
+                      - market: Coterie
+                        lob: BOP
+                        riskProfile: be3a292c-f644-4b98-9a04-19bd53433dcb
+                        fields:
+                        - uuid: f23c0847-1fce-4627-8744-b69bfdfa7b47
+                          requirementLevel: Required
+                        - uuid: 5637ffd5-2c09-4097-803a-5f3961525f2f
+                          requirementLevel: Required
+                        - uuid: 48d15f9c-09c0-4f67-9eec-d5a5d8f89ee0
+                          requirementLevel: Required
+                        repeatableGroups:
+                        - uuid: 37877f81-0239-487e-93d0-2cc0f97a2c33
+                          description: ''
+                          requirementLevel: Required
+                        - uuid: 53b9b5f5-debe-4cb9-8c72-287136f7ba6c
+                          description: ''
+                          requirementLevel: Required
+        '400':
+          description: One or more requested templates are not yet available
+          content:
+            application/json:
+              example:
+                detail: 'The following templates are not available at this time: 3fa85f64-5717-4562-b3fc-2c963f66afa6'
+        '403':
+          description: Risk Profile not available to the authenticated user
+          content:
+            application/json:
+              example:
+                detail: Risk Profile not available to user
+        '404':
+          description: Risk Profile or template not found
+          content:
+            application/json:
+              examples:
+                Risk Profile not found:
+                  value:
+                    detail: Risk Profile not found
+                No valid template found:
+                  value:
+                    detail: No valid template found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    SuggestedFields:
+      properties:
+        fieldValues:
+          additionalProperties: true
+          type: object
+          title: Fieldvalues
+        repeatableFieldBlocks:
+          items:
+            $ref: '#/components/schemas/FlattenedRepeatableFieldBlock'
+          type: array
+          title: Repeatablefieldblocks
+      type: object
+      title: SuggestedFields
+    ListItem:
+      properties:
+        listItem:
+          type: string
+          title: Listitem
+      type: object
+      required:
+      - listItem
+      title: ListItem
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    RiskProfileRepeatableFormGroup:
+      properties:
+        uuid:
+          type: string
+          title: Uuid
+        description:
+          type: string
+          title: Description
+        requirementLevel:
+          $ref: '#/components/schemas/RequirementLevel'
+        conditions:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+      type: object
+      required:
+      - uuid
+      - description
+      - requirementLevel
+      - conditions
+      title: RiskProfileRepeatableFormGroup
+    ErrorMsg:
+      properties:
+        detail:
+          type: string
+          title: Detail
+        condition(s):
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Condition(S)
+      type: object
+      required:
+      - detail
+      title: ErrorMsg
+    WarningDetail:
+      properties:
+        detail:
+          type: string
+          title: Detail
+      type: object
+      required:
+      - detail
+      title: WarningDetail
+    FastPathFormResponse:
+      properties:
+        defaultTemplate:
+          $ref: '#/components/schemas/DefaultTemplateInfo'
+        form:
+          anyOf:
+          - $ref: '#/components/schemas/NestedForm'
+          - $ref: '#/components/schemas/NonNestedForm'
+          title: Form
+      type: object
+      required:
+      - defaultTemplate
+      - form
+      title: FastPathFormResponse
+    FlattenedRepeatableFieldBlock:
+      properties:
+        id:
+          type: string
+          title: Id
+        fieldBlockId:
+          type: string
+          title: Fieldblockid
+        parentId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parentid
+        fieldValues:
+          additionalProperties: true
+          type: object
+          title: Fieldvalues
+      type: object
+      required:
+      - id
+      - fieldBlockId
+      - fieldValues
+      title: FlattenedRepeatableFieldBlock
+    AdditionalDetails:
+      properties:
+        heading:
+          type: string
+          title: Heading
+        children:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/AdditionalDetails'
+            - $ref: '#/components/schemas/ListItem'
+          type: array
+          title: Children
+      type: object
+      required:
+      - heading
+      - children
+      title: AdditionalDetails
+    NestedForm:
+      properties:
+        pages:
+          items:
+            $ref: '#/components/schemas/NestedFormPage'
+          type: array
+          title: Pages
+        marketFields:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/MarketFieldByRiskProfile'
+            - $ref: '#/components/schemas/MarketFieldByRiskProfileParent'
+          type: array
+          title: Marketfields
+        riskProfiles:
+          items:
+            $ref: '#/components/schemas/RiskProfile'
+          type: array
+          title: Riskprofiles
+          default: []
+        suggestedFields:
+          anyOf:
+          - $ref: '#/components/schemas/SuggestedFields'
+          - type: 'null'
+      type: object
+      required:
+      - pages
+      title: NestedForm
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    EvaluationType:
+      type: string
+      enum:
+      - Market
+      - IDP Quote
+      - IDP Bind
+      title: EvaluationType
+    BaseMarketFieldField:
+      properties:
+        uuid:
+          type: string
+          title: Uuid
+        requirementLevel:
+          type: string
+      type: object
+      required:
+      - uuid
+      - requirementLevel
+      title: BaseMarketFieldField
+    NonNestedFormGroup:
+      properties:
+        guid:
+          type: string
+          title: Guid
+        page:
+          type: string
+          title: Page
+        label:
+          type: string
+          title: Label
+        description:
+          type: string
+          title: Description
+        isRepeatable:
+          type: boolean
+          title: Isrepeatable
+        repeatMinMax:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Repeatminmax
+        order:
+          type: integer
+          title: Order
+        type:
+          type: string
+          title: Type
+        columns:
+          anyOf:
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Columns
+        parent:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parent
+        parentLabel:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parentlabel
+        parentColumns:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parentcolumns
+        children:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/NonNestedFormGroup'
+            type: array
+          - type: 'null'
+          title: Children
+      type: object
+      required:
+      - guid
+      - page
+      - label
+      - description
+      - isRepeatable
+      - repeatMinMax
+      - order
+      - type
+      - parent
+      - parentLabel
+      title: NonNestedFormGroup
+    SerializedRPA:
+      properties:
+        guid:
+          type: string
+          title: Guid
+        group:
+          type: string
+          title: Group
+        label:
+          type: string
+          title: Label
+        description:
+          type: string
+          title: Description
+        additionalDetails:
+          anyOf:
+          - $ref: '#/components/schemas/AdditionalDetails'
+          - items:
+              $ref: '#/components/schemas/AdditionalDetails'
+            type: array
+          - type: 'null'
+          title: Additionaldetails
+        order:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Order
+        type:
+          type: string
+        dataClass:
+          type: string
+        options:
+          items:
+            $ref: '#/components/schemas/ValueListOption'
+          type: array
+          title: Options
+        underwritingCategory:
+          $ref: '#/components/schemas/UnderwritingCategory'
+        isAppetiteCategory:
+          type: boolean
+          title: Isappetitecategory
+        isEnhancedAppetiteCategory:
+          type: boolean
+          title: Isenhancedappetitecategory
+        isBind:
+          type: boolean
+          title: Isbind
+        isRefer:
+          type: boolean
+          title: Isrefer
+        conditions:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+        actionConditions:
+          title: Actionconditions
+        market:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Market
+        classificationStandardGuid:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Classificationstandardguid
+        classCodeFilterFieldsGuids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Classcodefilterfieldsguids
+        unique:
+          type: boolean
+          title: Unique
+        uniqueToParent:
+          type: boolean
+          title: Uniquetoparent
+        parentAttributeGuid:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parentattributeguid
+        minimum:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Minimum
+        maximum:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Maximum
+        prefillSourceFieldGuid:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prefillsourcefieldguid
+        isSuggestable:
+          type: boolean
+          title: Issuggestable
+        length:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Length
+      type: object
+      required:
+      - guid
+      - group
+      - label
+      - description
+      - additionalDetails
+      - order
+      - type
+      - dataClass
+      - options
+      - underwritingCategory
+      - isAppetiteCategory
+      - isEnhancedAppetiteCategory
+      - isBind
+      - isRefer
+      - market
+      - unique
+      - uniqueToParent
+      - minimum
+      - maximum
+      - isSuggestable
+      - length
+      title: SerializedRPA
+    UnderwritingCategory:
+      type: integer
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      title: UnderwritingCategory
+    ValueListOption:
+      properties:
+        label:
+          type: string
+          title: Label
+        value:
+          anyOf:
+          - type: integer
+          - type: string
+          title: Value
+      type: object
+      required:
+      - label
+      - value
+      title: ValueListOption
+    MarketFieldByRiskProfile:
+      properties:
+        market:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Market
+        lob:
+          type: string
+          title: Lob
+        riskProfile:
+          type: string
+          title: Riskprofile
+        fields:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/BaseMarketFieldField'
+            type: array
+          - type: 'null'
+          title: Fields
+        repeatableGroups:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/RiskProfileRepeatableFormGroup'
+            type: array
+          - type: 'null'
+          title: Repeatablegroups
+          default: []
+      type: object
+      required:
+      - lob
+      - riskProfile
+      title: MarketFieldByRiskProfile
+    Evaluation:
+      properties:
+        type:
+          $ref: '#/components/schemas/EvaluationType'
+        reasons:
+          items:
+            $ref: '#/components/schemas/Reason'
+          type: array
+          title: Reasons
+      type: object
+      required:
+      - type
+      - reasons
+      title: Evaluation
+    RiskProfile:
+      properties:
+        uuid:
+          type: string
+          title: Uuid
+        name:
+          type: string
+          title: Name
+        type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Type
+        market:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Market
+        marketUuid:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Marketuuid
+        excessAndSurplus:
+          type: boolean
+          title: Excessandsurplus
+          default: false
+        lob:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Lob
+        childLobs:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Childlobs
+        inAppetite:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Inappetite
+          default: true
+        bindAllowed:
+          type: boolean
+          title: Bindallowed
+        bindAppetite:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Bindappetite
+        referAllowed:
+          type: boolean
+          title: Referallowed
+        routeType:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Routetype
+        requiredToSubmit:
+          anyOf:
+          - $ref: '#/components/schemas/RequiredToSubmit'
+          - additionalProperties: true
+            type: object
+          title: Requiredtosubmit
+        validationErrors:
+          items:
+            $ref: '#/components/schemas/IDPValidationError'
+          type: array
+          title: Validationerrors
+        validationWarnings:
+          items:
+            $ref: '#/components/schemas/IDPValidationWarning'
+          type: array
+          title: Validationwarnings
+        evaluations:
+          items:
+            $ref: '#/components/schemas/Evaluation'
+          type: array
+          title: Evaluations
+      type: object
+      required:
+      - uuid
+      - name
+      - bindAllowed
+      - referAllowed
+      - requiredToSubmit
+      title: RiskProfile
+    NestedFormPage:
+      properties:
+        guid:
+          type: string
+          title: Guid
+        label:
+          type: string
+          title: Label
+        description:
+          type: string
+          title: Description
+        order:
+          type: integer
+          title: Order
+        groups:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/NestedFormGroup'
+            type: array
+          - type: 'null'
+          title: Groups
+      type: object
+      required:
+      - guid
+      - label
+      - description
+      - order
+      title: NestedFormPage
+    NonNestedForm:
+      properties:
+        pages:
+          items:
+            $ref: '#/components/schemas/NonNestedFormPage'
+          type: array
+          title: Pages
+        groups:
+          items:
+            $ref: '#/components/schemas/NonNestedFormGroup'
+          type: array
+          title: Groups
+        fields:
+          items:
+            $ref: '#/components/schemas/SerializedRPA'
+          type: array
+          title: Fields
+        marketFields:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/MarketFieldByRiskProfile'
+            - $ref: '#/components/schemas/MarketFieldByRiskProfileParent'
+          type: array
+          title: Marketfields
+        riskProfiles:
+          items:
+            $ref: '#/components/schemas/RiskProfile'
+          type: array
+          title: Riskprofiles
+          default: []
+        suggestedFields:
+          anyOf:
+          - $ref: '#/components/schemas/SuggestedFields'
+          - type: 'null'
+      type: object
+      required:
+      - pages
+      - groups
+      - fields
+      title: NonNestedForm
+    ImpactingFactor:
+      properties:
+        attributeId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Attributeid
+        groupId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Groupid
+      type: object
+      title: ImpactingFactor
+    RequiredToSubmit:
+      properties:
+        contractCode:
+          type: boolean
+          title: Contractcode
+        username:
+          type: boolean
+          title: Username
+        password:
+          type: boolean
+          title: Password
+      type: object
+      required:
+      - contractCode
+      - username
+      - password
+      title: RequiredToSubmit
+    IDPValidationError:
+      properties:
+        groupId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Groupid
+        questionId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Questionid
+        errorMsg:
+          anyOf:
+          - $ref: '#/components/schemas/ErrorMsg'
+          - type: 'null'
+        value:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Value
+      type: object
+      title: IDPValidationError
+    RequirementLevel:
+      type: integer
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      title: RequirementLevel
+    MarketFieldByRiskProfileParent:
+      properties:
+        market:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Market
+        lob:
+          type: string
+          title: Lob
+        riskProfile:
+          type: string
+          title: Riskprofile
+        children:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/MarketFieldByRiskProfile'
+            type: array
+          - type: 'null'
+          title: Children
+      type: object
+      required:
+      - lob
+      - riskProfile
+      title: MarketFieldByRiskProfileParent
+    DefaultTemplateInfo:
+      properties:
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+        lobs:
+          items:
+            type: string
+          type: array
+          title: Lobs
+        markets:
+          items:
+            type: string
+          type: array
+          title: Markets
+      type: object
+      required:
+      - name
+      - description
+      - lobs
+      - markets
+      title: DefaultTemplateInfo
+    NestedFormGroup:
+      properties:
+        guid:
+          type: string
+          title: Guid
+        page:
+          type: string
+          title: Page
+        label:
+          type: string
+          title: Label
+        description:
+          type: string
+          title: Description
+        isRepeatable:
+          type: boolean
+          title: Isrepeatable
+        repeatMinMax:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Repeatminmax
+        order:
+          type: integer
+          title: Order
+        type:
+          type: string
+          title: Type
+        columns:
+          anyOf:
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Columns
+        parent:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parent
+        parentLabel:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parentlabel
+        parentColumns:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parentcolumns
+        fields:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/SerializedRPA'
+            type: array
+          - type: 'null'
+          title: Fields
+      type: object
+      required:
+      - guid
+      - page
+      - label
+      - description
+      - isRepeatable
+      - repeatMinMax
+      - order
+      - type
+      - parent
+      - parentLabel
+      title: NestedFormGroup
+    Reason:
+      properties:
+        message:
+          type: string
+          title: Message
+        impactingFactors:
+          items:
+            $ref: '#/components/schemas/ImpactingFactor'
+          type: array
+          title: Impactingfactors
+      type: object
+      required:
+      - message
+      - impactingFactors
+      title: Reason
+    NonNestedFormPage:
+      properties:
+        guid:
+          type: string
+          title: Guid
+        label:
+          type: string
+          title: Label
+        description:
+          type: string
+          title: Description
+        order:
+          type: integer
+          title: Order
+      type: object
+      required:
+      - guid
+      - label
+      - description
+      - order
+      title: NonNestedFormPage
+    IDPValidationWarning:
+      properties:
+        groupId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Groupid
+        questionId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Questionid
+        warningMessage:
+          anyOf:
+          - $ref: '#/components/schemas/WarningDetail'
+          - type: 'null'
+        value:
+          title: Value
+      type: object
+      required:
+      - value
+      title: IDPValidationWarning
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/get_basic_appetite_api_v1_forms_basic_appetite_get
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

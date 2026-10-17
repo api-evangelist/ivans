@@ -1,0 +1,937 @@
+openapi: 3.2.0
+info:
+  title: Ivans Producers API
+  version: '1.0'
+  description: 'Operations tagged Producers across 2 of this provider''s published API definitions: ivans-exchange-v1-openapi.json, ivans-exchange-v2-openapi.json. Each path carries the servers of the definition it was published in.'
+tags:
+- name: Producers
+paths:
+  /api/Producers/{producerId}:
+    delete:
+      tags:
+      - Producers
+      summary: Remove a producer code
+      description: Delete a Producer for an agency that is one of your trading partners. Requires that the caller’s organization be configured in IVANS Exchange to support Remote Location Manager information.
+      operationId: DeleteProducer
+      parameters:
+      - name: producerId
+        in: path
+        description: The producer id guid.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Successful operation.
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: User not authorized to view this resource.
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - Producers
+      summary: Retrieve the details of a given producer code
+      description: Retrieve a JSON object with the details on a Producer code currently assigned to an agency that is one of your trading partners. Requires that the caller’s organization be configured in IVANS Exchange to support Remote Location Manager information.
+      operationId: GetProducerById
+      parameters:
+      - name: producerId
+        in: path
+        description: The producer id guid.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Producer'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Producer'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Producer'
+        '204':
+          description: No producer was found for the given id.
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: User not authorized to view this resource.
+      security:
+      - Bearer: []
+    patch:
+      tags:
+      - Producers
+      summary: Patch the information for a given producer code
+      description: Patch Producer information for an agency that is one of your trading partners. Requires that the caller’s organization be configured in IVANS Exchange to support Remote Location Manager information.
+      operationId: PatchProducer
+      parameters:
+      - name: producerId
+        in: path
+        description: The producer id guid.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: The producer information.
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ProducerPatchRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProducerPatchRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ProducerPatchRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ProducerPatchRequest'
+      responses:
+        '200':
+          description: Successful operation.
+        '204':
+          description: No producer was found for the given id.
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: User not authorized to view this resource.
+      security:
+      - Bearer: []
+    put:
+      tags:
+      - Producers
+      summary: Update the information for a given producer code
+      description: Update Producer information for an agency that is one of your trading partners. Requires that the caller’s organization be configured in IVANS Exchange to support Remote Location Manager information.
+      operationId: PutProducer
+      parameters:
+      - name: producerId
+        in: path
+        description: The producer id guid.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: The producer information.
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ProducerV3UpdateRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProducerV3UpdateRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ProducerV3UpdateRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ProducerV3UpdateRequest'
+      responses:
+        '200':
+          description: Successful operation.
+        '204':
+          description: No producer was found for the given id.
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: User not authorized to view this resource.
+      security:
+      - Bearer: []
+  /api/Organizations/{accountCode}/Producers/{producerCode}:
+    delete:
+      tags:
+      - Producers
+      summary: Remove a producer code
+      description: Delete a Producer for an agency that is one of your trading partners. Requires that the caller’s organization be configured in IVANS Exchange to support Remote Location Manager information.
+      operationId: DeleteProducerByOrg
+      parameters:
+      - name: accountCode
+        in: path
+        description: The organization account code
+        required: true
+        schema:
+          type: string
+      - name: producerCode
+        in: path
+        description: The producer code.
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Successful operation.
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: User not authorized to view this resource.
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - Producers
+      summary: Retrieve the details of a given producer code
+      description: Retrieve a JSON object with the details on a Producer code currently assigned to an agency that is one of your trading partners. Requires that the caller’s organization be configured in IVANS Exchange to support Remote Location Manager information.
+      operationId: GetProducerByOrg
+      parameters:
+      - name: accountCode
+        in: path
+        description: The organization account code.
+        required: true
+        schema:
+          type: string
+      - name: producerCode
+        in: path
+        description: The producer code.
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Producer'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Producer'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Producer'
+        '204':
+          description: No producer was found for the given id.
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: User not authorized to view this resource.
+      security:
+      - Bearer: []
+    put:
+      tags:
+      - Producers
+      summary: Update the information for a given producer code
+      description: Update Producer information for an agency that is one of your trading partners. Requires that the caller’s organization be configured in IVANS Exchange to support Remote Location Manager information.
+      operationId: PutProducerByOrg
+      parameters:
+      - name: accountCode
+        in: path
+        description: The organization account code
+        required: true
+        schema:
+          type: string
+      - name: producerCode
+        in: path
+        description: The producer code.
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: The producer information.
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ProducerUpdateRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProducerUpdateRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ProducerUpdateRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ProducerUpdateRequest'
+      responses:
+        '200':
+          description: Successful operation.
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: User not authorized to view this resource.
+      security:
+      - Bearer: []
+  /api/Producers:
+    get:
+      tags:
+      - Producers
+      summary: Retrieve an array of JSON objects with the Producers currently assigned to an…
+      operationId: GetProducers
+      parameters:
+      - name: companyAccount
+        in: query
+        description: The company account code
+        schema:
+          type: string
+      - name: agencyAccount
+        in: query
+        description: The agency account code
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: page to request
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: pageSize
+        in: query
+        description: pageSize to request (minimum 25, maximum 500)
+        schema:
+          type: integer
+          format: int32
+          default: 25
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          headers:
+            First:
+              description: Pagination First Page URL
+              schema:
+                type: string
+                format: uri
+            Next:
+              description: Pagination Next Page URL
+              schema:
+                type: string
+                format: uri
+            Prev:
+              description: Pagination Previous Page URL
+              schema:
+                type: string
+                format: uri
+            Last:
+              description: Pagination Last Page URL
+              schema:
+                type: string
+                format: uri
+            Record-Count:
+              description: Total Record Count
+              schema:
+                type: string
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Producer'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Producer'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Producer'
+        '400':
+          description: returns error if input is invalid
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+        '401':
+          description: User not authorized to view this resource.
+      security:
+      - Bearer: []
+    post:
+      tags:
+      - Producers
+      summary: Add a producer code to a given partnership
+      description: Add a new Producer code to an agency that is one of your trading partners. Requires that the caller’s organization be configured in IVANS Exchange to support Remote Location Manager information.
+      operationId: PostProducer
+      parameters:
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: The producer information.
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ProducerV3CreateRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProducerV3CreateRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ProducerV3CreateRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ProducerV3CreateRequest'
+      responses:
+        '201':
+          description: Successful operation.
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: User not authorized to view this resource.
+      security:
+      - Bearer: []
+  /api/Organizations/{accountCode}/Producers:
+    post:
+      tags:
+      - Producers
+      summary: Add a producer code to a given partnership
+      description: Add a new Producer code to an agency that is one of your trading partners. Requires that the caller’s organization be configured in IVANS Exchange to support Remote Location Manager information.
+      operationId: PostProducerByOrg
+      parameters:
+      - name: accountCode
+        in: path
+        description: The organization account code.
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: The producer information.
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ProducerCreateRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProducerCreateRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ProducerCreateRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ProducerCreateRequest'
+      responses:
+        '201':
+          description: Successful operation.
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: User not authorized to view this resource.
+      security:
+      - Bearer: []
+  /api/Organizations/{accountCode}/Producers/Transfer/{producerCode}:
+    put:
+      tags:
+      - Producers
+      summary: Transfer specified producer code to a different agency under the same carrier
+      description: Transfer Producer information for an agency that is one of your trading partners. Requires that the caller’s organization be configured in IVANS Exchange to support Remote Location Manager information.
+      operationId: TransferProducer
+      parameters:
+      - name: accountCode
+        in: path
+        description: The organization account code
+        required: true
+        schema:
+          type: string
+      - name: producerCode
+        in: path
+        description: The producer code.
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: The producer information.
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ProducerTransferRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProducerTransferRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ProducerTransferRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ProducerTransferRequest'
+      responses:
+        '200':
+          description: Successful operation.
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: User not authorized to view this resource.
+      security:
+      - Bearer: []
+  /api/v2/Organizations/{accountCode}/Producers/{producerCode}:
+    put:
+      tags:
+      - Producers
+      summary: Update the information for a given producer code
+      description: Update Producer information for an agency that is one of your trading partners. Requires that the caller’s organization be configured in IVANS Exchange to support Remote Location Manager information.
+      operationId: PutProducerByOrgV2
+      parameters:
+      - name: accountCode
+        in: path
+        description: The organization account code
+        required: true
+        schema:
+          type: string
+      - name: producerCode
+        in: path
+        description: The producer code.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The producer information.
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ProducerUpdateRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProducerUpdateRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ProducerUpdateRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ProducerUpdateRequest'
+      responses:
+        '200':
+          description: Successful operation.
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: User not authorized to view this resource.
+        '403':
+          description: 'Forbidden - Requires the following scope: producers'
+          headers:
+            WWW-Authenticate:
+              description: Bearer error="insufficient_scope"
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: insufficient_scope
+      security:
+      - {}
+      x-required-scopes:
+      - producers
+components:
+  schemas:
+    ProducerTransferRequest:
+      required:
+      - companyAccount
+      - fromAgencyAccount
+      - fromAgencyUserId
+      - producerCode
+      - toAgencyAccount
+      - toAgencyUserId
+      type: object
+      properties:
+        fromAgencyAccount:
+          minLength: 1
+          type: string
+        fromAgencyUserId:
+          minLength: 1
+          type: string
+        toAgencyAccount:
+          minLength: 1
+          type: string
+        toAgencyUserId:
+          minLength: 1
+          type: string
+        companyAccount:
+          type: string
+        producerCode:
+          type: string
+      additionalProperties: false
+    ProducerUpdateRequest:
+      required:
+      - initialLoadCode
+      type: object
+      properties:
+        companyAccount:
+          type:
+          - string
+          - 'null'
+        producerCode:
+          type:
+          - string
+          - 'null'
+        contractNumber:
+          type:
+          - string
+          - 'null'
+        participantCode:
+          type:
+          - string
+          - 'null'
+        other1:
+          type:
+          - string
+          - 'null'
+        other2:
+          type:
+          - string
+          - 'null'
+        other3:
+          type:
+          - string
+          - 'null'
+        other4:
+          type:
+          - string
+          - 'null'
+        other5:
+          type:
+          - string
+          - 'null'
+        initialLoadCode:
+          minLength: 1
+          type: string
+      additionalProperties: false
+    Producer:
+      required:
+      - agencyAccount
+      - agencyUserId
+      - companyAccount
+      - id
+      - initialLoadCode
+      - producerCode
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        agencyAccount:
+          minLength: 1
+          type: string
+        agencyUserId:
+          minLength: 1
+          type: string
+        companyAccount:
+          minLength: 1
+          type: string
+        producerCode:
+          minLength: 1
+          type: string
+        contractNumber:
+          type:
+          - string
+          - 'null'
+        participantCode:
+          type:
+          - string
+          - 'null'
+        other1:
+          type:
+          - string
+          - 'null'
+        other2:
+          type:
+          - string
+          - 'null'
+        other3:
+          type:
+          - string
+          - 'null'
+        other4:
+          type:
+          - string
+          - 'null'
+        other5:
+          type:
+          - string
+          - 'null'
+        initialLoadCode:
+          minLength: 1
+          type: string
+      additionalProperties: false
+    ProducerCreateRequest:
+      required:
+      - agencyAccount
+      - agencyUserId
+      - initialLoadCode
+      - producerCode
+      type: object
+      properties:
+        agencyAccount:
+          minLength: 1
+          type: string
+        agencyUserId:
+          minLength: 1
+          type: string
+        companyAccount:
+          type:
+          - string
+          - 'null'
+        producerCode:
+          minLength: 1
+          type: string
+        contractNumber:
+          type:
+          - string
+          - 'null'
+        participantCode:
+          type:
+          - string
+          - 'null'
+        other1:
+          type:
+          - string
+          - 'null'
+        other2:
+          type:
+          - string
+          - 'null'
+        other3:
+          type:
+          - string
+          - 'null'
+        other4:
+          type:
+          - string
+          - 'null'
+        other5:
+          type:
+          - string
+          - 'null'
+        initialLoadCode:
+          minLength: 1
+          type: string
+      additionalProperties: false
+    ProducerV3CreateRequest:
+      required:
+      - agencyAccount
+      - agencyUserId
+      - companyAccount
+      - initialLoadCode
+      - producerCode
+      type: object
+      properties:
+        agencyAccount:
+          minLength: 1
+          type: string
+        agencyUserId:
+          minLength: 1
+          type: string
+        companyAccount:
+          minLength: 1
+          type: string
+        producerCode:
+          minLength: 1
+          type: string
+        contractNumber:
+          type:
+          - string
+          - 'null'
+        participantCode:
+          type:
+          - string
+          - 'null'
+        other1:
+          type:
+          - string
+          - 'null'
+        other2:
+          type:
+          - string
+          - 'null'
+        other3:
+          type:
+          - string
+          - 'null'
+        other4:
+          type:
+          - string
+          - 'null'
+        other5:
+          type:
+          - string
+          - 'null'
+        initialLoadCode:
+          minLength: 1
+          type: string
+      additionalProperties: false
+    ProducerPatchRequest:
+      type: object
+      properties:
+        agencyAccount:
+          type:
+          - string
+          - 'null'
+        agencyUserId:
+          type:
+          - string
+          - 'null'
+        companyAccount:
+          type:
+          - string
+          - 'null'
+        producerCode:
+          type:
+          - string
+          - 'null'
+        contractNumber:
+          type:
+          - string
+          - 'null'
+        participantCode:
+          type:
+          - string
+          - 'null'
+        other1:
+          type:
+          - string
+          - 'null'
+        other2:
+          type:
+          - string
+          - 'null'
+        other3:
+          type:
+          - string
+          - 'null'
+        other4:
+          type:
+          - string
+          - 'null'
+        other5:
+          type:
+          - string
+          - 'null'
+        initialLoadCode:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ErrorFormat:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+        traceId:
+          type: string
+        validationErrors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+      additionalProperties: false
+    ProducerV3UpdateRequest:
+      required:
+      - agencyAccount
+      - agencyUserId
+      - companyAccount
+      - contractNumber
+      - initialLoadCode
+      - other1
+      - other2
+      - other3
+      - other4
+      - other5
+      - participantCode
+      - producerCode
+      type: object
+      properties:
+        agencyAccount:
+          minLength: 1
+          type: string
+        agencyUserId:
+          minLength: 1
+          type: string
+        companyAccount:
+          minLength: 1
+          type: string
+        producerCode:
+          minLength: 1
+          type: string
+        contractNumber:
+          type: string
+        participantCode:
+          type: string
+        other1:
+          type: string
+        other2:
+          type: string
+        other3:
+          type: string
+        other4:
+          type: string
+        other5:
+          type: string
+        initialLoadCode:
+          minLength: 1
+          type: string
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: JWT
+      scheme: Bearer
+x-refined-from:
+- ivans-exchange-v1-openapi.json
+- ivans-exchange-v2-openapi.json
+x-readme:
+  headers: []
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/token
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

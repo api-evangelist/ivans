@@ -1,0 +1,215 @@
+openapi: 3.2.0
+info:
+  title: Ivans Distribution Platform Base Question Set Flow API
+  description: APIs for serving carrier forms, appetite, and validation
+  version: 0.1.0
+tags:
+- name: Base Question Set Flow
+paths:
+  /api/v1/forms/base-question-set:
+    get:
+      tags:
+      - Base Question Set Flow
+      summary: Get Base Question Set
+      description: 'Returns Base Question Set for given LOB(s)
+
+        Can optionally include Question Set for given Risk Profile(s)
+
+        Nested form param will change the structure of form to the nested structure'
+      operationId: get_base_question_set_api_v1_forms_base_question_set_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: lobs
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+          title: Lobs
+      - name: nested
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: true
+          title: Nested
+      - name: risk_profiles
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          title: Risk Profiles
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Base Question Set Flow
+      summary: Post Base Question Set
+      description: 'Validates answers to Base Question Set
+
+
+        Evaluates appetite for given Risk Profile(s) and returns combined Question Set for all valid Risk Profiles'
+      operationId: post_base_question_set_api_v1_forms_base_question_set_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: lobs
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+          title: Lobs
+      - name: nested
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: true
+          title: Nested
+      - name: risk_profiles
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+          title: Risk Profiles
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuotePayload'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    QuotePayload:
+      properties:
+        fieldValues:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/FieldValue'
+            type: array
+          - type: 'null'
+          title: Fieldvalues
+        repeatableFieldBlocks:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/RepeatableFieldBlock'
+            type: array
+          - type: 'null'
+          title: Repeatablefieldblocks
+      type: object
+      title: QuotePayload
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    RepeatableFieldBlock:
+      properties:
+        id:
+          type: string
+          title: Id
+        fieldBlockId:
+          type: string
+          title: Fieldblockid
+        parentId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parentid
+        fieldValues:
+          items:
+            $ref: '#/components/schemas/FieldValue'
+          type: array
+          title: Fieldvalues
+      type: object
+      required:
+      - id
+      - fieldBlockId
+      - fieldValues
+      title: RepeatableFieldBlock
+      description: 'id: row id (i.e., building #2)
+
+        field_block_id: guid of the form group (IDNET repeatable group, i.e., building group)
+
+        parent_id: guid of specific parent field block (i.e., location #3)'
+    FieldValue:
+      properties:
+        questionId:
+          type: string
+          title: Questionid
+        value:
+          title: Value
+      type: object
+      required:
+      - questionId
+      - value
+      title: FieldValue
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/get_basic_appetite_api_v1_forms_basic_appetite_get
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

@@ -1,0 +1,1012 @@
+openapi: 3.2.0
+info:
+  title: Identification Network Market Contract Codes API
+  version: 1.0.0
+  description: IVANS Identification Network API
+servers:
+- url: https://distribution-staging.ivansinsurance.com
+tags:
+- name: market-contract-codes
+paths:
+  /api/v1/market-contract-codes/bulk-delete/:
+    post:
+      operationId: market_contract_codes_bulk_delete_create
+      description: 'Deletes multiple existing contract codes.
+
+
+        Access restrictions:
+
+
+        - If the request user is an admin, all contract codes under the user''s database scope will be available to delete.
+
+        - If the request user is not an admin, the user can only delete codes where the user is the owner of the contract code.
+
+        - Every code must be accessible to the user for the bulk delete to complete.'
+      tags:
+      - market-contract-codes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarketContractCodeBulkDeleteRequest'
+            examples:
+              MultipleUUIDs:
+                value:
+                  contractCodes:
+                  - b822ed9b-16cd-4738-beed-c0d9d7f74f24
+                  - 15a11c06-7679-453e-b965-54b97ae9e741
+                  - 502b2c78-4b59-4142-9232-3b05ea1cec76
+                summary: Multiple UUIDs
+                description: Provide a UUID for each contract code to be deleted.
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MarketContractCodeBulkDeleteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MarketContractCodeBulkDeleteRequest'
+        required: true
+      security:
+      - oauth2:
+        - write
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Success:
+                  value:
+                    details: 3 contract codes deleted.
+          description: Successfully deleted.
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                EmptyList:
+                  value:
+                    contractCodes:
+                    - This list may not be empty.
+                  summary: Empty list
+                ContractCode(s)NotAllowed:
+                  value:
+                    contractCodes:
+                    - One or more of the requested contract codes are not allowed for the user and cannot be deleted. No contract codes were deleted.
+                  summary: Contract code(s) not allowed
+          description: Invalid request body
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+      summary: Market contract codes bulk delete create
+      x-summary-source: derived
+  /api/v1/market-contract-codes/:
+    post:
+      operationId: market_contract_codes_create
+      description: 'Creates a market contract code.
+
+
+        Attributes that control access:
+
+
+        - User - single user that represents the owner of the contract code. The owner of a contract code
+
+        can view, update, and delete the contract code.
+
+        - Users - array of users that represent users that have been assigned view access to the contract code.
+
+        - Access structures - array of structures that represent the structures that a user must belong to,
+
+        in order to view the contract code.
+
+        - If user, users, and access structures are all null or empty, the contract code has no access restrictions.
+
+
+        Permissions:
+
+
+        - An admin user can set any attributes on a contract code.
+
+        - A non-admin user cannot set access structures or specific users on a contract code.
+
+        - A non-admin user can set the owner on a contract code, but the owner must be its own user.'
+      tags:
+      - market-contract-codes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarketContractCodeCreateRequest'
+            examples:
+              ContractCodeForAllStructures:
+                value:
+                  marketConfiguration: b822ed9b-16cd-4738-beed-c0d9d7f74f24
+                  nickname: Test Contract Code
+                  code: ABC123
+                  codeType: 1
+                  user: null
+                  users: []
+                  accessStructures: []
+                summary: Contract code for all structures
+                description: If key "accessStructures" is empty list, that means the contract code is available for all structures under the tenant. Only admin users can set access structures for a contract code.
+              ContractCodeForSpecificStructures:
+                value:
+                  marketConfiguration: b822ed9b-16cd-4738-beed-c0d9d7f74f24
+                  nickname: Test Contract Code
+                  code: ABC123
+                  codeType: 1
+                  user: null
+                  users: []
+                  accessStructures:
+                  - agency: 15a11c06-7679-453e-b965-54b97ae9e741
+                    branch: 502b2c78-4b59-4142-9232-3b05ea1cec76
+                    department: 2b25151e-2bae-4bcf-8bc9-885d4bfd23b1
+                    businessUnit: 75d67c23-bb71-462e-ab77-32b4057880fe
+                summary: Contract code for specific structures
+                description: Only admin users can set specific structures on a contract code.
+              ContractCodeOwnedByAUser:
+                value:
+                  marketConfiguration: b822ed9b-16cd-4738-beed-c0d9d7f74f24
+                  nickname: Test Contract Code
+                  code: ABC123
+                  codeType: 1
+                  user: 00448c2f-0c06-4358-850c-85267d9be435
+                  users: []
+                  accessStructures: []
+                summary: Contract code owned by a user
+                description: Admin users can set the owner of a contract code to any user. Non-admin users can only set themselves as the owner.
+              ContractCodeForSpecificUsers:
+                value:
+                  marketConfiguration: b822ed9b-16cd-4738-beed-c0d9d7f74f24
+                  nickname: Test Contract Code
+                  code: ABC123
+                  codeType: 1
+                  user: null
+                  users:
+                  - 00448c2f-0c06-4358-850c-85267d9be435
+                  - 15a11c06-7679-453e-b965-54b97ae9e741
+                  accessStructures: []
+                summary: Contract code for specific users
+                description: Admin users can assign contract codes to multiple specific users. Non-admin users cannot set the users attribute.
+              ContractSub-code:
+                value:
+                  marketConfiguration: b822ed9b-16cd-4738-beed-c0d9d7f74f24
+                  nickname: Test Contract Sub-Code
+                  code: DEF456
+                  codeType: 1
+                  parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                  user: null
+                  users: []
+                  accessStructures: []
+                summary: Contract sub-code
+                description: Specify "parent" contract code UUID to set a code as a sub-code.
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MarketContractCodeCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MarketContractCodeCreateRequest'
+        required: true
+      security:
+      - oauth2:
+        - write
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketContractCodeDetail'
+          description: Successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                InvalidBody:
+                  value:
+                    marketConfiguration:
+                    - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" - object does not exist.
+                    parent:
+                    - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" - object does not exist.
+                    user:
+                    - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" - object does not exist.
+                    accessStructures:
+                    - agency:
+                      - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" -object does not exist.
+                      branch:
+                      - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" -object does not exist.
+                      department:
+                      - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" -object does not exist.
+                      businessUnit:
+                      - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" -object does not exist.
+                  summary: Invalid body
+          description: Invalid creation attempt or invalid body, some of the possible error reasons below;
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '403':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                MissingUserAttributeForNon-adminUser:
+                  value:
+                    detail: A non-admin user must specify "user" when creating a contract code.
+                  summary: Missing user attribute for non-admin user
+                InvalidUserAttributeForNon-adminUser:
+                  value:
+                    detail: A non-admin user can only set the "user" on a contract code to its own user.
+                  summary: Invalid user attribute for non-admin user
+                InvalidUsersAttributeForNon-adminUser:
+                  value:
+                    detail: A non-admin user cannot set specific users on a contract code.
+                  summary: Invalid users attribute for non-admin user
+                InvalidAccessStructuresAttributeForNon-adminUser:
+                  value:
+                    detail: A non-admin user cannot set access structures on a contract code.
+                  summary: Invalid access structures attribute for non-admin user
+          description: User does not have permission to create a contract code with the given attributes.
+      summary: Market contract codes create
+      x-summary-source: derived
+    get:
+      operationId: market_contract_codes_list
+      description: 'Returns all market contract codes that the user has access to.
+
+
+        Attributes that control access:
+
+
+        - User - single user that represents the owner of the contract code. The owner of a contract code
+
+        can view, update, and delete the contract code.
+
+        - Users - array of users that represent users that have been assigned view access to the contract code.
+
+        - Access structures - array of structures that represent the structures that a user must belong to,
+
+        in order to view the contract code.
+
+        - If user, users, and access structures are all null or empty, the contract code has no access restrictions.
+
+
+        Access restrictions:
+
+
+        - If the request user is an admin, all contract codes under the user''s database scope will be available to view.
+
+        - If the request user is not an admin, the user can only view codes where the user is the owner of the contract code,
+
+        the user is part of code''s specific users or access structures, or the code has no access restrictions.'
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - market-contract-codes
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMarketContractCodeDetailList'
+          description: Successfully received all configured contract codes
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+      summary: Market contract codes list
+      x-summary-source: derived
+  /api/v1/market-contract-codes/{uuid}/:
+    delete:
+      operationId: market_contract_codes_destroy
+      description: 'Deletes an existing contract code.
+
+
+        Access restrictions:
+
+
+        - If the request user is an admin, all contract codes under the user''s database scope will be available to delete.
+
+        - If the request user is not an admin, the user can only delete codes where the user is the owner of the contract code.'
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - market-contract-codes
+      security:
+      - oauth2:
+        - write
+      responses:
+        '204':
+          description: No Content, successfully deleted
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/market_contract_code_delete_responses'
+          description: UUID is not valid or user does not have access to it
+      summary: Market contract codes destroy
+      x-summary-source: derived
+    patch:
+      operationId: market_contract_codes_partial_update
+      description: 'Updates an existing market contract code.
+
+
+        Attributes that control access:
+
+
+        - User - single user that represents the owner of the contract code. The owner of a contract code
+
+        can view, update, and delete the contract code.
+
+        - Users - array of users that represent users that have been assigned view access to the contract code.
+
+        - Access structures - array of structures that represent the structures that a user must belong to,
+
+        in order to view the contract code.
+
+        - If user, users, and access structures are all null or empty, the contract code has no access restrictions.
+
+
+        Access restrictions:
+
+
+        - If the request user is an admin, all contract codes under the user''s database scope will be available to update.
+
+        - If the request user is not an admin, the user can only update codes where the user is the owner of the contract code.
+
+
+        Permissions:
+
+
+        - An admin user can set any attributes on a contract code.
+
+        - A non-admin user cannot set access structures or specific users on a contract code, and cannot change the owner
+
+        of the contract code to another user.'
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - market-contract-codes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMarketContractCodeCreateRequest'
+            examples:
+              UpdateNon-accessAttributesForContractCode:
+                value:
+                  marketConfiguration: b822ed9b-16cd-4738-beed-c0d9d7f74f24
+                  nickname: Test Contract Code
+                  code: ABC123
+                  codeType: 1
+                summary: Update non-access attributes for contract code
+                description: Admin users can update contract codes without user/structure info in the request body. Any or all of the attributes can be updated. Non-admin users can update if they own the contract code.
+              ContractCodeForAllStructures:
+                value:
+                  marketConfiguration: b822ed9b-16cd-4738-beed-c0d9d7f74f24
+                  nickname: Test Contract Code
+                  code: ABC123
+                  codeType: 1
+                  user: null
+                  users: []
+                  accessStructures: []
+                summary: Contract code for all structures
+                description: If key "accessStructures" is empty list, that means the contract code is available for all structures under the tenant. Only admin users can set access structures for a contract code.
+              ContractCodeForSpecificStructures:
+                value:
+                  marketConfiguration: b822ed9b-16cd-4738-beed-c0d9d7f74f24
+                  nickname: Test Contract Code
+                  code: ABC123
+                  codeType: 1
+                  user: null
+                  users: []
+                  accessStructures:
+                  - agency: 15a11c06-7679-453e-b965-54b97ae9e741
+                    branch: 502b2c78-4b59-4142-9232-3b05ea1cec76
+                    department: 2b25151e-2bae-4bcf-8bc9-885d4bfd23b1
+                    businessUnit: 75d67c23-bb71-462e-ab77-32b4057880fe
+                summary: Contract code for specific structures
+                description: Only admin users can set specific structures on a contract code.
+              ContractCodeOwnedByAUser:
+                value:
+                  marketConfiguration: b822ed9b-16cd-4738-beed-c0d9d7f74f24
+                  nickname: Test Contract Code
+                  code: ABC123
+                  codeType: 1
+                  user: 00448c2f-0c06-4358-850c-85267d9be435
+                  users: []
+                  accessStructures: []
+                summary: Contract code owned by a user
+                description: Admin users can set the owner of a contract code to any user. Non-admin users can only set themselves as the owner.
+              ContractCodeForSpecificUsers:
+                value:
+                  marketConfiguration: b822ed9b-16cd-4738-beed-c0d9d7f74f24
+                  nickname: Test Contract Code
+                  code: ABC123
+                  codeType: 1
+                  user: null
+                  users:
+                  - 00448c2f-0c06-4358-850c-85267d9be435
+                  - 15a11c06-7679-453e-b965-54b97ae9e741
+                  accessStructures: []
+                summary: Contract code for specific users
+                description: Admin users can assign contract codes to multiple specific users. Non-admin users cannot set the users attribute.
+              ContractSub-code:
+                value:
+                  marketConfiguration: b822ed9b-16cd-4738-beed-c0d9d7f74f24
+                  nickname: Test Contract Sub-Code
+                  code: DEF456
+                  codeType: 1
+                  parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                  user: null
+                  users: []
+                  accessStructures: []
+                summary: Contract sub-code
+                description: Specify "parent" contract code UUID to set a code as a sub-code.
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMarketContractCodeCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMarketContractCodeCreateRequest'
+      security:
+      - oauth2:
+        - write
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketContractCodeDetail'
+          description: Successfully updated.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/market_contract_code_update_responses_body'
+          description: Invalid request body (possible bad requests below).
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '403':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                InvalidUserAttributeForNon-adminUser:
+                  value:
+                    detail: A non-admin user can only set the "user" on a contract code to its own user.
+                  summary: Invalid user attribute for non-admin user
+                InvalidUsersAttributeForNon-adminUser:
+                  value:
+                    detail: A non-admin user cannot set specific users on a contract code.
+                  summary: Invalid users attribute for non-admin user
+                InvalidAccessStructuresAttributeForNon-adminUser:
+                  value:
+                    detail: A non-admin user cannot set access structures on a contract code.
+                  summary: Invalid access structures attribute for non-admin user
+          description: User does not have permission to update a contract code with the given attributes.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/market_contract_code_detail_update_responses'
+          description: UUID is not valid or user does not have access to it.
+      summary: Market contract codes partial update
+      x-summary-source: derived
+    get:
+      operationId: market_contract_codes_retrieve
+      description: 'Returns an individual contract code.
+
+
+        Attributes that control access:
+
+
+        - User - single user that represents the owner of the contract code. The owner of a contract code
+
+        can view, update, and delete the contract code.
+
+        - Users - array of users that represent users that have been assigned view access to the contract code.
+
+        - Access structures - array of structures that represent the structures that a user must belong to,
+
+        in order to view the contract code.
+
+        - If user, users, and access structures are all null or empty, the contract code has no access restrictions.
+
+
+        Access restrictions:
+
+
+        - If the request user is an admin, all contract codes under the user''s database scope will be available to view.
+
+        - If the request user is not an admin, the user can only view codes where the user is the owner of the contract code,
+
+        the user is part of code''s specific users or access structures, or the code has no access restrictions.'
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - market-contract-codes
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketContractCodeDetail'
+          description: Successfully received contract code.
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/market_configuration_contract_code_detail_responses'
+          description: UUID is not valid or user does not have access to it.
+      summary: Market contract codes retrieve
+      x-summary-source: derived
+components:
+  schemas:
+    CodeTypeEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      type: integer
+    StructureChild:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        name:
+          type: string
+      required:
+      - code
+      - id
+      - name
+    MarketContractCodeBulkDeleteRequest:
+      type: object
+      description: 'Serializer for bulk deletion of MarketContractCodes.
+
+
+        ViewSet: MarketContractCodeViewSet
+
+
+        Endpoint: market-contract-codes/bulk-delete/'
+      properties:
+        contractCodes:
+          type: array
+          items:
+            type: string
+            format: uuid
+      required:
+      - contractCodes
+    StructureAccess:
+      type: object
+      properties:
+        agency:
+          $ref: '#/components/schemas/StructureChild'
+        branch:
+          $ref: '#/components/schemas/StructureChild'
+        department:
+          $ref: '#/components/schemas/StructureChild'
+        businessUnit:
+          $ref: '#/components/schemas/StructureChild'
+      required:
+      - agency
+      - branch
+      - businessUnit
+      - department
+    market_contract_code_detail_update_responses:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
+    market_contract_code_delete_responses:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
+    market_contract_code_update_responses_body:
+      type: object
+      properties:
+        marketConfiguration:
+          type: array
+          items: {}
+          default:
+          - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" - object does not exist.
+        parent:
+          type: array
+          items: {}
+          default:
+          - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" - object does not exist.
+        user:
+          type: array
+          items: {}
+          default:
+          - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" - object does not exist.
+        accessStructures:
+          type: array
+          items: {}
+          default:
+          - agency:
+            - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" -object does not exist.
+            branch:
+            - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" -object does not exist.
+            department:
+            - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" -object does not exist.
+            businessUnit:
+            - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" -object does not exist.
+    SimpleUser:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        integratorUserId:
+          type: string
+        name:
+          type: string
+          readOnly: true
+        externalId:
+          type: string
+          description: Unique identifier from external system. Used to identify agents.
+          maxLength: 64
+      required:
+      - id
+      - integratorUserId
+      - name
+    market_configuration_contract_code_detail_responses:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
+    PaginatedMarketContractCodeDetailList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/market-contract-codes/?page=3
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/market-contract-codes/?page=1
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketContractCodeDetail'
+    PatchedMarketContractCodeCreateRequest:
+      type: object
+      properties:
+        marketConfiguration:
+          type: string
+          format: uuid
+        parent:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        nickname:
+          type: string
+          minLength: 1
+        codeType:
+          allOf:
+          - $ref: '#/components/schemas/CodeTypeEnum'
+          description: '[(1, ''Agency Id''), (2, ''Producer Id''), (3, ''Network Code'')]'
+          minimum: -2147483648
+          maximum: 2147483647
+        code:
+          type: string
+          minLength: 1
+          maxLength: 128
+        user:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        users:
+          type: array
+          items:
+            type: string
+            format: uuid
+        accessStructures:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketStructureRequest'
+    MarketContractCodeDetail:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        parent:
+          type: string
+        nickname:
+          type: string
+          maxLength: 128
+        codeType:
+          allOf:
+          - $ref: '#/components/schemas/CodeTypeEnum'
+          description: '[(1, ''Agency Id''), (2, ''Producer Id''), (3, ''Network Code'')]'
+          minimum: -2147483648
+          maximum: 2147483647
+        code:
+          type: string
+          maxLength: 128
+        user:
+          $ref: '#/components/schemas/SimpleUser'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimpleUser'
+        lastModifiedBy:
+          $ref: '#/components/schemas/SimpleUser'
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        marketConfiguration:
+          type: string
+        accessStructures:
+          type: array
+          items:
+            $ref: '#/components/schemas/StructureAccess'
+        contractSubcodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketContractCodeDetail'
+        lastUsedOn:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      required:
+      - accessStructures
+      - code
+      - codeType
+      - contractSubcodes
+      - lastModifiedBy
+      - marketConfiguration
+      - updatedAt
+      - user
+      - users
+      - uuid
+    MarketStructureRequest:
+      type: object
+      properties:
+        agency:
+          type: string
+          format: uuid
+        branch:
+          type: string
+          format: uuid
+        department:
+          type: string
+          format: uuid
+        businessUnit:
+          type: string
+          format: uuid
+      required:
+      - agency
+    MarketContractCodeCreateRequest:
+      type: object
+      properties:
+        marketConfiguration:
+          type: string
+          format: uuid
+        parent:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        nickname:
+          type: string
+          minLength: 1
+        codeType:
+          allOf:
+          - $ref: '#/components/schemas/CodeTypeEnum'
+          description: '[(1, ''Agency Id''), (2, ''Producer Id''), (3, ''Network Code'')]'
+          minimum: -2147483648
+          maximum: 2147483647
+        code:
+          type: string
+          minLength: 1
+          maxLength: 128
+        user:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        users:
+          type: array
+          items:
+            type: string
+            format: uuid
+        accessStructures:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketStructureRequest'
+      required:
+      - code
+      - codeType
+      - marketConfiguration
+      - nickname
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    oauth2:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: /api/v1/token/
+          refreshUrl: /api/v1/token/
+          scopes:
+            read: Read scope
+            write: Write scope
+            epic: Epic User
+            third-party: Third Party User
+    basicAuth:
+      type: http
+      scheme: basic
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/agencies_list
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

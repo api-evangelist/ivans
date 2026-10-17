@@ -1,0 +1,322 @@
+openapi: 3.2.0
+info:
+  title: Identification Network Naics Ak API
+  version: 1.0.0
+  description: IVANS Identification Network API
+servers:
+- url: https://distribution-staging.ivansinsurance.com
+tags:
+- name: naics-ak
+paths:
+  /api/v1/naics-ak/ak-hash-lookup/:
+    post:
+      operationId: naics_ak_ak_hash_lookup_create
+      description: Get NAICS index by AK hash
+      tags:
+      - naics-ak
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NAICSIndexAKLookupRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NAICSIndexAKLookupRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NAICSIndexAKLookupRequest'
+        required: true
+      security:
+      - oauth2:
+        - write
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NAICSIndex'
+          description: Successfully requested the NAICS index.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/naics_ak_lookup_invalid_request_body'
+          description: Invalid body request, possible error reasons below.
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+      summary: Naics ak ak hash lookup create
+      x-summary-source: derived
+  /api/v1/naics-ak/:
+    get:
+      operationId: naics_ak_list
+      description: 'Returns all NAICS indexes that match a given search term.
+
+        Uses Ask Kodiak''s Suggest NAICS Codes endpoint.'
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+        description: A page number within the paginated result set.
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+          default: 10
+        description: Number of results to return per page.
+      - in: query
+        name: search
+        schema:
+          type: string
+          minLength: 1
+        description: Search term used to match results by a business description, NAICS code, or SIC code.
+      tags:
+      - naics-ak
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedNAICSIndexList'
+          description: Successfully received NAICS indexes.
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/naics_ak_424_response'
+              examples:
+                InvalidPage:
+                  value:
+                    count: 123
+                    next: https://distribution.ivansinsurance.com/api/v1/naics-ak/?page=3
+                    previous: https://distribution.ivansinsurance.com/api/v1/naics-ak/?page=1
+                    results:
+                    - detail: 'Call to Ask Kodiak suggest service failed with status code: 400'
+                      endpoint: https://api.askkodiak.com/v2/suggest/naics-codes/roof
+                      params:
+                        hitsPerPage: '10'
+                        page: '-2'
+                      message: Value too small for "page" parameter, expected integer between 0 and 9223372036854775807
+                  summary: Invalid page
+          description: Callout to Ask Kodiak endpoint failed.
+      summary: Naics ak list
+      x-summary-source: derived
+  /api/v1/naics-ak/{uuid}/:
+    get:
+      operationId: naics_ak_retrieve
+      description: Returns an individual NAICS index based on the UUID.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - naics-ak
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NAICSIndexDetail'
+          description: Successfully received NAICS index.
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/naics_index_detail_responses'
+          description: UUID is not valid or does not have corresponding NAICS index.
+      summary: Naics ak retrieve
+      x-summary-source: derived
+components:
+  schemas:
+    NAICSIndex:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        akHash:
+          type: string
+          maxLength: 128
+        naicsCode:
+          type: string
+        description:
+          type: string
+      required:
+      - description
+      - naicsCode
+      - uuid
+    naics_index_detail_responses:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
+    NAICSIndexDetail:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        naicsCode:
+          type: string
+        description:
+          type: string
+        akHash:
+          type: string
+          maxLength: 128
+        classificationCodes:
+          type: array
+          items: {}
+          readOnly: true
+      required:
+      - classificationCodes
+      - description
+      - naicsCode
+      - uuid
+    naics_ak_424_response:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: string
+        endpoint:
+          type: string
+          default: string
+        params:
+          type: string
+          default: dict
+        message:
+          type: string
+          default: string
+    PaginatedNAICSIndexList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/naics/?page=3
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/naics/?page=1
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/NAICSIndex'
+    naics_ak_lookup_invalid_request_body:
+      type: object
+      properties:
+        akHash:
+          type: string
+          default: AK hash 'string' cannot be matched to a NAICS index
+    NAICSIndexAKLookupRequest:
+      type: object
+      properties:
+        akHash:
+          type: string
+          minLength: 1
+          description: AK Hash NAICS index
+      required:
+      - akHash
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    oauth2:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: /api/v1/token/
+          refreshUrl: /api/v1/token/
+          scopes:
+            read: Read scope
+            write: Write scope
+            epic: Epic User
+            third-party: Third Party User
+    basicAuth:
+      type: http
+      scheme: basic
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/agencies_list
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

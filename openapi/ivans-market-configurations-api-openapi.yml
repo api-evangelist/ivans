@@ -1,0 +1,944 @@
+openapi: 3.2.0
+info:
+  title: Identification Network Market Configurations API
+  version: 1.0.0
+  description: IVANS Identification Network API
+servers:
+- url: https://distribution-staging.ivansinsurance.com
+tags:
+- name: market-configurations
+paths:
+  /api/v1/market-configurations/{uuid}/contract-codes/:
+    get:
+      operationId: market_configurations_contract_codes_retrieve
+      description: Returns market contract codes for given market configuration.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - market-configurations
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMarketConfigContractCodeDetailList'
+          description: Successfully received configured contract for given uuid
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/market_configuration_contract_code_responses'
+          description: uuid is not a valid or does not have corresponding configuration for current user.
+      summary: Market configurations contract codes retrieve
+      x-summary-source: derived
+  /api/v1/market-configurations/:
+    post:
+      operationId: market_configurations_create
+      description: 'Creates market configuration.
+
+        - Agency is optional. If not provided, the user''s current agency will be used.
+
+        - Service level users can set a specific agency for the market configuration.'
+      tags:
+      - market-configurations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarketConfigurationCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MarketConfigurationCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MarketConfigurationCreateRequest'
+        required: true
+      security:
+      - oauth2:
+        - write
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketConfiguration'
+          description: Successfully created.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/market_configuration_create_responses'
+          description: Market is not valid uuid or you don't have an access to it
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/market_configuration_create_responses_forbidden'
+          description: Non admin users cannot create configuration
+      summary: Market configurations create
+      x-summary-source: derived
+    get:
+      operationId: market_configurations_list
+      description: 'Returns market configurations that are accessible to the user.
+
+        - Market configuration access depends on the user''s access level, and the user''s current agency''s market access.'
+      parameters:
+      - in: query
+        name: include_allowed_markets_only
+        schema:
+          type: boolean
+        description: Filter market configurations to only include configurations where the market is accessible for the user
+      - in: query
+        name: include_available_lobs_for_allowed_risk_profiles_only
+        schema:
+          type: boolean
+        description: Modify availableLinesOfBusiness to only include lines of business associated with risk profiles that the user currently has access to
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - market-configurations
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMarketConfigurationList'
+          description: Successfully retrieved market configurations
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+      summary: Market configurations list
+      x-summary-source: derived
+  /api/v1/market-configurations/{uuid}/credentials/:
+    get:
+      operationId: market_configurations_credentials_retrieve
+      description: Returns market credentials for given market configuration.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - market-configurations
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMarketConfigCredentialList'
+          description: Successfully received configured credentials for given uuid
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/market_configuration_credential_responses'
+          description: UUID is not a valid or does not have corresponding configuration for current user.
+      summary: Market configurations credentials retrieve
+      x-summary-source: derived
+  /api/v1/market-configurations/{uuid}/:
+    patch:
+      operationId: market_configurations_partial_update
+      description: 'Updates a market configuration.
+
+
+        Only service level users can update the agency.
+
+
+        Fields that can be updated:
+
+        - lineOfBusiness: uuid
+
+        - accessStructures: (multiple accepted)
+
+        - agency: uuid (required)
+
+        - branch: uuid (not required)
+
+        - department: uuid (not required)
+
+        - businessUnit: uuid (not required)
+
+        - appointed: true or false
+
+        - preferred: true or false
+
+        - notes: text
+
+        - agency: uuid'
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - market-configurations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMarketConfigurationUpdateRequest'
+            examples:
+              StandardExample:
+                value:
+                  linesOfBusiness:
+                  - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                  accessStructures:
+                  - agency: 15a11c06-7679-453e-b965-54b97ae9e741
+                    branch: 502b2c78-4b59-4142-9232-3b05ea1cec76
+                    department: 2b25151e-2bae-4bcf-8bc9-885d4bfd23b1
+                    businessUnit: 75d67c23-bb71-462e-ab77-32b4057880fe
+                  appointed: true
+                  preferred: true
+                  notes: Market specific notes
+                  agency: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                summary: Standard example
+                description: All keys are optional. Key "linesOfBusiness" accepts UUIDs. Key "accessStructures" accepts list of dictionary of UUIDs.
+              MarketForAllStructures:
+                value:
+                  linesOfBusiness:
+                  - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                  accessStructures: []
+                  appointed: true
+                  preferred: true
+                  notes: Market specific notes
+                  agency: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                summary: Market for all structures
+                description: If key "accessStructures" is empty list, that means the market is available for all structures under the tenant.
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMarketConfigurationUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMarketConfigurationUpdateRequest'
+      security:
+      - oauth2:
+        - write
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketConfiguration'
+          description: Successfully updated the configuration
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/market_configuration_patch_responses'
+          description: Invalid request body (possible bad requests below).
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/market_configuration_patch_responses_forbidden'
+          description: Only service level users can specify the agency for a market configuration.
+      summary: Market configurations partial update
+      x-summary-source: derived
+    get:
+      operationId: market_configurations_retrieve
+      description: 'Returns individual market configuration based on the uuid.
+
+        - User should have access to market configuration, otherwise it will return error.'
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - market-configurations
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketConfiguration'
+          description: Successfully received individual market configuration
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/market_configuration_detail_responses'
+          description: uuid is not a valid or does not have corresponding configuration for current user.
+      summary: Market configurations retrieve
+      x-summary-source: derived
+components:
+  schemas:
+    LineOfBusiness:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 128
+        code:
+          type: string
+          maxLength: 32
+      required:
+      - code
+      - name
+      - uuid
+    PatchedMarketConfigurationUpdateRequest:
+      type: object
+      properties:
+        linesOfBusiness:
+          type: array
+          items:
+            type: string
+            format: uuid
+        accessStructures:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketStructureRequest'
+        agency:
+          type: string
+          format: uuid
+        appointed:
+          type: boolean
+        preferred:
+          type: boolean
+        notes:
+          type: string
+    MarketConfigContractCodeDetail:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        parent:
+          type: string
+        nickname:
+          type: string
+          maxLength: 128
+        codeType:
+          allOf:
+          - $ref: '#/components/schemas/CodeTypeEnum'
+          description: '[(1, ''Agency Id''), (2, ''Producer Id''), (3, ''Network Code'')]'
+          minimum: -2147483648
+          maximum: 2147483647
+        code:
+          type: string
+          maxLength: 128
+        user:
+          $ref: '#/components/schemas/SimpleUser'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimpleUser'
+        lastModifiedBy:
+          $ref: '#/components/schemas/SimpleUser'
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        marketConfiguration:
+          type: string
+        accessStructures:
+          type: array
+          items:
+            $ref: '#/components/schemas/StructureAccess'
+        contractSubcodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketContractCodeDetail'
+        lastUsedOn:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      required:
+      - accessStructures
+      - code
+      - codeType
+      - contractSubcodes
+      - lastModifiedBy
+      - marketConfiguration
+      - updatedAt
+      - user
+      - users
+      - uuid
+    market_configuration_create_responses:
+      type: object
+      properties:
+        market:
+          type: array
+          items: {}
+          default:
+          - “56b2ff81-18d1-46ad-959a-1ea682bb95ed7” is not a valid UUID
+    AgencyTenantDetail:
+      type: object
+      description: Serializer for retrieving agency information.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: The unique ID for the agency.
+        externalId:
+          type: string
+          readOnly: true
+          description: The integrator's ID for the agency.
+        npn:
+          type: string
+          readOnly: true
+          description: The NPN of the agency.
+        name:
+          type: string
+          readOnly: true
+          description: The name of the agency.
+        isActive:
+          type: boolean
+          readOnly: true
+          description: Whether the agency is active.
+        testMode:
+          type: boolean
+          readOnly: true
+          description: Whether the agency is in test mode. In test mode, submissions for this agency will not be sent to the carrier, and a placeholder quote will be returned instead.
+      required:
+      - externalId
+      - id
+      - isActive
+      - name
+      - npn
+      - testMode
+    PaginatedMarketConfigurationList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/market-configurations/?page=3
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/market-configurations/?page=1
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketConfiguration'
+    market_configuration_patch_responses:
+      type: object
+      properties:
+        lineOfBusiness:
+          type: array
+          items: {}
+          default:
+          - not a valid UUID
+        accessStructures:
+          type: array
+          items: {}
+          default:
+          - agency:
+            - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" -object does not exist.
+            branch:
+            - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" -object does not exist.
+            department:
+            - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" -object does not exist.
+            businessUnit:
+            - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" -object does not exist.
+        appointed:
+          type: array
+          items: {}
+          default:
+          - Must be a valid boolean
+        preferred:
+          type: array
+          items: {}
+          default:
+          - Must be a valid boolean
+    market_configuration_contract_code_responses:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
+    StructureChild:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        name:
+          type: string
+      required:
+      - code
+      - id
+      - name
+    MarketConfiguration:
+      type: object
+      properties:
+        market:
+          $ref: '#/components/schemas/MarketNested'
+        allowedLinesOfBusiness:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineOfBusiness'
+        accessStructures:
+          type: array
+          items:
+            $ref: '#/components/schemas/StructureAccess'
+        agency:
+          $ref: '#/components/schemas/AgencyTenantDetail'
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        appointed:
+          type: boolean
+        preferred:
+          type: boolean
+        notes:
+          type: string
+      required:
+      - accessStructures
+      - agency
+      - allowedLinesOfBusiness
+      - market
+      - uuid
+    MarketConfigCredential:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        nickname:
+          type: string
+          maxLength: 128
+        username:
+          type: string
+          maxLength: 128
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        lastModifiedBy:
+          $ref: '#/components/schemas/SimpleUser'
+        marketConfiguration:
+          type: string
+        user:
+          $ref: '#/components/schemas/SimpleUser'
+        accessStructures:
+          type: array
+          items:
+            $ref: '#/components/schemas/StructureAccess'
+        lastUsedOn:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      required:
+      - accessStructures
+      - lastModifiedBy
+      - marketConfiguration
+      - nickname
+      - updatedAt
+      - user
+      - username
+      - uuid
+    SimpleUser:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        integratorUserId:
+          type: string
+        name:
+          type: string
+          readOnly: true
+        externalId:
+          type: string
+          description: Unique identifier from external system. Used to identify agents.
+          maxLength: 64
+      required:
+      - id
+      - integratorUserId
+      - name
+    CodeTypeEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      type: integer
+    StructureAccess:
+      type: object
+      properties:
+        agency:
+          $ref: '#/components/schemas/StructureChild'
+        branch:
+          $ref: '#/components/schemas/StructureChild'
+        department:
+          $ref: '#/components/schemas/StructureChild'
+        businessUnit:
+          $ref: '#/components/schemas/StructureChild'
+      required:
+      - agency
+      - branch
+      - businessUnit
+      - department
+    MarketConfigurationCreateRequest:
+      type: object
+      properties:
+        market:
+          type: string
+          format: uuid
+        agency:
+          type: string
+          format: uuid
+      required:
+      - market
+    PaginatedMarketConfigContractCodeDetailList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/market-configurations/{uuid}/contract-codes/?page=3
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/market-configurations/{uuid}/contract-codes/?page=1
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketConfigContractCodeDetail'
+    market_configuration_patch_responses_forbidden:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
+    MarketStructureRequest:
+      type: object
+      properties:
+        agency:
+          type: string
+          format: uuid
+        branch:
+          type: string
+          format: uuid
+        department:
+          type: string
+          format: uuid
+        businessUnit:
+          type: string
+          format: uuid
+      required:
+      - agency
+    market_configuration_create_responses_forbidden:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
+    market_configuration_credential_responses:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
+    MarketNested:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 128
+        displayName:
+          type:
+          - string
+          - 'null'
+          maxLength: 128
+        logo:
+          type:
+          - string
+          - 'null'
+          format: uri
+          pattern: (?:png|jpg|svg|jpeg)$
+        availableLinesOfBusiness:
+          allOf:
+          - $ref: '#/components/schemas/LineOfBusiness'
+          readOnly: true
+      required:
+      - availableLinesOfBusiness
+      - name
+    MarketContractCodeDetail:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        parent:
+          type: string
+        nickname:
+          type: string
+          maxLength: 128
+        codeType:
+          allOf:
+          - $ref: '#/components/schemas/CodeTypeEnum'
+          description: '[(1, ''Agency Id''), (2, ''Producer Id''), (3, ''Network Code'')]'
+          minimum: -2147483648
+          maximum: 2147483647
+        code:
+          type: string
+          maxLength: 128
+        user:
+          $ref: '#/components/schemas/SimpleUser'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimpleUser'
+        lastModifiedBy:
+          $ref: '#/components/schemas/SimpleUser'
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        marketConfiguration:
+          type: string
+        accessStructures:
+          type: array
+          items:
+            $ref: '#/components/schemas/StructureAccess'
+        contractSubcodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketContractCodeDetail'
+        lastUsedOn:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      required:
+      - accessStructures
+      - code
+      - codeType
+      - contractSubcodes
+      - lastModifiedBy
+      - marketConfiguration
+      - updatedAt
+      - user
+      - users
+      - uuid
+    PaginatedMarketConfigCredentialList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/market-configurations/{uuid}/credentials/?page=3
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/market-configurations/{uuid}/credentials/?page=1
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketConfigCredential'
+    market_configuration_detail_responses:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    oauth2:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: /api/v1/token/
+          refreshUrl: /api/v1/token/
+          scopes:
+            read: Read scope
+            write: Write scope
+            epic: Epic User
+            third-party: Third Party User
+    basicAuth:
+      type: http
+      scheme: basic
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/agencies_list
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

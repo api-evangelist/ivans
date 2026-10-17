@@ -1,0 +1,736 @@
+openapi: 3.2.0
+info:
+  title: IVANS Translation API's Commission Download API
+  description: These API's expose endpoints to manage Download Transactions.
+  license:
+    name: Copyright (C) 2023 IVANS Insurance, All rights reserved
+  version: '1.0'
+servers:
+- url: HTTPS://dev-cloud-dl.ivansinsurance.com
+  description: Server URL in UAT environment
+- url: HTTPS://cloud-dl.ivansinsurance.com
+  description: Server URL in Production environment
+tags:
+- name: Commission Download API
+paths:
+  /ivans/api/benefits/csv/upload:
+    post:
+      tags:
+      - Commission Download API
+      summary: Benefits Csv upload
+      operationId: processBenefitsCsvRequest
+      parameters:
+      - name: ClientId
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: transactionId
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: ErrorReturnType
+        in: header
+        required: false
+        schema:
+          type: string
+          default: json
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+              required:
+              - file
+      responses:
+        '200':
+          description: Successful Upload of csv file
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CsvResponse'
+        '202':
+          description: Csv Upload Complete. FileId not available. Exchange delivery delayed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CsvResponse202'
+        '400':
+          description: Invalid request received
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CsvResponseJson'
+        '401':
+          description: Authorization Failed
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CsvResponse422'
+        '503':
+          description: CSV Conversion Service Not Available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CsvResponse503'
+  /ivans/api/commissiondownload:
+    post:
+      tags:
+      - Commission Download API
+      description: Commission Download Operation
+      operationId: processRequest
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: transactionId
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommissionDownloadRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CommissionDownloadResponse'
+      summary: Process request
+      x-summary-source: derived
+components:
+  schemas:
+    CsvResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          example: 54A365A9B3AF4EEFA4E7CE154ABFE209
+        message:
+          type: string
+          example: Csv Upload Complete
+        transactionStatus:
+          type: string
+          example: SUCCESS
+        exchangeFileId:
+          type: string
+          example: 7ce6f940-fd77-419a-b656-27359ee47ff2
+    Companyidentification:
+      type: object
+      properties:
+        companyname:
+          type: string
+        originationaddress:
+          type: string
+          readOnly: true
+    StatementType:
+      type: object
+      properties:
+        producer:
+          $ref: '#/components/schemas/ProducerType'
+        statementdt:
+          format: yyyy-MM-dd
+          $ref: '#/components/schemas/LocalDate'
+          example: '2025-01-01'
+        summary:
+          $ref: '#/components/schemas/SummaryType'
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionType'
+          properties:
+            empty:
+              type: boolean
+    IsoChronology:
+      type: object
+      properties:
+        id:
+          type: string
+        calendarType:
+          type: string
+    CsvResponse202:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          example: 54A365A9B3AF4EEFA4E7CE154ABFE209
+        message:
+          type: string
+          example: Csv Upload Complete. FileId not available. Exchange delivery delayed
+        transactionStatus:
+          type: string
+          example: SUCCESS
+    AddressType:
+      type: object
+      properties:
+        addrtypecd:
+          type: string
+          enum:
+          - Billing Address
+          - Branch Office
+          - Contributing Address
+          - Data Backup Storage Address
+          - Duplicate Records Address
+          - Furthest Terminal Address
+          - Garaging Address
+          - Harbor
+          - Insured's Address
+          - Job Site
+          - Leader Address
+          - Leased Building Address
+          - Legal Address
+          - The address at which the loss occurred.
+          - Mailing Address
+          - Manufacturing Address
+          - Marina
+          - Military Base Address
+          - Owned Building Address
+          - Physical Risk Address/Location
+          - Point Of Departure Address
+          - Point Of Destination Address
+          - Port
+          - Previous Address
+          - Private Dock
+          - Public Dock
+          - Payroll Office
+          - Quay
+          - Recipient Address
+          - Rented Building Address
+          - Rented To Others
+          - The claim location under which the claim is being settled.
+          - Shipping Address
+          - Software Backup Storage Address
+          - Storage
+          - Street Address
+          - Terminal
+          - Wharf
+        addr1:
+          type: string
+        addr2:
+          type: string
+        city:
+          type: string
+        stateprovcd:
+          type: string
+          enum:
+          - AL
+          - AK
+          - AZ
+          - AR
+          - CA
+          - CO
+          - CT
+          - DC
+          - DE
+          - FL
+          - GA
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - OH
+          - OK
+          - OR
+          - PA
+          - PR
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+          - AB
+          - BC
+          - MB
+          - NB
+          - NL
+          - NS
+          - 'ON'
+          - PE
+          - QC
+          - SK
+          - NT
+          - NU
+          - YT
+          - AGU
+          - BCN
+          - BCS
+          - CAM
+          - CHH
+          - CHP
+          - CMX
+          - COA
+          - COL
+          - DUR
+          - GRO
+          - GUA
+          - HID
+          - JAL
+          - MEX
+          - MIC
+          - MOR
+          - NAY
+          - NLE
+          - OAX
+          - PUE
+          - QUE
+          - ROO
+          - SIN
+          - SLP
+          - SON
+          - TAB
+          - TAM
+          - TLA
+          - VER
+          - YUC
+          - ZAC
+          - AS
+          - FM
+          - GU
+          - MH
+          - MP
+          - PW
+          - VI
+        postalcd:
+          type: string
+        county:
+          type: string
+        country:
+          type: string
+        latitude:
+          type: string
+        longitude:
+          type: string
+    PersonalnameType:
+      type: object
+      properties:
+        firstname:
+          type: string
+          readOnly: true
+        middleintialname:
+          type: string
+          readOnly: true
+        lastname:
+          type: string
+          readOnly: true
+        fullname:
+          type: string
+    LocalDate:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int32
+        month:
+          type: string
+          enum:
+          - JANUARY
+          - FEBRUARY
+          - MARCH
+          - APRIL
+          - MAY
+          - JUNE
+          - JULY
+          - AUGUST
+          - SEPTEMBER
+          - OCTOBER
+          - NOVEMBER
+          - DECEMBER
+        monthValue:
+          type: integer
+          format: int32
+        dayOfMonth:
+          type: integer
+          format: int32
+        chronology:
+          $ref: '#/components/schemas/IsoChronology'
+        dayOfWeek:
+          type: string
+          enum:
+          - MONDAY
+          - TUESDAY
+          - WEDNESDAY
+          - THURSDAY
+          - FRIDAY
+          - SATURDAY
+          - SUNDAY
+        leapYear:
+          type: boolean
+        dayOfYear:
+          type: integer
+          format: int32
+        era:
+          $ref: '#/components/schemas/Era'
+    ContactType:
+      type: object
+      properties:
+        contacttypecd:
+          type: string
+          enum:
+          - Billing Contact
+          - Audit Contact
+          - Claim Contact
+          - Risk Manager
+          - Executive Contact
+          - Misc. Contact
+          - Customer Service Rep
+        personalname:
+          $ref: '#/components/schemas/PersonalnameType'
+        email:
+          type: string
+        phone:
+          $ref: '#/components/schemas/PhoneType'
+        employedbyinsuredind:
+          type: boolean
+    PhoneType:
+      type: object
+      properties:
+        phonetype:
+          type: string
+          enum:
+          - business
+          - personal
+          - cell
+        phone:
+          type: string
+        extension:
+          type: string
+    SummaryType:
+      type: object
+      properties:
+        totalnumitems:
+          type: integer
+          format: int32
+          readOnly: true
+        totalgrossamt:
+          type: number
+        totalcommissionamt:
+          type: number
+        numnonpolicyadjustment:
+          type: integer
+          format: int32
+          readOnly: true
+        totaladjustmentamt:
+          type: number
+          readOnly: true
+        accountdate:
+          format: yyyy-MM-dd
+          $ref: '#/components/schemas/LocalDate'
+          example: '2025-01-01'
+    ProducerType:
+      type: object
+      properties:
+        organizationname:
+          type: string
+          readOnly: true
+        name:
+          $ref: '#/components/schemas/PersonalnameType'
+          readOnly: true
+        address:
+          $ref: '#/components/schemas/AddressType'
+          readOnly: true
+        npn:
+          type: string
+          readOnly: true
+        contractcode:
+          type: string
+        contractsubcode:
+          type: string
+          readOnly: true
+        contact:
+          $ref: '#/components/schemas/ContactType'
+          readOnly: true
+    CommissionDownloadResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          description: Unique id for this transaction
+        code:
+          type: string
+          enum:
+          - SUCCESS
+          - FAILURE
+          example: SUCCESS
+        mailbox:
+          type: string
+        message:
+          type: string
+    CsvResponse422:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          example: 81A365A9B3AF4EEFA4E7CE154ABFE209
+        message:
+          type: object
+          additionalProperties:
+            type: object
+          example:
+            detail:
+            - loc:
+              - row
+              - 2
+              msg: Invalid Data
+              type: ZZZZZ
+        transactionStatus:
+          type: string
+          example: FAILURE
+    CsvResponse503:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          example: 81A365A9B3AF4EEFA4E7CE154ABFE209
+        message:
+          type: object
+          additionalProperties:
+            type: object
+          example: Unexpected internal exception occurred. Please report to IVANS support
+        transactionStatus:
+          type: string
+          example: FAILURE
+    CommissionDownloadRequest:
+      type: object
+      properties:
+        statement:
+          $ref: '#/components/schemas/StatementType'
+        companyidentification:
+          $ref: '#/components/schemas/Companyidentification'
+        carrierId:
+          type: string
+    Era:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    TransactionType:
+      type: object
+      properties:
+        producer:
+          $ref: '#/components/schemas/ProducerType'
+          readOnly: true
+        name:
+          $ref: '#/components/schemas/PersonalnameType'
+        secondaryname:
+          $ref: '#/components/schemas/PersonalnameType'
+          readOnly: true
+        policynum:
+          type: string
+        subpolicynum:
+          type: string
+          readOnly: true
+        lineofbusiness:
+          type: string
+          enum:
+          - ACCT
+          - AGENT
+          - AGLIA
+          - AGPP
+          - AGPR
+          - APKGE
+          - ARCH
+          - AUTOB
+          - AUTOP
+          - BANDM
+          - BOAT
+          - BOP
+          - BOPGL
+          - BOPPR
+          - CFIRE
+          - CGL
+          - CPKGE
+          - CRIM
+          - CUMBR
+          - CYBER
+          - DFIRE
+          - DNTL
+          - DO
+          - EL
+          - EO
+          - EPLI
+          - EQ
+          - EQLIA
+          - EXLIA
+          - FIDUC
+          - FLOOD
+          - GARAG
+          - HLTH
+          - HOME
+          - INMRC
+          - INMRP
+          - KIDRA
+          - LAW
+          - LIFE
+          - LL
+          - LMORT
+          - MEDIA
+          - MHOME
+          - MMAL
+          - MPL
+          - MTRCR
+          - MTRTK
+          - OCMRC
+          - PHYS
+          - PL
+          - PLMSC
+          - PPKGE
+          - PPL
+          - PROP
+          - PRSL
+          - PUMBR
+          - RECV
+          - RRPRL
+          - SFRNC
+          - SMP
+          - SURE
+          - WIND
+          - WORK
+          - WORKV
+          - YACHT
+        sublineofbusiness:
+          type: string
+          enum:
+          - ACCT
+          - ARCH
+          - ARP
+          readOnly: true
+        companycode:
+          type: string
+        transactioneffectivedt:
+          format: yyyy-MM-dd
+          $ref: '#/components/schemas/LocalDate'
+          example: '2025-01-01'
+        transactiontypecd:
+          type: string
+          enum:
+          - ADJ
+          - OTH
+          - PCH
+          - NBS
+          - RWL
+          - XLC
+          - XLN
+          - TAX
+          - FEE
+          - STL
+          - REI
+          - UNC
+          - PAD
+          - REW
+          - SCH
+        commissiontypecd:
+          type: string
+          enum:
+          - Commission Item
+          - Adjustment Item
+        policyeffectivedt:
+          format: yyyy-MM-dd
+          $ref: '#/components/schemas/LocalDate'
+          example: '2025-01-01'
+        policyexpirationdt:
+          format: yyyy-MM-dd
+          $ref: '#/components/schemas/LocalDate'
+          example: '2025-01-01'
+        secondarypolicydt:
+          $ref: '#/components/schemas/LocalDate'
+          readOnly: true
+        policygrossamt:
+          type: number
+        commissionrate:
+          type: number
+        commissionamt:
+          type: number
+        adjustmentamt:
+          type: number
+          readOnly: true
+        companyproductcd:
+          type: string
+        producerleveltransactionind:
+          type: boolean
+          readOnly: true
+        agencyinsuredid:
+          type: string
+        installmentnum:
+          type: integer
+          format: int32
+        payplan:
+          type: string
+        billingaccountnum:
+          type: string
+        policyversion:
+          type: string
+        mgacode:
+          type: string
+        npn:
+          type: string
+    CsvResponseJson:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          example: 99A365A9B3AF4EEFA4E7CE154ABFE209
+        message:
+          type: object
+          additionalProperties:
+            type: object
+          example:
+            errors:
+            - row: 166
+              column: LineOfBusinessCode
+              input: HOSP
+              msg: Input should be 'ACCT', 'ACHE', 'AGENT', 'AGLIA', 'AGPP', 'AGPR', 'AIRC', 'APFBO', 'APKGE', 'APROD', 'ARCH', 'ART', 'AUTOB', 'AUTOP', 'AVPKG', 'BANDM', 'BMISC', 'BOAT', 'BOP', 'BOPGL', 'BOPPR', 'CAVN', 'CFIRE', 'CFRM', 'CGL', 'CNTGC', 'CPKGE', 'CPMP', 'CRIM', 'CUMBR', 'CYBER', 'DFIRE', 'DISAB', 'DNTL', 'DO', 'ELIAB', 'EMGLI', 'EO', 'EPLI', 'EQ', 'EQLIA', 'EXLIA', 'FIDTY', 'FIDUC', 'FIIBO', 'FLOOD', 'GARAG', 'HLTH', 'HOME', 'INMRC', 'INMRP', 'INTER', 'JUDCL', 'KIDRA', 'LAW', 'LGLEX', 'LICPT', 'LIFE', 'LL', 'LMORT', 'LSTIN', 'LVSTK', 'MEDIA', 'MGMLI', 'MHOME', 'MMAL', 'MOTO', 'MPL', 'MTRCR', 'NWFGR', 'OCMRC', 'OLIB', 'PHYS', 'PL', 'PLMSC', 'PPKGE', 'PPL', 'PROP', 'PRSL', 'PUBOF', 'PUMBR', 'RECV', 'RRPRL', 'SCAP', 'SFRNC', 'SMP', 'SURE', 'TRKRS', 'TRVL', 'WCMA', 'WIND', 'WORK', 'WORKP', 'WORKV', 'XWARR' or 'YACHT'
+        transactionStatus:
+          type: string
+          example: FAILURE
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/getdocumentmetainfo
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

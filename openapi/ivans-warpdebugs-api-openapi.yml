@@ -1,0 +1,56 @@
+openapi: 3.2.0
+info:
+  title: IVANS Exchange API Docs Warp Debugs API
+  version: v1
+tags:
+- name: WarpDebugs
+paths:
+  /api/WarpDebugs/FromID/{clientID}/SessionID/{sessionID}:
+    get:
+      tags:
+      - WarpDebugs
+      summary: Retrieves debug files for a given client
+      description: Get a Warp Debugs by Client ID
+      operationId: GetWarpDebugList
+      parameters:
+      - name: clientID
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+      - name: sessionID
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Indicates successful operation
+        '400':
+          description: Error if request could not be completed with given input
+        '401':
+          description: Error if user does not have access to this resource
+        '404':
+          description: Error if requested resource was not found
+      security:
+      - Bearer: []
+components:
+  securitySchemes:
+    Bearer:
+      type: http
+      description: JWT
+      scheme: Bearer
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/get_api-agencies-1
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

@@ -1,0 +1,2 @@
+# x-archived-from: ivans-authorization-openapi.json
+# x-archived-on: 2026-10-17

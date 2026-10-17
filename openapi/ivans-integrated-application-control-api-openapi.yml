@@ -1,0 +1,416 @@
+openapi: 3.2.0
+info:
+  title: Identification Network Integrated Application Control API
+  version: 1.0.0
+  description: IVANS Identification Network API
+servers:
+- url: https://distribution-staging.ivansinsurance.com
+tags:
+- name: integrated-application-control
+paths:
+  /api/v1/integrated-application-control/available-risk-profiles/:
+    get:
+      operationId: integrated_application_control_available_risk_profiles_retrieve
+      description: Returns Risk Profiles that are available to the service-level User's Integrated Application Group
+      tags:
+      - integrated-application-control
+      security:
+      - oauth2:
+        - read
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RiskProfileReadOnly'
+          description: ''
+      summary: Integrated application control available risk profiles retrieve
+      x-summary-source: derived
+  /api/v1/integrated-application-control/get-idm-data/:
+    get:
+      operationId: integrated_application_control_get_idm_data_retrieve
+      description: Returns a service level user's current and available IDM versions for their integrated application
+      tags:
+      - integrated-application-control
+      security:
+      - oauth2:
+        - read
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IDMVersion'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                InvalidIDMVersion:
+                  value:
+                    detail:
+                    - 'Invalid IDM Version: 4.5'
+                  summary: Invalid IDM Version
+                UserMustBeServiceLevelForLoggedInIntegratedApplication:
+                  value:
+                    detail:
+                    - User must be service level for logged in integrated application.
+                  summary: User must be service level for logged in integrated application
+          description: Invalid IDM Version
+      summary: Integrated application control get idm data retrieve
+      x-summary-source: derived
+  /api/v1/integrated-application-control/risk-profiles/group/:
+    get:
+      operationId: integrated_application_control_risk_profiles_group_retrieve
+      description: Returns Integrated Applications and their assigned Risk Profiles for each Integrated Application related to the service-level User's Integrated Application Group
+      tags:
+      - integrated-application-control
+      security:
+      - oauth2:
+        - read
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntegratedApplicationWithRiskProfiles'
+          description: ''
+      summary: Integrated application control risk profiles group retrieve
+      x-summary-source: derived
+  /api/v1/integrated-application-control/risk-profiles/:
+    patch:
+      operationId: integrated_application_control_risk_profiles_partial_update
+      description: Service-level User can modify the Risk Profiles that are assigned to their Integrated Application
+      tags:
+      - integrated-application-control
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedIntegratedApplicationRiskProfileRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedIntegratedApplicationRiskProfileRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedIntegratedApplicationRiskProfileRequest'
+      security:
+      - oauth2:
+        - write
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RiskProfileReadOnly'
+          description: ''
+      summary: Integrated application control risk profiles partial update
+      x-summary-source: derived
+    get:
+      operationId: integrated_application_control_risk_profiles_retrieve
+      description: Returns Risk Profiles that have been assigned to the service-level User's Integrated Application
+      tags:
+      - integrated-application-control
+      security:
+      - oauth2:
+        - read
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RiskProfileReadOnly'
+          description: ''
+      summary: Integrated application control risk profiles retrieve
+      x-summary-source: derived
+  /api/v1/integrated-application-control/update-idm-data/:
+    patch:
+      operationId: integrated_application_control_update_idm_data_partial_update
+      description: Allows service level user to update IDM version for their integrated application
+      tags:
+      - integrated-application-control
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedIDMVersionRequestRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedIDMVersionRequestRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedIDMVersionRequestRequest'
+      security:
+      - oauth2:
+        - write
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IDMVersion'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                InvalidIDMVersion:
+                  value:
+                    detail:
+                    - 'Invalid IDM Version: 4.5'
+                  summary: Invalid IDM Version
+                UserMustBeServiceLevelForLoggedInIntegratedApplication:
+                  value:
+                    detail:
+                    - User must be service level for logged in integrated application.
+                  summary: User must be service level for logged in integrated application
+          description: Invalid IDM Version
+      summary: Integrated application control update idm data partial update
+      x-summary-source: derived
+components:
+  schemas:
+    LineOfBusiness:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 128
+        code:
+          type: string
+          maxLength: 32
+      required:
+      - code
+      - name
+      - uuid
+    CarrierTierEnum:
+      enum:
+      - PROD
+      - UAT
+      - DEV
+      type: string
+    ProductReadOnly:
+      type: object
+      description: 'Serializes subset of read-only fields for Product.
+
+
+        ViewSet: RiskProfileViewSet
+
+
+        Endpoint: GET /risk-profiles/'
+      properties:
+        market:
+          $ref: '#/components/schemas/MarketSimple'
+        lineOfBusiness:
+          $ref: '#/components/schemas/LineOfBusiness'
+      required:
+      - lineOfBusiness
+      - market
+    RiskProfileReadOnly:
+      type: object
+      description: 'Serializes read-only fields for risk profiles.
+
+
+        ViewSet: RiskProfileViewSet
+
+
+        Endpoint: GET /risk-profiles/'
+      properties:
+        name:
+          type: string
+          readOnly: true
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        type:
+          allOf:
+          - $ref: '#/components/schemas/TypeEnum'
+          readOnly: true
+          description: Type of risk profile. Base represents a base question set with a line of business. Monoline represents a carrier question set with a product and route configuration. Package represents a carrier question set with a product, route configuration, and related risk profile children. Bundle represents a carrier question set with a market and related risk profile children.
+        version:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+          description: Version number for a risk profile. A newly created risk profile's version is null, and will be set automatically when the risk profile is locked. The version number starts at 1 and increments by 1 based on existing risk profiles with matching market, line of business, product, route, and children.
+        isAvailable:
+          type: boolean
+          readOnly: true
+          description: Indicates whether the risk profile has no issues after testing and is available to quote from. Set this via admin action on the list page (subject to permission).
+        isLatest:
+          type: boolean
+          readOnly: true
+          description: Indicates whether this risk profile is the latest version. For bookkeeping purposes only - not used for business logic.Set this via admin action on the list page (subject to permission).
+        lineOfBusiness:
+          $ref: '#/components/schemas/LineOfBusiness'
+        product:
+          $ref: '#/components/schemas/ProductReadOnly'
+        routeConfiguration:
+          $ref: '#/components/schemas/RouteConfigurationReadOnly'
+      required:
+      - description
+      - isAvailable
+      - isLatest
+      - lineOfBusiness
+      - name
+      - product
+      - routeConfiguration
+      - type
+      - uuid
+      - version
+    PatchedIDMVersionRequestRequest:
+      type: object
+      properties:
+        idmVersion:
+          type: string
+          minLength: 1
+    RouteConfigurationReadOnly:
+      type: object
+      description: 'Serializes subset of read-only fields for RouteConfiguration.
+
+
+        ViewSet: RiskProfileViewSet
+
+
+        Endpoint: GET /risk-profiles/'
+      properties:
+        description:
+          type: string
+          readOnly: true
+        routeType:
+          type: string
+      required:
+      - description
+      - routeType
+    IDMVersion:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 128
+        idmVersion:
+          allOf:
+          - $ref: '#/components/schemas/IdmVersionEnum'
+          description: The Ivans Data Model version used by the application.
+        availableIdmVersions:
+          type: array
+          items: {}
+          readOnly: true
+      required:
+      - availableIdmVersions
+      - name
+    PatchedIntegratedApplicationRiskProfileRequest:
+      type: object
+      properties:
+        riskProfiles:
+          type: array
+          items:
+            type: string
+            format: uuid
+    TypeEnum:
+      enum:
+      - Base
+      - Monoline
+      - Package
+      - Bundle
+      type: string
+    MarketSimple:
+      type: object
+      description: 'Serializes subset of read-only fields for Market.
+
+
+        ViewSet: RiskProfileViewSet
+
+
+        Endpoint: GET /risk-profiles/'
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+      required:
+      - name
+      - uuid
+    IdmVersionEnum:
+      enum:
+      - '1.0'
+      - '2.0'
+      type: string
+    IntegratedApplicationWithRiskProfiles:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        companyName:
+          type: string
+          maxLength: 128
+        name:
+          type: string
+          maxLength: 128
+        carrierTier:
+          $ref: '#/components/schemas/CarrierTierEnum'
+        idmVersion:
+          allOf:
+          - $ref: '#/components/schemas/IdmVersionEnum'
+          description: The Ivans Data Model version used by the application.
+        riskProfiles:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+          readOnly: true
+      required:
+      - name
+      - riskProfiles
+      - uuid
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    oauth2:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: /api/v1/token/
+          refreshUrl: /api/v1/token/
+          scopes:
+            read: Read scope
+            write: Write scope
+            epic: Epic User
+            third-party: Third Party User
+    basicAuth:
+      type: http
+      scheme: basic
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/agencies_list
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

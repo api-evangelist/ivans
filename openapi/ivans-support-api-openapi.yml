@@ -1,0 +1,566 @@
+openapi: 3.2.0
+info:
+  title: Ivans Distribution Platform Support API
+  description: APIs for serving carrier forms, appetite, and validation
+  version: 0.1.0
+tags:
+- name: Support
+paths:
+  /api/v1/json-schema-to-api:
+    post:
+      tags:
+      - Support
+      summary: Convert Json Schema To Api Format
+      description: Convert JSON Schema format to API format.
+      operationId: convert_json_schema_to_api_format_api_v1_json_schema_to_api_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties: true
+              type: object
+              title: Json Schema
+            example:
+              appetite.classification_primary_state.classification|f23c0847-1fce-4627-8744-b69bfdfa7b47: '722513'
+              applicant_information.business_name.businessorganization_name_exact_name_needed|109cad7a-5667-4cf5-bd97-393a331121f4: Downtown Yoga Studio LLC
+              risk_information.location|37877f81-0239-487e-93d0-2cc0f97a2c33:
+              - location|5637ffd5-2c09-4097-803a-5f3961525f2f: 1
+                address|fd44fe00-86f7-46c9-be8b-4a3e2433aa09: 456 Broadway
+                address_2|5696fcee-7aee-4c81-b423-1ef6c8d80b79: 2nd Floor
+                city|ca0ebfdc-acb5-467f-a804-51f971102d2f: San Francisco
+                state|5de49646-a1e6-4aee-91c5-9e2f4190f562: CA
+                zip_code|d4a96bc6-9521-4376-9275-7eafd98cecef: '94133'
+                building|53b9b5f5-debe-4cb9-8c72-287136f7ba6c:
+                - building|48d15f9c-09c0-4f67-9eec-d5a5d8f89ee0: 1
+                  occupancy_type|bb9afe1b-a2d1-4112-a2ac-1951ce681061: Tenant
+                  type_of_coverage|314bce56-b29f-429b-b4f6-f01da6184fa5: Contents
+                  building_limit_of_insurance|352175b3-9955-48af-818c-812c4d43cb28: 0
+                  business_personal_property_limit|8657a469-5f23-408b-bcf8-e1624b162eee: 75000
+                  property_deductible|71498bd5-5c5b-4ee9-8830-25ec54819cc9: 2500
+                  property_deductible|ed1cf795-a9c0-4d9b-9bc6-7c91d2ef37b0: 2500
+                  building_type|58e21f7a-f5ac-484a-8061-4d9159f9878d: Building
+                  total_estimated_payroll_at_this_building|131434a6-e3f4-434c-9864-7ef5e11b4c28: 85000
+                  sprinklered|3a1b45af-4a96-47e1-a391-2c88a75d55f7: 100
+              ? policy_wide.coverages_liability.bodily_injury_and_property_damage_occurrenceaggregate_limit|8a153f02-2ee7-44e9-893d-ccf1d93d1331
+              : 500000
+              applicant_information.contact_information.business_phone|bb57a491-c9e4-41c2-b80a-606ba0c148de: (415) 555-7890
+              applicant_information.contact_information.contact_first_name|c08ff178-b35b-4c00-8709-9f6d2010cf67: Sarah
+              applicant_information.contact_information.contact_last_name|90278ac6-ee85-43dd-828b-489e46e47877: Johnson
+              applicant_information.contact_information.contact_email|4d7a01cc-8bce-470a-aef4-e3cce472b1ab: sarah@downtownyoga.com
+              appetite.eligibility_exposure.number_of_locations|800c6507-cbcb-45da-8339-d4a0d14da02f: 1
+              appetite.eligibility_exposure.total_revenue|134abdcd-011f-408c-8ea5-464fa8ae7e44: 325000
+              appetite.eligibility_exposure.number_of_employees|d5f471a5-d93f-41e2-ad9e-9b3c8b015617: 4
+              appetite.eligibility_exposure.number_of_claims|e0c0b4cb-48a2-4f1e-bc75-20b6f4d81589: 2
+              appetite.eligibility_exposure.any_single_claim_over_15000|57d1c3fe-4fe6-4778-b07b-57b9587d5fff: 'No'
+              appetite.eligibility_exposure.building_limit|7c93426f-33cb-4761-bada-7b5ea0eeb1bf: 0
+              appetite.eligibility_exposure.business_personal_property_limit|d4794e2f-c883-4ab4-9dab-097968fe1bba: 75000
+              applicant_information.mailing_address.address|5b407486-d1f3-4865-9964-537078b95aeb: 456 Broadway
+              applicant_information.mailing_address.address_2|a54f3a65-c9b4-4061-8b57-cd70e01b2666: 2nd Floor
+              applicant_information.mailing_address.city|db21be90-089f-475a-a695-1697276d4e8b: San Francisco
+              applicant_information.mailing_address.state|7265d179-e93b-4228-a9a0-a0b2585952a4: CA
+              applicant_information.mailing_address.zip_code|d7162434-bd88-4a5a-977c-330c25ded626: '94133'
+              applicant_information.primary_location_address.address|aa2deead-993d-4bae-b7eb-4680db303499: 456 Broadway
+              applicant_information.primary_location_address.address_2|36405fd6-c44b-45d6-8eb1-aa07b73282ff: 2nd Floor
+              applicant_information.primary_location_address.city|30049514-c52d-4ac4-beab-217c633f4f93: San Francisco
+              applicant_information.primary_location_address.state|97c25b3d-1390-4905-9536-c95cf0bd13fc: CA
+              applicant_information.primary_location_address.zip_code|530f8d6a-9eff-449d-9ef4-1f356c2ce9b2: '94133'
+              ? applicant_information.primary_location_address.is_the_mailing_address_the_same_as_the_primary_location|f7b5489c-c270-462f-80d9-8dc3f7c8a3fb
+              : true
+              applicant_information.losses|afa690cb-4974-498a-ac26-23f6feb83dd9:
+              - line_of_business|662bcf15-0559-460a-8cf5-dbd92649b042: BOP
+                date_of_loss|7f5cf92f-3b6e-4f26-9bf2-d7c703128b6e: '2024-03-15'
+                description_of_loss|bb4d3408-0d4f-4eed-a86b-bc1ac4e42c88: Slip and fall injury in studio lobby
+                loss_amount_paid|37fa3e93-4900-47f9-b496-c9460e0dcb5e: 8500
+              - line_of_business|662bcf15-0559-460a-8cf5-dbd92649b042: BOP
+                date_of_loss|7f5cf92f-3b6e-4f26-9bf2-d7c703128b6e: '2023-11-20'
+                description_of_loss|bb4d3408-0d4f-4eed-a86b-bc1ac4e42c88: Water damage from ceiling leak
+                loss_amount_paid|37fa3e93-4900-47f9-b496-c9460e0dcb5e: 12000
+              ? applicant_information.loss_history.does_the_insured_have_losses_to_report_for_the_last_three_years|056984c5-d8d3-44b7-98a4-ef9be0bd611e
+              : true
+              applicant_information.business_information.date_business_started|71eaada5-e2cf-4a7b-a2ff-969dff93789b: '2019-09-01'
+              agency_information.agency_information.producer_contact_email|3f7f3fd6-a2e4-41dd-b3b4-7e91a5f5bf7f: producer@bayareainsurance.com
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /api/v1/risk-profiles/passport:
+    get:
+      tags:
+      - Support
+      summary: Get Passport Risk Profiles
+      description: Fetch all Passport Risk Profiles.
+      operationId: get_passport_risk_profiles_api_v1_risk_profiles_passport_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/PassportRiskProfile'
+                type: array
+                title: Response Get Passport Risk Profiles Api V1 Risk Profiles Passport Get
+      security:
+      - HTTPBearer: []
+  /api/v1/risk-profiles/diff:
+    get:
+      tags:
+      - Support
+      summary: Get Risk Profile Diff
+      operationId: get_risk_profile_diff_api_v1_risk_profiles_diff_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: sourceRiskProfile
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Sourceriskprofile
+      - name: targetRiskProfile
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Targetriskprofile
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RiskProfileDiff'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/risk-profiles/{risk_profile_uuid}/json-schema:
+    get:
+      tags:
+      - Support
+      summary: Get Risk Profile Json Schema
+      description: Fetch the JSON schema for a specific risk profile.
+      operationId: get_risk_profile_json_schema_api_v1_risk_profiles__risk_profile_uuid__json_schema_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: risk_profile_uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Risk Profile Uuid
+      - name: templateIds
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          title: Templateids
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/risk-profiles/lineage:
+    post:
+      tags:
+      - Support
+      summary: Get Risk Profile Lineage
+      operationId: get_risk_profile_lineage_api_v1_risk_profiles_lineage_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Body_get_risk_profile_lineage_api_v1_risk_profiles_lineage_post'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+              examples:
+                Successful Response:
+                  value:
+                    b5ef001c-e9d4-4385-8416-16273ce5fd5e:
+                    - 575b06bf-5c8e-4297-bdcd-b488fe3c2a87
+                    - 4a19e95d-70fd-4019-bea8-45f09cd1f2a6
+                    - 2f0ec796-3d2c-48a6-93b2-2af8cc3dc8dd
+                    c786fe01-88fd-49bb-b096-c53c0f223d38: []
+                    1c4a6c00-e3c7-436a-a1b2-a4a6f96cff01:
+                    - 4d1fe374-891c-413c-bd53-9f3d4b18341c
+                    - 1c4a6c00-e3c7-436a-a1b2-a4a6f96cff01
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+components:
+  schemas:
+    RiskProfileDiff:
+      properties:
+        fieldsAdded:
+          items:
+            $ref: '#/components/schemas/SerializedRPA'
+          type: array
+          title: Fieldsadded
+          default: []
+        fieldsRemoved:
+          items:
+            $ref: '#/components/schemas/SerializedRPA'
+          type: array
+          title: Fieldsremoved
+          default: []
+        repeatableGroupsAdded:
+          items:
+            $ref: '#/components/schemas/RiskProfileRepeatableFormGroup'
+          type: array
+          title: Repeatablegroupsadded
+          default: []
+        repeatableGroupsRemoved:
+          items:
+            $ref: '#/components/schemas/RiskProfileRepeatableFormGroup'
+          type: array
+          title: Repeatablegroupsremoved
+          default: []
+      type: object
+      title: RiskProfileDiff
+    AdditionalDetails:
+      properties:
+        heading:
+          type: string
+          title: Heading
+        children:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/AdditionalDetails'
+            - $ref: '#/components/schemas/ListItem'
+          type: array
+          title: Children
+      type: object
+      required:
+      - heading
+      - children
+      title: AdditionalDetails
+    ListItem:
+      properties:
+        listItem:
+          type: string
+          title: Listitem
+      type: object
+      required:
+      - listItem
+      title: ListItem
+    PassportRiskProfile:
+      properties:
+        uuid:
+          type: string
+          title: Uuid
+        name:
+          type: string
+          title: Name
+        rpas:
+          items:
+            $ref: '#/components/schemas/PassportRPA'
+          type: array
+          title: Rpas
+      type: object
+      required:
+      - uuid
+      - name
+      - rpas
+      title: PassportRiskProfile
+      description: A simplified version of RiskProfile used for Passport
+    Body_get_risk_profile_lineage_api_v1_risk_profiles_lineage_post:
+      properties:
+        risk_profile_uuids:
+          items:
+            type: string
+          type: array
+          title: Risk Profile Uuids
+          examples:
+          - - 7f13057a-293d-49e3-9548-d51fe40bd5fd
+      type: object
+      required:
+      - risk_profile_uuids
+      title: Body_get_risk_profile_lineage_api_v1_risk_profiles_lineage_post
+    RequirementLevel:
+      type: integer
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      title: RequirementLevel
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PassportRPA:
+      properties:
+        required:
+          type: boolean
+          title: Required
+        name:
+          type: string
+          title: Name
+        options:
+          items: {}
+          type: array
+          title: Options
+        data_type:
+          type: string
+      type: object
+      required:
+      - required
+      - name
+      - options
+      - data_type
+      title: PassportRPA
+      description: A simplified version of RPA used for Passport
+    SerializedRPA:
+      properties:
+        guid:
+          type: string
+          title: Guid
+        group:
+          type: string
+          title: Group
+        label:
+          type: string
+          title: Label
+        description:
+          type: string
+          title: Description
+        additionalDetails:
+          anyOf:
+          - $ref: '#/components/schemas/AdditionalDetails'
+          - items:
+              $ref: '#/components/schemas/AdditionalDetails'
+            type: array
+          - type: 'null'
+          title: Additionaldetails
+        order:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Order
+        type:
+          type: string
+        dataClass:
+          type: string
+        options:
+          items:
+            $ref: '#/components/schemas/ValueListOption'
+          type: array
+          title: Options
+        underwritingCategory:
+          $ref: '#/components/schemas/UnderwritingCategory'
+        isAppetiteCategory:
+          type: boolean
+          title: Isappetitecategory
+        isEnhancedAppetiteCategory:
+          type: boolean
+          title: Isenhancedappetitecategory
+        isBind:
+          type: boolean
+          title: Isbind
+        isRefer:
+          type: boolean
+          title: Isrefer
+        conditions:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+        actionConditions:
+          title: Actionconditions
+        market:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Market
+        classificationStandardGuid:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Classificationstandardguid
+        classCodeFilterFieldsGuids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Classcodefilterfieldsguids
+        unique:
+          type: boolean
+          title: Unique
+        uniqueToParent:
+          type: boolean
+          title: Uniquetoparent
+        parentAttributeGuid:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parentattributeguid
+        minimum:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Minimum
+        maximum:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Maximum
+        prefillSourceFieldGuid:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prefillsourcefieldguid
+        isSuggestable:
+          type: boolean
+          title: Issuggestable
+        length:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Length
+      type: object
+      required:
+      - guid
+      - group
+      - label
+      - description
+      - additionalDetails
+      - order
+      - type
+      - dataClass
+      - options
+      - underwritingCategory
+      - isAppetiteCategory
+      - isEnhancedAppetiteCategory
+      - isBind
+      - isRefer
+      - market
+      - unique
+      - uniqueToParent
+      - minimum
+      - maximum
+      - isSuggestable
+      - length
+      title: SerializedRPA
+    UnderwritingCategory:
+      type: integer
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      title: UnderwritingCategory
+    RiskProfileRepeatableFormGroup:
+      properties:
+        uuid:
+          type: string
+          title: Uuid
+        description:
+          type: string
+          title: Description
+        requirementLevel:
+          $ref: '#/components/schemas/RequirementLevel'
+        conditions:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+      type: object
+      required:
+      - uuid
+      - description
+      - requirementLevel
+      - conditions
+      title: RiskProfileRepeatableFormGroup
+    ValueListOption:
+      properties:
+        label:
+          type: string
+          title: Label
+        value:
+          anyOf:
+          - type: integer
+          - type: string
+          title: Value
+      type: object
+      required:
+      - label
+      - value
+      title: ValueListOption
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/get_basic_appetite_api_v1_forms_basic_appetite_get
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

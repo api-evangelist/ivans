@@ -1,0 +1,459 @@
+openapi: 3.2.0
+info:
+  title: Ivans Distribution Platform Classic Flow API
+  description: APIs for serving carrier forms, appetite, and validation
+  version: 0.1.0
+tags:
+- name: Classic Flow
+paths:
+  /api/v1/forms/basic-appetite:
+    get:
+      tags:
+      - Classic Flow
+      summary: Get Basic Appetite
+      description: 'Returns form with basic appetite and available Risk Profiles.
+
+
+        Starting endpoint for IDP appetite flow.'
+      operationId: get_basic_appetite_api_v1_forms_basic_appetite_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: lobs
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+          title: Lobs
+      - name: markets
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+          title: Markets
+      - name: nested
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: true
+          title: Nested
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+              examples:
+                Nested Response:
+                  value:
+                    pages:
+                    - guid: string
+                      label: string
+                      description: string
+                      order: 2147483647
+                      groups:
+                      - guid: string
+                        page: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        label: string
+                        description: string
+                        isRepeatable: true
+                        repeatMinMax: ''
+                        order: 2147483647
+                        type: normal
+                        columns:
+                        - guid: string
+                        parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        parentLabel: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        parentColumns:
+                          guid: string
+                        fields:
+                          guid: string
+                          group: string
+                          label: string
+                          description: string
+                          additionalDetails:
+                            heading: string
+                            children:
+                            - heading: string
+                              children:
+                              - listItem: string
+                          order: 0
+                          type: string
+                          dataClass: string
+                          options:
+                            label: string
+                            value: 0
+                          underwritingCategory: string
+                          isAppetiteCategory: true
+                          isEnhancedAppetiteCategory: true
+                          isBind: true
+                          isRefer: true
+                          conditions:
+                            operator: and
+                            action: referral
+                            conditions:
+                            - operator: ==
+                              value: string
+                              attribute: string
+                              repeatingOperator: ANY
+                              sourceGroup: string
+                          actionConditions:
+                            operator: and
+                            action: referral
+                            conditions:
+                            - operator: ==
+                              value: string
+                              attribute: string
+                              repeatingOperator: ANY
+                              sourceGroup: string
+                          market: string
+                          classificationStandardGuid: string
+                          classCodeFilterFieldsGuids:
+                          - string
+                          unique: true
+                          uniqueToParent: true
+                          parentAttributeGuid: string
+                          prefillSourceFieldGuid: string
+                          minimum: 0
+                          maximum: 0
+                          isSuggestable: true
+                          length: 0
+                    marketFields:
+                    - market: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      riskProfiles:
+                      - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      fields:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        requirementLevel: string
+                      repeatableGroups:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        description: string
+                        requirementLevel: string
+                        risk_profile: 6434827e-903d-4bdd-b213-d1b8bad56060
+                    riskProfiles:
+                    - uuid: 0a952028-b25f-47b9-a7be-23872666c7f3
+                      name: Test Risk Profile | BOP | Bindable Quote
+                      type: Package
+                      market: Test Market
+                      marketUuid: 20cd4728-f7d2-4c6b-aafb-ab21e3af043c
+                      excessAndSurplus: false
+                      lob: BOP
+                      childLobs:
+                      - CGL
+                      - PROP
+                      inAppetite: true
+                      bindAllowed: true
+                      bindAppetite: true
+                      referAllowed: false
+                      routeType: Quote
+                      requiredToSubmit:
+                        contractCode: false
+                        username: false
+                        password: false
+                      validationErrors: []
+                      evaluations: []
+                Non-Nested Response:
+                  value:
+                    pages:
+                    - guid: string
+                      label: string
+                      description: string
+                      order: 2147483647
+                    groups:
+                    - guid: string
+                      page: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      label: string
+                      description: string
+                      isRepeatable: true
+                      repeatMinMax: ''
+                      order: 2147483647
+                      type: normal
+                      columns:
+                      - guid: string
+                      parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      parentLabel: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      parentColumns:
+                        guid: string
+                    fields:
+                      guid: string
+                      group: string
+                      label: string
+                      description: string
+                      additionalDetails:
+                        heading: string
+                        children:
+                        - heading: string
+                          children:
+                          - listItem: string
+                      order: 0
+                      type: string
+                      dataClass: string
+                      options:
+                        label: string
+                        value: 0
+                      underwritingCategory: string
+                      isAppetiteCategory: true
+                      isEnhancedAppetiteCategory: true
+                      isBind: true
+                      isRefer: true
+                      conditions:
+                        operator: and
+                        action: referral
+                        conditions:
+                        - operator: ==
+                          value: string
+                          attribute: string
+                          repeatingOperator: ANY
+                          sourceGroup: string
+                      actionConditions:
+                        operator: and
+                        action: referral
+                        conditions:
+                        - operator: ==
+                          value: string
+                          attribute: string
+                          repeatingOperator: ANY
+                          sourceGroup: string
+                      market: string
+                      classificationStandardGuid: string
+                      classCodeFilterFieldsGuids:
+                      - string
+                      unique: true
+                      uniqueToParent: true
+                      parentAttributeGuid: string
+                      prefillSourceFieldGuid: string
+                      minimum: 0
+                      maximum: 0
+                      isSuggestable: true
+                      length: 0
+                    marketFields:
+                    - market: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      riskProfiles:
+                      - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      fields:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        requirementLevel: string
+                      repeatableGroups:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        description: string
+                        requirementLevel: string
+                        risk_profile: 6434827e-903d-4bdd-b213-d1b8bad56060
+                    riskProfiles:
+                    - uuid: 0a952028-b25f-47b9-a7be-23872666c7f3
+                      name: Test Risk Profile | BOP | Bindable Quote
+                      type: Package
+                      market: Test Market
+                      marketUuid: 20cd4728-f7d2-4c6b-aafb-ab21e3af043c
+                      excessAndSurplus: false
+                      lob: BOP
+                      childLobs:
+                      - CGL
+                      - PROP
+                      inAppetite: true
+                      bindAllowed: true
+                      bindAppetite: true
+                      referAllowed: false
+                      routeType: Quote
+                      requiredToSubmit:
+                        contractCode: false
+                        username: false
+                        password: false
+                      validationErrors: []
+                      evaluations: []
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/basic-appetite-capture:
+    post:
+      tags:
+      - Classic Flow
+      summary: Post Basic Appetite Capture
+      operationId: post_basic_appetite_capture_api_v1_basic_appetite_capture_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: nested
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: true
+          title: Nested
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassicQuotePayload'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/enhanced-appetite-capture:
+    post:
+      tags:
+      - Classic Flow
+      summary: Post Enhanced Appetite Capture
+      operationId: post_enhanced_appetite_capture_api_v1_enhanced_appetite_capture_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: nested
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: true
+          title: Nested
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassicQuotePayload'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ClassicQuotePayload:
+      properties:
+        fieldValues:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/FieldValue'
+            type: array
+          - type: 'null'
+          title: Fieldvalues
+        repeatableFieldBlocks:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/RepeatableFieldBlock'
+            type: array
+          - type: 'null'
+          title: Repeatablefieldblocks
+        lobs:
+          items:
+            type: string
+          type: array
+          title: Lobs
+        markets:
+          items:
+            type: string
+          type: array
+          title: Markets
+      type: object
+      required:
+      - lobs
+      - markets
+      title: ClassicQuotePayload
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    RepeatableFieldBlock:
+      properties:
+        id:
+          type: string
+          title: Id
+        fieldBlockId:
+          type: string
+          title: Fieldblockid
+        parentId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parentid
+        fieldValues:
+          items:
+            $ref: '#/components/schemas/FieldValue'
+          type: array
+          title: Fieldvalues
+      type: object
+      required:
+      - id
+      - fieldBlockId
+      - fieldValues
+      title: RepeatableFieldBlock
+      description: 'id: row id (i.e., building #2)
+
+        field_block_id: guid of the form group (IDNET repeatable group, i.e., building group)
+
+        parent_id: guid of specific parent field block (i.e., location #3)'
+    FieldValue:
+      properties:
+        questionId:
+          type: string
+          title: Questionid
+        value:
+          title: Value
+      type: object
+      required:
+      - questionId
+      - value
+      title: FieldValue
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/get_basic_appetite_api_v1_forms_basic_appetite_get
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

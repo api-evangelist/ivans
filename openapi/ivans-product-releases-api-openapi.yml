@@ -1,0 +1,111 @@
+openapi: 3.2.0
+info:
+  title: Identification Network Product Releases API
+  version: 1.0.0
+  description: IVANS Identification Network API
+servers:
+- url: https://distribution-staging.ivansinsurance.com
+tags:
+- name: product-releases
+paths:
+  /api/v1/product-releases/:
+    get:
+      operationId: product_releases_list
+      description: 'Returns MarketAppetite for market/lob combinations that are in appetite and in effect.
+
+
+        Filters out products whose effective date is not in the future.
+
+
+        Endpoint: /product-releases/
+
+
+        Actions:
+
+        detail (GET): returns market, displayName, lob, and effective date for eligible products'
+      parameters:
+      - in: query
+        name: effective_date
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: lob
+        schema:
+          type: string
+      - in: query
+        name: market
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - product-releases
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductRelease'
+          description: ''
+      summary: Product releases list
+      x-summary-source: derived
+components:
+  schemas:
+    ProductRelease:
+      type: object
+      description: 'Returns MarketAppetite for market/lob combinations that are in appetite and in effect.
+
+
+        Filters out products whose effective date is not in the future.
+
+
+        Endpoint: /product-releases/'
+      properties:
+        market:
+          type: string
+        displayName:
+          type: string
+          format: uri
+        lob:
+          type: string
+        effectiveDate:
+          type:
+          - string
+          - 'null'
+          format: date
+      required:
+      - displayName
+      - lob
+      - market
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    oauth2:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: /api/v1/token/
+          refreshUrl: /api/v1/token/
+          scopes:
+            read: Read scope
+            write: Write scope
+            epic: Epic User
+            third-party: Third Party User
+    basicAuth:
+      type: http
+      scheme: basic
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/agencies_list
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

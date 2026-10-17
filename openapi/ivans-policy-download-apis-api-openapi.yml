@@ -1,0 +1,131 @@
+openapi: 3.2.0
+info:
+  title: IVANS Translation API's Policy Download APIs API
+  description: These API's expose endpoints to manage Download Transactions.
+  license:
+    name: Copyright (C) 2023 IVANS Insurance, All rights reserved
+  version: '1.0'
+servers:
+- url: HTTPS://dev-cloud-dl.ivansinsurance.com
+  description: Server URL in UAT environment
+- url: HTTPS://cloud-dl.ivansinsurance.com
+  description: Server URL in Production environment
+tags:
+- name: Policy Download APIs
+paths:
+  /ivans/api/carrier/v3/translation:
+    post:
+      tags:
+      - Policy Download APIs
+      description: v3 translation operation
+      operationId: translationProcessor
+      parameters:
+      - name: projectName
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: transactionId
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: translationType
+        in: header
+        required: true
+        schema:
+          type: string
+          enum:
+          - Policy
+          - Edoc
+          - Claims
+          - DirectBill
+      - name: requestType
+        in: header
+        required: true
+        schema:
+          type: string
+          enum:
+          - XML
+          - JSON
+      - name: carrierId
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: agencyId
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: claimNumber
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: policyNumber
+        in: header
+        required: false
+        schema:
+          type: string
+      - name: returnTranslationData
+        in: header
+        required: false
+        schema:
+          type: boolean
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranslationPayload'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DownloadResponse'
+      summary: Translation processor
+      x-summary-source: derived
+components:
+  schemas:
+    DownloadResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          description: Unique id for this transaction
+        message:
+          type: string
+        data:
+          type: string
+        code:
+          type: string
+          enum:
+          - SUCCESS
+          - FAILURE
+          example: SUCCESS
+    TranslationPayload:
+      type: object
+      properties:
+        xmlPayload:
+          type: string
+          description: XML must be base64 encoded
+        jsonPayload:
+          type: object
+          additionalProperties:
+            type: object
+          properties:
+            empty:
+              type: boolean
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/getdocumentmetainfo
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

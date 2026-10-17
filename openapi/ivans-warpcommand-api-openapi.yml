@@ -1,0 +1,147 @@
+openapi: 3.2.0
+info:
+  title: IVANS Exchange API Docs Warp Command API
+  version: v1
+tags:
+- name: WarpCommand
+paths:
+  /api/WarpCommand/{id}:
+    get:
+      tags:
+      - WarpCommand
+      summary: Retrieves a Warp Command
+      description: Get a Warp Command
+      operationId: GetCommand
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Indicates successful operation
+        '400':
+          description: Error if request could not be completed with given input
+        '401':
+          description: Error if user does not have access to this resource
+        '404':
+          description: Error if requested resource was not found
+      security:
+      - Bearer: []
+    put:
+      tags:
+      - WarpCommand
+      summary: Updates a Warp Command
+      operationId: PutCommand
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/WarpExchCommand'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WarpExchCommand'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/WarpExchCommand'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/WarpExchCommand'
+      responses:
+        '201':
+          description: Indicates successful operation
+        '400':
+          description: Error if request could not be completed with given input
+        '401':
+          description: Error if user does not have access to this resource
+        '404':
+          description: Error if requested resource was not found
+      security:
+      - Bearer: []
+  /api/WarpCommand:
+    post:
+      tags:
+      - WarpCommand
+      summary: Adds new Warp Command
+      operationId: PostCommand
+      parameters:
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/WarpExchCommand'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WarpExchCommand'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/WarpExchCommand'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/WarpExchCommand'
+      responses:
+        '201':
+          description: Indicates successful operation
+        '400':
+          description: Error if request could not be completed with given input
+        '401':
+          description: Error if user does not have access to this resource
+        '404':
+          description: Error if requested resource was not found
+      security:
+      - Bearer: []
+components:
+  schemas:
+    WarpExchCommand:
+      required:
+      - commandID
+      - productID
+      - transactionType
+      type: object
+      properties:
+        commandID:
+          type: string
+        productID:
+          type: string
+        transactionType:
+          type: string
+        active:
+          type: integer
+          format: int32
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: JWT
+      scheme: Bearer
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/get_api-agencies-1
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

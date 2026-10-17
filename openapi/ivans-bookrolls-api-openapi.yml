@@ -1,0 +1,141 @@
+openapi: 3.2.0
+info:
+  title: IVANS Exchange API Docs Bookrolls API
+  version: v1
+tags:
+- name: Bookrolls
+paths:
+  /api/Bookrolls:
+    post:
+      tags:
+      - Bookrolls
+      summary: Create a bookroll request
+      operationId: CreateBookrollRequest
+      parameters:
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/BookrollRequestRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookrollRequestRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/BookrollRequestRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/BookrollRequestRequest'
+      responses:
+        '201':
+          description: Successful operation
+        '400':
+          description: The request is not formatted properly or contains an inactive non-Personal Package Line of Business.
+        '401':
+          description: User not authorized to view this resource.
+      security:
+      - Bearer: []
+components:
+  schemas:
+    BookrollRequestRequest:
+      required:
+      - agencyContactEmail
+      - agencyContactName
+      - agencyId
+      - bookrollType
+      - carrierContactEmail
+      - carrierContactName
+      - carrierId
+      - endDate
+      - linesOfBusiness
+      - naics
+      - name
+      - startDate
+      type: object
+      properties:
+        name:
+          minLength: 1
+          type: string
+        carrierId:
+          type: string
+          format: uuid
+        carrierContactName:
+          minLength: 1
+          type: string
+        carrierContactEmail:
+          minLength: 1
+          type: string
+        agencyId:
+          type: string
+          format: uuid
+        agencyContactName:
+          minLength: 1
+          type: string
+        agencyContactEmail:
+          minLength: 1
+          type: string
+        linesOfBusiness:
+          type: array
+          items:
+            type: string
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        naics:
+          type: array
+          items:
+            type: string
+        includePackagePolicies:
+          type:
+          - boolean
+          - 'null'
+        stateCodes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        transferCode:
+          type:
+          - string
+          - 'null'
+        agencyReferenceId:
+          type:
+          - string
+          - 'null'
+        agencyArchive:
+          type:
+          - boolean
+          - 'null'
+        carrierArchive:
+          type:
+          - boolean
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        bookrollType:
+          type: string
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: JWT
+      scheme: Bearer
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/get_api-agencies-1
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

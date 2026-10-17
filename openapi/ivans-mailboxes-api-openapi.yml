@@ -1,0 +1,314 @@
+openapi: 3.2.0
+info:
+  title: IVANS Exchange API Docs Mailboxes API
+  version: v1
+tags:
+- name: Mailboxes
+paths:
+  /api/Mailboxes/{id}/NotifyConfigs:
+    get:
+      tags:
+      - Mailboxes
+      summary: Retrieve notification configuration settings for a given mailbox
+      description: Get all notification configuration settings for a mailbox. {id} is in the format "account.mailboxId"
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ConsumerInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsumerInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ConsumerInfo'
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: User not authorized to view this resource.
+        '404':
+          description: The mailbox does not exist or does not have any configured consumers.
+      security:
+      - Bearer: []
+      operationId: getApiMailboxesByIdNotifyConfigs
+      x-operation-id-source: derived
+  /api/Mailboxes:
+    get:
+      tags:
+      - Mailboxes
+      summary: Retrieve a list of mailboxes.
+      parameters:
+      - name: accounts
+        in: query
+        description: 'Filter: Accounts that the user has access to.'
+        schema:
+          type: array
+          items:
+            type: string
+      - name: userIds
+        in: query
+        description: 'Filter: Mailbox UserIDs to filter by'
+        schema:
+          type: array
+          items:
+            type: string
+      - name: page
+        in: query
+        description: The page. Defaults to first page.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: pageSize
+        in: query
+        description: The page size. Default and minimum is 25
+        schema:
+          type: integer
+          format: int32
+          default: 25
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/MailboxSummaryPaginatedResultList'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MailboxSummaryPaginatedResultList'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/MailboxSummaryPaginatedResultList'
+        '400':
+          description: The request is not formatted properly.
+        '404':
+          description: One or more accounts could not be found or user is not authorized to view this resource.
+        '500':
+          description: Error retrieving the mailbox list.
+      security:
+      - Bearer: []
+      operationId: getApiMailboxes
+      x-operation-id-source: derived
+  /api/organizations/{organizationId}/Mailboxes:
+    get:
+      tags:
+      - Mailboxes
+      summary: Get Mailboxes list by OrganizationId"
+      parameters:
+      - name: organizationId
+        in: path
+        description: Organization Id.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: page
+        in: query
+        description: The page. Defaults to 1.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: pageSize
+        in: query
+        description: The page size. Defaults to 25.
+        schema:
+          type: integer
+          format: int32
+          default: 25
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/OrganizationMailbox'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationMailbox'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationMailbox'
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: User not authorized to view this resource.
+        '404':
+          description: The Organization does not exist.
+      security:
+      - Bearer: []
+      operationId: getApiOrganizationsByOrganizationIdMailboxes
+      x-operation-id-source: derived
+  /api/Mailboxes/{id}/ChangePassword:
+    post:
+      tags:
+      - Mailboxes
+      summary: Change the mailbox password
+      description: Change account mailbox password.
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/MailboxPassword'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MailboxPassword'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/MailboxPassword'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/MailboxPassword'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: Account not authorized to use this resource.
+        '404':
+          description: Mailbox could not be found.
+      security:
+      - Bearer: []
+      operationId: postApiMailboxesByIdChangePassword
+      x-operation-id-source: derived
+components:
+  schemas:
+    MailboxSummary:
+      required:
+      - account
+      - accountType
+      - userID
+      type: object
+      properties:
+        account:
+          type: string
+        userID:
+          type: string
+        accountType:
+          type: string
+        isBookrollMailbox:
+          type: boolean
+        canAddOrRemovePartnerships:
+          type: boolean
+      additionalProperties: false
+    OrganizationMailbox:
+      required:
+      - account
+      - userId
+      type: object
+      properties:
+        badLoginAttempts:
+          type: integer
+          format: int32
+        ibmMachineAddress:
+          type:
+          - string
+          - 'null'
+        migratedToMembership:
+          type: boolean
+        account:
+          type: string
+        userId:
+          type: string
+      additionalProperties: false
+    ConsumerInfo:
+      required:
+      - account
+      - endpoint
+      - headers
+      - userId
+      type: object
+      properties:
+        consumerInfoId:
+          type: integer
+          format: int32
+        account:
+          type: string
+        userId:
+          type: string
+        delay:
+          type: integer
+          format: int32
+        maxFileListSize:
+          type: integer
+          format: int32
+        consumerPackage:
+          type:
+          - string
+          - 'null'
+        endpoint:
+          type: string
+        headers:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+      additionalProperties: false
+    MailboxSummaryPaginatedResultList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MailboxSummary'
+        totalCount:
+          type: integer
+          format: int32
+      additionalProperties: false
+    MailboxPassword:
+      required:
+      - newPassword
+      type: object
+      properties:
+        newPassword:
+          minLength: 1
+          type: string
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: JWT
+      scheme: Bearer
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/get_api-agencies-1
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

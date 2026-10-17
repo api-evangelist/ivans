@@ -1,0 +1,112 @@
+openapi: 3.2.0
+info:
+  title: IVANS Translation API's Document Store API
+  description: These API's expose endpoints to manage Download Transactions.
+  license:
+    name: Copyright (C) 2023 IVANS Insurance, All rights reserved
+  version: '1.0'
+servers:
+- url: HTTPS://dev-cloud-dl.ivansinsurance.com
+  description: Server URL in UAT environment
+- url: HTTPS://cloud-dl.ivansinsurance.com
+  description: Server URL in Production environment
+tags:
+- name: Document Store API
+paths:
+  /ivans/api/document:
+    get:
+      tags:
+      - Document Store API
+      summary: Fetch document file meta information
+      operationId: getDocumentMetaInfo
+      parameters:
+      - name: carrierId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: documentId
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentMeta'
+    post:
+      tags:
+      - Document Store API
+      summary: Stores document/attachments files (max allowed size 100MB)
+      operationId: save
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: transactionId
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                document:
+                  type: string
+                  format: binary
+                meta:
+                  type: Map
+                  description: "File metadata example:\n\n```json\n{\n  \"documentName\": \"value1\",\n  \"description\": \"value2\",\n  \"policyNumber\": \"value3\",\n  \"agencyId\": \"value4\",\n  \"carrierId\": \"value5\"\n}\n```"
+              required:
+              - document
+              - meta
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SaveResponse'
+components:
+  schemas:
+    SaveResponse:
+      type: object
+      properties:
+        documentId:
+          type: string
+    DocumentMeta:
+      type: object
+      properties:
+        carrierId:
+          type: string
+        agencyId:
+          type: string
+        documentName:
+          type: string
+        documentDesc:
+          type: string
+        policyId:
+          type: string
+        mimeType:
+          type: string
+        documentType:
+          type: string
+        contentSize:
+          type: string
+        createdOn:
+          type: string
+        lastUpdated:
+          type: string
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/getdocumentmetainfo
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

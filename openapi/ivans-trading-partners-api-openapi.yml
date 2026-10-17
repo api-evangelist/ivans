@@ -1,0 +1,316 @@
+openapi: 3.2.0
+info:
+  title: Ivans Trading Partners API
+  version: '1.0'
+  description: 'Operations tagged Trading Partners across 2 of this provider''s published API definitions: ivans-exchange-v1-openapi.json, ivans-exchange-v2-openapi.json. Each path carries the servers of the definition it was published in.'
+tags:
+- name: Trading Partners
+paths:
+  /api/Partners/{id}:
+    delete:
+      tags:
+      - Trading Partners
+      summary: Removes a trading partnership
+      description: Delete a trading partnership.
+      operationId: DeletePartner
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Successful operation.
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: User not authorized to view this resource.
+        '404':
+          description: No trading partner set was found for the given id.
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - Trading Partners
+      summary: Retrieve the details of a given partnership
+      description: Retrieve a JSON object with the details of one of your trading partners with this id. Requires that the caller’s organization be configured in IVANS Exchange to support trading partner management.
+      operationId: GetPartner
+      parameters:
+      - name: id
+        in: path
+        description: The partner's API identifier.
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Partner'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Partner'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Partner'
+        '400':
+          description: The request is not formatted properly.  The id parameter may be invalid.
+        '401':
+          description: User not authorized to view this resource.
+        '404':
+          description: No trading partner was found for the given id.
+      security:
+      - Bearer: []
+  /api/Partners:
+    get:
+      tags:
+      - Trading Partners
+      summary: Retrieve a list of trading partners
+      description: Retrieve a list of trading partners. This is a JSON-formatted collection with each object containing an encoded identifier for a single trading partner. It will contain all members of all trading partner sets that the logged-in client is allowed to access in ECS. These identifiers are accepted by other actions available from /Partners endpoints.
+      operationId: GetPartners
+      parameters:
+      - name: leadRoute
+        in: query
+        description: The accessing user's leadRoute.
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Partner'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Partner'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Partner'
+        '204':
+          description: No partners were found for the given client.
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: User not authorized to view this resource.
+      security:
+      - Bearer: []
+    post:
+      tags:
+      - Trading Partners
+      summary: Create a trading partnership
+      description: Create a new Trading Partnership between two mailboxes.
+      operationId: PostPartner
+      parameters:
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: This trading partner relationship already exists.
+        '201':
+          description: Successful operation.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PartnerPostResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerPostResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/PartnerPostResponse'
+        '400':
+          description: The request is not formatted properly.  Some requested fields may be invalid.
+        '401':
+          description: User not authorized to view this resource.
+      security:
+      - Bearer: []
+  /api/v2/Partners:
+    get:
+      tags:
+      - Trading Partners
+      summary: Retrieve a list of trading partners.
+      parameters:
+      - name: leadAccounts
+        in: query
+        description: 'Filter: Accounts the user must have access to.'
+        schema:
+          type: array
+          items:
+            type: string
+      - name: leadUserIDs
+        in: query
+        description: 'Filter: Mailbox userids that belong to accounts the user has access to.'
+        schema:
+          type: array
+          items:
+            type: string
+      - name: followAccounts
+        in: query
+        description: 'Filter: Accounts on the other end of the partnerships.'
+        schema:
+          type: array
+          items:
+            type: string
+      - name: followUserIDs
+        in: query
+        description: 'Filter: Mailbox userids that belong to accounts the user has access to.'
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Partner'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Partner'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Partner'
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: User not authorized to view this resource.
+        '403':
+          description: 'Forbidden - Requires one of these scopes: trading_partners, exchange'
+          headers:
+            WWW-Authenticate:
+              description: Bearer error="insufficient_scope"
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: insufficient_scope
+      security:
+      - {}
+      x-required-scopes:
+      - trading_partners
+      - exchange
+      operationId: getApiV2Partners
+      x-operation-id-source: derived
+components:
+  schemas:
+    Partner:
+      required:
+      - followAccount
+      - followUserId
+      - leadAccount
+      - leadUserId
+      - partnerId
+      - tprSetName
+      type: object
+      properties:
+        tprSetId:
+          type: integer
+          format: int32
+        leadAccount:
+          type: string
+        leadUserId:
+          type: string
+        followAccount:
+          type: string
+        followUserId:
+          type: string
+        partnerId:
+          type: string
+        tprSetName:
+          type: string
+        ibmMachineAddress:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    PartnerPostResponse:
+      required:
+      - followAccount
+      - followRoute
+      - followUserId
+      - leadAccount
+      - leadRoute
+      - leadUserId
+      - partnerId
+      - tprSetName
+      type: object
+      properties:
+        leadRoute:
+          type: string
+          readOnly: true
+        followRoute:
+          type: string
+          readOnly: true
+        tprSetId:
+          type: integer
+          format: int32
+        leadAccount:
+          type: string
+        leadUserId:
+          type: string
+        followAccount:
+          type: string
+        followUserId:
+          type: string
+        partnerId:
+          type: string
+        tprSetName:
+          type: string
+        ibmMachineAddress:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: JWT
+      scheme: Bearer
+x-refined-from:
+- ivans-exchange-v1-openapi.json
+- ivans-exchange-v2-openapi.json
+x-readme:
+  headers: []
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/token
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

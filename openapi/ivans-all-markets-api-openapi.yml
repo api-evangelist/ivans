@@ -1,0 +1,267 @@
+openapi: 3.2.0
+info:
+  title: Identification Network All Markets API
+  version: 1.0.0
+  description: IVANS Identification Network API
+servers:
+- url: https://distribution-staging.ivansinsurance.com
+tags:
+- name: all-markets
+paths:
+  /api/v1/all-markets/:
+    get:
+      operationId: all_markets_list
+      description: 'Returns all markets.
+
+        - Optional boolean parameter to get carrier and broker data with send accounts and icos.
+
+        - Optional string parameter to match search term to carrier name.
+
+        - Optional string parameter to match NAIC company number to carrier company ID or related ICO NAIC code.'
+      parameters:
+      - in: query
+        name: include_carrier_info
+        schema:
+          type: boolean
+        description: Includes carrier and broker information. User must have permission to view.
+      - in: query
+        name: naic_company_number
+        schema:
+          type: string
+        description: Value used to filter results by NAIC company number on the carriers or related ICOs
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search term used to match results by name
+      tags:
+      - all-markets
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Markets(includeCarrierInfo=False):
+                  value:
+                    count: 123
+                    next: path/to/next/page
+                    previous: null
+                    results:
+                    - uuid: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                      name: MARKET NAME
+                      displayName: null
+                      notes: ''
+                      logo: null
+                      akGroupId: null
+                  summary: Markets (include_carrier_info=False)
+                Markets(includeCarrierInfo=True):
+                  value:
+                    count: 2
+                    next: path/to/next/page
+                    previous: null
+                    results:
+                    - uuid: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                      name: BROKER MARKET NAME
+                      displayName: null
+                      notes: ''
+                      logo: path/to/logo
+                      akGroupId: null
+                      broker:
+                        uuid: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                        name: BROKER NAME
+                        fein: xx-xxxxxxx
+                        npn: NPN VALUE
+                        downloadInfo:
+                          sendAccounts:
+                          - uuid: dc7f60dc-99ee-4033-bbc5-6d5dc584b9c3
+                            accountId: TICL
+                            accountIdAlternate: null
+                        icos:
+                        - uuid: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                          name: ICO NAME
+                          groupCode: null
+                          naicCode: 15640
+                          type: string
+                          downloadIndicator: null
+                      carrier: null
+                    - uuid: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                      name: CARRIER MARKET NAME
+                      displayName: null
+                      notes: ''
+                      logo: null
+                      akGroupId: null
+                      broker: null
+                      carrier:
+                        uuid: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                        name: CARRIER NAME
+                        companyId: 15267
+                        groupNumber: null
+                        downloadInfo:
+                          sendAccounts:
+                          - uuid: dc7f60dc-99ee-4033-bbc5-6d5dc584b9c3
+                            accountId: TICL
+                            accountIdAlternate: null
+                        icos:
+                        - uuid: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                          name: ANOTHER ICO NAME
+                          groupCode: null
+                          naicCode: 15267
+                          type: string
+                          downloadIndicator: null
+                  summary: Markets (include_carrier_info=True)
+          description: Successfully received markets.
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+      summary: All markets list
+      x-summary-source: derived
+  /api/v1/all-markets/{uuid}/:
+    get:
+      operationId: all_markets_retrieve
+      description: 'Returns an individual market based on a given UUID.
+
+        - UUID: Universally unique identifier set for each IVANS Distribution Platform market'
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - all-markets
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UniversalMarketList'
+          description: Returns individual market
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/universal_market_detail_not_found'
+          description: '`UUID` does not have corresponding market or Invalid `UUID`'
+      summary: All markets retrieve
+      x-summary-source: derived
+components:
+  schemas:
+    UniversalMarketList:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 128
+        displayName:
+          type:
+          - string
+          - 'null'
+          maxLength: 128
+        notes:
+          type: string
+        logo:
+          type:
+          - string
+          - 'null'
+          format: uri
+          pattern: (?:png|jpg|svg|jpeg)$
+        akGroupId:
+          type:
+          - string
+          - 'null'
+          maxLength: 32
+      required:
+      - name
+    universal_market_detail_not_found:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    oauth2:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: /api/v1/token/
+          refreshUrl: /api/v1/token/
+          scopes:
+            read: Read scope
+            write: Write scope
+            epic: Epic User
+            third-party: Third Party User
+    basicAuth:
+      type: http
+      scheme: basic
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/agencies_list
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

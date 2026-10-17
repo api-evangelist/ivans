@@ -1,0 +1,672 @@
+openapi: 3.2.0
+info:
+  title: Identification Network Licenses API
+  version: 1.0.0
+  description: IVANS Identification Network API
+servers:
+- url: https://distribution-staging.ivansinsurance.com
+tags:
+- name: Licenses
+paths:
+  /api/v1/licenses/:
+    post:
+      operationId: licenses_create
+      description: 'Creates a new insurance license.
+
+
+        Access restrictions:
+
+
+        - Service level users can create licenses under any of their allowed agencies, for any allowed licensee,
+
+        and assigned to any allowed agents.
+
+        - Admin users can create licenses under their own agency, for any allowed licensee,
+
+        and assigned to any allowed agents.
+
+        - Non-admin users can create licenses where they are the licensee, under their own agency.
+
+        They cannot grant other users access to a license.'
+      tags:
+      - Licenses
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InsuranceLicenseRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/InsuranceLicenseRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/InsuranceLicenseRequest'
+        required: true
+      security:
+      - oauth2:
+        - write
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                DefaultResponse:
+                  value:
+                    uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    licenseNumber: string
+                    type: string
+                    subdivision: string
+                    licenseStatus: string
+                    residentStatus: string
+                    expirationDate: YYYY-MM-DD
+                    agency: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    agencyLicensee: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    agentLicensee: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    agentsGrantedAccess:
+                    - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                  summary: Default response
+          description: Successfully created an insurance license
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                NotAuthorizedForIntegratedApplication:
+                  value:
+                    detail: User is not authorized for the given integrated application.
+                  summary: Not authorized for integrated application
+                InvalidAgency:
+                  value:
+                    agency: User is not authorized for the given agency.
+                  summary: Invalid agency
+                Non-adminCannotSetAgencyLicensee:
+                  value:
+                    agencyLicensee: User is not authorized to set agency licensee on the license.
+                  summary: Non-admin cannot set agency licensee
+                InvalidAgencyLicensee:
+                  value:
+                    agencyLicensee: User is not authorized for the given agency licensee.
+                  summary: Invalid agency licensee
+                InvalidAgentLicensee:
+                  value:
+                    agentLicensee: User is not authorized for the given agent licensee.
+                  summary: Invalid agent licensee
+                Non-adminCannotSetAgentsGrantedAccess:
+                  value:
+                    agentsGrantedAccess: User is not authorized to set agents granted access on creation of the license.
+                  summary: Non-admin cannot set agents granted access
+                InvalidAgentsGrantedAccess:
+                  value:
+                    agentsGrantedAccess: User is not authorized for the given agent(s) granted access...
+                  summary: Invalid agents granted access
+                CannotSetBothLicenseeFields:
+                  value:
+                    nonFieldErrors: Agency licensee and agent licensee cannot both be specified.
+                  summary: Cannot set both licensee fields
+                MustSetEitherLicenseeField:
+                  value:
+                    nonFieldErrors: Either agency licensee or agent licensee must be specified.
+                  summary: Must set either licensee field
+                AgencyLicenseeMustMatchAgency:
+                  value:
+                    nonFieldErrors: Agency licensee must match the agency.
+                  summary: Agency licensee must match agency
+                AgentLicenseeMustMatchAgency:
+                  value:
+                    nonFieldErrors: Agent licensee's agency must match the agency.
+                  summary: Agent licensee must match agency
+                AgentsGrantedAccessMustMatchAgency:
+                  value:
+                    nonFieldErrors: The agency of each agent granted access must match the agency.
+                  summary: Agents granted access must match agency
+                InvalidLicenseType:
+                  value:
+                    licenseType: License type must be one of...
+                  summary: Invalid license type
+                InvalidResidentStatus:
+                  value:
+                    residentStatus: Resident status must be one of...
+                  summary: Invalid resident status
+                InvalidLicenseStatus:
+                  value:
+                    licenseStatus: License status must be one of...
+                  summary: Invalid license status
+                DuplicateLicenseNumber:
+                  value:
+                    licenseNumber: License with this license number already exists under the given agency.
+                  summary: Duplicate license number
+          description: Creation errored due to bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/license_create'
+          description: Creation errored due to lack of permission
+      summary: Licenses create
+      x-summary-source: derived
+    get:
+      operationId: licenses_list
+      description: 'Returns insurance licenses that are accessible to the user.
+
+
+        Access restrictions:
+
+
+        - Service level users can retrieve any license under their integrated application.
+
+        - Admin users can retrieve any license under the admin''s agency.
+
+        - Non-admin users can retrieve active licenses where
+
+        they or their agency are the licensee, or where they are granted access.'
+      parameters:
+      - in: query
+        name: agency
+        schema:
+          type: string
+        description: Filter by agency ID (exact match)
+      - in: query
+        name: agency_licensee
+        schema:
+          type: string
+        description: Filter by agency licensee ID (exact match)
+      - in: query
+        name: agent_granted_access
+        schema:
+          type: string
+        description: Filter by ID of an agent granted access (exact match)
+      - in: query
+        name: agent_licensee
+        schema:
+          type: string
+        description: Filter by agent licensee ID (exact match)
+      - in: query
+        name: license_number
+        schema:
+          type: string
+        description: Filter by license number (exact match)
+      - in: query
+        name: license_status
+        schema:
+          type: string
+        description: Filter by license status (active, inactive, cancelled)
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: subdivision
+        schema:
+          type: string
+        description: Filter by subdivision two-character code (exact match)
+      tags:
+      - Licenses
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                DefaultResponse:
+                  value:
+                    count: 1
+                    next: path/to/next/page
+                    previous: path/to/previous/page
+                    results:
+                    - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      licenseNumber: string
+                      type: string
+                      subdivision: string
+                      licenseStatus: string
+                      residentStatus: string
+                      expirationDate: YYYY-MM-DD
+                      agency: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      agencyLicensee: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      agentLicensee: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      agentsGrantedAccess:
+                      - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                  summary: Default response
+          description: Successfully retrieved insurance licenses
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                NotAuthorizedForIntegratedApplication:
+                  value:
+                    detail: User is not authorized for the given integrated application.
+                  summary: Not authorized for integrated application
+          description: Retrieval errored due to bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/license_list'
+          description: Retrieval errored due to lack of permission
+      summary: Licenses list
+      x-summary-source: derived
+  /api/v1/licenses/{uuid}/:
+    get:
+      operationId: licenses_retrieve
+      description: 'Returns an insurance license if it is accessible to the user.
+
+
+        Access restrictions:
+
+
+        - Service level users can retrieve any license under their integrated application.
+
+        - Admin users can retrieve any license under the admin''s agency.
+
+        - Non-admin users can retrieve active licenses where
+
+        they or their agency are the licensee, or where they are granted access.'
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Licenses
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                DefaultResponse:
+                  value:
+                    uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    licenseNumber: string
+                    type: string
+                    subdivision: string
+                    licenseStatus: string
+                    residentStatus: string
+                    expirationDate: YYYY-MM-DD
+                    agency: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    agencyLicensee: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    agentLicensee: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    agentsGrantedAccess:
+                    - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                  summary: Default response
+          description: Successfully retrieved an insurance license
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                NotAuthorizedForIntegratedApplication:
+                  value:
+                    detail: User is not authorized for the given integrated application.
+                  summary: Not authorized for integrated application
+          description: Retrieval errored due to bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/license_retrieve'
+          description: Retrieval errored due to lack of permission
+      summary: Licenses retrieve
+      x-summary-source: derived
+    put:
+      operationId: licenses_update
+      description: 'Updates an insurance license if it is accessible to the user.
+
+
+        Access restrictions:
+
+
+        - Service level users can update any license under their integrated application.
+
+        - Admin users can update any license under the admin''s agency.
+
+        - Non-admin users can update active licenses where they are the licensee.
+
+        They cannot grant other users access to a license.'
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Licenses
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InsuranceLicenseRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/InsuranceLicenseRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/InsuranceLicenseRequest'
+        required: true
+      security:
+      - oauth2:
+        - write
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                DefaultResponse:
+                  value:
+                    uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    licenseNumber: string
+                    type: string
+                    subdivision: string
+                    licenseStatus: string
+                    residentStatus: string
+                    expirationDate: YYYY-MM-DD
+                    agency: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    agencyLicensee: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    agentLicensee: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    agentsGrantedAccess:
+                    - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                  summary: Default response
+          description: Successfully updated an insurance license
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                NotAuthorizedForIntegratedApplication:
+                  value:
+                    detail: User is not authorized for the given integrated application.
+                  summary: Not authorized for integrated application
+                InvalidAgency:
+                  value:
+                    agency: User is not authorized for the given agency.
+                  summary: Invalid agency
+                Non-adminCannotSetAgencyLicensee:
+                  value:
+                    agencyLicensee: User is not authorized to set agency licensee on the license.
+                  summary: Non-admin cannot set agency licensee
+                InvalidAgencyLicensee:
+                  value:
+                    agencyLicensee: User is not authorized for the given agency licensee.
+                  summary: Invalid agency licensee
+                InvalidAgentLicensee:
+                  value:
+                    agentLicensee: User is not authorized for the given agent licensee.
+                  summary: Invalid agent licensee
+                Non-adminCannotSetAgentsGrantedAccess:
+                  value:
+                    agentsGrantedAccess: User is not authorized to modify the existing agents granted access on this license. Ensure the value is unchanged when updating the license.
+                  summary: Non-admin cannot set agents granted access
+                InvalidAgentsGrantedAccess:
+                  value:
+                    agentsGrantedAccess: User is not authorized for the given agent(s) granted access...
+                  summary: Invalid agents granted access
+                CannotSetBothLicenseeFields:
+                  value:
+                    nonFieldErrors: Agency licensee and agent licensee cannot both be specified.
+                  summary: Cannot set both licensee fields
+                MustSetEitherLicenseeField:
+                  value:
+                    nonFieldErrors: Either agency licensee or agent licensee must be specified.
+                  summary: Must set either licensee field
+                AgencyLicenseeMustMatchAgency:
+                  value:
+                    nonFieldErrors: Agency licensee must match the agency.
+                  summary: Agency licensee must match agency
+                AgentLicenseeMustMatchAgency:
+                  value:
+                    nonFieldErrors: Agent licensee's agency must match the agency.
+                  summary: Agent licensee must match agency
+                AgentsGrantedAccessMustMatchAgency:
+                  value:
+                    nonFieldErrors: The agency of each agent granted access must match the agency.
+                  summary: Agents granted access must match agency
+                InvalidLicenseType:
+                  value:
+                    licenseType: License type must be one of...
+                  summary: Invalid license type
+                InvalidResidentStatus:
+                  value:
+                    residentStatus: Resident status must be one of...
+                  summary: Invalid resident status
+                InvalidLicenseStatus:
+                  value:
+                    licenseStatus: License status must be one of...
+                  summary: Invalid license status
+                DuplicateLicenseNumber:
+                  value:
+                    licenseNumber: License with this license number already exists under the given agency.
+                  summary: Duplicate license number
+          description: Retrieval errored due to bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/license_update'
+          description: Retrieval errored due to lack of permission
+      summary: Licenses update
+      x-summary-source: derived
+components:
+  schemas:
+    license_create:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
+    InsuranceLicenseRequest:
+      type: object
+      properties:
+        licenseNumber:
+          type: string
+          minLength: 1
+          description: The license number.
+          maxLength: 128
+        type:
+          type: string
+          description: 'The type of license. Choices are: ''producer'', ''broker''.'
+        subdivision:
+          type:
+          - string
+          - 'null'
+          description: The state or province of the license. Format is the two-letter abbreviation.
+        licenseStatus:
+          type: string
+          minLength: 1
+          description: 'The status of the license. Choices are: ''active'', ''inactive'', ''cancelled''.'
+        residentStatus:
+          type: string
+          description: 'The resident status of the license. Choices are: ''resident'', ''non-resident''.'
+        expirationDate:
+          type:
+          - string
+          - 'null'
+          format: date
+          description: The expiration date of the license. Format is 'YYYY-MM-DD'.
+        agency:
+          type: string
+          format: uuid
+          description: The unique ID of the agency that this license is scoped to.
+        agencyLicensee:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: The unique ID of the agency that is the licensee.
+        agentLicensee:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: The unique ID of the agent that is the licensee.
+        agentsGrantedAccess:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: An array of unique IDs of agents that have been granted access to the license.
+      required:
+      - agency
+      - agencyLicensee
+      - agentLicensee
+      - agentsGrantedAccess
+      - licenseNumber
+      - licenseStatus
+      - residentStatus
+      - subdivision
+      - type
+    license_update:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
+    license_retrieve:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
+    license_list:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    oauth2:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: /api/v1/token/
+          refreshUrl: /api/v1/token/
+          scopes:
+            read: Read scope
+            write: Write scope
+            epic: Epic User
+            third-party: Third Party User
+    basicAuth:
+      type: http
+      scheme: basic
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/agencies_list
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

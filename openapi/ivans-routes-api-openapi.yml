@@ -1,0 +1,184 @@
+openapi: 3.2.0
+info:
+  title: IVANS Exchange API Docs Routes API
+  version: v1
+tags:
+- name: Routes
+paths:
+  /api/Mailboxes/{id}/Routes:
+    get:
+      tags:
+      - Routes
+      summary: Retrieve a JSON - formatted collection of trading partners in the format…
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the mailbox in the form of "account.mailboxId".
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Route'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Route'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Route'
+        '204':
+          description: No send routes were found for the given mailbox.
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: User not authorized to view this resource.
+      security:
+      - Bearer: []
+      operationId: getApiMailboxesByIdRoutes
+      x-operation-id-source: derived
+  /api/Routes:
+    get:
+      tags:
+      - Routes
+      summary: Retrieve a JSON - formatted collection of available mailbox routes in the…
+      parameters:
+      - name: account
+        in: query
+        description: The account portion of a mailbox route
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: The page. Defaults to 1.
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: pageSize
+        in: query
+        description: The page size. Defaults to 25. Only used if page > 0.
+        schema:
+          type: integer
+          format: int32
+          default: 25
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns data on success
+          headers:
+            First:
+              description: Pagination First Page URL
+              schema:
+                type: string
+                format: uri
+            Next:
+              description: Pagination Next Page URL
+              schema:
+                type: string
+                format: uri
+            Prev:
+              description: Pagination Previous Page URL
+              schema:
+                type: string
+                format: uri
+            Last:
+              description: Pagination Last Page URL
+              schema:
+                type: string
+                format: uri
+            Record-Count:
+              description: Total Record Count
+              schema:
+                type: string
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Route'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Route'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Route'
+        '403':
+          description: Error if requested resource was not permissible for user
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+      security:
+      - Bearer: []
+      operationId: getApiRoutes
+      x-operation-id-source: derived
+components:
+  schemas:
+    ErrorFormat:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+        traceId:
+          type: string
+        validationErrors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+      additionalProperties: false
+    Route:
+      required:
+      - fileRoute
+      type: object
+      properties:
+        fileRoute:
+          type: string
+        partnerRouteCount:
+          type: integer
+          format: int32
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: JWT
+      scheme: Bearer
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/get_api-agencies-1
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

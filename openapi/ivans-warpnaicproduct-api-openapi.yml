@@ -1,0 +1,199 @@
+openapi: 3.2.0
+info:
+  title: IVANS Exchange API Docs Warp NAIC Product API
+  version: v1
+tags:
+- name: WarpNAICProduct
+paths:
+  /api/WarpNAICProduct/{id}:
+    delete:
+      tags:
+      - WarpNAICProduct
+      summary: Removes an NAIC from a Product
+      description: Delete an NAIC from a Product
+      operationId: DeleteNaic
+      parameters:
+      - name: id
+        in: path
+        description: NAIC.productid to delete
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Indicates successful operation
+        '400':
+          description: Error if request could not be completed with given input
+        '401':
+          description: Error if user does not have access to this resource
+        '404':
+          description: NaicProduct could not be found.
+      security:
+      - Bearer: []
+    get:
+      tags:
+      - WarpNAICProduct
+      summary: Retrieves a list of NAIC for a Product
+      description: Get a Warp NAIC list for a Product
+      operationId: GetNaicList
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Indicates successful operation
+        '400':
+          description: Error if request could not be completed with given input
+        '401':
+          description: Error if user does not have access to this resource
+        '404':
+          description: NaicProduct could not be found.
+      security:
+      - Bearer: []
+    put:
+      tags:
+      - WarpNAICProduct
+      summary: Updates a Warp NAIC Product
+      operationId: PutNaicProduct
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/WarpExchNaicProduct'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WarpExchNaicProduct'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/WarpExchNaicProduct'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/WarpExchNaicProduct'
+      responses:
+        '201':
+          description: Indicates successful operation
+        '400':
+          description: Error if request could not be completed with given input
+        '401':
+          description: Error if user does not have access to this resource
+        '404':
+          description: NaicProduct could not be found.
+      security:
+      - Bearer: []
+  /api/WarpNAICProduct/Product/{id}:
+    get:
+      tags:
+      - WarpNAICProduct
+      summary: Retrieves a list of Products for a NAIC
+      description: Get a Product for a NAIC
+      operationId: GetProduct
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Indicates successful operation
+        '400':
+          description: Error if request could not be completed with given input
+        '401':
+          description: Error if user does not have access to this resource
+        '404':
+          description: NaicProduct could not be found.
+      security:
+      - Bearer: []
+  /api/WarpNAICProduct:
+    post:
+      tags:
+      - WarpNAICProduct
+      summary: Add a new Warp NAIC Product
+      description: Add a new Warp NAIC Product.
+      operationId: PostNaicProduct
+      parameters:
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/WarpExchNaicProduct'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WarpExchNaicProduct'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/WarpExchNaicProduct'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/WarpExchNaicProduct'
+      responses:
+        '201':
+          description: Indicates successful operation
+        '400':
+          description: Error if request could not be completed with given input
+        '401':
+          description: Error if user does not have access to this resource
+        '404':
+          description: Error if requested resource was not found
+      security:
+      - Bearer: []
+components:
+  schemas:
+    WarpExchNaicProduct:
+      required:
+      - naic
+      - productID
+      type: object
+      properties:
+        productID:
+          type: string
+        naic:
+          type: string
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: JWT
+      scheme: Bearer
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/get_api-agencies-1
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

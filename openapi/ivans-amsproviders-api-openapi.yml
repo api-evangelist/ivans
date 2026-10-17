@@ -1,0 +1,124 @@
+openapi: 3.2.0
+info:
+  title: IVANS Exchange API Docs Ams Providers API
+  version: v1
+tags:
+- name: AmsProviders
+paths:
+  /api/AmsProviders:
+    get:
+      tags:
+      - AmsProviders
+      summary: Gets list of all Management System Providers for the IVANS Download product
+      parameters:
+      - name: page
+        in: query
+        description: page to request
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: pageSize
+        in: query
+        description: pagesize to request (minimum 25, maximum 500)
+        schema:
+          type: integer
+          format: int32
+          default: 25
+      - name: name
+        in: query
+        description: filter for finding vendors with name containing the input
+        schema:
+          type: string
+          default: ''
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns data on success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AmsProviderResponse'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AmsProviderResponse'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AmsProviderResponse'
+        '400':
+          description: Error if request could not be completed with given input
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+      security:
+      - Bearer: []
+      operationId: getApiAmsProviders
+      x-operation-id-source: derived
+components:
+  schemas:
+    ErrorFormat:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+        traceId:
+          type: string
+        validationErrors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+      additionalProperties: false
+    AmsProviderResponse:
+      required:
+      - amsProducts
+      - name
+      - shortName
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        shortName:
+          type: string
+        active:
+          type: boolean
+        amsProducts:
+          type: string
+          format: uri; see <AmsProductResponse>
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: JWT
+      scheme: Bearer
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/get_api-agencies-1
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

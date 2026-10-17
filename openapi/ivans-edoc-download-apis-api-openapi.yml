@@ -1,0 +1,560 @@
+openapi: 3.2.0
+info:
+  title: IVANS Translation API's eDoc Download APIs API
+  description: These API's expose endpoints to manage Download Transactions.
+  license:
+    name: Copyright (C) 2023 IVANS Insurance, All rights reserved
+  version: '1.0'
+servers:
+- url: HTTPS://dev-cloud-dl.ivansinsurance.com
+  description: Server URL in UAT environment
+- url: HTTPS://cloud-dl.ivansinsurance.com
+  description: Server URL in Production environment
+tags:
+- name: eDoc Download APIs
+paths:
+  /ivans/api/carrier/edocdownload:
+    post:
+      tags:
+      - eDoc Download APIs
+      description: edoc download operation
+      operationId: processRequest_2
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: transactionId
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EdocReq'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/EdocResponse'
+      summary: Process request 2
+      x-summary-source: derived
+  /ivans/api/carrier/documentstorage:
+    post:
+      tags:
+      - eDoc Download APIs
+      description: document storage operation
+      operationId: processRequestDocument
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: transactionId
+        in: header
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentStoreReq'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/EdocDocumentResponse'
+      summary: Process request document
+      x-summary-source: derived
+components:
+  schemas:
+    Document:
+      type: object
+      properties:
+        documentId:
+          type: string
+        statusCode:
+          type: string
+          enum:
+          - SUCCESS
+          - FAILURE
+          - NOTFOUND
+    ClaimPaymentType:
+      type: object
+      properties:
+        paymentTypeCd:
+          type: string
+          enum:
+          - AdjExp
+          - DeductRecovery
+          - LossResv
+          - Payment
+          - StopPay
+          - SubrRecovery
+          - SalvRecovery
+        totalPaymentAmount:
+          type: number
+        lossCauseCode:
+          type: string
+          enum:
+          - CLMD
+        checkNumber:
+          type: string
+        paymentDate:
+          format: yyyy-MM-dd
+          $ref: '#/components/schemas/LocalDate'
+          example: '2025-01-01'
+        paymentDesc:
+          type: string
+    LocalDate:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int32
+        month:
+          type: string
+          enum:
+          - JANUARY
+          - FEBRUARY
+          - MARCH
+          - APRIL
+          - MAY
+          - JUNE
+          - JULY
+          - AUGUST
+          - SEPTEMBER
+          - OCTOBER
+          - NOVEMBER
+          - DECEMBER
+        monthValue:
+          type: integer
+          format: int32
+        dayOfMonth:
+          type: integer
+          format: int32
+        chronology:
+          $ref: '#/components/schemas/IsoChronology'
+        dayOfWeek:
+          type: string
+          enum:
+          - MONDAY
+          - TUESDAY
+          - WEDNESDAY
+          - THURSDAY
+          - FRIDAY
+          - SATURDAY
+          - SUNDAY
+        leapYear:
+          type: boolean
+        dayOfYear:
+          type: integer
+          format: int32
+        era:
+          $ref: '#/components/schemas/Era'
+    GeneralPartyInfo:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        address:
+          $ref: '#/components/schemas/Address'
+          readOnly: true
+    EdocDocumentResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          description: Unique id for this transaction
+        code:
+          type: string
+          enum:
+          - SUCCESS
+          - FAILURE
+          example: SUCCESS
+        documentId:
+          type: string
+          description: id of document in repository
+        message:
+          type: string
+    DocumentStoreReq:
+      type: object
+      properties:
+        agencyId:
+          type: string
+        policyNumber:
+          type: string
+        carrierId:
+          type: string
+        documentType:
+          type: string
+          enum:
+          - EDOC
+          - OCR
+        documentName:
+          type: string
+        documentDesc:
+          type: string
+          readOnly: true
+        mimeType:
+          type: string
+          enum:
+          - application/pdf
+          - image/pict
+          - application/excel
+        document:
+          type: string
+    AttachmentType:
+      type: object
+      properties:
+        documentIdentity:
+          type: string
+    EdocReq:
+      type: object
+      properties:
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttachmentType'
+        remark:
+          type: array
+          items:
+            $ref: '#/components/schemas/RemarkTypeInner'
+          properties:
+            empty:
+              type: boolean
+        balanceInfo:
+          $ref: '#/components/schemas/BalanceInfoType'
+        agencyId:
+          type: string
+        carrierId:
+          type: string
+        changeOrReasonDesc:
+          type: string
+        edocTypeCd:
+          type: string
+          enum:
+          - ACR
+          - ADD
+          - ADE
+          - ADF
+          - ADI
+          - ADJ
+          - ADO
+          - ADU
+          - ADW
+          - APV
+          - ARR
+          - BCS
+          - BDC
+          - BND
+          - BRP
+          - BRQ
+          - BRS
+          - BST
+          - CLI
+          - CLN
+          - CLS
+          - COL
+          - COM
+          - CON
+          - CRN
+          - CSQ
+          - DBR
+          - DBS
+          - DIV
+          - EPN
+          - EPP
+          - ERR
+          - LNT
+          - MEM
+          - NBQ
+          - NBS
+          - NRA
+          - PCH
+          - PCQ
+          - PMK
+          - PMT
+          - PNQ
+          - POL
+          - PRMAU
+          - PYO
+          - PYR
+          - REI
+          - RES
+          - REV
+          - REW
+          - RIX
+          - RNR
+          - RRQ
+          - RSN
+          - RTA
+          - RWL
+          - RWQ
+          - RWX
+          - RWR
+          - SBB
+          - SBC
+          - SBD
+          - SBP
+          - SBQ
+          - SBR
+          - SBT
+          - SBU
+          - XLC
+          - XLN
+          - XLP
+        insuredInfo:
+          $ref: '#/components/schemas/GeneralPartyInfo'
+        policyInfo:
+          $ref: '#/components/schemas/PolicyInfoType'
+        totalPolicyTermPremiumAmt:
+          type: number
+        totalPolicyNetChangePremAmt:
+          type: number
+        transactionDt:
+          format: yyyy-MM-dd
+          $ref: '#/components/schemas/LocalDate'
+          example: '2025-01-01'
+        transactionEffectiveDt:
+          format: yyyy-MM-dd
+          $ref: '#/components/schemas/LocalDate'
+          example: '2025-01-01'
+        claimsData:
+          $ref: '#/components/schemas/ClaimInfo'
+    RemarkTypeInner:
+      type: object
+      properties:
+        text:
+          type: string
+    BalanceInfoType:
+      type: object
+      properties:
+        minimumDueAmt:
+          type: number
+        totalDueAmt:
+          type: number
+        lastPaymentDt:
+          format: yyyy-MM-dd
+          $ref: '#/components/schemas/LocalDate'
+          example: '2025-01-01'
+        minimumDueDt:
+          format: yyyy-MM-dd
+          $ref: '#/components/schemas/LocalDate'
+          example: '2025-01-01'
+    PolicyInfoType:
+      type: object
+      properties:
+        policyNumber:
+          type: string
+        lobCd:
+          type: string
+          enum:
+          - ACCT
+          - AGENT
+          - AGLIA
+          - AGPP
+          - AGPR
+          - APKGE
+          - ARCH
+          - AUTOB
+          - AUTOP
+          - BANDM
+          - BOAT
+          - BOP
+          - BOPGL
+          - BOPPR
+          - CFIRE
+          - CFRM
+          - CGL
+          - COMR
+          - CPKGE
+          - CRIM
+          - UMBRC
+          - CYBER
+          - DFIRE
+          - DNTL
+          - DO
+          - EL
+          - EO
+          - EPLI
+          - EQ
+          - EQLIA
+          - EXLIA
+          - FIDUC
+          - FLOOD
+          - GARAG
+          - HLTH
+          - HOME
+          - INMRC
+          - INMRP
+          - KIDRA
+          - LAW
+          - LIFE
+          - LL
+          - LMORT
+          - MEDIA
+          - MHOME
+          - MMAL
+          - MPL
+          - MTRCR
+          - PHYS
+          - PL
+          - PLMSC
+          - PPKGE
+          - PPL
+          - PROP
+          - PRSL
+          - UMBRP
+          - RECV
+          - RRPRL
+          - SFRNC
+          - SMP
+          - SURE
+          - WIND
+          - WORK
+          - WORKV
+          - YACHT
+        naicCd:
+          type: string
+        npnCd:
+          type: string
+        effectiveDt:
+          format: yyyy-MM-dd
+          $ref: '#/components/schemas/LocalDate'
+          example: '2025-01-01'
+        expirationDt:
+          format: yyyy-MM-dd
+          $ref: '#/components/schemas/LocalDate'
+          example: '2025-01-01'
+        broadLOBCd:
+          type: string
+          enum:
+          - P
+          - C
+          - B
+          - F
+          - S
+        lobSubCd:
+          type: string
+          enum:
+          - GRP
+          - INDV
+          - NPC
+          - NPO
+          - NSTD
+          - VOL
+          - OCP
+          - GARAG
+          - PROF
+    EdocResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          description: Unique id for this transaction
+        code:
+          type: string
+          enum:
+          - SUCCESS
+          - INCOMPLETE
+          - FAILURE
+          example: SUCCESS
+        mailbox:
+          type: string
+        message:
+          type: string
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+    Adjuster:
+      type: object
+      properties:
+        partyInfo:
+          $ref: '#/components/schemas/GeneralPartyInfo'
+        assignedDt:
+          format: yyyy-MM-dd
+          $ref: '#/components/schemas/LocalDate'
+          example: '2025-01-01'
+        adjusterId:
+          type: string
+    ClaimInfo:
+      type: object
+      properties:
+        claimNumber:
+          type: string
+        claimPayment:
+          $ref: '#/components/schemas/ClaimPaymentType'
+        claimsStatusCd:
+          type: string
+          enum:
+          - O
+          - C
+          - S
+          - R
+        claimsStatusDt:
+          format: yyyy-MM-dd
+          $ref: '#/components/schemas/LocalDate'
+          example: '2025-01-01'
+        incidentDesc:
+          type: string
+        lossDt:
+          format: yyyy-MM-dd
+          $ref: '#/components/schemas/LocalDate'
+          example: '2025-01-01'
+        adjusterData:
+          type: array
+          items:
+            $ref: '#/components/schemas/Adjuster'
+    Name:
+      type: object
+      properties:
+        commercialName:
+          type: string
+        personalFirst:
+          type: string
+        personalLast:
+          type: string
+        personalOther:
+          type: string
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        postalCd:
+          type: string
+    IsoChronology:
+      type: object
+      properties:
+        id:
+          type: string
+        calendarType:
+          type: string
+    Era:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/getdocumentmetainfo
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

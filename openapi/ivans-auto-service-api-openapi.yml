@@ -1,0 +1,420 @@
+openapi: 3.2.0
+info:
+  title: Ivans Distribution Platform Auto Service API
+  description: APIs for serving carrier forms, appetite, and validation
+  version: 0.1.0
+tags:
+- name: Auto Service
+paths:
+  /api/v1/auto/details:
+    get:
+      tags:
+      - Auto Service
+      summary: Get Vehicle Data with VIN or Year, Make, Model or a combination of these
+      description: Retrieve vehicle details by VIN or by year, make, and model.
+      operationId: get_auto_details_api_v1_auto_details_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: vin
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Full VIN
+          examples:
+          - 1HGCM82633A123456
+          title: Vin
+        description: Full VIN
+      - name: year
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Model year filter
+          examples:
+          - 2003
+          title: Year
+        description: Model year filter
+      - name: make
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Make
+          examples:
+          - HONDA
+          title: Make
+        description: Make
+      - name: model
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Model
+          examples:
+          - ACCORD
+          title: Model
+        description: Model
+      responses:
+        '200':
+          description: Successful retrieval of vehicle details
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AutoDetailResponse'
+                title: Response 200 Get Auto Details Api V1 Auto Details Get
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseWithValidationDetails'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseWithMessageOnly'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseWithMessageOnly'
+        '404':
+          description: VIN not found.
+          content:
+            application/json:
+              example:
+                detail: VIN not found. Please check your VIN and try again.
+              schema:
+                $ref: '#/components/schemas/ErrorResponseWithMessageOnly'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseWithValidationDetails'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseWithMessageOnly'
+  /api/v1/auto/makes:
+    get:
+      tags:
+      - Auto Service
+      summary: Get unique vehicle makes
+      description: Retrieve unique make names for all vehicles listed alphabetically.
+      operationId: get_makes_api_v1_auto_makes_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: year
+        in: query
+        required: true
+        schema:
+          type: integer
+          title: Year
+      - name: vehicle_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Restrict to specified types: ''Vehicle'', ''Trailer''. Multiple types can be provided separated by commas.'
+          title: Vehicle Type
+        description: 'Restrict to specified types: ''Vehicle'', ''Trailer''. Multiple types can be provided separated by commas.'
+      responses:
+        '200':
+          description: Successful retrieval of vehicle makes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutoFieldOptionsResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseWithValidationDetails'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseWithMessageOnly'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseWithMessageOnly'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseWithValidationDetails'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseWithMessageOnly'
+  /api/v1/auto/models:
+    get:
+      tags:
+      - Auto Service
+      summary: Get unique vehicle models
+      description: Retrieve unique model names for all vehicles listed alphabetically.
+      operationId: get_models_api_v1_auto_models_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: year
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Model year filter
+          examples:
+          - 2020
+          required: true
+          title: Year
+        description: Model year filter
+      - name: make
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Make name filter (case insensitive)
+          examples:
+          - Toyota
+          required: true
+          title: Make
+        description: Make name filter (case insensitive)
+      responses:
+        '200':
+          description: Successful retrieval of vehicle models
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutoFieldOptionsResponse'
+                type: array
+                items:
+                  type: string
+                title: Response 200 Get Models Api V1 Auto Models Get
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseWithValidationDetails'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseWithMessageOnly'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseWithMessageOnly'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseWithValidationDetails'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseWithMessageOnly'
+  /api/v1/auto/years:
+    get:
+      tags:
+      - Auto Service
+      summary: Get unique vehicle years
+      description: Retrieve unique model years for all vehicles in descending order.
+      operationId: get_years_api_v1_auto_years_get
+      responses:
+        '200':
+          description: Successful retrieval of vehicle years
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutoDetailResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseWithValidationDetails'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseWithMessageOnly'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseWithMessageOnly'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseWithMessageOnly'
+      security:
+      - HTTPBearer: []
+components:
+  schemas:
+    AutoDetailResponse:
+      properties:
+        details:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/AutoFieldValueResponse'
+            - $ref: '#/components/schemas/AutoFieldOptionsResponse'
+          type: array
+          title: Details
+          description: List of vehicle details with labels and values
+      type: object
+      required:
+      - details
+      title: AutoDetailResponse
+      description: Response model for Auto vehicle details.
+    AutoFieldOptionsResponse:
+      properties:
+        guid:
+          type: string
+          title: Guid
+          description: GUID of the vehicle attribute
+        label:
+          type: string
+          title: Label
+          description: Label of the vehicle attribute
+        options:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/ValueOptionResponse'
+            - type: 'null'
+          type: array
+          title: Options
+          description: List of unique vehicle attributes with labels and values
+      type: object
+      required:
+      - guid
+      - label
+      - options
+      title: AutoFieldOptionsResponse
+      description: Response model for Auto field data with options.
+    ErrorResponseWithValidationDetails:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          type: array
+          title: Detail
+      type: object
+      required:
+      - detail
+      title: ErrorResponseWithValidationDetails
+      description: Response for errors that have a list of validation details.
+    ErrorResponseWithMessageOnly:
+      properties:
+        detail:
+          type: string
+          title: Detail
+      type: object
+      required:
+      - detail
+      title: ErrorResponseWithMessageOnly
+      description: Response for errors that have only a message.
+    ValueOptionResponse:
+      properties:
+        label:
+          type: string
+          title: Label
+          description: Label of the option
+        value:
+          anyOf:
+          - type: integer
+          - type: string
+          title: Value
+          description: Value of the option
+      type: object
+      required:
+      - label
+      - value
+      title: ValueOptionResponse
+      description: Response model for options with label and value.
+    AutoFieldValueResponse:
+      properties:
+        guid:
+          type: string
+          title: Guid
+          description: GUID of the vehicle attribute
+        label:
+          type: string
+          title: Label
+          description: Label of the vehicle attribute
+        value:
+          anyOf:
+          - type: integer
+          - type: string
+          - type: 'null'
+          title: Value
+          description: Value of the vehicle attribute
+      type: object
+      required:
+      - guid
+      - label
+      title: AutoFieldValueResponse
+      description: Response model for Auto field data with values.
+    ValidationErrorDetail:
+      properties:
+        type:
+          type: string
+          title: Type
+        loc:
+          items:
+            type: string
+          type: array
+          title: Loc
+        msg:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Msg
+        input:
+          title: Input
+      type: object
+      required:
+      - type
+      - loc
+      - input
+      title: ValidationErrorDetail
+      description: Validation error detail for standard Pydantic/FastAPI request validation errors.
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/get_basic_appetite_api_v1_forms_basic_appetite_get
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

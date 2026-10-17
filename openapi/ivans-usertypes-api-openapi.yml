@@ -1,0 +1,72 @@
+openapi: 3.2.0
+info:
+  title: IVANS Exchange API Docs User Types API
+  version: v1
+tags:
+- name: UserTypes
+paths:
+  /api/UserTypes:
+    get:
+      tags:
+      - UserTypes
+      summary: Gets the static list of user types/roles
+      parameters:
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserType'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserType'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserType'
+      security:
+      - Bearer: []
+      operationId: getApiUserTypes
+      x-operation-id-source: derived
+components:
+  schemas:
+    UserType:
+      required:
+      - description
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          minLength: 1
+          type: string
+        description:
+          minLength: 1
+          type: string
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: JWT
+      scheme: Bearer
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/get_api-agencies-1
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

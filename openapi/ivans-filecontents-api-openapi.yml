@@ -1,0 +1,459 @@
+openapi: 3.2.0
+info:
+  title: IVANS Exchange API Docs File Contents API
+  version: v1
+tags:
+- name: FileContents
+paths:
+  /api/Files/{id}/Items/{index}:
+    get:
+      tags:
+      - FileContents
+      summary: Retrieve a list of metadata contents for a given file
+      description: 'Retrieve metadata for the contents of the file specified by the id parameter,
+
+        at the index specified by the index parameter. Indexes are one-based.
+
+        This is a JSON-formatted object containing detailed information on a single data item in the file.'
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the file to retrieve.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: index
+        in: path
+        description: The index of the contents within the file to retrieve.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns data on success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/FileContent'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileContent'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/FileContent'
+        '204':
+          description: Returns empty success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+        '400':
+          description: Error if request could not be completed with given input
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+        '401':
+          description: Error if user does not have access to this resource
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+        '403':
+          description: Error if requested resource was not permissible for user
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+        '404':
+          description: Error if requested resource was not found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+      security:
+      - Bearer: []
+      operationId: getApiFilesByIdItemsByIndex
+      x-operation-id-source: derived
+  /api/Files/{id}/Items:
+    get:
+      tags:
+      - FileContents
+      summary: Retrieve a list of contents for a given file
+      description: 'Retrieve a list of the contents of the file specified by the id parameter.
+
+        This is a JSON-formatted collection with each object containing
+
+        detailed information on a single data item in the file.'
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the file to retrieve.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns data on success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FileContent'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FileContent'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FileContent'
+        '204':
+          description: Returns empty success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+        '400':
+          description: Error if request could not be completed with given input
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+        '401':
+          description: Error if user does not have access to this resource
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+        '403':
+          description: Error if requested resource was not permissible for user
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+        '404':
+          description: Error if requested resource was not found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+      security:
+      - Bearer: []
+      operationId: getApiFilesByIdItems
+      x-operation-id-source: derived
+  /api/Files/{id}/transaction/{transId}:
+    get:
+      tags:
+      - FileContents
+      summary: Retrieve a list of metadata contents for a given file
+      description: 'Retrieve metadata for the contents of the file specified by the id parameter,
+
+        at the index specified by the index parameter. Indexes are one-based.
+
+        This is a JSON-formatted object containing detailed information on a single data item in the file.'
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the file to retrieve.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: transId
+        in: path
+        description: The transaction Id of the contents within the file to retrieve.
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns data on success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/FileContent'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileContent'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/FileContent'
+        '204':
+          description: Returns empty success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+        '400':
+          description: Error if request could not be completed with given input
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+        '401':
+          description: Error if user does not have access to this resource
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+        '403':
+          description: Error if requested resource was not permissible for user
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+        '404':
+          description: Error if requested resource was not found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorFormat'
+      security:
+      - Bearer: []
+      operationId: getApiFilesByIdTransactionByTransId
+      x-operation-id-source: derived
+components:
+  schemas:
+    ErrorFormat:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+        traceId:
+          type: string
+        validationErrors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+      additionalProperties: false
+    FileContent:
+      required:
+      - contentCode
+      - description
+      - id
+      - index
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        index:
+          type: integer
+          format: int32
+        contentCode:
+          minLength: 1
+          type: string
+        policyNumber:
+          type:
+          - string
+          - 'null'
+        claimNumber:
+          type:
+          - string
+          - 'null'
+        claimType:
+          type:
+          - string
+          - 'null'
+        broadLob:
+          type:
+          - string
+          - 'null'
+        lob:
+          type:
+          - string
+          - 'null'
+        cycle:
+          type:
+          - string
+          - 'null'
+        naic:
+          type:
+          - string
+          - 'null'
+        producerCode:
+          type:
+          - string
+          - 'null'
+        insuredName:
+          type:
+          - string
+          - 'null'
+        effectiveDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        expirationDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        transactionEffectiveDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        transactionResponseDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        lossDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        generationDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        transactionType:
+          type:
+          - string
+          - 'null'
+        sessionId:
+          type: string
+          format: uuid
+        attachId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        attachCount:
+          type: integer
+          format: int32
+        description:
+          minLength: 1
+          type: string
+          readOnly: true
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: JWT
+      scheme: Bearer
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/get_api-agencies-1
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

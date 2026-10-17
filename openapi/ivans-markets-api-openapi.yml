@@ -1,0 +1,516 @@
+openapi: 3.2.0
+info:
+  title: Identification Network Markets API
+  version: 1.0.0
+  description: IVANS Identification Network API
+servers:
+- url: https://distribution-staging.ivansinsurance.com
+tags:
+- name: Markets
+paths:
+  /api/v1/markets/:
+    get:
+      operationId: markets_list
+      description: Returns the markets that the current tenant has access to through an integrated application.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - Markets
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMarketListList'
+          description: Successfully received the markets.
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+      summary: Markets list
+      x-summary-source: derived
+  /api/v1/markets/{uuid}/:
+    get:
+      operationId: markets_retrieve
+      description: Returns an individual market that the current tenant has access to through an integrated application.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Markets
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketDetail'
+          description: Successfully received the market.
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/market_detail_responses'
+          description: UUID is not valid or does not have a corresponding market
+      summary: Markets retrieve
+      x-summary-source: derived
+components:
+  schemas:
+    LineOfBusiness:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 128
+        code:
+          type: string
+          maxLength: 32
+      required:
+      - code
+      - name
+      - uuid
+    MarketDetail:
+      type: object
+      properties:
+        broker:
+          $ref: '#/components/schemas/Broker'
+        carrier:
+          $ref: '#/components/schemas/Carrier'
+        countries:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketCountry'
+        subdivisions:
+          allOf:
+          - $ref: '#/components/schemas/MarketSubdivision'
+          readOnly: true
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 128
+        displayName:
+          type:
+          - string
+          - 'null'
+          maxLength: 128
+        notes:
+          type: string
+        logo:
+          type:
+          - string
+          - 'null'
+          format: uri
+          pattern: (?:png|jpg|svg|jpeg)$
+        akGroupId:
+          type:
+          - string
+          - 'null'
+          maxLength: 32
+      required:
+      - broker
+      - carrier
+      - countries
+      - name
+      - products
+      - subdivisions
+    ProductTypeEnum:
+      enum:
+      - policy
+      - dbcd
+      - claims
+      - edocs
+      type: string
+    MarketList:
+      type: object
+      properties:
+        availableLinesOfBusiness:
+          allOf:
+          - $ref: '#/components/schemas/LineOfBusiness'
+          readOnly: true
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 128
+        displayName:
+          type:
+          - string
+          - 'null'
+          maxLength: 128
+        notes:
+          type: string
+        logo:
+          type:
+          - string
+          - 'null'
+          format: uri
+          pattern: (?:png|jpg|svg|jpeg)$
+        akGroupId:
+          type:
+          - string
+          - 'null'
+          maxLength: 32
+      required:
+      - availableLinesOfBusiness
+      - name
+    NullEnum:
+      enum:
+      - null
+    MarketCountry:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 128
+        alpha3:
+          type:
+          - string
+          - 'null'
+          maxLength: 3
+        alpha2:
+          type:
+          - string
+          - 'null'
+          maxLength: 2
+        numerical:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+      required:
+      - createdAt
+      - id
+      - name
+      - updatedAt
+      - uuid
+    PaginatedMarketListList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/markets/?page=3
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/markets/?page=1
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketList'
+    BlankEnum:
+      enum:
+      - ''
+    IcoTypeEnum:
+      enum:
+      - Property & Casualty
+      - LIFE
+      - HEALTH
+      - GPAL
+      type: string
+    Product:
+      type: object
+      properties:
+        lineOfBusiness:
+          $ref: '#/components/schemas/LineOfBusiness'
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 128
+        productType:
+          $ref: '#/components/schemas/ProductTypeEnum'
+      required:
+      - createdAt
+      - lineOfBusiness
+      - name
+      - updatedAt
+      - uuid
+    Broker:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        deleted:
+          type: boolean
+        deletedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        name:
+          type: string
+          maxLength: 256
+        fein:
+          type: string
+          description: Federal Employer Identification Number
+          maxLength: 10
+        npn:
+          type: string
+          description: National Producer Number
+          maxLength: 32
+      required:
+      - createdAt
+      - updatedAt
+      - uuid
+    MarketSubdivision:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 128
+        alpha3:
+          type:
+          - string
+          - 'null'
+          maxLength: 3
+        alpha2:
+          type:
+          - string
+          - 'null'
+          maxLength: 2
+        numerical:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+        subdivisionType:
+          allOf:
+          - $ref: '#/components/schemas/SubdivisionTypeEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        country:
+          type: integer
+        parent:
+          type:
+          - integer
+          - 'null'
+      required:
+      - country
+      - createdAt
+      - id
+      - name
+      - subdivisionType
+      - updatedAt
+      - uuid
+    market_detail_responses:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
+    SubdivisionTypeEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      type: integer
+    Carrier:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        deleted:
+          type: boolean
+        deletedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        companyId:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+        name:
+          type:
+          - string
+          - 'null'
+          maxLength: 256
+        groupNumber:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+        icoType:
+          description: '[(''Property & Casualty'', ''P''), (''LIFE'', ''L''), (''HEALTH'', ''H''), (''GPAL'', ''G'')]'
+          oneOf:
+          - $ref: '#/components/schemas/IcoTypeEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        monikers:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          description: A list of strings that represent the company's moniker(s).
+          minProperties: 1
+      required:
+      - createdAt
+      - updatedAt
+      - uuid
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    oauth2:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: /api/v1/token/
+          refreshUrl: /api/v1/token/
+          scopes:
+            read: Read scope
+            write: Write scope
+            epic: Epic User
+            third-party: Third Party User
+    basicAuth:
+      type: http
+      scheme: basic
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/agencies_list
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

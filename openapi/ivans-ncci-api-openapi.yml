@@ -1,0 +1,223 @@
+openapi: 3.2.0
+info:
+  title: Identification Network Ncci API
+  version: 1.0.0
+  description: IVANS Identification Network API
+servers:
+- url: https://distribution-staging.ivansinsurance.com
+tags:
+- name: ncci
+paths:
+  /api/v1/ncci/:
+    get:
+      operationId: ncci_list
+      description: 'Returns four-digit NCCI codes produced by the National Council on Compensation Insurance used
+
+        to classify businesses for workers'' compensation insurance.'
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: search
+        schema:
+          type: string
+          minLength: 1
+        description: Search term used to match results by code and description
+      - in: query
+        name: state
+        schema:
+          type: string
+        description: ISO alpha-2 code of state, used to filter results
+      tags:
+      - ncci
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedNCCIClassificationCodeDetailList'
+          description: Successfully received NCCI codes
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ncci_invalid_request_body'
+          description: Invalid Request arguments or Required Arguments are missing.
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ncci_list_pagination_fail'
+          description: Invalid page.
+      summary: Ncci list
+      x-summary-source: derived
+components:
+  schemas:
+    Standard:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 128
+        externalId:
+          type: string
+          maxLength: 255
+        market:
+          type:
+          - string
+          - 'null'
+        marketName:
+          type:
+          - string
+          - 'null'
+        lineOfBusiness:
+          type:
+          - string
+          - 'null'
+        lineOfBusinessCode:
+          type:
+          - string
+          - 'null'
+      required:
+      - externalId
+      - lineOfBusiness
+      - lineOfBusinessCode
+      - market
+      - marketName
+      - name
+    PaginatedNCCIClassificationCodeDetailList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/ncci/?page=3
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/ncci/?page=1
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/NCCIClassificationCodeDetail'
+    ncci_invalid_request_body:
+      type: object
+      properties:
+        state:
+          type: string
+          default: Invalid
+    ncci_list_pagination_fail:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Invalid page.
+    NCCIClassificationCodeDetail:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        persistentId:
+          type: string
+          readOnly: true
+          description: A hash of the code and description.Used to match the same code across different versions of the same Classification Standard.
+        code:
+          type: string
+          maxLength: 10
+        description:
+          type: string
+        states:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubdivisionSimple'
+        standard:
+          $ref: '#/components/schemas/Standard'
+      required:
+      - code
+      - description
+      - persistentId
+      - standard
+      - states
+      - uuid
+    SubdivisionSimple:
+      type: object
+      properties:
+        alpha2:
+          type:
+          - string
+          - 'null'
+          maxLength: 2
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+      required:
+      - uuid
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    oauth2:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: /api/v1/token/
+          refreshUrl: /api/v1/token/
+          scopes:
+            read: Read scope
+            write: Write scope
+            epic: Epic User
+            third-party: Third Party User
+    basicAuth:
+      type: http
+      scheme: basic
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/agencies_list
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

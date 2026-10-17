@@ -1,0 +1,4157 @@
+openapi: 3.2.0
+info:
+  title: Identification Network Forms API
+  version: 1.0.0
+  description: IVANS Identification Network API
+servers:
+- url: https://distribution-staging.ivansinsurance.com
+tags:
+- name: Forms
+paths:
+  /api/v1/forms/base-question-set/:
+    post:
+      operationId: forms_base_question_set_create
+      description: 'Validates answers to Base Question Set
+
+
+        Evaluates appetite for given Risk Profile(s) and returns combined Question Set for all valid Risk Profiles'
+      parameters:
+      - in: query
+        name: lobs
+        schema:
+          type: array
+          items:
+            type: string
+        description: ACORD codes or UUIDs of lines of business
+        required: true
+      - in: query
+        name: nested
+        schema:
+          type: boolean
+          default: false
+        description: Format the returned form with nested pages, groups, and fields
+      - in: query
+        name: risk_profiles
+        schema:
+          type: array
+          items:
+            type: string
+        description: Risk profile UUIDs
+        required: true
+      tags:
+      - Forms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormResponsesRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FormResponsesRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FormResponsesRequest'
+        required: true
+      security:
+      - oauth2:
+        - write
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Response(nestedForm=false):
+                  value:
+                    pages:
+                    - guid: string
+                      label: string
+                      description: string
+                      order: 2147483647
+                    groups:
+                    - guid: string
+                      page: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      label: string
+                      description: string
+                      isRepeatable: true
+                      repeatMinMax: ''
+                      order: 2147483647
+                      type: normal
+                      columns:
+                      - guid: string
+                      parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      parentLabel: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      parentColumns:
+                        guid: string
+                    fields:
+                      guid: string
+                      group: string
+                      label: string
+                      description: string
+                      additionalDetails:
+                        heading: string
+                        children:
+                        - heading: string
+                          children:
+                          - listItem: string
+                      order: 0
+                      type: string
+                      dataClass: string
+                      options:
+                        label: string
+                        value: 0
+                      underwritingCategory: string
+                      isAppetiteCategory: true
+                      isEnhancedAppetiteCategory: true
+                      isBind: true
+                      isRefer: true
+                      conditions:
+                        operator: and
+                        action: referral
+                        conditions:
+                        - operator: ==
+                          value: string
+                          attribute: string
+                          repeatingOperator: ANY
+                          sourceGroup: string
+                      actionConditions:
+                        operator: and
+                        action: referral
+                        conditions:
+                        - operator: ==
+                          value: string
+                          attribute: string
+                          repeatingOperator: ANY
+                          sourceGroup: string
+                      market: string
+                      classificationStandardGuid: string
+                      classCodeFilterFieldsGuids:
+                      - string
+                      unique: true
+                      uniqueToParent: true
+                      parentAttributeGuid: string
+                      prefillSourceFieldGuid: string
+                      minimum: 0
+                      maximum: 0
+                      isSuggestable: true
+                      length: 0
+                    marketFields:
+                    - market: null
+                      lob: BOP
+                      riskProfile: d6d5bd5e-824f-4c55-a570-bcc91e844707
+                      fields:
+                      - uuid: f23c0847-1fce-4627-8744-b69bfdfa7b47
+                        requirementLevel: Required
+                      repeatableGroups:
+                      - uuid: afa690cb-4974-498a-ac26-23f6feb83dd9
+                        requirementLevel: Required
+                        description: Please provide 3 years of loss history
+                        conditions:
+                          attribute: 056984c5-d8d3-44b7-98a4-ef9be0bd611e
+                          sourceGroup: null
+                          sourceValueModifier: null
+                          operator: 'TRUE'
+                          value: null
+                          repeatingOperator: null
+                          childGroupsOnly: null
+                        actionConditionSets: null
+                        risk_profile: 6434827e-903d-4bdd-b213-d1b8bad56060
+                    - market: Hanover
+                      lob: BOP
+                      riskProfile: d6d5bd5e-824f-4c55-a570-bcc91e844707
+                      fields:
+                      - uuid: f23c0847-1fce-4627-8744-b69bfdfa7b47
+                        requirementLevel: Required
+                      repeatableGroups:
+                      - uuid: afa690cb-4974-498a-ac26-23f6feb83dd9
+                        requirementLevel: Required
+                        description: Please provide 3 years of loss history
+                        conditions:
+                          attribute: 056984c5-d8d3-44b7-98a4-ef9be0bd611e
+                          sourceGroup: null
+                          sourceValueModifier: null
+                          operator: 'TRUE'
+                          value: null
+                          repeatingOperator: null
+                          childGroupsOnly: null
+                    - market: Hanover
+                      lob: CPKGE
+                      riskProfile: e56ebed1-4951-459f-ac33-132e034386c7
+                      children:
+                      - market: Hanover
+                        lob: PROP
+                        riskProfile: e53505ca-4895-4a43-9792-13ec401ae2ef
+                        fields:
+                        - uuid: f23c0847-1fce-4627-8744-b69bfdfa7b47
+                          requirementLevel: Required
+                        repeatableGroups:
+                        - uuid: afa690cb-4974-498a-ac26-23f6feb83dd9
+                          requirementLevel: Required
+                          description: Please provide 3 years of loss history
+                          conditions:
+                            attribute: 056984c5-d8d3-44b7-98a4-ef9be0bd611e
+                            sourceGroup: null
+                            sourceValueModifier: null
+                            operator: 'TRUE'
+                            value: null
+                            repeatingOperator: null
+                            childGroupsOnly: null
+                      - market: Hanover
+                        lob: CGL
+                        riskProfile: 9bc83cc0-e51f-435d-8ee9-6bc36de50961
+                        fields:
+                        - uuid: f23c0847-1fce-4627-8744-b69bfdfa7b47
+                          requirementLevel: Required
+                        repeatableGroups:
+                        - uuid: afa690cb-4974-498a-ac26-23f6feb83dd9
+                          requirementLevel: Required
+                          description: Please provide 3 years of loss history
+                          conditions:
+                            attribute: 056984c5-d8d3-44b7-98a4-ef9be0bd611e
+                            sourceGroup: null
+                            sourceValueModifier: null
+                            operator: 'TRUE'
+                            value: null
+                            repeatingOperator: null
+                            childGroupsOnly: null
+                    riskProfiles:
+                    - uuid: d6d5bd5e-824f-4c55-a570-bcc91e844707
+                      name: Hanover | BOP | Quote
+                      type: Package
+                      market: Hanover
+                      marketUuid: 7c7615e1-57b8-84d8-a4a9-4bfc333381c3
+                      excessAndSurplus: false
+                      lob: BOP
+                      childLobs: []
+                      inAppetite: false
+                      bindAllowed: false
+                      bindAppetite: false
+                      referAllowed: false
+                      routeType: Quote
+                      requiredToSubmit:
+                        contractCode: true
+                        username: true
+                        password: false
+                      validationErrors: []
+                      evaluations:
+                      - type: Market
+                        reasons:
+                        - message: Hanover declines this quote based on Appetite.
+                          impactingFactors:
+                          - attributeId: f23c0847-1fce-4627-8744-b69bfdfa7b47
+                            groupId: null
+                          - attributeId: 3dcdd8fa-60f0-4352-b464-d444d91aa947
+                            groupId: null
+                    - uuid: e56ebed1-4951-459f-ac33-132e034386c7
+                      name: Hanover | CPKGE | Quote
+                      type: Package
+                      market: Hanover
+                      marketUuid: 7c7615e1-57b8-84d8-a4a9-4bfc333381c3
+                      excessAndSurplus: false
+                      lob: CPKGE
+                      childLobs:
+                      - PROP
+                      - CGL
+                      inAppetite: false
+                      bindAllowed: false
+                      bindAppetite: false
+                      referAllowed: false
+                      routeType: Quote
+                      requiredToSubmit:
+                        contractCode: true
+                        username: true
+                        password: false
+                      validationErrors: []
+                      evaluations:
+                      - type: Market
+                        reasons:
+                        - message: Hanover declines this quote based on Appetite.
+                          impactingFactors:
+                          - attributeId: f23c0847-1fce-4627-8744-b69bfdfa7b47
+                            groupId: null
+                          - attributeId: 3dcdd8fa-60f0-4352-b464-d444d91aa947
+                            groupId: null
+                  summary: Response (nested_form=false)
+                Response(nestedForm=true):
+                  value:
+                    pages:
+                    - guid: string
+                      label: string
+                      description: string
+                      order: 2147483647
+                      groups:
+                      - guid: string
+                        page: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        label: string
+                        description: string
+                        isRepeatable: true
+                        repeatMinMax: ''
+                        order: 2147483647
+                        type: normal
+                        columns:
+                        - guid: string
+                        parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        parentLabel: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        parentColumns:
+                          guid: string
+                        fields:
+                          guid: string
+                          group: string
+                          label: string
+                          description: string
+                          additionalDetails:
+                            heading: string
+                            children:
+                            - heading: string
+                              children:
+                              - listItem: string
+                          order: 0
+                          type: string
+                          dataClass: string
+                          options:
+                            label: string
+                            value: 0
+                          underwritingCategory: string
+                          isAppetiteCategory: true
+                          isEnhancedAppetiteCategory: true
+                          isBind: true
+                          isRefer: true
+                          conditions:
+                            operator: and
+                            action: referral
+                            conditions:
+                            - operator: ==
+                              value: string
+                              attribute: string
+                              repeatingOperator: ANY
+                              sourceGroup: string
+                          actionConditions:
+                            operator: and
+                            action: referral
+                            conditions:
+                            - operator: ==
+                              value: string
+                              attribute: string
+                              repeatingOperator: ANY
+                              sourceGroup: string
+                          market: string
+                          classificationStandardGuid: string
+                          classCodeFilterFieldsGuids:
+                          - string
+                          unique: true
+                          uniqueToParent: true
+                          parentAttributeGuid: string
+                          prefillSourceFieldGuid: string
+                          minimum: 0
+                          maximum: 0
+                          isSuggestable: true
+                          length: 0
+                    marketFields:
+                    - market: null
+                      lob: BOP
+                      riskProfile: d6d5bd5e-824f-4c55-a570-bcc91e844707
+                      fields:
+                      - uuid: f23c0847-1fce-4627-8744-b69bfdfa7b47
+                        requirementLevel: Required
+                      repeatableGroups:
+                      - uuid: afa690cb-4974-498a-ac26-23f6feb83dd9
+                        requirementLevel: Required
+                        description: Please provide 3 years of loss history
+                        conditions:
+                          attribute: 056984c5-d8d3-44b7-98a4-ef9be0bd611e
+                          sourceGroup: null
+                          sourceValueModifier: null
+                          operator: 'TRUE'
+                          value: null
+                          repeatingOperator: null
+                          childGroupsOnly: null
+                        actionConditionSets: null
+                        risk_profile: 6434827e-903d-4bdd-b213-d1b8bad56060
+                    - market: Hanover
+                      lob: BOP
+                      riskProfile: d6d5bd5e-824f-4c55-a570-bcc91e844707
+                      fields:
+                      - uuid: f23c0847-1fce-4627-8744-b69bfdfa7b47
+                        requirementLevel: Required
+                      repeatableGroups:
+                      - uuid: afa690cb-4974-498a-ac26-23f6feb83dd9
+                        requirementLevel: Required
+                        description: Please provide 3 years of loss history
+                        conditions:
+                          attribute: 056984c5-d8d3-44b7-98a4-ef9be0bd611e
+                          sourceGroup: null
+                          sourceValueModifier: null
+                          operator: 'TRUE'
+                          value: null
+                          repeatingOperator: null
+                          childGroupsOnly: null
+                    - market: Hanover
+                      lob: CPKGE
+                      riskProfile: e56ebed1-4951-459f-ac33-132e034386c7
+                      children:
+                      - market: Hanover
+                        lob: PROP
+                        riskProfile: e53505ca-4895-4a43-9792-13ec401ae2ef
+                        fields:
+                        - uuid: f23c0847-1fce-4627-8744-b69bfdfa7b47
+                          requirementLevel: Required
+                        repeatableGroups:
+                        - uuid: afa690cb-4974-498a-ac26-23f6feb83dd9
+                          requirementLevel: Required
+                          description: Please provide 3 years of loss history
+                          conditions:
+                            attribute: 056984c5-d8d3-44b7-98a4-ef9be0bd611e
+                            sourceGroup: null
+                            sourceValueModifier: null
+                            operator: 'TRUE'
+                            value: null
+                            repeatingOperator: null
+                            childGroupsOnly: null
+                      - market: Hanover
+                        lob: CGL
+                        riskProfile: 9bc83cc0-e51f-435d-8ee9-6bc36de50961
+                        fields:
+                        - uuid: f23c0847-1fce-4627-8744-b69bfdfa7b47
+                          requirementLevel: Required
+                        repeatableGroups:
+                        - uuid: afa690cb-4974-498a-ac26-23f6feb83dd9
+                          requirementLevel: Required
+                          description: Please provide 3 years of loss history
+                          conditions:
+                            attribute: 056984c5-d8d3-44b7-98a4-ef9be0bd611e
+                            sourceGroup: null
+                            sourceValueModifier: null
+                            operator: 'TRUE'
+                            value: null
+                            repeatingOperator: null
+                            childGroupsOnly: null
+                    riskProfiles:
+                    - uuid: d6d5bd5e-824f-4c55-a570-bcc91e844707
+                      name: Hanover | BOP | Quote
+                      type: Package
+                      market: Hanover
+                      marketUuid: 7c7615e1-57b8-84d8-a4a9-4bfc333381c3
+                      excessAndSurplus: false
+                      lob: BOP
+                      childLobs: []
+                      inAppetite: false
+                      bindAllowed: false
+                      bindAppetite: false
+                      referAllowed: false
+                      routeType: Quote
+                      requiredToSubmit:
+                        contractCode: true
+                        username: true
+                        password: false
+                      validationErrors: []
+                      evaluations:
+                      - type: Market
+                        reasons:
+                        - message: Hanover declines this quote based on Appetite.
+                          impactingFactors:
+                          - attributeId: f23c0847-1fce-4627-8744-b69bfdfa7b47
+                            groupId: null
+                          - attributeId: 3dcdd8fa-60f0-4352-b464-d444d91aa947
+                            groupId: null
+                    - uuid: e56ebed1-4951-459f-ac33-132e034386c7
+                      name: Hanover | CPKGE | Quote
+                      type: Package
+                      market: Hanover
+                      marketUuid: 7c7615e1-57b8-84d8-a4a9-4bfc333381c3
+                      excessAndSurplus: false
+                      lob: CPKGE
+                      childLobs:
+                      - PROP
+                      - CGL
+                      inAppetite: false
+                      bindAllowed: false
+                      bindAppetite: false
+                      referAllowed: false
+                      routeType: Quote
+                      requiredToSubmit:
+                        contractCode: true
+                        username: true
+                        password: false
+                      validationErrors: []
+                      evaluations:
+                      - type: Market
+                        reasons:
+                        - message: Hanover declines this quote based on Appetite.
+                          impactingFactors:
+                          - attributeId: f23c0847-1fce-4627-8744-b69bfdfa7b47
+                            groupId: null
+                          - attributeId: 3dcdd8fa-60f0-4352-b464-d444d91aa947
+                            groupId: null
+                  summary: Response (nested_form=true)
+          description: Successfully received the form.
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                InvalidParams:
+                  value:
+                    lobs:
+                    - Invalid pk "{BAD LOB}" - object does not exist.
+                  summary: Invalid params
+          description: Invalid LOB
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                NotFound:
+                  value:
+                    detail: No base question set(s) found or allowed for the given line(s) of business.
+                  summary: Not found
+          description: Base question set(s) not found
+      summary: Forms base question set create
+      x-summary-source: derived
+    get:
+      operationId: forms_base_question_set_retrieve
+      description: 'Returns Base Question Set for given LOB(s)
+
+
+        Can optionally include Question Set for given Risk Profile(s)
+
+
+        Nested form param will change the structure of form to the nested structure'
+      parameters:
+      - in: query
+        name: lobs
+        schema:
+          type: array
+          items:
+            type: string
+        description: ACORD codes or UUIDs of lines of business
+        required: true
+      - in: query
+        name: nested
+        schema:
+          type: boolean
+          default: false
+        description: Format the returned form with nested pages, groups, and fields
+      - in: query
+        name: risk_profiles
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        description: Risk profile UUIDs
+      tags:
+      - Forms
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Response(nestedForm=false):
+                  value:
+                    pages:
+                    - guid: string
+                      label: string
+                      description: string
+                      order: 2147483647
+                    groups:
+                    - guid: string
+                      page: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      label: string
+                      description: string
+                      isRepeatable: true
+                      repeatMinMax: ''
+                      order: 2147483647
+                      type: normal
+                      columns:
+                      - guid: string
+                      parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      parentLabel: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      parentColumns:
+                        guid: string
+                    fields:
+                      guid: string
+                      group: string
+                      label: string
+                      description: string
+                      additionalDetails:
+                        heading: string
+                        children:
+                        - heading: string
+                          children:
+                          - listItem: string
+                      order: 0
+                      type: string
+                      dataClass: string
+                      options:
+                        label: string
+                        value: 0
+                      underwritingCategory: string
+                      isAppetiteCategory: true
+                      isEnhancedAppetiteCategory: true
+                      isBind: true
+                      isRefer: true
+                      conditions:
+                        operator: and
+                        action: referral
+                        conditions:
+                        - operator: ==
+                          value: string
+                          attribute: string
+                          repeatingOperator: ANY
+                          sourceGroup: string
+                      actionConditions:
+                        operator: and
+                        action: referral
+                        conditions:
+                        - operator: ==
+                          value: string
+                          attribute: string
+                          repeatingOperator: ANY
+                          sourceGroup: string
+                      market: string
+                      classificationStandardGuid: string
+                      classCodeFilterFieldsGuids:
+                      - string
+                      unique: true
+                      uniqueToParent: true
+                      parentAttributeGuid: string
+                      prefillSourceFieldGuid: string
+                      minimum: 0
+                      maximum: 0
+                      isSuggestable: true
+                      length: 0
+                    marketFields:
+                    - market: null
+                      lob: BOP
+                      riskProfile: d6d5bd5e-824f-4c55-a570-bcc91e844707
+                      fields:
+                      - uuid: f23c0847-1fce-4627-8744-b69bfdfa7b47
+                        requirementLevel: Required
+                      repeatableGroups:
+                      - uuid: afa690cb-4974-498a-ac26-23f6feb83dd9
+                        requirementLevel: Required
+                        description: Please provide 3 years of loss history
+                        conditions:
+                          attribute: 056984c5-d8d3-44b7-98a4-ef9be0bd611e
+                          sourceGroup: null
+                          sourceValueModifier: null
+                          operator: 'TRUE'
+                          value: null
+                          repeatingOperator: null
+                          childGroupsOnly: null
+                        actionConditionSets: null
+                        risk_profile: 6434827e-903d-4bdd-b213-d1b8bad56060
+                    riskProfiles:
+                    - uuid: d6d5bd5e-824f-4c55-a570-bcc91e844707
+                      name: Hanover | BOP | Quote
+                      type: Package
+                      market: Hanover
+                      marketUuid: 7c7615e1-57b8-84d8-a4a9-4bfc333381c3
+                      excessAndSurplus: false
+                      lob: BOP
+                      childLobs: []
+                      inAppetite: false
+                      bindAllowed: false
+                      bindAppetite: false
+                      referAllowed: false
+                      routeType: Quote
+                      requiredToSubmit:
+                        contractCode: true
+                        username: true
+                        password: false
+                      validationErrors: []
+                      evaluations: []
+                    - uuid: e56ebed1-4951-459f-ac33-132e034386c7
+                      name: Hanover | CPKGE | Quote
+                      type: Package
+                      market: Hanover
+                      marketUuid: 7c7615e1-57b8-84d8-a4a9-4bfc333381c3
+                      excessAndSurplus: false
+                      lob: CPKGE
+                      childLobs:
+                      - PROP
+                      - CGL
+                      inAppetite: false
+                      bindAllowed: false
+                      bindAppetite: false
+                      referAllowed: false
+                      routeType: Quote
+                      requiredToSubmit:
+                        contractCode: true
+                        username: true
+                        password: false
+                      validationErrors: []
+                      evaluations: []
+                  summary: Response (nested_form=false)
+                Response(nestedForm=true):
+                  value:
+                    pages:
+                    - guid: string
+                      label: string
+                      description: string
+                      order: 2147483647
+                      groups:
+                      - guid: string
+                        page: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        label: string
+                        description: string
+                        isRepeatable: true
+                        repeatMinMax: ''
+                        order: 2147483647
+                        type: normal
+                        columns:
+                        - guid: string
+                        parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        parentLabel: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        parentColumns:
+                          guid: string
+                        fields:
+                          guid: string
+                          group: string
+                          label: string
+                          description: string
+                          additionalDetails:
+                            heading: string
+                            children:
+                            - heading: string
+                              children:
+                              - listItem: string
+                          order: 0
+                          type: string
+                          dataClass: string
+                          options:
+                            label: string
+                            value: 0
+                          underwritingCategory: string
+                          isAppetiteCategory: true
+                          isEnhancedAppetiteCategory: true
+                          isBind: true
+                          isRefer: true
+                          conditions:
+                            operator: and
+                            action: referral
+                            conditions:
+                            - operator: ==
+                              value: string
+                              attribute: string
+                              repeatingOperator: ANY
+                              sourceGroup: string
+                          actionConditions:
+                            operator: and
+                            action: referral
+                            conditions:
+                            - operator: ==
+                              value: string
+                              attribute: string
+                              repeatingOperator: ANY
+                              sourceGroup: string
+                          market: string
+                          classificationStandardGuid: string
+                          classCodeFilterFieldsGuids:
+                          - string
+                          unique: true
+                          uniqueToParent: true
+                          parentAttributeGuid: string
+                          prefillSourceFieldGuid: string
+                          minimum: 0
+                          maximum: 0
+                          isSuggestable: true
+                          length: 0
+                    marketFields:
+                    - market: null
+                      lob: BOP
+                      riskProfile: d6d5bd5e-824f-4c55-a570-bcc91e844707
+                      fields:
+                      - uuid: f23c0847-1fce-4627-8744-b69bfdfa7b47
+                        requirementLevel: Required
+                      repeatableGroups:
+                      - uuid: afa690cb-4974-498a-ac26-23f6feb83dd9
+                        requirementLevel: Required
+                        description: Please provide 3 years of loss history
+                        conditions:
+                          attribute: 056984c5-d8d3-44b7-98a4-ef9be0bd611e
+                          sourceGroup: null
+                          sourceValueModifier: null
+                          operator: 'TRUE'
+                          value: null
+                          repeatingOperator: null
+                          childGroupsOnly: null
+                        actionConditionSets: null
+                        risk_profile: 6434827e-903d-4bdd-b213-d1b8bad56060
+                    riskProfiles:
+                    - uuid: d6d5bd5e-824f-4c55-a570-bcc91e844707
+                      name: Hanover | BOP | Quote
+                      type: Package
+                      market: Hanover
+                      marketUuid: 7c7615e1-57b8-84d8-a4a9-4bfc333381c3
+                      excessAndSurplus: false
+                      lob: BOP
+                      childLobs: []
+                      inAppetite: false
+                      bindAllowed: false
+                      bindAppetite: false
+                      referAllowed: false
+                      routeType: Quote
+                      requiredToSubmit:
+                        contractCode: true
+                        username: true
+                        password: false
+                      validationErrors: []
+                      evaluations: []
+                    - uuid: e56ebed1-4951-459f-ac33-132e034386c7
+                      name: Hanover | CPKGE | Quote
+                      type: Package
+                      market: Hanover
+                      marketUuid: 7c7615e1-57b8-84d8-a4a9-4bfc333381c3
+                      excessAndSurplus: false
+                      lob: CPKGE
+                      childLobs:
+                      - PROP
+                      - CGL
+                      inAppetite: false
+                      bindAllowed: false
+                      bindAppetite: false
+                      referAllowed: false
+                      routeType: Quote
+                      requiredToSubmit:
+                        contractCode: true
+                        username: true
+                        password: false
+                      validationErrors: []
+                      evaluations: []
+                  summary: Response (nested_form=true)
+          description: Successfully received the form.
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                InvalidParams:
+                  value:
+                    lobs:
+                    - Invalid pk "{BAD LOB}" - object does not exist.
+                  summary: Invalid params
+          description: Invalid LOB
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                NotFound:
+                  value:
+                    detail: No base question set(s) found or allowed for the given line(s) of business.
+                  summary: Not found
+          description: Base question set(s) not found
+      summary: Forms base question set retrieve
+      x-summary-source: derived
+  /api/v1/forms/basic-appetite/:
+    get:
+      operationId: forms_basic_appetite_list
+      description: 'Returns form with basic appetite and possible routes.
+
+
+        Possible routes contain route types for each market and lob combination.
+
+
+        Starting endpoint for IDP appetite flow.'
+      parameters:
+      - in: query
+        name: lobs
+        schema:
+          type: array
+          items:
+            type: string
+        description: ACORD codes or UUIDs of lines of businesses
+        required: true
+      - in: query
+        name: markets
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        description: UUIDs of markets
+        required: true
+      - in: query
+        name: nested
+        schema:
+          type: boolean
+          default: false
+        description: Format the returned form with nested pages, groups, and fields
+      tags:
+      - Forms
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Response(nestedForm=false):
+                  value:
+                  - form:
+                      pages:
+                      - guid: string
+                        label: string
+                        description: string
+                        order: 2147483647
+                      groups:
+                      - guid: string
+                        page: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        label: string
+                        description: string
+                        isRepeatable: true
+                        repeatMinMax: ''
+                        order: 2147483647
+                        type: normal
+                        columns:
+                        - guid: string
+                        parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        parentLabel: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        parentColumns:
+                          guid: string
+                      fields:
+                        guid: string
+                        group: string
+                        label: string
+                        description: string
+                        additionalDetails:
+                          heading: string
+                          children:
+                          - heading: string
+                            children:
+                            - listItem: string
+                        order: 0
+                        type: string
+                        dataClass: string
+                        options:
+                          label: string
+                          value: 0
+                        underwritingCategory: string
+                        isAppetiteCategory: true
+                        isEnhancedAppetiteCategory: true
+                        isBind: true
+                        isRefer: true
+                        conditions:
+                          operator: and
+                          action: referral
+                          conditions:
+                          - operator: ==
+                            value: string
+                            attribute: string
+                            repeatingOperator: ANY
+                            sourceGroup: string
+                        actionConditions:
+                          operator: and
+                          action: referral
+                          conditions:
+                          - operator: ==
+                            value: string
+                            attribute: string
+                            repeatingOperator: ANY
+                            sourceGroup: string
+                        market: string
+                        classificationStandardGuid: string
+                        classCodeFilterFieldsGuids:
+                        - string
+                        unique: true
+                        uniqueToParent: true
+                        parentAttributeGuid: string
+                        prefillSourceFieldGuid: string
+                        minimum: 0
+                        maximum: 0
+                        isSuggestable: true
+                        length: 0
+                      marketFields:
+                      - market: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        riskProfiles:
+                        - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        fields:
+                        - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                          requirementLevel: string
+                        repeatableGroups:
+                        - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                          description: string
+                          requirementLevel: string
+                          conditions: null
+                          actionConditionSets: null
+                          risk_profile: 6434827e-903d-4bdd-b213-d1b8bad56060
+                    possibleRoutes:
+                      market.uuid:
+                        BOP:
+                        - Quote
+                        - Bridge
+                        WORK:
+                        - Quote
+                        - Bridge
+                      market2.uuid:
+                        BOP:
+                        - Quote
+                        WORK:
+                        - Quote
+                  summary: Response (nested_form=false)
+                Response(nestedForm=true):
+                  value:
+                  - form:
+                      pages:
+                      - guid: string
+                        label: string
+                        description: string
+                        order: 2147483647
+                        groups:
+                        - guid: string
+                          page: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                          label: string
+                          description: string
+                          isRepeatable: true
+                          repeatMinMax: ''
+                          order: 2147483647
+                          type: normal
+                          columns:
+                          - guid: string
+                          parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                          parentLabel: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                          parentColumns:
+                            guid: string
+                          fields:
+                            guid: string
+                            group: string
+                            label: string
+                            description: string
+                            additionalDetails:
+                              heading: string
+                              children:
+                              - heading: string
+                                children:
+                                - listItem: string
+                            order: 0
+                            type: string
+                            dataClass: string
+                            options:
+                              label: string
+                              value: 0
+                            underwritingCategory: string
+                            isAppetiteCategory: true
+                            isEnhancedAppetiteCategory: true
+                            isBind: true
+                            isRefer: true
+                            conditions:
+                              operator: and
+                              action: referral
+                              conditions:
+                              - operator: ==
+                                value: string
+                                attribute: string
+                                repeatingOperator: ANY
+                                sourceGroup: string
+                            actionConditions:
+                              operator: and
+                              action: referral
+                              conditions:
+                              - operator: ==
+                                value: string
+                                attribute: string
+                                repeatingOperator: ANY
+                                sourceGroup: string
+                            market: string
+                            classificationStandardGuid: string
+                            classCodeFilterFieldsGuids:
+                            - string
+                            unique: true
+                            uniqueToParent: true
+                            parentAttributeGuid: string
+                            prefillSourceFieldGuid: string
+                            minimum: 0
+                            maximum: 0
+                            isSuggestable: true
+                            length: 0
+                      marketFields:
+                      - market: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        riskProfiles:
+                        - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        fields:
+                        - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                          requirementLevel: string
+                        repeatableGroups:
+                        - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                          description: string
+                          requirementLevel: string
+                          conditions: null
+                          actionConditionSets: null
+                          risk_profile: 6434827e-903d-4bdd-b213-d1b8bad56060
+                    possibleRoutes:
+                      market.uuid:
+                        BOP:
+                        - Quote
+                        - Bridge
+                        WORK:
+                        - Quote
+                        - Bridge
+                      market2.uuid:
+                        BOP:
+                        - Quote
+                        WORK:
+                        - Quote
+                  summary: Response (nested_form=true)
+          description: Successfully received the basic appetite form.
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                ConfiguredMarket:
+                  value:
+                    markets:
+                    - User does not have configured markets or permission
+                  summary: Configured market
+                InvalidParams:
+                  value:
+                    lobs:
+                    - Invalid
+                    markets:
+                    - Invalid
+                  summary: Invalid params
+          description: Nonexistence of configured market or invalid request params.
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/form_basic_appetite_detail_not_found'
+          description: Detail not found for given markets or lobs, or they are not provided.
+      summary: Forms basic appetite list
+      x-summary-source: derived
+  /api/v1/forms/bind/:
+    get:
+      operationId: forms_bind_retrieve
+      description: 'Returns bind questions applicable to the requested risk profile
+
+
+        Nested form parameter will change the structure of the form to the nested structure'
+      parameters:
+      - in: query
+        name: nested
+        schema:
+          type: boolean
+          default: false
+        description: Format the returned form with nested pages, groups, and fields
+      - in: query
+        name: risk_profile
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Forms
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Response(nestedForm=false):
+                  value:
+                    pages:
+                    - guid: string
+                      label: string
+                      description: string
+                      order: 2147483647
+                    groups:
+                    - guid: string
+                      page: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      label: string
+                      description: string
+                      isRepeatable: true
+                      repeatMinMax: ''
+                      order: 2147483647
+                      type: normal
+                      columns:
+                      - guid: string
+                      parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      parentLabel: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      parentColumns:
+                        guid: string
+                    fields:
+                      guid: string
+                      group: string
+                      label: string
+                      description: string
+                      additionalDetails:
+                        heading: string
+                        children:
+                        - heading: string
+                          children:
+                          - listItem: string
+                      order: 0
+                      type: string
+                      dataClass: string
+                      options:
+                        label: string
+                        value: 0
+                      underwritingCategory: string
+                      isAppetiteCategory: true
+                      isEnhancedAppetiteCategory: true
+                      isBind: true
+                      isRefer: true
+                      conditions:
+                        operator: and
+                        action: referral
+                        conditions:
+                        - operator: ==
+                          value: string
+                          attribute: string
+                          repeatingOperator: ANY
+                          sourceGroup: string
+                      actionConditions:
+                        operator: and
+                        action: referral
+                        conditions:
+                        - operator: ==
+                          value: string
+                          attribute: string
+                          repeatingOperator: ANY
+                          sourceGroup: string
+                      market: string
+                      classificationStandardGuid: string
+                      classCodeFilterFieldsGuids:
+                      - string
+                      unique: true
+                      uniqueToParent: true
+                      parentAttributeGuid: string
+                      prefillSourceFieldGuid: string
+                      minimum: 0
+                      maximum: 0
+                      isSuggestable: true
+                      length: 0
+                    marketFields:
+                    - market: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      riskProfiles:
+                      - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      fields:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        requirementLevel: string
+                      repeatableGroups:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        description: string
+                        requirementLevel: string
+                        conditions: null
+                        actionConditionSets: null
+                        risk_profile: 6434827e-903d-4bdd-b213-d1b8bad56060
+                  summary: Response (nested_form=false)
+                Response(nestedForm=true):
+                  value:
+                    pages:
+                    - guid: string
+                      label: string
+                      description: string
+                      order: 2147483647
+                      groups:
+                      - guid: string
+                        page: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        label: string
+                        description: string
+                        isRepeatable: true
+                        repeatMinMax: ''
+                        order: 2147483647
+                        type: normal
+                        columns:
+                        - guid: string
+                        parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        parentLabel: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        parentColumns:
+                          guid: string
+                        fields:
+                          guid: string
+                          group: string
+                          label: string
+                          description: string
+                          additionalDetails:
+                            heading: string
+                            children:
+                            - heading: string
+                              children:
+                              - listItem: string
+                          order: 0
+                          type: string
+                          dataClass: string
+                          options:
+                            label: string
+                            value: 0
+                          underwritingCategory: string
+                          isAppetiteCategory: true
+                          isEnhancedAppetiteCategory: true
+                          isBind: true
+                          isRefer: true
+                          conditions:
+                            operator: and
+                            action: referral
+                            conditions:
+                            - operator: ==
+                              value: string
+                              attribute: string
+                              repeatingOperator: ANY
+                              sourceGroup: string
+                          actionConditions:
+                            operator: and
+                            action: referral
+                            conditions:
+                            - operator: ==
+                              value: string
+                              attribute: string
+                              repeatingOperator: ANY
+                              sourceGroup: string
+                          market: string
+                          classificationStandardGuid: string
+                          classCodeFilterFieldsGuids:
+                          - string
+                          unique: true
+                          uniqueToParent: true
+                          parentAttributeGuid: string
+                          prefillSourceFieldGuid: string
+                          minimum: 0
+                          maximum: 0
+                          isSuggestable: true
+                          length: 0
+                    marketFields:
+                    - market: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      riskProfiles:
+                      - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      fields:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        requirementLevel: string
+                      repeatableGroups:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        description: string
+                        requirementLevel: string
+                        conditions: null
+                        actionConditionSets: null
+                        risk_profile: 6434827e-903d-4bdd-b213-d1b8bad56060
+                  summary: Response (nested_form=true)
+          description: Successfully retrieved the bind form
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                InvalidRiskProfileRequested:
+                  value:
+                    detail: Invalid pk 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX' - object does not exist.
+                  summary: Invalid risk profile requested
+                UserDoesNotHaveAccessToRiskProfile:
+                  value:
+                    risk_profile:
+                      detail: User does not have access to the requested risk profile
+                  summary: User does not have access to risk profile
+                RiskProfileDoesNotSupportBinding:
+                  value:
+                    risk_profile:
+                      detail: Binding is not allowed for this risk profile
+                  summary: Risk profile does not support binding
+          description: Invalid request for bind form
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+      summary: Forms bind retrieve
+      x-summary-source: derived
+  /api/v1/forms/dynamic-form/:
+    get:
+      operationId: forms_dynamic_form_retrieve
+      description: 'Returns data-capturing form based on the LOB and Markets
+
+
+        Nested form param will change the structure of form to the nested structure'
+      parameters:
+      - in: query
+        name: lob
+        schema:
+          type: string
+        description: ACORD code or UUID of line of business
+        required: true
+      - in: query
+        name: markets
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        description: UUIDs of markets
+      - in: query
+        name: nested
+        schema:
+          type: boolean
+          default: false
+        description: Format the returned form with nested pages, groups, and fields
+      tags:
+      - Forms
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Response(nestedForm=false):
+                  value:
+                    pages:
+                    - guid: string
+                      label: string
+                      description: string
+                      order: 2147483647
+                    groups:
+                    - guid: string
+                      page: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      label: string
+                      description: string
+                      isRepeatable: true
+                      repeatMinMax: ''
+                      order: 2147483647
+                      type: normal
+                      columns:
+                      - guid: string
+                      parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      parentLabel: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      parentColumns:
+                        guid: string
+                    fields:
+                      guid: string
+                      group: string
+                      label: string
+                      description: string
+                      additionalDetails:
+                        heading: string
+                        children:
+                        - heading: string
+                          children:
+                          - listItem: string
+                      order: 0
+                      type: string
+                      dataClass: string
+                      options:
+                        label: string
+                        value: 0
+                      underwritingCategory: string
+                      isAppetiteCategory: true
+                      isEnhancedAppetiteCategory: true
+                      isBind: true
+                      isRefer: true
+                      conditions:
+                        operator: and
+                        action: referral
+                        conditions:
+                        - operator: ==
+                          value: string
+                          attribute: string
+                          repeatingOperator: ANY
+                          sourceGroup: string
+                      actionConditions:
+                        operator: and
+                        action: referral
+                        conditions:
+                        - operator: ==
+                          value: string
+                          attribute: string
+                          repeatingOperator: ANY
+                          sourceGroup: string
+                      market: string
+                      classificationStandardGuid: string
+                      classCodeFilterFieldsGuids:
+                      - string
+                      unique: true
+                      uniqueToParent: true
+                      parentAttributeGuid: string
+                      prefillSourceFieldGuid: string
+                      minimum: 0
+                      maximum: 0
+                      isSuggestable: true
+                      length: 0
+                    marketFields:
+                    - market: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      riskProfiles:
+                      - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      fields:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        requirementLevel: string
+                      repeatableGroups:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        description: string
+                        requirementLevel: string
+                        conditions: null
+                        actionConditionSets: null
+                        risk_profile: 6434827e-903d-4bdd-b213-d1b8bad56060
+                  summary: Response (nested_form=false)
+                Response(nestedForm=true):
+                  value:
+                    pages:
+                    - guid: string
+                      label: string
+                      description: string
+                      order: 2147483647
+                      groups:
+                      - guid: string
+                        page: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        label: string
+                        description: string
+                        isRepeatable: true
+                        repeatMinMax: ''
+                        order: 2147483647
+                        type: normal
+                        columns:
+                        - guid: string
+                        parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        parentLabel: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        parentColumns:
+                          guid: string
+                        fields:
+                          guid: string
+                          group: string
+                          label: string
+                          description: string
+                          additionalDetails:
+                            heading: string
+                            children:
+                            - heading: string
+                              children:
+                              - listItem: string
+                          order: 0
+                          type: string
+                          dataClass: string
+                          options:
+                            label: string
+                            value: 0
+                          underwritingCategory: string
+                          isAppetiteCategory: true
+                          isEnhancedAppetiteCategory: true
+                          isBind: true
+                          isRefer: true
+                          conditions:
+                            operator: and
+                            action: referral
+                            conditions:
+                            - operator: ==
+                              value: string
+                              attribute: string
+                              repeatingOperator: ANY
+                              sourceGroup: string
+                          actionConditions:
+                            operator: and
+                            action: referral
+                            conditions:
+                            - operator: ==
+                              value: string
+                              attribute: string
+                              repeatingOperator: ANY
+                              sourceGroup: string
+                          market: string
+                          classificationStandardGuid: string
+                          classCodeFilterFieldsGuids:
+                          - string
+                          unique: true
+                          uniqueToParent: true
+                          parentAttributeGuid: string
+                          prefillSourceFieldGuid: string
+                          minimum: 0
+                          maximum: 0
+                          isSuggestable: true
+                          length: 0
+                    marketFields:
+                    - market: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      riskProfiles:
+                      - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      fields:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        requirementLevel: string
+                      repeatableGroups:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        description: string
+                        requirementLevel: string
+                        conditions: null
+                        actionConditionSets: null
+                        risk_profile: 6434827e-903d-4bdd-b213-d1b8bad56060
+                  summary: Response (nested_form=true)
+          description: Successfully received the form.
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                ConfiguredMarket:
+                  value:
+                    markets:
+                    - User does not have configured markets or permission
+                  summary: Configured market
+                InvalidParams:
+                  value:
+                    lobs:
+                    - Invalid
+                    markets:
+                    - Invalid
+                  summary: Invalid params
+          description: Nonexistence of configured market or invalid request params.
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dynamic_form_not_found'
+          description: Detail not found for given markets or lob.
+      summary: Forms dynamic form retrieve
+      x-summary-source: derived
+  /api/v1/forms/is-eligible/:
+    post:
+      operationId: forms_is_eligible_create
+      description: 'Returns eligibility results for the requested risk profiles, based on the provided form answers.
+
+        Request body is comprised of form answers, and must include answers for classification (NAICS)
+
+        and primary state fields.
+
+        Results will only be returned for risk profiles that are allowed for the user.'
+      parameters:
+      - in: query
+        name: risk_profiles
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        description: List of risk profile UUIDs to evaluate eligibility for
+        required: true
+      tags:
+      - Forms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FormResponsesRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FormResponsesRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FormResponsesRequest'
+        required: true
+      security:
+      - oauth2:
+        - write
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Success:
+                  value:
+                    riskProfiles:
+                    - uuid: d6d5bd5e-824f-4c55-a570-bcc91e844707
+                      name: Hanover | BOP | Quote
+                      type: Package
+                      market: Hanover
+                      marketUuid: 7c7615e1-57b8-84d8-a4a9-4bfc333381c3
+                      excessAndSurplus: false
+                      lob: BOP
+                      childLobs: []
+                      inAppetite: false
+                      bindAllowed: false
+                      bindAppetite: false
+                      referAllowed: false
+                      routeType: Quote
+                      requiredToSubmit:
+                        contractCode: true
+                        username: true
+                        password: false
+                      validationErrors: []
+                      evaluations:
+                      - type: Market
+                        reasons:
+                        - message: Hanover declines this quote based on Appetite.
+                          impactingFactors:
+                          - attributeId: f23c0847-1fce-4627-8744-b69bfdfa7b47
+                            groupId: null
+                          - attributeId: 3dcdd8fa-60f0-4352-b464-d444d91aa947
+                            groupId: null
+                    - uuid: e56ebed1-4951-459f-ac33-132e034386c7
+                      name: Hanover | CPKGE | Quote
+                      type: Package
+                      market: Hanover
+                      marketUuid: 7c7615e1-57b8-84d8-a4a9-4bfc333381c3
+                      excessAndSurplus: false
+                      lob: CPKGE
+                      childLobs:
+                      - PROP
+                      - CGL
+                      inAppetite: false
+                      bindAllowed: false
+                      bindAppetite: false
+                      referAllowed: false
+                      routeType: Quote
+                      requiredToSubmit:
+                        contractCode: true
+                        username: true
+                        password: false
+                      validationErrors: []
+                      evaluations:
+                      - type: Market
+                        reasons:
+                        - message: Hanover declines this quote based on Appetite.
+                          impactingFactors:
+                          - attributeId: f23c0847-1fce-4627-8744-b69bfdfa7b47
+                            groupId: null
+                          - attributeId: 3dcdd8fa-60f0-4352-b464-d444d91aa947
+                            groupId: null
+          description: Successfully checked eligibility
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                MissingField:
+                  value:
+                    fieldValues:
+                    - This field is required.
+                  summary: Missing field
+          description: Missing field
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+      summary: Forms is eligible create
+      x-summary-source: derived
+  /api/v1/forms/question-set/:
+    get:
+      operationId: forms_question_set_retrieve
+      description: Returns the question set form for the given risk profile(s) and optional parameters.
+      parameters:
+      - in: query
+        name: naics_index
+        schema:
+          type: string
+          format: uuid
+        description: UUID of a NAICS Index that is used to filter irrelevant NAICS-specific questions out of the form.
+      - in: query
+        name: nested
+        schema:
+          type: boolean
+          default: false
+        description: If true, formats the returned form with nested pages, groups, and fields
+      - in: query
+        name: risk_profiles
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        description: UUIDs of risk profiles that are used to build the form. Risk profiles that are not permitted for the user will be excluded from the form.
+        required: true
+      - in: query
+        name: states
+        schema:
+          type: array
+          items:
+            type: string
+        description: 2-letter codes of US states that are used to filter irrelevant state-specific questions out of the form.
+      tags:
+      - Forms
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Response(nestedForm=false):
+                  value:
+                    pages:
+                    - guid: string
+                      label: string
+                      description: string
+                      order: 2147483647
+                    groups:
+                    - guid: string
+                      page: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      label: string
+                      description: string
+                      isRepeatable: true
+                      repeatMinMax: ''
+                      order: 2147483647
+                      type: normal
+                      columns:
+                      - guid: string
+                      parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      parentLabel: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      parentColumns:
+                        guid: string
+                    fields:
+                      guid: string
+                      group: string
+                      label: string
+                      description: string
+                      additionalDetails:
+                        heading: string
+                        children:
+                        - heading: string
+                          children:
+                          - listItem: string
+                      order: 0
+                      type: string
+                      dataClass: string
+                      options:
+                        label: string
+                        value: 0
+                      underwritingCategory: string
+                      isAppetiteCategory: true
+                      isEnhancedAppetiteCategory: true
+                      isBind: true
+                      isRefer: true
+                      conditions:
+                        operator: and
+                        action: referral
+                        conditions:
+                        - operator: ==
+                          value: string
+                          attribute: string
+                          repeatingOperator: ANY
+                          sourceGroup: string
+                      actionConditions:
+                        operator: and
+                        action: referral
+                        conditions:
+                        - operator: ==
+                          value: string
+                          attribute: string
+                          repeatingOperator: ANY
+                          sourceGroup: string
+                      market: string
+                      classificationStandardGuid: string
+                      classCodeFilterFieldsGuids:
+                      - string
+                      unique: true
+                      uniqueToParent: true
+                      parentAttributeGuid: string
+                      prefillSourceFieldGuid: string
+                      minimum: 0
+                      maximum: 0
+                      isSuggestable: true
+                      length: 0
+                    marketFields:
+                    - market: null
+                      lob: BOP
+                      riskProfile: d6d5bd5e-824f-4c55-a570-bcc91e844707
+                      fields:
+                      - uuid: f23c0847-1fce-4627-8744-b69bfdfa7b47
+                        requirementLevel: Required
+                      repeatableGroups:
+                      - uuid: afa690cb-4974-498a-ac26-23f6feb83dd9
+                        requirementLevel: Required
+                        description: Please provide 3 years of loss history
+                        conditions:
+                          attribute: 056984c5-d8d3-44b7-98a4-ef9be0bd611e
+                          sourceGroup: null
+                          sourceValueModifier: null
+                          operator: 'TRUE'
+                          value: null
+                          repeatingOperator: null
+                          childGroupsOnly: null
+                        actionConditionSets: null
+                        risk_profile: 6434827e-903d-4bdd-b213-d1b8bad56060
+                  summary: Response (nested_form=false)
+                Response(nestedForm=true):
+                  value:
+                    pages:
+                    - guid: string
+                      label: string
+                      description: string
+                      order: 2147483647
+                      groups:
+                      - guid: string
+                        page: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        label: string
+                        description: string
+                        isRepeatable: true
+                        repeatMinMax: ''
+                        order: 2147483647
+                        type: normal
+                        columns:
+                        - guid: string
+                        parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        parentLabel: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        parentColumns:
+                          guid: string
+                        fields:
+                          guid: string
+                          group: string
+                          label: string
+                          description: string
+                          additionalDetails:
+                            heading: string
+                            children:
+                            - heading: string
+                              children:
+                              - listItem: string
+                          order: 0
+                          type: string
+                          dataClass: string
+                          options:
+                            label: string
+                            value: 0
+                          underwritingCategory: string
+                          isAppetiteCategory: true
+                          isEnhancedAppetiteCategory: true
+                          isBind: true
+                          isRefer: true
+                          conditions:
+                            operator: and
+                            action: referral
+                            conditions:
+                            - operator: ==
+                              value: string
+                              attribute: string
+                              repeatingOperator: ANY
+                              sourceGroup: string
+                          actionConditions:
+                            operator: and
+                            action: referral
+                            conditions:
+                            - operator: ==
+                              value: string
+                              attribute: string
+                              repeatingOperator: ANY
+                              sourceGroup: string
+                          market: string
+                          classificationStandardGuid: string
+                          classCodeFilterFieldsGuids:
+                          - string
+                          unique: true
+                          uniqueToParent: true
+                          parentAttributeGuid: string
+                          prefillSourceFieldGuid: string
+                          minimum: 0
+                          maximum: 0
+                          isSuggestable: true
+                          length: 0
+                    marketFields:
+                    - market: null
+                      lob: BOP
+                      riskProfile: d6d5bd5e-824f-4c55-a570-bcc91e844707
+                      fields:
+                      - uuid: f23c0847-1fce-4627-8744-b69bfdfa7b47
+                        requirementLevel: Required
+                      repeatableGroups:
+                      - uuid: afa690cb-4974-498a-ac26-23f6feb83dd9
+                        requirementLevel: Required
+                        description: Please provide 3 years of loss history
+                        conditions:
+                          attribute: 056984c5-d8d3-44b7-98a4-ef9be0bd611e
+                          sourceGroup: null
+                          sourceValueModifier: null
+                          operator: 'TRUE'
+                          value: null
+                          repeatingOperator: null
+                          childGroupsOnly: null
+                        actionConditionSets: null
+                        risk_profile: 6434827e-903d-4bdd-b213-d1b8bad56060
+                  summary: Response (nested_form=true)
+          description: Successfully received the form.
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                InvalidParams:
+                  value:
+                    riskProfiles:
+                    - Invalid pk "{BAD UUID}" - object does not exist.
+                  summary: Invalid params
+          description: Invalid risk profile
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+      summary: Forms question set retrieve
+      x-summary-source: derived
+  /api/v1/forms/refer/:
+    get:
+      operationId: forms_refer_retrieve
+      description: 'Returns referral questions applicable to the requested risk profile.
+
+
+        Nested form parameter will change the structure of the form to the nested structure.'
+      parameters:
+      - in: query
+        name: nested
+        schema:
+          type: boolean
+          default: false
+        description: Format the returned form with nested pages, groups, and fields
+      - in: query
+        name: risk_profile
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Forms
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Response(nestedForm=false):
+                  value:
+                    pages:
+                    - guid: string
+                      label: string
+                      description: string
+                      order: 2147483647
+                    groups:
+                    - guid: string
+                      page: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      label: string
+                      description: string
+                      isRepeatable: true
+                      repeatMinMax: ''
+                      order: 2147483647
+                      type: normal
+                      columns:
+                      - guid: string
+                      parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      parentLabel: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      parentColumns:
+                        guid: string
+                    fields:
+                      guid: string
+                      group: string
+                      label: string
+                      description: string
+                      additionalDetails:
+                        heading: string
+                        children:
+                        - heading: string
+                          children:
+                          - listItem: string
+                      order: 0
+                      type: string
+                      dataClass: string
+                      options:
+                        label: string
+                        value: 0
+                      underwritingCategory: string
+                      isAppetiteCategory: true
+                      isEnhancedAppetiteCategory: true
+                      isBind: true
+                      isRefer: true
+                      conditions:
+                        operator: and
+                        action: referral
+                        conditions:
+                        - operator: ==
+                          value: string
+                          attribute: string
+                          repeatingOperator: ANY
+                          sourceGroup: string
+                      actionConditions:
+                        operator: and
+                        action: referral
+                        conditions:
+                        - operator: ==
+                          value: string
+                          attribute: string
+                          repeatingOperator: ANY
+                          sourceGroup: string
+                      market: string
+                      classificationStandardGuid: string
+                      classCodeFilterFieldsGuids:
+                      - string
+                      unique: true
+                      uniqueToParent: true
+                      parentAttributeGuid: string
+                      prefillSourceFieldGuid: string
+                      minimum: 0
+                      maximum: 0
+                      isSuggestable: true
+                      length: 0
+                    marketFields:
+                    - market: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      riskProfiles:
+                      - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      fields:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        requirementLevel: string
+                      repeatableGroups:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        description: string
+                        requirementLevel: string
+                        conditions: null
+                        actionConditionSets: null
+                        risk_profile: 6434827e-903d-4bdd-b213-d1b8bad56060
+                  summary: Response (nested_form=false)
+                Response(nestedForm=true):
+                  value:
+                    pages:
+                    - guid: string
+                      label: string
+                      description: string
+                      order: 2147483647
+                      groups:
+                      - guid: string
+                        page: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        label: string
+                        description: string
+                        isRepeatable: true
+                        repeatMinMax: ''
+                        order: 2147483647
+                        type: normal
+                        columns:
+                        - guid: string
+                        parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        parentLabel: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        parentColumns:
+                          guid: string
+                        fields:
+                          guid: string
+                          group: string
+                          label: string
+                          description: string
+                          additionalDetails:
+                            heading: string
+                            children:
+                            - heading: string
+                              children:
+                              - listItem: string
+                          order: 0
+                          type: string
+                          dataClass: string
+                          options:
+                            label: string
+                            value: 0
+                          underwritingCategory: string
+                          isAppetiteCategory: true
+                          isEnhancedAppetiteCategory: true
+                          isBind: true
+                          isRefer: true
+                          conditions:
+                            operator: and
+                            action: referral
+                            conditions:
+                            - operator: ==
+                              value: string
+                              attribute: string
+                              repeatingOperator: ANY
+                              sourceGroup: string
+                          actionConditions:
+                            operator: and
+                            action: referral
+                            conditions:
+                            - operator: ==
+                              value: string
+                              attribute: string
+                              repeatingOperator: ANY
+                              sourceGroup: string
+                          market: string
+                          classificationStandardGuid: string
+                          classCodeFilterFieldsGuids:
+                          - string
+                          unique: true
+                          uniqueToParent: true
+                          parentAttributeGuid: string
+                          prefillSourceFieldGuid: string
+                          minimum: 0
+                          maximum: 0
+                          isSuggestable: true
+                          length: 0
+                    marketFields:
+                    - market: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      riskProfiles:
+                      - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      fields:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        requirementLevel: string
+                      repeatableGroups:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        description: string
+                        requirementLevel: string
+                        conditions: null
+                        actionConditionSets: null
+                        risk_profile: 6434827e-903d-4bdd-b213-d1b8bad56060
+                  summary: Response (nested_form=true)
+          description: Successfully retrieved the referral form
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                InvalidRiskProfileRequested:
+                  value:
+                    detail: Invalid pk 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX' - object does not exist.
+                  summary: Invalid risk profile requested
+                UserDoesNotHaveAccessToRiskProfile:
+                  value:
+                    risk_profile:
+                      detail: User does not have access to the requested risk profile
+                  summary: User does not have access to risk profile
+                RiskProfileDoesNotSupportReferral:
+                  value:
+                    risk_profile:
+                      detail: Referral is not allowed for this risk profile
+                  summary: Risk profile does not support referral
+          description: Invalid request for referral form
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+      summary: Forms refer retrieve
+      x-summary-source: derived
+  /api/v1/forms/submission/bind/:
+    post:
+      operationId: forms_submission_bind_create
+      description: 'Endpoint to bind quotes through IDP.
+
+
+        Metadata:
+
+        - clientId: integrator''s account ID, required
+
+        - quoteId: integrator''s quote ID, required
+
+        - callbackUrl: integrator''s callback URL, required
+
+
+        Market metadata:
+
+        - riskProfile: risk profile UUID, required
+
+        - marketQuoteId: carrier''s quote ID, optional and can be null
+
+        - marketAccountId: carrier''s account ID, optional and can be null
+
+        - contractCodeId: user''s market contract code UUID, optional or required, depending on user configuration
+
+        - credentialId: user''s market credential UUID, optional and can be null
+
+        - referenceIds: carrier''s quote IDs for binding, optional and can be null'
+      parameters:
+      - in: query
+        name: flatten
+        schema:
+          type: boolean
+        description: Return flattened response
+      - in: query
+        name: test
+        schema:
+          type: boolean
+        description: Test submission flow
+      tags:
+      - Forms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmissionRequestRequest'
+            examples:
+              IDPBindExample:
+                value:
+                  metadata:
+                    clientId: 6368e930-4e68-11ee-be56-0242ac120002
+                    quoteId: cktbz9qv300003b66gp4h3v3t
+                    callbackUrl: https://1234-165-225-208-177.ngrok.io/api/v1/rate-post-back
+                  linesOfBusiness:
+                  - lob: BOP
+                    effectiveDate: '2021-09-08'
+                    expirationDate: '2022-09-08'
+                  marketMetadata:
+                  - riskProfile: 2677e363-336a-4fa3-8252-7e058cf0dc21
+                    marketQuoteId: cktbz9qv300003b66gp4h3v3t
+                    marketAccountId: gf5i5wygrtluvjlt9ndttubjo
+                    contractCodeId: 8d4c8553-03fb-4452-924d-e6c98ceecc98
+                    credentialId: 52b460e7-22fa-44db-a97e-9d5b5a4a275f
+                    referenceIds:
+                    - cktbz9qv300003b66gp4h3v3t
+                  fieldValues:
+                  - questionId: 109cad7a-5667-4cf5-bd97-393a331121f4
+                    value: string
+                  repeatableFieldBlocks: []
+                summary: IDP bind example
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubmissionRequestRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubmissionRequestRequest'
+        required: true
+      security:
+      - oauth2:
+        - write
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmissionResponseSerializerV2'
+          description: ''
+      summary: Forms submission bind create
+      x-summary-source: derived
+  /api/v1/forms/submission/:
+    post:
+      operationId: forms_submission_create
+      description: 'Endpoint for quote submission.
+
+
+        Metadata:
+
+        - clientId: integrator''s account ID, required
+
+        - quoteId: integrator''s quote ID, required
+
+        - callbackUrl: integrator''s callback URL, required
+
+
+        Market metadata:
+
+        - riskProfile: risk profile UUID, required
+
+        - marketQuoteId: carrier''s quote ID, optional and can be null
+
+        - externalMarketQuoteId: carrier''s secondary quote ID, provided by the integrator when a carrier wants more
+
+        than one of their quote IDs passed back to them upon resubmitting a quote, optional and can be null
+
+        - marketAccountId: carrier''s account ID, optional and can be null
+
+        - contractCodeId: user''s market contract code UUID, optional or required, depending on user configuration
+
+        - credentialId: user''s market credential UUID, optional and can be null'
+      parameters:
+      - in: query
+        name: flatten
+        schema:
+          type: boolean
+        description: Return flattened response
+      - in: query
+        name: test
+        schema:
+          type: boolean
+        description: Test submission flow
+      tags:
+      - Forms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmissionRequestRequest'
+            examples:
+              BOPExample:
+                value:
+                  metadata:
+                    clientId: 27304f2e-aa78-4ecf-a3ed-5dc29c3a6108
+                    quoteId: cktbz9qv300003b66gp4h3v3t
+                    callbackUrl: https://1234-165-225-208-177.ngrok.io/api/v1/rate-post-back
+                  linesOfBusiness:
+                  - lob: BOP
+                    effectiveDate: '2021-09-08'
+                    expirationDate: '2022-09-08'
+                  marketMetadata:
+                  - riskProfile: 40b8daa9-63e8-4dc7-a316-a2378fd2d33e
+                    marketQuoteId: cktbz9qv300003b66gp4h3v3t
+                    externalMarketQuoteId: s9frjuhots0ua725sp79bi3xr
+                    marketAccountId: gf5i5wygrtluvjlt9ndttubjo
+                    contractCodeId: 72ffe658-88a4-4275-968a-19074aca8be4
+                    credentialId: 39a4aa13-d3c2-40e9-b7af-0229b881e5a4
+                  fieldValues:
+                  - questionId: c08ff178-b35b-4c00-8709-9f6d2010cf67
+                    value: Test
+                  - questionId: 109cad7a-5667-4cf5-bd97-393a331121f4
+                    value: ABC Company
+                  - questionId: 4fbe7319-cace-4446-89e6-b9dc866e7fec
+                    value: IL
+                  - questionId: 2ee03b78-cbb8-4c99-81ae-c83c3c8d1490
+                    value: 3412 Blandford Avenue
+                  - questionId: 90278ac6-ee85-43dd-828b-489e46e47877
+                    value: Testerson
+                  - questionId: 2663c6e0-c101-455b-80b6-55a9230d87e0
+                    value: '60451'
+                  - questionId: ea488a6f-1e82-47d7-bb15-4686f6053143
+                    value: New Lenox
+                  - questionId: 3dcdd8fa-60f0-4352-b464-d444d91aa947
+                    value: MI
+                  - questionId: f23c0847-1fce-4627-8744-b69bfdfa7b47
+                    value: b69fce38-eaad-450b-87c6-4c5628596d54
+                  - questionId: 134abdcd-011f-408c-8ea5-464fa8ae7e44
+                    value: 1000
+                  - questionId: 7c93426f-33cb-4761-bada-7b5ea0eeb1bf
+                    value: 1000
+                  - questionId: d4794e2f-c883-4ab4-9dab-097968fe1bba
+                    value: 1000
+                  - questionId: bb57a491-c9e4-41c2-b80a-606ba0c148de
+                    value: (234) 243-4542
+                  - questionId: 8a153f02-2ee7-44e9-893d-ccf1d93d1331
+                    value: 500000
+                  - questionId: 800c6507-cbcb-45da-8339-d4a0d14da02f
+                    value: 1
+                  - questionId: d5f471a5-d93f-41e2-ad9e-9b3c8b015617
+                    value: 1
+                  - questionId: e0c0b4cb-48a2-4f1e-bc75-20b6f4d81589
+                    value: 0
+                  - questionId: 4d7a01cc-8bce-470a-aef4-e3cce472b1ab
+                    value: test@test.com
+                  - questionId: ffaf9144-58a5-484d-a22d-fa41ff80271a
+                    value: Corporation
+                  - questionId: 71eaada5-e2cf-4a7b-a2ff-969dff93789b
+                    value: '2021-09-10'
+                  - questionId: c0c2ae7d-463e-46c1-b64b-d8999d26b609
+                    value: 1000000
+                  - questionId: 71fba4bd-9a61-4cb7-a566-cf23dd194d03
+                    value: false
+                  - questionId: 98e2fec0-c7e8-4473-bf06-4470eb33692c
+                    value: false
+                  - questionId: 39646e61-93de-4654-8694-b4d7b7e3d999
+                    value: 48-2738484
+                  - questionId: 05047d38-d1d5-4743-8d27-1c2a7c96e092
+                    value: false
+                  - questionId: e519933b-7a2a-41a3-9a77-7572d4a86a4d
+                    value: false
+                  - questionId: fbc76cc8-0418-45cd-bf89-51144d9e2d29
+                    value: ''
+                  repeatableFieldBlocks:
+                  - id: cktdbylc400193b6652g1htj6
+                    fieldBlockId: 37877f81-0239-487e-93d0-2cc0f97a2c33
+                    fieldValues:
+                    - questionId: 5637ffd5-2c09-4097-803a-5f3961525f2f
+                      value: 1
+                    - questionId: 5696fcee-7aee-4c81-b423-1ef6c8d80b79
+                      value: ''
+                    - questionId: 5de49646-a1e6-4aee-91c5-9e2f4190f562
+                      value: WV
+                    - questionId: ca0ebfdc-acb5-467f-a804-51f971102d2f
+                      value: Wheeling
+                    - questionId: d4a96bc6-9521-4376-9275-7eafd98cecef
+                      value: 26003-3416
+                    - questionId: fd44fe00-86f7-46c9-be8b-4a3e2433aa09
+                      value: 123 14th St
+                  - id: cktdvc28s00003b66km8w5kqi
+                    parentId: cktdbylc400193b6652g1htj6
+                    fieldBlockId: 53b9b5f5-debe-4cb9-8c72-287136f7ba6c
+                    fieldValues:
+                    - questionId: 48d15f9c-09c0-4f67-9eec-d5a5d8f89ee0
+                      value: 1
+                    - questionId: f65edcb8-cf41-4c37-86de-5b4721c25cf2
+                      value: 1000
+                    - questionId: 9e288570-97cb-41ee-9db8-962ef8add770
+                      value: 2000
+                    - questionId: 58e21f7a-f5ac-484a-8061-4d9159f9878d
+                      value: Commercial Condominium
+                    - questionId: 131434a6-e3f4-434c-9864-7ef5e11b4c28
+                      value: 20000
+                    - questionId: 2014b793-7301-4fdd-90e5-d38b562e2e4c
+                      value: Frame
+                    - questionId: b5309c78-a51b-4373-a930-4158f51f0f22
+                      value: 2020
+                    - questionId: 3a1b45af-4a96-47e1-a391-2c88a75d55f7
+                      value: 20
+                    - questionId: 2078f2d7-b336-455f-a86f-b1bad619de81
+                      value: 2000
+                    - questionId: 4a52ab30-fca7-4a31-9a00-63331c08f100
+                      value: false
+                    - questionId: 71498bd5-5c5b-4ee9-8830-25ec54819cc9
+                      value: 500
+                    - questionId: 5eb44859-3238-437f-a703-93ae53662a5c
+                      value: Tenant
+                summary: BOP example
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubmissionRequestRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubmissionRequestRequest'
+        required: true
+      security:
+      - oauth2:
+        - write
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmissionResponse'
+          description: ''
+      summary: Forms submission create
+      x-summary-source: derived
+  /api/v1/forms/submission/refer/:
+    post:
+      operationId: forms_submission_refer_create
+      description: 'Endpoint to refer quotes through IDP.
+
+
+        Metadata:
+
+        - clientId: integrator''s account ID, required
+
+        - quoteId: integrator''s quote ID, required
+
+        - callbackUrl: integrator''s callback URL, required
+
+
+        Market metadata:
+
+        - riskProfile: risk profile UUID, required
+
+        - marketQuoteId: carrier''s quote ID, optional and can be null
+
+        - marketAccountId: carrier''s account ID, optional and can be null
+
+        - contractCodeId: user''s market contract code UUID, optional or required, depending on user configuration
+
+        - credentialId: user''s market credential UUID, optional and can be null
+
+        - referenceIds: carrier''s quote IDs for referral, optional and can be null'
+      parameters:
+      - in: query
+        name: flatten
+        schema:
+          type: boolean
+        description: Return flattened response
+      - in: query
+        name: test
+        schema:
+          type: boolean
+        description: Test submission flow
+      tags:
+      - Forms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmissionRequestRequest'
+            examples:
+              IDPReferExample:
+                value:
+                  metadata:
+                    clientId: 6368e930-4e68-11ee-be56-0242ac120002
+                    quoteId: cktbz9qv300003b66gp4h3v3t
+                    callbackUrl: https://1234-165-225-208-177.ngrok.io/api/v1/rate-post-back
+                  linesOfBusiness:
+                  - lob: BOP
+                    effectiveDate: '2021-09-08'
+                    expirationDate: '2022-09-08'
+                  marketMetadata:
+                  - riskProfile: 2677e363-336a-4fa3-8252-7e058cf0dc21
+                    marketQuoteId: cktbz9qv300003b66gp4h3v3t
+                    marketAccountId: gf5i5wygrtluvjlt9ndttubjo
+                    contractCodeId: 8d4c8553-03fb-4452-924d-e6c98ceecc98
+                    credentialId: 52b460e7-22fa-44db-a97e-9d5b5a4a275f
+                    referenceIds:
+                    - cktbz9qv300003b66gp4h3v3t
+                  fieldValues:
+                  - questionId: 109cad7a-5667-4cf5-bd97-393a331121f4
+                    value: string
+                  repeatableFieldBlocks: []
+                summary: IDP refer example
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubmissionRequestRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubmissionRequestRequest'
+        required: true
+      security:
+      - oauth2:
+        - write
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmissionResponseSerializerV2'
+          description: ''
+      summary: Forms submission refer create
+      x-summary-source: derived
+  /api/v1/forms/templates/{uuid}/clone/:
+    post:
+      operationId: forms_templates_clone_create
+      description: 'Creates a copy of the template with the given UUID.
+
+
+        Permissions:
+
+        - Non-admin users cannot clone templates.
+
+
+        The new template will be scoped to the user''s application, regardless of the source template''s application.
+
+
+        If the template is cloned by an agency level admin user, the template''s agency owner will be set to their agency.'
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Forms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DefaultFieldValuesTemplateCloneRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DefaultFieldValuesTemplateCloneRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DefaultFieldValuesTemplateCloneRequest'
+        required: true
+      security:
+      - oauth2:
+        - write
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                SuccessResponse:
+                  value:
+                    filters:
+                      baseLob: BOP
+                      lobs:
+                      - BOP
+                      - WORK
+                      markets:
+                      - uuid: 1504a097-b34c-4ec1-83ec-377e6cd405e1
+                        name: Market 1 Name
+                      - uuid: 4c13cf0e-dbd5-4a80-b0a8-897dc1089ca6
+                        name: Market 2 Name
+                    uuid: 36405fd6-c44b-45d6-8eb1-aa07b73282ff
+                    name: Template Name
+                    description: Template Description
+                    owner: Owner Name
+                    createdAt: 2024-04-04T08:30:251
+                    availableAt: 2024-04-04T08:30:251
+                    clonedFromTemplate:
+                      uuid: aa2deead-993d-4bae-b7eb-4680db303499
+                      name: Source Template Name
+                    defaults:
+                      a61edba1-5938-44c8-aacb-6319178e4343:
+                        label: Field 1 Label
+                        value: string
+                      109cad7a-5667-4cf5-bd97-393a331121f4:
+                        label: Field 2 Label
+                        value: true
+                  summary: Success Response
+          description: Successful request
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/templates_get_response_forbidden_for_clone'
+          description: 'Error: Forbidden'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/templates_get_response_not_found_for_clone'
+          description: 'Error: Not Found'
+      summary: Forms templates clone create
+      x-summary-source: derived
+  /api/v1/forms/templates/:
+    post:
+      operationId: forms_templates_create
+      description: 'Creates a new template.
+
+
+        Permissions:
+
+        - Non-admin users cannot create templates.
+
+        - By default, a template is scoped to the user''s application, and is accessible to all agencies
+
+        under the application.
+
+        - Service level users can specify the agency owner of the template, which restricts access to users
+
+        under that agency.
+
+        - Agency level admin users cannot specify the owner of the template - any template they create will
+
+        automatically set the agency owner to their agency.
+
+
+        If availableAt is set, no updates can be made to the template after it is available.
+
+
+        Defaults keys can be either a field GUID or parent attribute GUID. Values will be validated
+
+        according to data type and options.'
+      tags:
+      - Forms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DefaultFieldValuesTemplateCreateRequest'
+            examples:
+              DefaultRequest:
+                value:
+                  name: string
+                  description: string
+                  agencyOwner: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                  baseLob: string
+                  lobs:
+                  - string
+                  markets:
+                  - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                  defaults:
+                    3fa85f64-5717-4562-b3fc-2c963f66afa6:
+                      value: string
+                    afa690cb-4974-498a-ac26-23f6feb83dd9:
+                      value: 123
+                    b93e8523-e4bd-434c-96a1-a7acbf7918df:
+                      value: true
+                  availableAt: '2024-05-22T02:32:35.010Z'
+                summary: Default request
+                description: Request with all possible properties
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DefaultFieldValuesTemplateCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DefaultFieldValuesTemplateCreateRequest'
+        required: true
+      security:
+      - oauth2:
+        - write
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                SuccessResponse:
+                  value:
+                    filters:
+                      baseLob: BOP
+                      lobs:
+                      - BOP
+                      - WORK
+                      markets:
+                      - uuid: 1504a097-b34c-4ec1-83ec-377e6cd405e1
+                        name: Market 1 Name
+                      - uuid: 4c13cf0e-dbd5-4a80-b0a8-897dc1089ca6
+                        name: Market 2 Name
+                    uuid: 36405fd6-c44b-45d6-8eb1-aa07b73282ff
+                    name: Template Name
+                    description: Template Description
+                    owner: Owner Name
+                    createdAt: 2024-04-04T08:30:251
+                    availableAt: 2024-04-04T08:30:251
+                    clonedFromTemplate:
+                      uuid: aa2deead-993d-4bae-b7eb-4680db303499
+                      name: Source Template Name
+                    defaults:
+                      a61edba1-5938-44c8-aacb-6319178e4343:
+                        label: Field 1 Label
+                        value: string
+                      109cad7a-5667-4cf5-bd97-393a331121f4:
+                        label: Field 2 Label
+                        value: true
+                  summary: Success Response
+          description: Successful request
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                InvalidLOBs:
+                  value:
+                    lobs:
+                    - Invalid pk - object does not exist.
+                  summary: Invalid LOBs
+                InvalidMarkets:
+                  value:
+                    markets:
+                    - Invalid pk - object does not exist.
+                  summary: Invalid markets
+                NoPermissionToSetAgencyOwner:
+                  value:
+                    agencyOwner:
+                      detail: You do not have permission to set the agency owner. Exclude the key from the request.
+                  summary: No permission to set agency owner
+                NoPermissionForAgency:
+                  value:
+                    agencyOwner:
+                      detail: You do not have permission for the given agency.
+                  summary: No permission for agency
+                InvalidDefaultFieldValue:
+                  value:
+                    defaults:
+                      detail:
+                        a61edba1-5938-44c8-aacb-6319178e4343:
+                        - 'Value 123 is not valid for data type Text: Value must be a string.'
+                  summary: Invalid default field value
+          description: Invalid request
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/templates_get_response_forbidden_for_create'
+          description: 'Error: Forbidden'
+      summary: Forms templates create
+      x-summary-source: derived
+    get:
+      operationId: forms_templates_list
+      description: 'Returns list of templates and their default field values that are accessible to the user.
+
+
+        Permissions:
+
+        - All users can access templates owned by Ivans.
+
+        - Service level users can access templates that are owned by their application or any agency under the application.
+
+        - Agency level admin users can access templates owned by their application or their own agency.
+
+        - Agency level non-admin users can access templates that are set to available, and are owned by their application
+
+        or their own agency.
+
+
+        Templates can be filtered with the given Lines of Business and Markets.
+
+        If no filters are provided, all permitted templates will be returned.
+
+        If exclude_defaults is true, default field values will not be returned for each template.'
+      parameters:
+      - in: query
+        name: exclude_defaults
+        schema:
+          type: boolean
+          default: false
+        description: Exclude default field values from the response
+      - in: query
+        name: lobs
+        schema:
+          type: array
+          items:
+            type: string
+        description: ACORD code or UUID of line of business
+      - in: query
+        name: markets
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        description: UUID of market
+      tags:
+      - Forms
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                DefaultsIncluded:
+                  value:
+                  - filters:
+                      baseLob: BOP
+                      lobs:
+                      - BOP
+                      - WORK
+                      markets:
+                      - uuid: 1504a097-b34c-4ec1-83ec-377e6cd405e1
+                        name: Market 1 Name
+                      - uuid: 4c13cf0e-dbd5-4a80-b0a8-897dc1089ca6
+                        name: Market 2 Name
+                    uuid: 36405fd6-c44b-45d6-8eb1-aa07b73282ff
+                    name: Template Name
+                    description: Template Description
+                    owner: Owner Name
+                    createdAt: 2024-04-04T08:30:251
+                    availableAt: 2024-04-04T08:30:251
+                    clonedFromTemplate:
+                      uuid: aa2deead-993d-4bae-b7eb-4680db303499
+                      name: Source Template Name
+                    defaults:
+                      a61edba1-5938-44c8-aacb-6319178e4343:
+                        label: Field 1 Label
+                        value: string
+                      109cad7a-5667-4cf5-bd97-393a331121f4:
+                        label: Field 2 Label
+                        value: true
+                  summary: Defaults included
+                DefaultsExcluded:
+                  value:
+                  - filters:
+                      baseLob: BOP
+                      lobs:
+                      - BOP
+                      - WORK
+                      markets:
+                      - uuid: 1504a097-b34c-4ec1-83ec-377e6cd405e1
+                        name: Market 1 Name
+                      - uuid: 4c13cf0e-dbd5-4a80-b0a8-897dc1089ca6
+                        name: Market 2 Name
+                    uuid: 36405fd6-c44b-45d6-8eb1-aa07b73282ff
+                    name: Template Name
+                    description: Template Description
+                    owner: Owner Name
+                    createdAt: 2024-04-04T08:30:251
+                    availableAt: 2024-04-04T08:30:251
+                    clonedFromTemplate:
+                      uuid: aa2deead-993d-4bae-b7eb-4680db303499
+                      name: Source Template Name
+                  summary: Defaults excluded
+          description: Successful request
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                InvalidLOBs:
+                  value:
+                    lobs:
+                    - Invalid pk - object does not exist.
+                  summary: Invalid LOBs
+                InvalidMarkets:
+                  value:
+                    markets:
+                    - Invalid pk - object does not exist.
+                  summary: Invalid markets
+          description: Invalid request
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/templates_get_response_forbidden_for_get'
+          description: 'Error: Forbidden'
+      summary: Forms templates list
+      x-summary-source: derived
+  /api/v1/forms/templates/{uuid}/:
+    delete:
+      operationId: forms_templates_destroy
+      description: 'Deletes the template with the given UUID.
+
+
+        Permissions:
+
+        - Non-admin users cannot delete templates.
+
+        - Service level users can delete any template under their application.
+
+        - Agency level admin users can only delete templates that are owned by the agency.'
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Forms
+      security:
+      - oauth2:
+        - write
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: Successful request
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/templates_get_response_forbidden_for_destroy'
+          description: 'Error: Forbidden'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/templates_get_response_not_found_for_destroy'
+          description: 'Error: Not Found'
+      summary: Forms templates destroy
+      x-summary-source: derived
+    patch:
+      operationId: forms_templates_partial_update
+      description: 'Updates the template with the given UUID.
+
+
+        Permissions:
+
+        - Non-admin users cannot update templates.
+
+        - Service level users can update any template under their application.
+
+        - Agency level admin users can only update templates that are owned by their agency.
+
+        - Service level users can update the agency owner of the template.
+
+        - Agency level admin users cannot update the owner of the template.
+
+
+        If a field is not provided in the request body, it will not be updated.
+
+
+        If availableAt is set, no updates can be made to the template after it is available.
+
+
+        Defaults keys can be either a field GUID or parent attribute GUID. Values will be validated
+
+        according to data type and options.'
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Forms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDefaultFieldValuesTemplateUpdateRequest'
+            examples:
+              DefaultRequest:
+                value:
+                  name: string
+                  description: string
+                  agencyOwner: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                  baseLob: string
+                  lobs:
+                  - string
+                  markets:
+                  - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                  defaults:
+                    3fa85f64-5717-4562-b3fc-2c963f66afa6:
+                      value: string
+                    afa690cb-4974-498a-ac26-23f6feb83dd9:
+                      value: 123
+                    b93e8523-e4bd-434c-96a1-a7acbf7918df:
+                      value: true
+                  availableAt: '2024-05-22T02:32:35.010Z'
+                summary: Default request
+                description: Request with all possible properties
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDefaultFieldValuesTemplateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDefaultFieldValuesTemplateUpdateRequest'
+      security:
+      - oauth2:
+        - write
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                SuccessResponse:
+                  value:
+                    filters:
+                      baseLob: BOP
+                      lobs:
+                      - BOP
+                      - WORK
+                      markets:
+                      - uuid: 1504a097-b34c-4ec1-83ec-377e6cd405e1
+                        name: Market 1 Name
+                      - uuid: 4c13cf0e-dbd5-4a80-b0a8-897dc1089ca6
+                        name: Market 2 Name
+                    uuid: 36405fd6-c44b-45d6-8eb1-aa07b73282ff
+                    name: Template Name
+                    description: Template Description
+                    owner: Owner Name
+                    createdAt: 2024-04-04T08:30:251
+                    availableAt: 2024-04-04T08:30:251
+                    clonedFromTemplate:
+                      uuid: aa2deead-993d-4bae-b7eb-4680db303499
+                      name: Source Template Name
+                    defaults:
+                      a61edba1-5938-44c8-aacb-6319178e4343:
+                        label: Field 1 Label
+                        value: string
+                      109cad7a-5667-4cf5-bd97-393a331121f4:
+                        label: Field 2 Label
+                        value: true
+                  summary: Success Response
+          description: Successful request
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                InvalidLOBs:
+                  value:
+                    lobs:
+                    - Invalid pk - object does not exist.
+                  summary: Invalid LOBs
+                InvalidMarkets:
+                  value:
+                    markets:
+                    - Invalid pk - object does not exist.
+                  summary: Invalid markets
+                NoPermissionToSetAgencyOwner:
+                  value:
+                    agencyOwner:
+                      detail: You do not have permission to set the agency owner. Exclude the key from the request.
+                  summary: No permission to set agency owner
+                NoPermissionForAgency:
+                  value:
+                    agencyOwner:
+                      detail: You do not have permission for the given agency.
+                  summary: No permission for agency
+                CannotUpdateAvailableTemplate:
+                  value:
+                    detail: You cannot update a template that is available.
+                  summary: Cannot update available template
+                InvalidDefaultFieldValue:
+                  value:
+                    defaults:
+                      detail:
+                        a61edba1-5938-44c8-aacb-6319178e4343:
+                        - 'Value 123 is not valid for data type Text: Value must be a string.'
+                  summary: Invalid default field value
+          description: Invalid request
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/templates_get_response_forbidden_for_update'
+          description: 'Error: Forbidden'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/templates_get_response_not_found_for_update'
+          description: 'Error: Not Found'
+      summary: Forms templates partial update
+      x-summary-source: derived
+    get:
+      operationId: forms_templates_retrieve
+      description: 'Returns individual template and its default field values.
+
+
+        Permissions:
+
+        - All users can access templates owned by Ivans.
+
+        - Service level users can access templates that are owned by their application or any agency under the application.
+
+        - Agency level admin users can access templates owned by their application or their own agency.
+
+        - Agency level non-admin users can access templates that are set to available, and are owned by their application
+
+        or their own agency.'
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - Forms
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                SuccessResponse:
+                  value:
+                    filters:
+                      baseLob: BOP
+                      lobs:
+                      - BOP
+                      - WORK
+                      markets:
+                      - uuid: 1504a097-b34c-4ec1-83ec-377e6cd405e1
+                        name: Market 1 Name
+                      - uuid: 4c13cf0e-dbd5-4a80-b0a8-897dc1089ca6
+                        name: Market 2 Name
+                    uuid: 36405fd6-c44b-45d6-8eb1-aa07b73282ff
+                    name: Template Name
+                    description: Template Description
+                    owner: Owner Name
+                    createdAt: 2024-04-04T08:30:251
+                    availableAt: 2024-04-04T08:30:251
+                    clonedFromTemplate:
+                      uuid: aa2deead-993d-4bae-b7eb-4680db303499
+                      name: Source Template Name
+                    defaults:
+                      a61edba1-5938-44c8-aacb-6319178e4343:
+                        label: Field 1 Label
+                        value: string
+                      109cad7a-5667-4cf5-bd97-393a331121f4:
+                        label: Field 2 Label
+                        value: true
+                  summary: Success Response
+          description: Successful request
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/templates_get_response_forbidden_for_detail'
+          description: 'Error: Forbidden'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/templates_get_response_not_found_for_detail'
+          description: 'Error: Not Found'
+      summary: Forms templates retrieve
+      x-summary-source: derived
+components:
+  schemas:
+    templates_get_response_forbidden_for_detail:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
+    SubmissionError:
+      type: object
+      properties:
+        riskProfileUuid:
+          type: string
+          format: uuid
+        marketUuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+        lineOfBusiness:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+      required:
+      - errors
+      - lineOfBusiness
+      - marketUuid
+      - name
+      - riskProfileUuid
+    RepeatableFieldBlockRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 1
+        parentId:
+          type: string
+          minLength: 1
+        fieldBlockId:
+          type: string
+          minLength: 1
+        fieldValues:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValuesRequest'
+      required:
+      - fieldBlockId
+      - fieldValues
+      - id
+    templates_get_response_not_found_for_detail:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
+    FieldValuesRequest:
+      type: object
+      properties:
+        questionId:
+          type: string
+          minLength: 1
+        value:
+          type:
+          - string
+          - 'null'
+      required:
+      - questionId
+      - value
+    SubmissionEvaluationReasons:
+      type: object
+      properties:
+        message:
+          type: string
+        impactingFactors:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubmissionImpactingFactors'
+      required:
+      - impactingFactors
+      - message
+    DefaultFieldValuesTemplateCreateRequest:
+      type: object
+      description: Serializer for creating DefaultFieldValuesTemplate.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: The name of the template.
+          maxLength: 128
+        description:
+          type: string
+          description: The description of the template.
+        agencyOwner:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: ID of the agency that owns the template.
+        baseLob:
+          type:
+          - string
+          - 'null'
+          description: ACORD code of the base question set line of business associated with the template.
+        lobs:
+          type: array
+          items:
+            type: string
+          description: ACORD codes of the lines of business associated with the template.
+        markets:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: UUIDs of the markets associated with the template.
+        defaults:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        availableAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: The date and time when the template is locked and available to be retrieved.
+      required:
+      - name
+    templates_get_response_forbidden_for_get:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
+    SubmissionEvaluations:
+      type: object
+      properties:
+        type:
+          type: string
+        reasons:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubmissionEvaluationReasons'
+      required:
+      - reasons
+      - type
+    SubmissionErrorMessage:
+      type: object
+      properties:
+        detail:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubmissionErrorDetail'
+      required:
+      - detail
+    LineOfBusinessSubmissionRequest:
+      type: object
+      properties:
+        lob:
+          type: string
+          minLength: 1
+        effectiveDate:
+          type: string
+          format: date
+        expirationDate:
+          type: string
+          format: date
+      required:
+      - effectiveDate
+      - expirationDate
+      - lob
+    ValidationError:
+      type: object
+      properties:
+        groupId:
+          type:
+          - string
+          - 'null'
+        questionId:
+          type:
+          - string
+          - 'null'
+        errorMsg:
+          type: object
+          additionalProperties: {}
+        value:
+          oneOf:
+          - type: string
+          - type: array
+            items: {}
+          readOnly: true
+      required:
+      - errorMsg
+      - groupId
+      - questionId
+      - value
+    WarningMessageDict:
+      type: object
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    templates_get_response_forbidden_for_create:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
+    SubmissionMetaDataRequest:
+      type: object
+      properties:
+        clientId:
+          type: string
+          format: uuid
+        quoteId:
+          type: string
+          minLength: 1
+        callbackUrl:
+          type: string
+          format: uri
+          minLength: 1
+      required:
+      - callbackUrl
+      - clientId
+      - quoteId
+    FormResponsesRequest:
+      type: object
+      properties:
+        fieldValues:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValuesRequest'
+        repeatableFieldBlocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/RepeatableFieldBlockRequest'
+      required:
+      - fieldValues
+      - repeatableFieldBlocks
+    SubmissionTransaction:
+      type: object
+      properties:
+        riskProfileUuid:
+          type: string
+          format: uuid
+        marketUuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+        lineOfBusiness:
+          type: string
+        timeout:
+          type: integer
+          description: Time (in seconds) to wait before timing out a submission
+        submissionErrorMsg:
+          allOf:
+          - $ref: '#/components/schemas/SubmissionErrorMessage'
+      required:
+      - lineOfBusiness
+      - marketUuid
+      - name
+      - riskProfileUuid
+      - submissionErrorMsg
+      - timeout
+    SubmissionRiskProfiles:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+        market:
+          type: string
+        marketUuid:
+          type: string
+          format: uuid
+        lob:
+          type: string
+        inAppetite:
+          type: boolean
+        bindAllowed:
+          type: boolean
+        bindAppetite:
+          type: boolean
+        routeType:
+          type: string
+        requiredToSubmit:
+          $ref: '#/components/schemas/RequiredToSubmitDict'
+        validationErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+        evaluations:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubmissionEvaluations'
+      required:
+      - bindAllowed
+      - bindAppetite
+      - evaluations
+      - inAppetite
+      - lob
+      - market
+      - marketUuid
+      - name
+      - requiredToSubmit
+      - routeType
+      - uuid
+      - validationErrors
+    SubmissionImpactingFactors:
+      type: object
+      properties:
+        attributeId:
+          type: string
+          format: uuid
+        groupId:
+          type: string
+          format: uuid
+      required:
+      - attributeId
+      - groupId
+    templates_get_response_not_found_for_clone:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
+    templates_get_response_not_found_for_update:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
+    templates_get_response_forbidden_for_clone:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
+    templates_get_response_forbidden_for_update:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
+    dynamic_form_not_found:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
+    SubmissionResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+        quoteSessionId:
+          type: string
+          format: uuid
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubmissionError'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubmissionWarning'
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubmissionTransaction'
+      required:
+      - detail
+      - errors
+      - quoteSessionId
+      - transactions
+      - warnings
+    SubmissionResponseSerializerV2:
+      type: object
+      properties:
+        detail:
+          type: string
+        quoteSessionId:
+          type: string
+          format: uuid
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubmissionError'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubmissionWarning'
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubmissionTransaction'
+        riskProfiles:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubmissionRiskProfiles'
+      required:
+      - detail
+      - errors
+      - quoteSessionId
+      - riskProfiles
+      - transactions
+      - warnings
+    RequiredToSubmitDict:
+      type: object
+      properties:
+        contractCode:
+          type: boolean
+        username:
+          type: boolean
+        password:
+          type: boolean
+      required:
+      - contractCode
+      - password
+      - username
+    templates_get_response_not_found_for_destroy:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
+    SubmissionRequestRequest:
+      type: object
+      description: Submission request serializer. Contains methods used elsewhere.
+      properties:
+        fieldValues:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValuesRequest'
+        repeatableFieldBlocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/RepeatableFieldBlockRequest'
+        metadata:
+          $ref: '#/components/schemas/SubmissionMetaDataRequest'
+        linesOfBusiness:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineOfBusinessSubmissionRequest'
+        marketMetadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketMetaDataRequest'
+      required:
+      - fieldValues
+      - linesOfBusiness
+      - marketMetadata
+      - metadata
+      - repeatableFieldBlocks
+    form_basic_appetite_detail_not_found:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
+    MarketMetaDataRequest:
+      type: object
+      properties:
+        riskProfile:
+          type: string
+          format: uuid
+        marketQuoteId:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+        externalMarketQuoteId:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+        marketAccountId:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+        credentialId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        referenceIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            minLength: 1
+        contractCodeId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+      required:
+      - riskProfile
+    PatchedDefaultFieldValuesTemplateUpdateRequest:
+      type: object
+      description: Serializer for updating DefaultFieldValuesTemplate.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: The name of the template.
+          maxLength: 128
+        description:
+          type: string
+          description: The description of the template.
+        agencyOwner:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: ID of the agency that owns the template.
+        baseLob:
+          type:
+          - string
+          - 'null'
+          description: ACORD code of the base question set line of business associated with the template.
+        lobs:
+          type: array
+          items:
+            type: string
+          description: ACORD codes of the lines of business associated with the template.
+        markets:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: UUIDs of the markets associated with the template.
+        defaults:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        availableAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Date and time the template is available for use.
+    DefaultFieldValuesTemplateCloneRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: Name of the new template
+          maxLength: 128
+        description:
+          type: string
+          minLength: 1
+          description: Description of the newly cloned template
+      required:
+      - name
+    templates_get_response_forbidden_for_destroy:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
+    SubmissionWarning:
+      type: object
+      properties:
+        questionId:
+          type: string
+          format: uuid
+        warningMessage:
+          $ref: '#/components/schemas/WarningMessageDict'
+        value:
+          type: string
+          format: uuid
+      required:
+      - questionId
+      - value
+      - warningMessage
+    SubmissionErrorDetail:
+      type: object
+      properties:
+        loc:
+          type: array
+          items: {}
+        msg:
+          type: string
+        type:
+          type: string
+      required:
+      - loc
+      - msg
+      - type
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    oauth2:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: /api/v1/token/
+          refreshUrl: /api/v1/token/
+          scopes:
+            read: Read scope
+            write: Write scope
+            epic: Epic User
+            third-party: Third Party User
+    basicAuth:
+      type: http
+      scheme: basic
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/agencies_list
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

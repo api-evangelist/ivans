@@ -1,0 +1,47 @@
+openapi: 3.2.0
+info:
+  title: IVANS Exchange API Docs Warp Transaction API
+  version: v1
+tags:
+- name: WarpTransaction
+paths:
+  /api/WarpTransaction/{clientID}:
+    post:
+      tags:
+      - WarpTransaction
+      summary: Sends a Warp request to the server
+      parameters:
+      - name: clientID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: User not authorized to view this resource.
+      security:
+      - Bearer: []
+      operationId: postApiWarpTransactionByClientID
+      x-operation-id-source: derived
+components:
+  securitySchemes:
+    Bearer:
+      type: http
+      description: JWT
+      scheme: Bearer
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/get_api-agencies-1
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

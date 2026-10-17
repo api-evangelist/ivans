@@ -1,0 +1,1025 @@
+openapi: 3.2.0
+info:
+  title: Ivans Distribution Platform Submission API
+  description: APIs for serving carrier forms, appetite, and validation
+  version: 0.1.0
+tags:
+- name: Submission
+paths:
+  /api/v1/forms/submission/bind:
+    post:
+      tags:
+      - Submission
+      summary: Bind Submission
+      description: 'Endpoint to bind quotes through IDP.
+
+
+        Metadata:
+
+        - clientId: integrator''s account ID, required
+
+        - quoteId: integrator''s quote ID, required
+
+        - callbackUrl: integrator''s callback URL, required
+
+
+        Market metadata:
+
+        - riskProfile: risk profile UUID, required
+
+        - marketQuoteId: carrier''s quote ID, optional and can be null
+
+        - marketAccountId: carrier''s account ID, optional and can be null
+
+        - contractCodeId: user''s market contract code UUID, optional or required, depending on user configuration
+
+        - credentialId: user''s market credential UUID, optional and can be null
+
+        - referenceIds: carrier''s quote IDs for binding, optional and can be null
+
+
+        Field values (optional, defaults to empty list):
+
+        - questionId: question UUID, required
+
+        - value: answer value, required
+
+
+        Repeatable field blocks (optional, defaults to empty list):
+
+        - id: repeatable field block UUID (integrator-generated), required
+
+        - fieldBlockId: repeatable form group UUID, required
+
+        - parentId: parent repeatable field block UUID, required if the repeatable field block is nested, otherwise null
+
+        - fieldValues: list of field values within the repeatable block, required
+
+        - questionId: question UUID, required
+
+        - value: answer value, required'
+      operationId: bind_submission_api_v1_forms_submission_bind_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: test_submission
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Test Submission
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmissionRequestPayload'
+      responses:
+        '200':
+          description: Successful Submission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmissionResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                All Risk Profiles have validation errors or are not in appetite:
+                  value:
+                    detail: invalid form submission
+                    errorDetails:
+                    - riskProfile: e1878571-2ccf-4c4d-a07c-e163e248a1e5
+                      lineOfBusiness: BOP
+                      validationErrors:
+                      - groupId: 1388bb46-c9b7-423d-95d7-7c09aab6d2a9
+                        questionId: 26b9b60c-1711-460a-95cd-fc743832054d
+                        errorMsg:
+                          detail: attribute_is_required
+                      evaluations: []
+                Contract Code is missing:
+                  value:
+                    detail: invalid form submission
+                    errorDetails:
+                    - riskProfile: 1c13c4a9-a46a-4987-8219-b435312670d8
+                      lineOfBusiness: BOP
+                      validationErrors:
+                      - groupId: af23ccec-57a6-4989-8e41-91e3562522b6
+                        questionId: 6c5924fd-3934-449d-b9b2-75fb5004cc3c
+                        errorMsg:
+                          detail: contractCodeId is required.
+                      evaluations: []
+                User does not have access to Contract Code:
+                  value:
+                    detail: invalid form submission
+                    errorDetails:
+                    - riskProfile: 1af59457-500a-4b93-a6c0-7802bf743961
+                      lineOfBusiness: BOP
+                      validationErrors:
+                      - groupId: 196bf1f8-912d-4fff-868c-bf2aa94d6a31
+                        questionId: ab38bcfd-8e29-4179-9cc3-6ac496903979
+                        errorMsg:
+                          detail: 'User does not have access to the contract_code: 2bd0faa7-2aba-44b4-8671-16e80db47a2df'
+                      evaluations: []
+                Credential is missing:
+                  value:
+                    detail: invalid form submission
+                    errorDetails:
+                    - riskProfile: cd319172-3e26-476a-9227-dfe60bd68dbd
+                      lineOfBusiness: BOP
+                      validationErrors:
+                      - groupId: 8dd4037c-df21-48b7-8c45-03c4300e2c27
+                        questionId: 659ebffd-c587-45cd-b117-52b94fd9246a
+                        errorMsg:
+                          detail: credentialId is required.
+                      evaluations: []
+                User does not have access to Market Credential:
+                  value:
+                    detail: invalid form submission
+                    errorDetails:
+                    - riskProfile: 46a0248e-d5b1-4127-afb2-f43c0d2c9348
+                      lineOfBusiness: BOP
+                      validationErrors:
+                      - groupId: 85765208-0e5b-49b2-8473-f58a7f174ad6
+                        questionId: 8aeff6fc-3366-41b1-a041-b58f2d6c9223
+                        errorMsg:
+                          detail: 'User does not have access to the credential: 2bd0faa7-2aba-44b4-8671-16e80db47a2df'
+                      evaluations: []
+                User does not have access to one or more Risk Profiles:
+                  value:
+                    detail:
+                    - 'user does not have permission for the submitted risk profile(s), or the risk profile(s) are no longer available: 2bd0faa7-2aba-44b4-8671-16e80db47a2df'
+                User submits a 'Base' Risk Profile:
+                  value:
+                    detail:
+                    - submitted risk profile(s) are base risk profiles and cannot be submitted
+                User submits a Risk Profile without a Route:
+                  value:
+                    detail:
+                    - submitted risk profile(s) do not have a configured route
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/forms/submission/fast-path:
+    post:
+      tags:
+      - Submission
+      summary: Fast Path Submission
+      operationId: fast_path_submission_api_v1_forms_submission_fast_path_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: test_submission
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Test Submission
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FastPathSubmissionRequestPayload'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/forms/submission:
+    post:
+      tags:
+      - Submission
+      summary: Post Submission
+      description: 'Endpoint for quote submission.
+
+
+        Metadata:
+
+        - clientId: integrator''s account ID, required
+
+        - quoteId: integrator''s quote ID, required
+
+        - callbackUrl: integrator''s callback URL, required
+
+
+        Market metadata:
+
+        - riskProfile: risk profile UUID, required
+
+        - marketQuoteId: carrier''s quote ID, optional and can be null
+
+        - marketAccountId: carrier''s account ID, optional and can be null
+
+        - contractCodeId: user''s market contract code UUID, optional or required, depending on user configuration
+
+        - credentialId: user''s market credential UUID, optional and can be null
+
+        - externalMarketQuoteId: carrier''s secondary quote ID, provided by the integrator when a carrier wants more
+
+        than one of their quote IDs passed back to them upon resubmitting a quote, optional and can be null
+
+
+        Field values (optional, defaults to empty list):
+
+        - questionId: question UUID, required
+
+        - value: answer value, required
+
+
+        Repeatable field blocks (optional, defaults to empty list):
+
+        - id: repeatable field block UUID (integrator-generated), required
+
+        - fieldBlockId: repeatable form group UUID, required
+
+        - parentId: parent repeatable field block UUID, required if the repeatable field block is nested, otherwise null
+
+        - fieldValues: list of field values within the repeatable block, required
+
+        - questionId: question UUID, required
+
+        - value: answer value, required'
+      operationId: post_submission_api_v1_forms_submission_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: test_submission
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Test Submission
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmissionRequestPayload'
+      responses:
+        '200':
+          description: Successful Submission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmissionResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                All Risk Profiles have validation errors or are not in appetite:
+                  value:
+                    detail: invalid form submission
+                    errorDetails:
+                    - riskProfile: e1878571-2ccf-4c4d-a07c-e163e248a1e5
+                      lineOfBusiness: BOP
+                      validationErrors:
+                      - groupId: 1388bb46-c9b7-423d-95d7-7c09aab6d2a9
+                        questionId: 26b9b60c-1711-460a-95cd-fc743832054d
+                        errorMsg:
+                          detail: attribute_is_required
+                      evaluations: []
+                Contract Code is missing:
+                  value:
+                    detail: invalid form submission
+                    errorDetails:
+                    - riskProfile: 1c13c4a9-a46a-4987-8219-b435312670d8
+                      lineOfBusiness: BOP
+                      validationErrors:
+                      - groupId: af23ccec-57a6-4989-8e41-91e3562522b6
+                        questionId: 6c5924fd-3934-449d-b9b2-75fb5004cc3c
+                        errorMsg:
+                          detail: contractCodeId is required.
+                      evaluations: []
+                User does not have access to Contract Code:
+                  value:
+                    detail: invalid form submission
+                    errorDetails:
+                    - riskProfile: 1af59457-500a-4b93-a6c0-7802bf743961
+                      lineOfBusiness: BOP
+                      validationErrors:
+                      - groupId: 196bf1f8-912d-4fff-868c-bf2aa94d6a31
+                        questionId: ab38bcfd-8e29-4179-9cc3-6ac496903979
+                        errorMsg:
+                          detail: 'User does not have access to the contract_code: 2bd0faa7-2aba-44b4-8671-16e80db47a2df'
+                      evaluations: []
+                Credential is missing:
+                  value:
+                    detail: invalid form submission
+                    errorDetails:
+                    - riskProfile: cd319172-3e26-476a-9227-dfe60bd68dbd
+                      lineOfBusiness: BOP
+                      validationErrors:
+                      - groupId: 8dd4037c-df21-48b7-8c45-03c4300e2c27
+                        questionId: 659ebffd-c587-45cd-b117-52b94fd9246a
+                        errorMsg:
+                          detail: credentialId is required.
+                      evaluations: []
+                User does not have access to Market Credential:
+                  value:
+                    detail: invalid form submission
+                    errorDetails:
+                    - riskProfile: 46a0248e-d5b1-4127-afb2-f43c0d2c9348
+                      lineOfBusiness: BOP
+                      validationErrors:
+                      - groupId: 85765208-0e5b-49b2-8473-f58a7f174ad6
+                        questionId: 8aeff6fc-3366-41b1-a041-b58f2d6c9223
+                        errorMsg:
+                          detail: 'User does not have access to the credential: 2bd0faa7-2aba-44b4-8671-16e80db47a2df'
+                      evaluations: []
+                User does not have access to one or more Risk Profiles:
+                  value:
+                    detail:
+                    - 'user does not have permission for the submitted risk profile(s), or the risk profile(s) are no longer available: 2bd0faa7-2aba-44b4-8671-16e80db47a2df'
+                User submits a 'Base' Risk Profile:
+                  value:
+                    detail:
+                    - submitted risk profile(s) are base risk profiles and cannot be submitted
+                User submits a Risk Profile without a Route:
+                  value:
+                    detail:
+                    - submitted risk profile(s) do not have a configured route
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/forms/submission/refer:
+    post:
+      tags:
+      - Submission
+      summary: Refer Submission
+      description: 'Endpoint to refer quotes through IDP.
+
+
+        Metadata:
+
+        - clientId: integrator''s account ID, required
+
+        - quoteId: integrator''s quote ID, required
+
+        - callbackUrl: integrator''s callback URL, required
+
+
+        Market metadata:
+
+        - riskProfile: risk profile UUID, required
+
+        - marketQuoteId: carrier''s quote ID, optional and can be null
+
+        - marketAccountId: carrier''s account ID, optional and can be null
+
+        - contractCodeId: user''s market contract code UUID, optional or required, depending on user configuration
+
+        - credentialId: user''s market credential UUID, optional and can be null
+
+        - referenceIds: carrier''s quote IDs for referral, optional and can be null
+
+
+        Field values (optional, defaults to empty list):
+
+        - questionId: question UUID, required
+
+        - value: answer value, required
+
+
+        Repeatable field blocks (optional, defaults to empty list):
+
+        - id: repeatable field block UUID (integrator-generated), required
+
+        - fieldBlockId: repeatable form group UUID, required
+
+        - parentId: parent repeatable field block UUID, required if the repeatable field block is nested, otherwise null
+
+        - fieldValues: list of field values within the repeatable block, required
+
+        - questionId: question UUID, required
+
+        - value: answer value, required'
+      operationId: refer_submission_api_v1_forms_submission_refer_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: test_submission
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Test Submission
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmissionRequestPayload'
+      responses:
+        '200':
+          description: Successful Submission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmissionResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                All Risk Profiles have validation errors or are not in appetite:
+                  value:
+                    detail: invalid form submission
+                    errorDetails:
+                    - riskProfile: e1878571-2ccf-4c4d-a07c-e163e248a1e5
+                      lineOfBusiness: BOP
+                      validationErrors:
+                      - groupId: 1388bb46-c9b7-423d-95d7-7c09aab6d2a9
+                        questionId: 26b9b60c-1711-460a-95cd-fc743832054d
+                        errorMsg:
+                          detail: attribute_is_required
+                      evaluations: []
+                Contract Code is missing:
+                  value:
+                    detail: invalid form submission
+                    errorDetails:
+                    - riskProfile: 1c13c4a9-a46a-4987-8219-b435312670d8
+                      lineOfBusiness: BOP
+                      validationErrors:
+                      - groupId: af23ccec-57a6-4989-8e41-91e3562522b6
+                        questionId: 6c5924fd-3934-449d-b9b2-75fb5004cc3c
+                        errorMsg:
+                          detail: contractCodeId is required.
+                      evaluations: []
+                User does not have access to Contract Code:
+                  value:
+                    detail: invalid form submission
+                    errorDetails:
+                    - riskProfile: 1af59457-500a-4b93-a6c0-7802bf743961
+                      lineOfBusiness: BOP
+                      validationErrors:
+                      - groupId: 196bf1f8-912d-4fff-868c-bf2aa94d6a31
+                        questionId: ab38bcfd-8e29-4179-9cc3-6ac496903979
+                        errorMsg:
+                          detail: 'User does not have access to the contract_code: 2bd0faa7-2aba-44b4-8671-16e80db47a2df'
+                      evaluations: []
+                Credential is missing:
+                  value:
+                    detail: invalid form submission
+                    errorDetails:
+                    - riskProfile: cd319172-3e26-476a-9227-dfe60bd68dbd
+                      lineOfBusiness: BOP
+                      validationErrors:
+                      - groupId: 8dd4037c-df21-48b7-8c45-03c4300e2c27
+                        questionId: 659ebffd-c587-45cd-b117-52b94fd9246a
+                        errorMsg:
+                          detail: credentialId is required.
+                      evaluations: []
+                User does not have access to Market Credential:
+                  value:
+                    detail: invalid form submission
+                    errorDetails:
+                    - riskProfile: 46a0248e-d5b1-4127-afb2-f43c0d2c9348
+                      lineOfBusiness: BOP
+                      validationErrors:
+                      - groupId: 85765208-0e5b-49b2-8473-f58a7f174ad6
+                        questionId: 8aeff6fc-3366-41b1-a041-b58f2d6c9223
+                        errorMsg:
+                          detail: 'User does not have access to the credential: 2bd0faa7-2aba-44b4-8671-16e80db47a2df'
+                      evaluations: []
+                User does not have access to one or more Risk Profiles:
+                  value:
+                    detail:
+                    - 'user does not have permission for the submitted risk profile(s), or the risk profile(s) are no longer available: 2bd0faa7-2aba-44b4-8671-16e80db47a2df'
+                User submits a 'Base' Risk Profile:
+                  value:
+                    detail:
+                    - submitted risk profile(s) are base risk profiles and cannot be submitted
+                User submits a Risk Profile without a Route:
+                  value:
+                    detail:
+                    - submitted risk profile(s) do not have a configured route
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ErrorMsg:
+      properties:
+        detail:
+          type: string
+          title: Detail
+        condition(s):
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Condition(S)
+      type: object
+      required:
+      - detail
+      title: ErrorMsg
+    WarningDetail:
+      properties:
+        detail:
+          type: string
+          title: Detail
+      type: object
+      required:
+      - detail
+      title: WarningDetail
+    RepeatableFieldBlock:
+      properties:
+        id:
+          type: string
+          title: Id
+        fieldBlockId:
+          type: string
+          title: Fieldblockid
+        parentId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parentid
+        fieldValues:
+          items:
+            $ref: '#/components/schemas/FieldValue'
+          type: array
+          title: Fieldvalues
+      type: object
+      required:
+      - id
+      - fieldBlockId
+      - fieldValues
+      title: RepeatableFieldBlock
+      description: 'id: row id (i.e., building #2)
+
+        field_block_id: guid of the form group (IDNET repeatable group, i.e., building group)
+
+        parent_id: guid of specific parent field block (i.e., location #3)'
+    SubmissionRequestPayload:
+      properties:
+        metadata:
+          $ref: '#/components/schemas/SubmissionMetadata'
+        marketMetadata:
+          items:
+            $ref: '#/components/schemas/SubmissionMarketMetadata'
+          type: array
+          title: Marketmetadata
+        fieldValues:
+          items:
+            $ref: '#/components/schemas/FieldValue'
+          type: array
+          title: Fieldvalues
+        repeatableFieldBlocks:
+          items:
+            $ref: '#/components/schemas/RepeatableFieldBlock'
+          type: array
+          title: Repeatablefieldblocks
+      type: object
+      required:
+      - metadata
+      - marketMetadata
+      title: SubmissionRequestPayload
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    FastPathSubmissionRequestPayload:
+      properties:
+        metadata:
+          $ref: '#/components/schemas/SubmissionMetadata'
+        marketMetadata:
+          items:
+            $ref: '#/components/schemas/SubmissionMarketMetadata'
+          type: array
+          maxItems: 1
+          title: Marketmetadata
+        fieldValues:
+          items:
+            $ref: '#/components/schemas/FieldValue'
+          type: array
+          title: Fieldvalues
+        repeatableFieldBlocks:
+          items:
+            $ref: '#/components/schemas/RepeatableFieldBlock'
+          type: array
+          title: Repeatablefieldblocks
+        templateIds:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Templateids
+          description: Templates will be applied in the order they are submitted, if no template ids are provided, the Ivans default template will be used
+          examples:
+          - - d5b72035-f8e9-47c5-8591-adec34232401
+            - 4a99c8df-39a5-4126-89d1-95b576cc1318
+      type: object
+      required:
+      - metadata
+      - marketMetadata
+      title: FastPathSubmissionRequestPayload
+    SubmissionTransaction:
+      properties:
+        riskProfileUuid:
+          type: string
+          title: Riskprofileuuid
+        marketUuid:
+          type: string
+          title: Marketuuid
+        name:
+          type: string
+          title: Name
+        lineOfBusiness:
+          type: string
+          title: Lineofbusiness
+        timeout:
+          type: integer
+          title: Timeout
+          default: 60
+        submissionErrorMsg:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          - type: 'null'
+          title: Submissionerrormsg
+      type: object
+      required:
+      - riskProfileUuid
+      - marketUuid
+      - name
+      - lineOfBusiness
+      title: SubmissionTransaction
+    EvaluationType:
+      type: string
+      enum:
+      - Market
+      - IDP Quote
+      - IDP Bind
+      title: EvaluationType
+    Evaluation:
+      properties:
+        type:
+          $ref: '#/components/schemas/EvaluationType'
+        reasons:
+          items:
+            $ref: '#/components/schemas/Reason'
+          type: array
+          title: Reasons
+      type: object
+      required:
+      - type
+      - reasons
+      title: Evaluation
+    RiskProfile:
+      properties:
+        uuid:
+          type: string
+          title: Uuid
+        name:
+          type: string
+          title: Name
+        type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Type
+        market:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Market
+        marketUuid:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Marketuuid
+        excessAndSurplus:
+          type: boolean
+          title: Excessandsurplus
+          default: false
+        lob:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Lob
+        childLobs:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Childlobs
+        inAppetite:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Inappetite
+          default: true
+        bindAllowed:
+          type: boolean
+          title: Bindallowed
+        bindAppetite:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Bindappetite
+        referAllowed:
+          type: boolean
+          title: Referallowed
+        routeType:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Routetype
+        requiredToSubmit:
+          anyOf:
+          - $ref: '#/components/schemas/RequiredToSubmit'
+          - additionalProperties: true
+            type: object
+          title: Requiredtosubmit
+        validationErrors:
+          items:
+            $ref: '#/components/schemas/IDPValidationError'
+          type: array
+          title: Validationerrors
+        validationWarnings:
+          items:
+            $ref: '#/components/schemas/IDPValidationWarning'
+          type: array
+          title: Validationwarnings
+        evaluations:
+          items:
+            $ref: '#/components/schemas/Evaluation'
+          type: array
+          title: Evaluations
+      type: object
+      required:
+      - uuid
+      - name
+      - bindAllowed
+      - referAllowed
+      - requiredToSubmit
+      title: RiskProfile
+    FieldValue:
+      properties:
+        questionId:
+          type: string
+          title: Questionid
+        value:
+          title: Value
+      type: object
+      required:
+      - questionId
+      - value
+      title: FieldValue
+    ImpactingFactor:
+      properties:
+        attributeId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Attributeid
+        groupId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Groupid
+      type: object
+      title: ImpactingFactor
+    SubmissionResponse:
+      properties:
+        detail:
+          type: string
+          title: Detail
+          default: submission successful
+        quoteSessionId:
+          type: string
+          title: Quotesessionid
+        warnings:
+          items:
+            $ref: '#/components/schemas/IDPValidationWarning'
+          type: array
+          title: Warnings
+        transactions:
+          items:
+            $ref: '#/components/schemas/SubmissionTransaction'
+          type: array
+          title: Transactions
+        riskProfiles:
+          items:
+            $ref: '#/components/schemas/RiskProfile'
+          type: array
+          title: Riskprofiles
+      type: object
+      required:
+      - quoteSessionId
+      - transactions
+      - riskProfiles
+      title: SubmissionResponse
+    RequiredToSubmit:
+      properties:
+        contractCode:
+          type: boolean
+          title: Contractcode
+        username:
+          type: boolean
+          title: Username
+        password:
+          type: boolean
+          title: Password
+      type: object
+      required:
+      - contractCode
+      - username
+      - password
+      title: RequiredToSubmit
+    IDPValidationError:
+      properties:
+        groupId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Groupid
+        questionId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Questionid
+        errorMsg:
+          anyOf:
+          - $ref: '#/components/schemas/ErrorMsg'
+          - type: 'null'
+        value:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Value
+      type: object
+      title: IDPValidationError
+    SubmissionMarketMetadata:
+      properties:
+        riskProfile:
+          type: string
+          title: Riskprofile
+        credentialId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Credentialid
+        contractCodeId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Contractcodeid
+        marketQuoteId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Marketquoteid
+        externalMarketQuoteId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Externalmarketquoteid
+        marketAccountId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Marketaccountid
+        referenceIds:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Referenceids
+        effectiveDate:
+          type: string
+          format: date
+          title: Effectivedate
+        expirationDate:
+          type: string
+          format: date
+          title: Expirationdate
+      type: object
+      required:
+      - riskProfile
+      - effectiveDate
+      - expirationDate
+      title: SubmissionMarketMetadata
+    Reason:
+      properties:
+        message:
+          type: string
+          title: Message
+        impactingFactors:
+          items:
+            $ref: '#/components/schemas/ImpactingFactor'
+          type: array
+          title: Impactingfactors
+      type: object
+      required:
+      - message
+      - impactingFactors
+      title: Reason
+    SubmissionMetadata:
+      properties:
+        clientId:
+          type: string
+          title: Clientid
+        quoteId:
+          type: string
+          title: Quoteid
+        callbackUrl:
+          type: string
+          maxLength: 2083
+          minLength: 1
+          format: uri
+          title: Callbackurl
+      type: object
+      required:
+      - clientId
+      - quoteId
+      - callbackUrl
+      title: SubmissionMetadata
+    IDPValidationWarning:
+      properties:
+        groupId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Groupid
+        questionId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Questionid
+        warningMessage:
+          anyOf:
+          - $ref: '#/components/schemas/WarningDetail'
+          - type: 'null'
+        value:
+          title: Value
+      type: object
+      required:
+      - value
+      title: IDPValidationWarning
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/get_basic_appetite_api_v1_forms_basic_appetite_get
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

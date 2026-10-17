@@ -1,0 +1,285 @@
+openapi: 3.2.0
+info:
+  title: Identification Network Risk Profiles API
+  version: 1.0.0
+  description: IVANS Identification Network API
+servers:
+- url: https://distribution-staging.ivansinsurance.com
+tags:
+- name: risk-profiles
+paths:
+  /api/v1/risk-profiles/:
+    get:
+      operationId: risk_profiles_list
+      description: Returns risk profiles that are accessible to the user. Certain restrictions can be bypassed via permissions.
+      parameters:
+      - in: query
+        name: include_supported_states
+        schema:
+          type: boolean
+          default: false
+        description: Include supported states for each risk profile in the response. The value may depend on data from Ask Kodiak and will be null if the callout to Ask Kodiak fails.
+      - in: query
+        name: lob
+        schema:
+          type: string
+        description: Filter results by line of business code
+      - in: query
+        name: market
+        schema:
+          type: string
+          format: uuid
+        description: Filter results by market UUID
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - risk-profiles
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRiskProfileReadOnlyWithAnalyzerInfoList'
+          description: Successfully received risk profiles.
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/risk_profile_list_json_response_forbidden'
+          description: 'Error: Forbidden'
+      summary: Risk profiles list
+      x-summary-source: derived
+components:
+  schemas:
+    LineOfBusiness:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 128
+        code:
+          type: string
+          maxLength: 32
+      required:
+      - code
+      - name
+      - uuid
+    risk_profile_list_json_response_forbidden:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
+    ProductReadOnly:
+      type: object
+      description: 'Serializes subset of read-only fields for Product.
+
+
+        ViewSet: RiskProfileViewSet
+
+
+        Endpoint: GET /risk-profiles/'
+      properties:
+        market:
+          $ref: '#/components/schemas/MarketSimple'
+        lineOfBusiness:
+          $ref: '#/components/schemas/LineOfBusiness'
+      required:
+      - lineOfBusiness
+      - market
+    RouteConfigurationReadOnly:
+      type: object
+      description: 'Serializes subset of read-only fields for RouteConfiguration.
+
+
+        ViewSet: RiskProfileViewSet
+
+
+        Endpoint: GET /risk-profiles/'
+      properties:
+        description:
+          type: string
+          readOnly: true
+        routeType:
+          type: string
+      required:
+      - description
+      - routeType
+    RiskProfileReadOnlyWithAnalyzerInfo:
+      type: object
+      description: 'Serializes read-only fields for risk profiles, including additional info (e.g. supported states, multi-location support).
+
+
+        ViewSet: RiskProfileViewSet
+
+
+        Endpoint: GET /risk-profiles/'
+      properties:
+        name:
+          type: string
+          readOnly: true
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        type:
+          allOf:
+          - $ref: '#/components/schemas/TypeEnum'
+          readOnly: true
+          description: Type of risk profile. Base represents a base question set with a line of business. Monoline represents a carrier question set with a product and route configuration. Package represents a carrier question set with a product, route configuration, and related risk profile children. Bundle represents a carrier question set with a market and related risk profile children.
+        version:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+          description: Version number for a risk profile. A newly created risk profile's version is null, and will be set automatically when the risk profile is locked. The version number starts at 1 and increments by 1 based on existing risk profiles with matching market, line of business, product, route, and children.
+        isAvailable:
+          type: boolean
+          readOnly: true
+          description: Indicates whether the risk profile has no issues after testing and is available to quote from. Set this via admin action on the list page (subject to permission).
+        isLatest:
+          type: boolean
+          readOnly: true
+          description: Indicates whether this risk profile is the latest version. For bookkeeping purposes only - not used for business logic.Set this via admin action on the list page (subject to permission).
+        lineOfBusiness:
+          $ref: '#/components/schemas/LineOfBusiness'
+        product:
+          $ref: '#/components/schemas/ProductReadOnly'
+        routeConfiguration:
+          $ref: '#/components/schemas/RouteConfigurationReadOnly'
+        supportedStates:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        isMultiLocationSupported:
+          type: boolean
+          readOnly: true
+      required:
+      - description
+      - isAvailable
+      - isLatest
+      - isMultiLocationSupported
+      - lineOfBusiness
+      - name
+      - product
+      - routeConfiguration
+      - supportedStates
+      - type
+      - uuid
+      - version
+    TypeEnum:
+      enum:
+      - Base
+      - Monoline
+      - Package
+      - Bundle
+      type: string
+    MarketSimple:
+      type: object
+      description: 'Serializes subset of read-only fields for Market.
+
+
+        ViewSet: RiskProfileViewSet
+
+
+        Endpoint: GET /risk-profiles/'
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+      required:
+      - name
+      - uuid
+    PaginatedRiskProfileReadOnlyWithAnalyzerInfoList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/risk-profiles/?page=3
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/risk-profiles/?page=1
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RiskProfileReadOnlyWithAnalyzerInfo'
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    oauth2:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: /api/v1/token/
+          refreshUrl: /api/v1/token/
+          scopes:
+            read: Read scope
+            write: Write scope
+            epic: Epic User
+            third-party: Third Party User
+    basicAuth:
+      type: http
+      scheme: basic
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/agencies_list
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

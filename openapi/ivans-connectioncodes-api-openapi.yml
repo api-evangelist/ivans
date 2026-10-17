@@ -1,0 +1,74 @@
+openapi: 3.2.0
+info:
+  title: IVANS Exchange API Docs Connection Codes API
+  version: v1
+tags:
+- name: ConnectionCodes
+paths:
+  /api/ConnectionCodes:
+    get:
+      tags:
+      - ConnectionCodes
+      summary: Gets static list of connection codes
+      parameters:
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ConnectionCode'
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ConnectionCode'
+            text/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ConnectionCode'
+      security:
+      - Bearer: []
+      operationId: getApiConnectionCodes
+      x-operation-id-source: derived
+components:
+  schemas:
+    ConnectionCode:
+      required:
+      - abbreviation
+      - description
+      type: object
+      properties:
+        abbreviation:
+          type: string
+        description:
+          type: string
+        usesColorCodes:
+          type: boolean
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: JWT
+      scheme: Bearer
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/get_api-agencies-1
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

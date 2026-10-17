@@ -1,0 +1,633 @@
+openapi: 3.2.0
+info:
+  title: Identification Network Agents API
+  version: 1.0.0
+  description: IVANS Identification Network API
+servers:
+- url: https://distribution-staging.ivansinsurance.com
+tags:
+- name: Agents
+paths:
+  /api/v1/agents/:
+    post:
+      operationId: agents_create
+      description: 'Creates a new agent.
+
+
+        Access restrictions:
+
+
+        - Only service level users can use this endpoint to register an agent.
+
+        - Non-service level users must use the PUT endpoint instead to register an agent.'
+      tags:
+      - Agents
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AgentWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AgentWriteRequest'
+        required: true
+      security:
+      - oauth2:
+        - write
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentDetail'
+          description: Successfully created an agent
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                NotAuthorizedForIntegratedApplication:
+                  value:
+                    detail: User is not authorized for the given integrated application.
+                  summary: Not authorized for integrated application
+                Non-serviceLevelUserCannotPOST:
+                  value:
+                    detail: User data already exists for your integrated application. Use the PUT endpoint to register agent information on existing users.
+                  summary: Non-service level user cannot POST
+                DuplicateExternalID:
+                  value:
+                    externalId: Agent with this external ID already exists.
+                  summary: Duplicate external ID
+                DuplicateNPN:
+                  value:
+                    externalId: Agent with this NPN already exists within the agency.
+                  summary: Duplicate NPN
+          description: Creation errored due to bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agent_create'
+          description: Creation errored due to lack of permission
+      summary: Agents create
+      x-summary-source: derived
+    get:
+      operationId: agents_list
+      description: 'Returns agents that are accessible to the user.
+
+
+        Access restrictions:
+
+
+        - Service level users can retrieve any agent and license under their integrated application.
+
+        - Admin users can retrieve any agent or license under the admin''s agency.
+
+        - Non-admin users can retrieve their own active agent, and active licenses where
+
+        they or their agency are the licensee, or where they are granted access.'
+      parameters:
+      - in: query
+        name: external_id
+        schema:
+          type: string
+        description: Filter by agent external ID (exact match)
+      - in: query
+        name: include_license_info
+        schema:
+          type: boolean
+          default: false
+        description: Include license information in the response
+      - in: query
+        name: is_active
+        schema:
+          type: boolean
+        description: Filter by agent's active status
+      - in: query
+        name: npn
+        schema:
+          type: string
+        description: Filter by agent NPN (exact match)
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - Agents
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                DoNotIncludeLicenseInfo:
+                  value:
+                    count: 1
+                    next: path/to/next/page
+                    previous: path/to/previous/page
+                    results:
+                    - id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      externalId: string
+                      agency: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      npn: string
+                      firstName: string
+                      middleName: string
+                      lastName: string
+                      email: user@example.com
+                      isActive: true
+                      isAdmin: true
+                      isProducer: true
+                  summary: Do not include license info
+                IncludeLicenseInfo:
+                  value:
+                    count: 1
+                    next: path/to/next/page
+                    previous: path/to/previous/page
+                    results:
+                    - id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      externalId: string
+                      agency: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      npn: string
+                      firstName: string
+                      middleName: string
+                      lastName: string
+                      email: user@example.com
+                      isActive: true
+                      isAdmin: true
+                      isProducer: true
+                      licenses:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        licenseNumber: string
+                        type: string
+                        subdivision: string
+                        licenseStatus: string
+                        residentStatus: string
+                        expirationDate: YYYY-MM-DD
+                        agency: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        agencyLicensee: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        agentLicensee: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        agentsGrantedAccess:
+                        - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                  summary: Include license info
+          description: Successfully retrieved agents
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                NotAuthorizedForIntegratedApplication:
+                  value:
+                    detail: User is not authorized for the given integrated application.
+                  summary: Not authorized for integrated application
+          description: Retrieval errored due to bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agent_list'
+          description: Retrieval errored due to lack of permission
+      summary: Agents list
+      x-summary-source: derived
+  /api/v1/agents/{id}/:
+    get:
+      operationId: agents_retrieve
+      description: 'Returns an agent if it is accessible to the user.
+
+
+        Access restrictions:
+
+
+        - Service level users can retrieve any agent and license under their integrated application.
+
+        - Admin users can retrieve any agent or license under their agency.
+
+        - Non-admin users can retrieve their own active agent, and active licenses where
+
+        they or their agency are the licensee, or where they are granted access.'
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this user.
+        required: true
+      - in: query
+        name: include_license_info
+        schema:
+          type: boolean
+          default: false
+        description: Include license information in the response
+      tags:
+      - Agents
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                DoNotIncludeLicenseInfo:
+                  value:
+                    id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    externalId: string
+                    agency: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    npn: string
+                    firstName: string
+                    middleName: string
+                    lastName: string
+                    email: user@example.com
+                    isActive: true
+                    isAdmin: true
+                    isProducer: true
+                  summary: Do not include license info
+                IncludeLicenseInfo:
+                  value:
+                    id: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    externalId: string
+                    agency: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                    npn: string
+                    firstName: string
+                    middleName: string
+                    lastName: string
+                    email: user@example.com
+                    isActive: true
+                    isAdmin: true
+                    isProducer: true
+                    licenses:
+                    - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      licenseNumber: string
+                      type: string
+                      subdivision: string
+                      licenseStatus: string
+                      residentStatus: string
+                      expirationDate: YYYY-MM-DD
+                      agency: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      agencyLicensee: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      agentLicensee: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      agentsGrantedAccess:
+                      - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                  summary: Include license info
+          description: Successfully retrieved agencies
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                NotAuthorizedForIntegratedApplication:
+                  value:
+                    detail: User is not authorized for the given integrated application.
+                  summary: Not authorized for integrated application
+          description: Retrieval errored due to bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agent_retrieve'
+          description: Retrieval errored due to lack of permission
+      summary: Agents retrieve
+      x-summary-source: derived
+    put:
+      operationId: agents_update
+      description: 'Updates an agent if it is accessible to the user.
+
+
+        Access restrictions:
+
+
+        - Only service level and admin users can update an agent.
+
+        - Service level users can update any agent under their integrated application.
+
+        - Admin users can update any agent under their own agency.'
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this user.
+        required: true
+      tags:
+      - Agents
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AgentWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AgentWriteRequest'
+        required: true
+      security:
+      - oauth2:
+        - write
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentDetail'
+          description: Successfully updated an agent
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                NotAuthorizedForIntegratedApplication:
+                  value:
+                    detail: User is not authorized for the given integrated application.
+                  summary: Not authorized for integrated application
+                DuplicateExternalID:
+                  value:
+                    externalId: Agent with this external ID already exists.
+                  summary: Duplicate external ID
+                DuplicateNPN:
+                  value:
+                    externalId: Agent with this NPN already exists within the agency.
+                  summary: Duplicate NPN
+          description: Update errored due to bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/agent_update'
+          description: Update errored due to lack of permission
+      summary: Agents update
+      x-summary-source: derived
+components:
+  schemas:
+    AgentDetail:
+      type: object
+      description: Serializer for retrieving agent information.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: The unique ID for the agent.
+        externalId:
+          type: string
+          readOnly: true
+          description: The integrator's ID for the agency.
+        agency:
+          type: string
+          format: uuid
+          readOnly: true
+          description: The ID of the agency that the agent belongs to.
+        npn:
+          type: string
+          readOnly: true
+          description: The NPN of the agent.
+        firstName:
+          type: string
+          readOnly: true
+          description: The first name of the agent.
+        middleName:
+          type: string
+          readOnly: true
+          description: The middle name of the agent.
+        lastName:
+          type: string
+          readOnly: true
+          description: The last name of the agent.
+        email:
+          type: string
+          format: email
+          readOnly: true
+          description: The email of the agent.
+        isActive:
+          type: boolean
+          readOnly: true
+          description: Whether the agent is active.
+        isAdmin:
+          type: boolean
+          readOnly: true
+          description: Whether the agent is an admin.
+        isProducer:
+          type: boolean
+          readOnly: true
+          description: Whether the agent is a producer.
+      required:
+      - agency
+      - email
+      - externalId
+      - firstName
+      - id
+      - isActive
+      - isAdmin
+      - isProducer
+      - lastName
+      - middleName
+      - npn
+    agent_list:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
+    agent_update:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
+    AgentWriteRequest:
+      type: object
+      description: Serializer for creating and updating agents (users).
+      properties:
+        externalId:
+          type: string
+          minLength: 1
+          description: The integrator's ID for the agent.
+          maxLength: 64
+        agency:
+          type: string
+          format: uuid
+          description: The ID of the agency that the agent belongs to.
+        npn:
+          type: string
+          description: The NPN of the agent.
+          maxLength: 32
+        firstName:
+          type: string
+          description: The first name of the agent.
+          maxLength: 150
+        middleName:
+          type: string
+          description: The middle name of the agent.
+          maxLength: 64
+        lastName:
+          type: string
+          description: The last name of the agent.
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          description: The email of the agent.
+        isActive:
+          type: boolean
+          description: Whether the agent is active.
+        isAdmin:
+          type: boolean
+          description: Whether the agent is an admin.
+        isProducer:
+          type: boolean
+          description: Whether the agent is a producer.
+      required:
+      - agency
+      - email
+      - externalId
+      - firstName
+      - isActive
+      - isAdmin
+      - isProducer
+      - lastName
+      - middleName
+      - npn
+    agent_retrieve:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
+    agent_create:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    oauth2:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: /api/v1/token/
+          refreshUrl: /api/v1/token/
+          scopes:
+            read: Read scope
+            write: Write scope
+            epic: Epic User
+            third-party: Third Party User
+    basicAuth:
+      type: http
+      scheme: basic
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/agencies_list
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

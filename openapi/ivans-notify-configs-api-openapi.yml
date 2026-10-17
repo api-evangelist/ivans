@@ -1,0 +1,319 @@
+openapi: 3.2.0
+info:
+  title: IVANS Exchange API Docs Notify Configs API
+  version: v1
+tags:
+- name: Notify Configs
+paths:
+  /api/NotifyConfigs/{consumerInfoId}:
+    delete:
+      tags:
+      - Notify Configs
+      summary: Removes notification configuration for a given consumer info id
+      description: De-registers a notification configuration by deleting it by ID.
+      parameters:
+      - name: consumerInfoId
+        in: path
+        description: the id to delete
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ConsumerInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsumerInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ConsumerInfo'
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: User not authorized to view this resource.
+        '404':
+          description: Notification configuration does not exist for the provided ID
+      security:
+      - Bearer: []
+      operationId: deleteApiNotifyConfigsByConsumerInfoId
+      x-operation-id-source: derived
+    get:
+      tags:
+      - Notify Configs
+      summary: Retrieve a notification configuration for a given consumer info id
+      description: Get a notification configuration by ID.
+      operationId: GetNotifyConfig
+      parameters:
+      - name: consumerInfoId
+        in: path
+        description: the id to retrieve
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ConsumerInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsumerInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ConsumerInfo'
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: User not authorized to view this resource.
+        '404':
+          description: Notification configuration does not exist for the provided ID
+      security:
+      - Bearer: []
+    put:
+      tags:
+      - Notify Configs
+      summary: Update the notification configuration settings for a given consumer info id
+      description: Update the notification configuration settings by ID. The delay, maxFileListSize, consumerPackage, and headers properties can be updated.
+      parameters:
+      - name: consumerInfoId
+        in: path
+        description: the id to update
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: the updated consumer info to register for notifications
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ConsumerInfoUpdate'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConsumerInfoUpdate'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ConsumerInfoUpdate'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ConsumerInfoUpdate'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ConsumerInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsumerInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ConsumerInfo'
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: User not authorized to view this resource.
+        '404':
+          description: Notification configuration does not exist for the provided ID
+      security:
+      - Bearer: []
+      operationId: putApiNotifyConfigsByConsumerInfoId
+      x-operation-id-source: derived
+  /api/NotifyConfigs:
+    post:
+      tags:
+      - Notify Configs
+      summary: Register a mailbox for notifications
+      description: Register a mailbox for notifications.
+      parameters:
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: the consumer info to register for notifications
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ConsumerInfoRegistration'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConsumerInfoRegistration'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ConsumerInfoRegistration'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ConsumerInfoRegistration'
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ConsumerInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsumerInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ConsumerInfo'
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: User not authorized to view this resource.
+      security:
+      - Bearer: []
+      operationId: postApiNotifyConfigs
+      x-operation-id-source: derived
+components:
+  schemas:
+    ConsumerInfo:
+      required:
+      - account
+      - endpoint
+      - headers
+      - userId
+      type: object
+      properties:
+        consumerInfoId:
+          type: integer
+          format: int32
+        account:
+          type: string
+        userId:
+          type: string
+        delay:
+          type: integer
+          format: int32
+        maxFileListSize:
+          type: integer
+          format: int32
+        consumerPackage:
+          type:
+          - string
+          - 'null'
+        endpoint:
+          type: string
+        headers:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+      additionalProperties: false
+    ConsumerInfoRegistration:
+      required:
+      - account
+      - delay
+      - endpoint
+      - maxFileListSize
+      - userId
+      type: object
+      properties:
+        account:
+          minLength: 1
+          type: string
+          description: mailbox account to register notifications for
+        userId:
+          minLength: 1
+          type: string
+          description: mailbox userId to register notifications for
+        consumerPackage:
+          type:
+          - string
+          - 'null'
+          description: custom data to send with notification
+        delay:
+          maximum: 2147483
+          minimum: 0
+          type: integer
+          description: delay (in seconds) to wait between sending notifications for this registration
+          format: int32
+        maxFileListSize:
+          maximum: 2147483647
+          minimum: 0
+          type: integer
+          description: maximum number of notifications to send
+          format: int32
+        endpoint:
+          minLength: 1
+          type: string
+          description: endpoint to post notifications to
+        headers:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          description: custom headers to include in notification package
+      additionalProperties: false
+    ConsumerInfoUpdate:
+      required:
+      - delay
+      - maxFileListSize
+      type: object
+      properties:
+        consumerPackage:
+          type:
+          - string
+          - 'null'
+          description: custom data to send with notification
+        delay:
+          maximum: 2147483
+          minimum: 0
+          type: integer
+          description: delay (in seconds) to wait between sending notifications for this registration
+          format: int32
+        maxFileListSize:
+          maximum: 2147483647
+          minimum: 0
+          type: integer
+          description: maximum number of notifications to send
+          format: int32
+        headers:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          description: custom headers to include in notification package
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: JWT
+      scheme: Bearer
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/get_api-agencies-1
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

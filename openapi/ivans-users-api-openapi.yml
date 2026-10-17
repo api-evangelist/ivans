@@ -1,0 +1,302 @@
+openapi: 3.2.0
+info:
+  title: Identification Network Users API
+  version: 1.0.0
+  description: IVANS Identification Network API
+servers:
+- url: https://distribution-staging.ivansinsurance.com
+tags:
+- name: Users
+paths:
+  /api/v1/users/files/upload/:
+    post:
+      operationId: users_files_upload_create
+      description: ViewSet responsible for handling uploads and downloads for user files
+      tags:
+      - Users
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserCloudFileUploadRequest'
+        required: true
+      security:
+      - oauth2:
+        - write
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCloudFile'
+          description: Successfully uploaded file
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                UserHasNoTenantSet:
+                  value:
+                    detail:
+                    - User has no current tenant
+                  summary: User has no tenant set
+          description: Failed to upload file
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+      summary: Users files upload create
+      x-summary-source: derived
+  /api/v1/users/:
+    get:
+      operationId: users_list
+      description: Returns users related to the requesting user's current tenant.
+      parameters:
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search term used to match results by username or name or last name
+      tags:
+      - Users
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+          description: ''
+      summary: Users list
+      x-summary-source: derived
+  /api/v1/users/{id}/:
+    patch:
+      operationId: users_partial_update
+      description: Updates a user's information. Only admins can update user information.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this user.
+        required: true
+      tags:
+      - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+            examples:
+              StandardExample:
+                value:
+                  firstName: John
+                  lastName: Doe
+                  userCode: test code
+                  email: user@example.com
+                  phoneNumber: '4142345678'
+                  isAdmin: true
+                summary: Standard example
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+      security:
+      - oauth2:
+        - write
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+      summary: Users partial update
+      x-summary-source: derived
+    get:
+      operationId: users_retrieve
+      description: Returns an individual user.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this user.
+        required: true
+      tags:
+      - Users
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+      summary: Users retrieve
+      x-summary-source: derived
+components:
+  schemas:
+    UserCloudFile:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        originalName:
+          type: string
+          maxLength: 256
+      required:
+      - createdAt
+      - originalName
+      - uuid
+    UserCloudFileUploadRequest:
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+        delimiter:
+          type: string
+          maxLength: 8
+      required:
+      - file
+    PatchedUserRequest:
+      type: object
+      properties:
+        integratorUserId:
+          type: string
+          minLength: 1
+        firstName:
+          type: string
+          maxLength: 150
+        lastName:
+          type: string
+          maxLength: 150
+        userCode:
+          type:
+          - string
+          - 'null'
+          maxLength: 64
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        phoneNumber:
+          type:
+          - string
+          - 'null'
+          maxLength: 64
+        isAdmin:
+          type: boolean
+          description: Designates whether this user represents an admin account. An admin account can access and modify all users, contract codes, credentials, and licenses under its current tenant.
+        isServiceLevel:
+          type: boolean
+          description: Designates whether this user represents a service level account. A service level account can access all tenants and users under its integrated application.
+        externalId:
+          type: string
+          description: Unique identifier from external system. Used to identify agents.
+          maxLength: 64
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        integratorUserId:
+          type: string
+        firstName:
+          type: string
+          maxLength: 150
+        lastName:
+          type: string
+          maxLength: 150
+        userCode:
+          type:
+          - string
+          - 'null'
+          maxLength: 64
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        phoneNumber:
+          type:
+          - string
+          - 'null'
+          maxLength: 64
+        isAdmin:
+          type: boolean
+          description: Designates whether this user represents an admin account. An admin account can access and modify all users, contract codes, credentials, and licenses under its current tenant.
+        isServiceLevel:
+          type: boolean
+          description: Designates whether this user represents a service level account. A service level account can access all tenants and users under its integrated application.
+        externalId:
+          type: string
+          description: Unique identifier from external system. Used to identify agents.
+          maxLength: 64
+      required:
+      - id
+      - integratorUserId
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    oauth2:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: /api/v1/token/
+          refreshUrl: /api/v1/token/
+          scopes:
+            read: Read scope
+            write: Write scope
+            epic: Epic User
+            third-party: Third Party User
+    basicAuth:
+      type: http
+      scheme: basic
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/agencies_list
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

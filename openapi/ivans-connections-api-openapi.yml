@@ -1,0 +1,254 @@
+openapi: 3.2.0
+info:
+  title: IVANS Exchange API Docs Connections API
+  version: v1
+tags:
+- name: Connections
+paths:
+  /api/Organizations/{accountCode}/Connections/{connectionKey}:
+    get:
+      tags:
+      - Connections
+      summary: Retrieve connection information for a given organization and line of business
+      description: Get connection information for a given organization partnership and line of business.
+      parameters:
+      - name: accountCode
+        in: path
+        description: The organization ID.
+        required: true
+        schema:
+          type: string
+      - name: connectionKey
+        in: path
+        description: The connection key.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Connection'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Connection'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Connection'
+        '401':
+          description: User not authorized to view this resource.
+        '404':
+          description: Connection with this ID was not found.
+      operationId: getApiOrganizationsByAccountCodeConnectionsByConnectionKey
+      x-operation-id-source: derived
+  /api/Organizations/{accountCode}/Connections:
+    get:
+      tags:
+      - Connections
+      summary: Retrieve connection information for a given organization
+      description: Get connection information for a given organization
+      parameters:
+      - name: accountCode
+        in: path
+        description: The organization ID.
+        required: true
+        schema:
+          type: string
+      - name: agencyId
+        in: query
+        description: Optional trading partner ID.
+        schema:
+          type: string
+      - name: carrierId
+        in: query
+        description: Optional trading partner ID.
+        schema:
+          type: string
+      - name: lobCode
+        in: query
+        description: Optional Line of Business code.
+        schema:
+          type: string
+      - name: preferenceCode
+        in: query
+        description: Optional CSV list of Preference Codes.
+        schema:
+          type: string
+      - name: feedbackCode
+        in: query
+        description: Optional CSV list of Feedback Codes.
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation.
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Connection'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Connection'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Connection'
+        '401':
+          description: User not authorized to view this resource.
+      security:
+      - Bearer: []
+      operationId: getApiOrganizationsByAccountCodeConnections
+      x-operation-id-source: derived
+  /api/Connections/{connectionKey}:
+    put:
+      tags:
+      - Connections
+      summary: Update connection information
+      description: 'Update connection information for a given connection ID. Updateable fields: PreferenceCode, FeedbackCode.
+
+
+        Updateable fields: NewPreferenceCode, NewFeedbackCode.'
+      parameters:
+      - name: connectionKey
+        in: path
+        description: The connection key.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: Connection data to be updated.
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ConnectionRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectionRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ConnectionRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ConnectionRequest'
+      responses:
+        '200':
+          description: Successful operation.
+        '400':
+          description: The request is not formatted properly.
+        '401':
+          description: User not authorized to view this resource.
+        '404':
+          description: Connection with this ID was not found.
+      security:
+      - Bearer: []
+      operationId: putApiConnectionsByConnectionKey
+      x-operation-id-source: derived
+components:
+  schemas:
+    Connection:
+      required:
+      - agencyAccount
+      - agencyName
+      - carrierAccount
+      - carrierName
+      - feedbackCode
+      - feedbackDisplayValue
+      - lob
+      - lobDescription
+      - preferenceCode
+      - preferenceDisplayValue
+      type: object
+      properties:
+        connectionKey:
+          type: integer
+          format: int32
+        agencyAccount:
+          type: string
+        agencyName:
+          type: string
+        carrierAccount:
+          type: string
+        carrierName:
+          type: string
+        lob:
+          type: string
+        lobDescription:
+          type: string
+        active:
+          type: boolean
+        available:
+          type: boolean
+        preferenceCode:
+          type: string
+        preferenceDisplayValue:
+          type: string
+        preferenceUpdatedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        feedbackCode:
+          type: string
+        feedbackDisplayValue:
+          type: string
+        feedbackUpdatedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      additionalProperties: false
+    ConnectionRequest:
+      required:
+      - agencyAccount
+      - carrierAccount
+      type: object
+      properties:
+        agencyAccount:
+          minLength: 1
+          type: string
+        carrierAccount:
+          minLength: 1
+          type: string
+        preferenceCode:
+          type:
+          - string
+          - 'null'
+        feedbackCode:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: JWT
+      scheme: Bearer
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/get_api-agencies-1
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

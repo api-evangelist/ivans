@@ -1,0 +1,191 @@
+openapi: 3.2.0
+info:
+  title: IVANS Exchange API Docs Warp Client Command API
+  version: v1
+tags:
+- name: WarpClientCommand
+paths:
+  /api/WarpClientCommand/{id}:
+    get:
+      tags:
+      - WarpClientCommand
+      summary: Retrieves a list of commands for a client
+      description: Get list of Warp Commands for a client
+      operationId: GetClientCommand
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Indicates successful operation
+        '400':
+          description: Error if request could not be completed with given input
+        '401':
+          description: Error if user does not have access to this resource
+        '404':
+          description: Error if requested resource was not found
+      security:
+      - Bearer: []
+  /api/WarpClientCommand:
+    post:
+      tags:
+      - WarpClientCommand
+      summary: Add a Warp Client Command
+      operationId: PostClientCommand
+      parameters:
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/WarpExchClientCommand'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WarpExchClientCommand'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/WarpExchClientCommand'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/WarpExchClientCommand'
+      responses:
+        '201':
+          description: Indicates successful operation
+        '400':
+          description: Error if request could not be completed with given input
+        '401':
+          description: Error if user does not have access to this resource
+        '404':
+          description: Error if requested resource was not found
+      security:
+      - Bearer: []
+  /api/WarpClientCommand/{id}/FromClientCommands:
+    put:
+      tags:
+      - WarpClientCommand
+      summary: Updates a Warp Client Command
+      operationId: PutClientCommandFromClientCommands
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/WarpExchClientCommand'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WarpExchClientCommand'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/WarpExchClientCommand'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/WarpExchClientCommand'
+      responses:
+        '201':
+          description: Indicates successful operation
+        '400':
+          description: Error if request could not be completed with given input
+        '401':
+          description: Error if user does not have access to this resource
+        '404':
+          description: Error if requested resource was not found
+      security:
+      - Bearer: []
+  /api/WarpClientCommand/{id}/FromClients:
+    put:
+      tags:
+      - WarpClientCommand
+      summary: Updates a Warp Client Command
+      operationId: PutClientCommandFromClients
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/WarpExchClientCommand'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WarpExchClientCommand'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/WarpExchClientCommand'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/WarpExchClientCommand'
+      responses:
+        '201':
+          description: Indicates successful operation
+        '400':
+          description: Error if request could not be completed with given input
+        '401':
+          description: Error if user does not have access to this resource
+        '404':
+          description: Error if requested resource was not found
+      security:
+      - Bearer: []
+components:
+  schemas:
+    WarpExchClientCommand:
+      required:
+      - commandID
+      - country
+      - fromIDWARP
+      type: object
+      properties:
+        commandID:
+          type: string
+        fromIDWARP:
+          type: string
+        country:
+          type: string
+        active:
+          type: integer
+          format: int32
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: JWT
+      scheme: Bearer
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/get_api-agencies-1
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

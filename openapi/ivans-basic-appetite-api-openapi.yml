@@ -1,0 +1,565 @@
+openapi: 3.2.0
+info:
+  title: Identification Network Basic Appetite API
+  version: 1.0.0
+  description: IVANS Identification Network API
+servers:
+- url: https://distribution-staging.ivansinsurance.com
+tags:
+- name: basic-appetite
+paths:
+  /api/v1/basic-appetite/:
+    post:
+      operationId: basic_appetite_create
+      description: 'Returns basic appetite result and optional form.
+
+
+        Basic appetite result contains status for each combination of the requested markets, lobs, and states.
+
+        - If no markets are requested, appetite status is returned for all allowed markets.
+
+        - If no states are requested, appetite status is returned for all US states.
+
+
+        Optional form contains:
+
+        - basic appetite fields
+
+        - enhanced appetite fields for risk profiles in appetite
+
+        - list of risk profiles that passed basic appetite'
+      parameters:
+      - in: query
+        name: nested_form
+        schema:
+          type: boolean
+        description: Format the returned form with nested pages, groups, and fields
+      - in: query
+        name: return_enhanced_form
+        schema:
+          type: boolean
+        description: Return  the enhanced appetite form
+      tags:
+      - basic-appetite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BasicAppetiteRequest'
+            examples:
+              StandardExample:
+                value:
+                  lobs:
+                  - BOP
+                  - WORK
+                  markets:
+                  - 7eeb51e5-6e68-4ca9-b85f-661f31a157b0
+                  - c780e6d1-e89e-4a5d-8942-d43536e39092
+                  naicsIndex: e99fe5c4-01c8-433e-8e4a-d134a6a8a66e
+                  states:
+                  - AL
+                  - AK
+                summary: Standard example
+                description: The most common scenario is to use ACORD codes for lobs, UUIDs for markets, UUID for naicsIndex, and ISO alpha-2 codes for states
+              UseUUIDsForLOBsAndStates:
+                value:
+                  lobs:
+                  - 2bc95bf9-cf44-40fe-9d83-c7054bf4cc49
+                  - 856f8ab3-761b-4899-b305-67a43ab92267
+                  markets:
+                  - 7eeb51e5-6e68-4ca9-b85f-661f31a157b0
+                  - c780e6d1-e89e-4a5d-8942-d43536e39092
+                  naicsIndex: e99fe5c4-01c8-433e-8e4a-d134a6a8a66e
+                  states:
+                  - 4fafb949-e1c7-498d-8429-808ae7bd18dc
+                  - 2cde8afd-4b3c-44c0-89a7-492fc0e7addd
+                summary: Use UUIDs for LOBs and states
+                description: UUIDs can be used instead of codes for lobs and states
+              Use6-digitCodeForNAICS:
+                value:
+                  lobs:
+                  - BOP
+                  - WORK
+                  markets:
+                  - 7eeb51e5-6e68-4ca9-b85f-661f31a157b0
+                  - c780e6d1-e89e-4a5d-8942-d43536e39092
+                  naicsIndex: '236118'
+                  states:
+                  - AL
+                  - AK
+                summary: Use 6-digit code for NAICS
+                description: 6-digit national industry code can be used instead of UUID for naicsIndex. A market is considered in appetite if at least one of the NAICS indexes under the national industry is in appetite.
+              ExcludeStates:
+                value:
+                  lobs:
+                  - BOP
+                  - WORK
+                  markets:
+                  - 7eeb51e5-6e68-4ca9-b85f-661f31a157b0
+                  - c780e6d1-e89e-4a5d-8942-d43536e39092
+                  naicsIndex: e99fe5c4-01c8-433e-8e4a-d134a6a8a66e
+                summary: Exclude states
+                description: States can be excluded from the request. Appetite will be evaluated for all US states.
+              ExcludeMarkets:
+                value:
+                  lobs:
+                  - BOP
+                  - WORK
+                  naicsIndex: e99fe5c4-01c8-433e-8e4a-d134a6a8a66e
+                summary: Exclude markets
+                description: Markets can be excluded from the request. Appetite will be evaluated for all markets accessible to the user.
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BasicAppetiteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BasicAppetiteRequest'
+        required: true
+      security:
+      - oauth2:
+        - write
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Response(nestedForm=false,ReturnEnhancedAppetiteForm=false):
+                  value:
+                    basicAppetite:
+                      market.uuid:
+                        BOP:
+                          AL: Available
+                          WA: Not in Appetite
+                        WORK:
+                          AL: Available
+                          WA: Not in Appetite
+                      market2.uuid:
+                        BOP:
+                          AL: Available
+                          WA: Not in Appetite
+                        WORK:
+                          AL: Available
+                          WA: Not in Appetite
+                  summary: Response (nested_form=false, return_enhanced_appetite_form=false)
+                Response(nestedForm=false,ReturnEnhancedAppetiteForm=true):
+                  value:
+                    basicAppetite:
+                      market.uuid:
+                        BOP:
+                          AL: Available
+                          WA: Not in Appetite
+                        WORK:
+                          AL: Available
+                          WA: Not in Appetite
+                      market2.uuid:
+                        BOP:
+                          AL: Available
+                          WA: Not in Appetite
+                        WORK:
+                          AL: Available
+                          WA: Not in Appetite
+                    form:
+                      pages:
+                      - guid: string
+                        label: string
+                        description: string
+                        order: 2147483647
+                      groups:
+                      - guid: string
+                        page: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        label: string
+                        description: string
+                        isRepeatable: true
+                        repeatMinMax: ''
+                        order: 2147483647
+                        type: normal
+                        columns:
+                        - guid: string
+                        parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        parentLabel: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        parentColumns:
+                          guid: string
+                      fields:
+                        guid: string
+                        group: string
+                        label: string
+                        description: string
+                        additionalDetails:
+                          heading: string
+                          children:
+                          - heading: string
+                            children:
+                            - listItem: string
+                        order: 0
+                        type: string
+                        dataClass: string
+                        options:
+                          label: string
+                          value: 0
+                        underwritingCategory: string
+                        isAppetiteCategory: true
+                        isEnhancedAppetiteCategory: true
+                        isBind: true
+                        isRefer: true
+                        conditions:
+                          operator: and
+                          action: referral
+                          conditions:
+                          - operator: ==
+                            value: string
+                            attribute: string
+                            repeatingOperator: ANY
+                            sourceGroup: string
+                        actionConditions:
+                          operator: and
+                          action: referral
+                          conditions:
+                          - operator: ==
+                            value: string
+                            attribute: string
+                            repeatingOperator: ANY
+                            sourceGroup: string
+                        market: string
+                        classificationStandardGuid: string
+                        classCodeFilterFieldsGuids:
+                        - string
+                        unique: true
+                        uniqueToParent: true
+                        parentAttributeGuid: string
+                        prefillSourceFieldGuid: string
+                        minimum: 0
+                        maximum: 0
+                        isSuggestable: true
+                        length: 0
+                      marketFields:
+                      - market: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        riskProfiles:
+                        - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        fields:
+                        - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                          requirementLevel: string
+                        repeatableGroups:
+                        - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                          description: string
+                          requirementLevel: string
+                          conditions: null
+                          actionConditionSets: null
+                          risk_profile: 6434827e-903d-4bdd-b213-d1b8bad56060
+                      availableRiskProfiles:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        name: string
+                        market: string
+                        marketId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        lob: string
+                        route:
+                          routeType: string
+                          requiredToSubmit:
+                            contractCode: true
+                            username: true
+                            password: true
+                          bindAllowed: true
+                          referAllowed: true
+                  summary: Response (nested_form=false, return_enhanced_appetite_form=true)
+                Response(nestedForm=true,ReturnEnhancedAppetiteForm=true):
+                  value:
+                    basicAppetite:
+                      market.uuid:
+                        BOP:
+                          AL: Available
+                          WA: Not in Appetite
+                        WORK:
+                          AL: Available
+                          WA: Not in Appetite
+                      market2.uuid:
+                        BOP:
+                          AL: Available
+                          WA: Not in Appetite
+                        WORK:
+                          AL: Available
+                          WA: Not in Appetite
+                    form:
+                      pages:
+                      - guid: string
+                        label: string
+                        description: string
+                        order: 2147483647
+                        groups:
+                        - guid: string
+                          page: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                          label: string
+                          description: string
+                          isRepeatable: true
+                          repeatMinMax: ''
+                          order: 2147483647
+                          type: normal
+                          columns:
+                          - guid: string
+                          parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                          parentLabel: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                          parentColumns:
+                            guid: string
+                          fields:
+                            guid: string
+                            group: string
+                            label: string
+                            description: string
+                            additionalDetails:
+                              heading: string
+                              children:
+                              - heading: string
+                                children:
+                                - listItem: string
+                            order: 0
+                            type: string
+                            dataClass: string
+                            options:
+                              label: string
+                              value: 0
+                            underwritingCategory: string
+                            isAppetiteCategory: true
+                            isEnhancedAppetiteCategory: true
+                            isBind: true
+                            isRefer: true
+                            conditions:
+                              operator: and
+                              action: referral
+                              conditions:
+                              - operator: ==
+                                value: string
+                                attribute: string
+                                repeatingOperator: ANY
+                                sourceGroup: string
+                            actionConditions:
+                              operator: and
+                              action: referral
+                              conditions:
+                              - operator: ==
+                                value: string
+                                attribute: string
+                                repeatingOperator: ANY
+                                sourceGroup: string
+                            market: string
+                            classificationStandardGuid: string
+                            classCodeFilterFieldsGuids:
+                            - string
+                            unique: true
+                            uniqueToParent: true
+                            parentAttributeGuid: string
+                            prefillSourceFieldGuid: string
+                            minimum: 0
+                            maximum: 0
+                            isSuggestable: true
+                            length: 0
+                      marketFields:
+                      - market: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        riskProfiles:
+                        - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        fields:
+                        - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                          requirementLevel: string
+                        repeatableGroups:
+                        - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                          description: string
+                          requirementLevel: string
+                          conditions: null
+                          actionConditionSets: null
+                          risk_profile: 6434827e-903d-4bdd-b213-d1b8bad56060
+                      availableRiskProfiles:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        name: string
+                        market: string
+                        marketId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        lob: string
+                        route:
+                          routeType: string
+                          requiredToSubmit:
+                            contractCode: true
+                            username: true
+                            password: true
+                          bindAllowed: true
+                          referAllowed: true
+                  summary: Response (nested_form=true, return_enhanced_appetite_form=true)
+          description: Successfully received the appetite response.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/basic_appetite_invalid_body_request'
+          description: Invalid request body (possible bad requests below).
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+      summary: Basic appetite create
+      x-summary-source: derived
+components:
+  schemas:
+    basic_appetite_invalid_body_request:
+      type: object
+      properties:
+        lobs:
+          type: array
+          items: {}
+          default:
+          - Required or Invalid
+        markets:
+          type: array
+          items: {}
+          default:
+          - Invalid
+        naicsIndex:
+          type: string
+          default: Required or Invalid
+        states:
+          type: array
+          items: {}
+          default:
+          - Invalid
+    BasicAppetiteRequest:
+      type: object
+      description: 'Returns basic appetite result and optional form.
+
+
+        Basic appetite result contains status for each combination of the requested markets, lobs, and states.
+
+        - If no markets are requested, appetite status is returned for all allowed markets.
+
+        - If no states are requested, appetite status is returned for all US states.
+
+
+        Optional form contains:
+
+        - basic appetite fields
+
+        - enhanced appetite fields for risk profiles in appetite
+
+
+        ViewSet: BasicAppetiteViewSet
+
+
+        Endpoint: /basic-appetite/'
+      properties:
+        lobs:
+          type: array
+          items:
+            type: string
+        markets:
+          type: array
+          items:
+            type: string
+            format: uuid
+        naicsIndex:
+          type: string
+        states:
+          type: array
+          items:
+            type: string
+            default: null
+          default:
+          - AL
+          - AK
+          - AS
+          - AZ
+          - AR
+          - AA
+          - AE
+          - AP
+          - CA
+          - CO
+          - CT
+          - DE
+          - DC
+          - FL
+          - GA
+          - GU
+          - HI
+          - ID
+          - IL
+          - IN
+          - IA
+          - KS
+          - KY
+          - LA
+          - ME
+          - MD
+          - MA
+          - MI
+          - MN
+          - MS
+          - MO
+          - MT
+          - NE
+          - NV
+          - NH
+          - NJ
+          - NM
+          - NY
+          - NC
+          - ND
+          - MP
+          - OH
+          - OK
+          - OR
+          - PA
+          - PR
+          - RI
+          - SC
+          - SD
+          - TN
+          - TX
+          - UT
+          - VT
+          - VI
+          - VA
+          - WA
+          - WV
+          - WI
+          - WY
+      required:
+      - lobs
+      - naicsIndex
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    oauth2:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: /api/v1/token/
+          refreshUrl: /api/v1/token/
+          scopes:
+            read: Read scope
+            write: Write scope
+            epic: Epic User
+            third-party: Third Party User
+    basicAuth:
+      type: http
+      scheme: basic
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/agencies_list
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

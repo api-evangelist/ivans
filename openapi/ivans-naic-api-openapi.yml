@@ -1,0 +1,204 @@
+openapi: 3.2.0
+info:
+  title: Ivans NAIC API
+  version: '1.0'
+  description: 'Operations tagged NAIC across 2 of this provider''s published API definitions: ivans-exchange-v1-openapi.json, ivans-exchange-v2-openapi.json. Each path carries the servers of the definition it was published in.'
+tags:
+- name: NAIC
+paths:
+  /api/NAIC/{naicCode}:
+    get:
+      tags:
+      - NAIC
+      summary: Gets a NAIC mapping by NAIC
+      parameters:
+      - name: naicCode
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/CarrierNaicGroup'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarrierNaicGroup'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/CarrierNaicGroup'
+      security:
+      - Bearer: []
+      operationId: getApiNAICByNaicCode
+      x-operation-id-source: derived
+  /api/NAIC:
+    get:
+      tags:
+      - NAIC
+      summary: Gets a list of Carrier-to-NAIC mappings
+      parameters:
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarrierNaicGroup'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarrierNaicGroup'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarrierNaicGroup'
+      security:
+      - Bearer: []
+      operationId: getApiNAIC
+      x-operation-id-source: derived
+  /api/v2/NAIC/{naicCode}:
+    get:
+      tags:
+      - NAIC
+      summary: Gets a NAIC mapping by NAIC
+      parameters:
+      - name: naicCode
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/CarrierNaicGroupV2'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarrierNaicGroupV2'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/CarrierNaicGroupV2'
+      security:
+      - {}
+      operationId: getApiV2NAICByNaicCode
+      x-operation-id-source: derived
+  /api/v2/NAIC:
+    get:
+      tags:
+      - NAIC
+      summary: Gets a list of Carrier-to-NAIC mappings
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarrierNaicGroupV2'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarrierNaicGroupV2'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarrierNaicGroupV2'
+      security:
+      - {}
+      operationId: getApiV2NAIC
+      x-operation-id-source: derived
+components:
+  schemas:
+    CarrierNaic:
+      required:
+      - carrierName
+      - naic
+      type: object
+      properties:
+        naic:
+          type: integer
+          format: int32
+        carrierName:
+          minLength: 1
+          type: string
+      additionalProperties: false
+    CarrierNaicGroup:
+      required:
+      - carrierNaics
+      type: object
+      properties:
+        groupName:
+          type:
+          - string
+          - 'null'
+        carrierNaics:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarrierNaic'
+      additionalProperties: false
+    CarrierNaicV2:
+      required:
+      - carrierName
+      - naic
+      type: object
+      properties:
+        naic:
+          minLength: 1
+          type: string
+        carrierName:
+          minLength: 1
+          type: string
+      additionalProperties: false
+    CarrierNaicGroupV2:
+      required:
+      - carrierNaics
+      type: object
+      properties:
+        groupName:
+          type:
+          - string
+          - 'null'
+        carrierNaics:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarrierNaicV2'
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: JWT
+      scheme: Bearer
+x-refined-from:
+- ivans-exchange-v1-openapi.json
+- ivans-exchange-v2-openapi.json
+x-readme:
+  headers: []
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/token
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

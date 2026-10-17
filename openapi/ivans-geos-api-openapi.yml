@@ -1,0 +1,590 @@
+openapi: 3.2.0
+info:
+  title: Identification Network Geos API
+  version: 1.0.0
+  description: IVANS Identification Network API
+servers:
+- url: https://distribution-staging.ivansinsurance.com
+tags:
+- name: geos
+paths:
+  /api/v1/geos/countries/:
+    get:
+      operationId: geos_countries_list
+      description: 'Returns all countries and associated subdivisions.
+
+
+        Search parameter can be used for filtering.'
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search term used to match results by name
+      tags:
+      - geos
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCountryList'
+          description: Successfully received countries.
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+      summary: Geos countries list
+      x-summary-source: derived
+  /api/v1/geos/countries/{uuid}/:
+    get:
+      operationId: geos_countries_retrieve
+      description: Returns individual country based on the uuid.
+      parameters:
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search term used to match results by name
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - geos
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Country'
+          description: Successfully received country.
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/country_detail_available_responses'
+          description: UUID is not valid or does not have corresponding country.
+      summary: Geos countries retrieve
+      x-summary-source: derived
+  /api/v1/geos/subdivisions/:
+    get:
+      operationId: geos_subdivisions_list
+      description: Search all Subdivisions
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search term used to match results by name
+      tags:
+      - geos
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSubdivisionList'
+          description: Successfully searched subdivisions
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+      summary: Geos subdivisions list
+      x-summary-source: derived
+  /api/v1/geos/us/counties/:
+    get:
+      operationId: geos_us_counties_list
+      description: Search US Counties
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: search
+        schema:
+          type: string
+          minLength: 1
+        description: Search term used to match results by name
+      - in: query
+        name: state
+        schema:
+          type: string
+        description: ISO alpha-2 code of state, used to filter results
+      tags:
+      - geos
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUSCountyList'
+          description: Successfully searched US counties
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/us_counties_responses'
+          description: State not found
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+      summary: Geos us counties list
+      x-summary-source: derived
+  /api/v1/geos/us/states/:
+    get:
+      operationId: geos_us_states_list
+      description: Search US States
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search term used to match results by name
+      tags:
+      - geos
+      security:
+      - oauth2:
+        - read
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUSStateList'
+          description: Successfully searched US States
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                Invalid:
+                  value:
+                    details: Authentication credentials were not provided.
+                Expired:
+                  value:
+                    detail: Given token not valid for any token type
+                    code: token_not_valid
+                    messages:
+                    - tokenClass: AccessToken
+                      tokenType: access
+                      message: Token is invalid or expired
+          description: Invalid or Expired token.
+      summary: Geos us states list
+      x-summary-source: derived
+components:
+  schemas:
+    country_detail_available_responses:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
+    Country:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        subdivisions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subdivision'
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 128
+        alpha3:
+          type:
+          - string
+          - 'null'
+          maxLength: 3
+        alpha2:
+          type:
+          - string
+          - 'null'
+          maxLength: 2
+        numerical:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+      required:
+      - createdAt
+      - id
+      - name
+      - subdivisions
+      - updatedAt
+      - uuid
+    PaginatedSubdivisionList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/geos/subdivisions/?page=3
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/geos/subdivisions/?page=1
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subdivision'
+    SubdivisionTypeEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      type: integer
+    PaginatedUSCountyList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/geos/us/counties/?page=3
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/geos/us/counties/?page=1
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/USCounty'
+    Subdivision:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        childSubdivisions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subdivision'
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 128
+        alpha3:
+          type:
+          - string
+          - 'null'
+          maxLength: 3
+        alpha2:
+          type:
+          - string
+          - 'null'
+          maxLength: 2
+        numerical:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+        subdivisionType:
+          allOf:
+          - $ref: '#/components/schemas/SubdivisionTypeEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        country:
+          type: integer
+        parent:
+          type:
+          - integer
+          - 'null'
+      required:
+      - childSubdivisions
+      - country
+      - createdAt
+      - id
+      - name
+      - subdivisionType
+      - updatedAt
+      - uuid
+    USState:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 128
+        alpha2:
+          type:
+          - string
+          - 'null'
+          maxLength: 2
+      required:
+      - name
+      - uuid
+    PaginatedCountryList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/geos/countries/?page=3
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/geos/countries/?page=1
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Country'
+    us_counties_responses:
+      type: object
+      properties:
+        state:
+          type: array
+          items:
+            type: string
+            default: Invalid pk "ZZ" - object does not exist.
+      required:
+      - state
+    PaginatedUSStateList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/geos/us/states/?page=3
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/geos/us/states/?page=1
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/USState'
+    USCounty:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 128
+        state:
+          $ref: '#/components/schemas/USState'
+        numerical:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+      required:
+      - name
+      - state
+      - uuid
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    oauth2:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: /api/v1/token/
+          refreshUrl: /api/v1/token/
+          scopes:
+            read: Read scope
+            write: Write scope
+            epic: Epic User
+            third-party: Third Party User
+    basicAuth:
+      type: http
+      scheme: basic
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/agencies_list
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

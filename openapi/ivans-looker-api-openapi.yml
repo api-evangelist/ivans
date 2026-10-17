@@ -1,0 +1,196 @@
+openapi: 3.2.0
+info:
+  title: Ivans Insights Looker API
+  version: 0.1.0
+servers:
+- url: https://api.looker.ivans.com
+  description: Development
+- url: https://api.looker-staging.ivans.com
+  description: Staging
+- url: https://api.looker.ivans.com
+  description: Production
+tags:
+- name: Looker
+paths:
+  /api/v1/looker/schedule-export:
+    post:
+      tags:
+      - Looker
+      summary: Schedule Export
+      operationId: schedule_export_api_v1_looker_schedule_export_post
+      parameters:
+      - description: Row Limit. Set the maximum number of rows to include in the exported data. Use -1 to export all rows. Defaults to 200 if no value is provided and no limit is provided within the export template
+        required: false
+        schema:
+          type: string
+          title: Limit
+          description: Row Limit. Set the maximum number of rows to include in the exported data. Use -1 to export all rows. Defaults to 200 if no value is provided and no limit is provided within the export template
+        name: limit
+        in: query
+      - description: Export Template. Filename of the export template (Optional)
+        required: false
+        schema:
+          type: string
+          title: Export File
+          description: Export Template. Filename of the export template (Optional)
+        name: export_file
+        in: query
+      - description: Replace column name with label. Set to True to use labels instead of names in the export.
+        required: false
+        schema:
+          type: boolean
+          title: Use Labels
+          description: Replace column name with label. Set to True to use labels instead of names in the export.
+          default: true
+        name: use_labels
+        in: query
+      - description: ' Show filters used in the first row of response data. Set to True to display filters in the first row of the export.'
+        required: false
+        schema:
+          type: boolean
+          title: Show Filters
+          description: ' Show filters used in the first row of response data. Set to True to display filters in the first row of the export.'
+          default: false
+        name: show_filters
+        in: query
+      - description: Set the format of the exported data. Supports xslx and csv_zip. If csv_zip is chosen, a zip file is created with individual files containing each query data. Defaults to csv_zip.
+        required: false
+        schema:
+          allOf:
+          - $ref: '#/components/schemas/ScheduleResultFormat'
+          description: Set the format of the exported data. Supports xslx and csv_zip. If csv_zip is chosen, a zip file is created with individual files containing each query data. Defaults to csv_zip.
+          default: csv_zip
+        name: result_type
+        in: query
+      - description: ' Looker access token for authentication.'
+        required: false
+        schema:
+          type: string
+          title: Access-Token
+          description: ' Looker access token for authentication.'
+        name: access-token
+        in: header
+      - description: Looker Client ID for authentication
+        required: false
+        schema:
+          type: string
+          title: Client-Id
+          description: Looker Client ID for authentication
+        name: client-id
+        in: header
+      - description: Looker Client secret for authentication
+        required: false
+        schema:
+          type: string
+          title: Client-Secret
+          description: Looker Client secret for authentication
+        name: client-secret
+        in: header
+      - description: Passport token for authentication.
+        required: false
+        schema:
+          type: string
+          title: Passport-Token
+          description: Passport token for authentication.
+        name: passport-token
+        in: header
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: Request Body
+              description: Request Body. JSON object containing additional parameters for the export operation.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/looker/task-status:
+    post:
+      tags:
+      - Looker
+      summary: Task Status
+      operationId: task_status_api_v1_looker_task_status_post
+      parameters:
+      - description: Webhook Request Id
+        required: true
+        schema:
+          type: string
+          title: Task Id
+          description: Webhook Request Id
+        name: task_id
+        in: query
+      - description: Passport token for authentication.
+        required: false
+        schema:
+          type: string
+          title: Passport-Token
+          description: Passport token for authentication.
+        name: passport-token
+        in: header
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ScheduleResultFormat:
+      type: string
+      enum:
+      - csv_zip
+      - xlsx
+      - json_zip
+      title: ScheduleResultFormat
+      description: An enumeration.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+x-readme: {}
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/task_status_api_v1_looker_task_status_post
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

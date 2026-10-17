@@ -1,0 +1,185 @@
+openapi: 3.2.0
+info:
+  title: IVANS Exchange API Docs Warp Carrier Product API
+  version: v1
+tags:
+- name: WarpCarrierProduct
+paths:
+  /api/WarpCarrierProduct/{id}:
+    get:
+      tags:
+      - WarpCarrierProduct
+      summary: Retrieves a list of eServicing Carrier Products
+      description: Get a Warp Carrier Product
+      operationId: GetCarrierProduct
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Indicates successful operation
+        '400':
+          description: Error if request could not be completed with given input
+        '401':
+          description: Error if user does not have access to this resource
+        '404':
+          description: Error if requested resource was not found
+      security:
+      - Bearer: []
+    put:
+      tags:
+      - WarpCarrierProduct
+      summary: Updates an eServicing Carrier Product
+      description: Updates an eServicing (TS/Warp) Carrier Product.
+      operationId: PutCarrierProduct
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        schema:
+          type: string
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/WarpExchCarrierProduct'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WarpExchCarrierProduct'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/WarpExchCarrierProduct'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/WarpExchCarrierProduct'
+      responses:
+        '201':
+          description: Indicates successful operation
+        '400':
+          description: Error if request could not be completed with given input
+        '401':
+          description: Error if user does not have access to this resource
+        '404':
+          description: Error if requested resource was not found
+      security:
+      - Bearer: []
+  /api/WarpCarrierProduct:
+    post:
+      tags:
+      - WarpCarrierProduct
+      summary: Add a new eServicng Carrier Product
+      description: Add a new eServicng (TS/Warp) Carrier Product.
+      operationId: PostCarrierProduct
+      parameters:
+      - name: api-version
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: ''
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/WarpExchCarrierProductCreateRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WarpExchCarrierProductCreateRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/WarpExchCarrierProductCreateRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/WarpExchCarrierProductCreateRequest'
+      responses:
+        '201':
+          description: Indicates successful operation
+        '400':
+          description: Error if request could not be completed with given input
+        '401':
+          description: Error if user does not have access to this resource
+        '404':
+          description: Error if requested resource was not found
+      security:
+      - Bearer: []
+components:
+  schemas:
+    WarpExchCarrierProductCreateRequest:
+      required:
+      - admin
+      - ivansId
+      - name
+      - objectType
+      - productId
+      type: object
+      properties:
+        productId:
+          type: string
+        objectType:
+          type: string
+        name:
+          type: string
+        admin:
+          type: string
+        ivansId:
+          type: string
+        country:
+          type:
+          - string
+          - 'null'
+        active:
+          type: integer
+          format: int32
+      additionalProperties: false
+    WarpExchCarrierProduct:
+      required:
+      - admin
+      - country
+      - ivansid
+      - name
+      - objectType
+      - productID
+      type: object
+      properties:
+        productID:
+          type: string
+        objectType:
+          type: string
+        name:
+          type: string
+        admin:
+          type: string
+        ivansid:
+          type: string
+        country:
+          type: string
+        active:
+          type: integer
+          format: int32
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: JWT
+      scheme: Bearer
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/get_api-agencies-1
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

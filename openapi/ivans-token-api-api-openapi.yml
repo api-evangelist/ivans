@@ -1,0 +1,60 @@
+openapi: 3.2.0
+info:
+  title: IVANS Translation API's Token API
+  description: These API's expose endpoints to manage Download Transactions.
+  license:
+    name: Copyright (C) 2023 IVANS Insurance, All rights reserved
+  version: '1.0'
+servers:
+- url: HTTPS://dev-cloud-dl.ivansinsurance.com
+  description: Server URL in UAT environment
+- url: HTTPS://cloud-dl.ivansinsurance.com
+  description: Server URL in Production environment
+tags:
+- name: Token API
+paths:
+  /ivans/api/carrier/tokens:
+    post:
+      tags:
+      - Token API
+      description: Obtain a token to be used with all download operations
+      operationId: getAuthToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenReq'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TokenRes'
+      summary: Get auth token
+      x-summary-source: derived
+components:
+  schemas:
+    TokenReq:
+      type: object
+      properties:
+        carrierId:
+          type: string
+        password:
+          type: string
+      required:
+      - carrierId
+      - password
+    TokenRes:
+      type: object
+      properties:
+        encryptionToken:
+          type: string
+        authToken:
+          type: string
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/getdocumentmetainfo
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

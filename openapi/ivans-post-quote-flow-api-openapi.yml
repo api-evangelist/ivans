@@ -1,0 +1,586 @@
+openapi: 3.2.0
+info:
+  title: Ivans Distribution Platform Post Quote Flow API
+  description: APIs for serving carrier forms, appetite, and validation
+  version: 0.1.0
+tags:
+- name: Post Quote Flow
+paths:
+  /api/v1/forms/bind:
+    get:
+      tags:
+      - Post Quote Flow
+      summary: Get Bind Question Set
+      description: 'Returns bind questions applicable to the requested risk profile
+
+
+        Nested form parameter will change the structure of the form to the nested structure'
+      operationId: get_bind_question_set_api_v1_forms_bind_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: risk_profile
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Risk Profile
+      - name: nested
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: true
+          title: Nested
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+              examples:
+                Nested Response:
+                  value:
+                    pages:
+                    - guid: string
+                      label: string
+                      description: string
+                      order: 2147483647
+                      groups:
+                      - guid: string
+                        page: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        label: string
+                        description: string
+                        isRepeatable: true
+                        repeatMinMax: ''
+                        order: 2147483647
+                        type: normal
+                        columns:
+                        - guid: string
+                        parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        parentLabel: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        parentColumns:
+                          guid: string
+                        fields:
+                          guid: string
+                          group: string
+                          label: string
+                          description: string
+                          additionalDetails:
+                            heading: string
+                            children:
+                            - heading: string
+                              children:
+                              - listItem: string
+                          order: 0
+                          type: string
+                          dataClass: string
+                          options:
+                            label: string
+                            value: 0
+                          underwritingCategory: string
+                          isAppetiteCategory: true
+                          isEnhancedAppetiteCategory: true
+                          isBind: true
+                          isRefer: true
+                          conditions:
+                            operator: and
+                            action: referral
+                            conditions:
+                            - operator: ==
+                              value: string
+                              attribute: string
+                              repeatingOperator: ANY
+                              sourceGroup: string
+                          actionConditions:
+                            operator: and
+                            action: referral
+                            conditions:
+                            - operator: ==
+                              value: string
+                              attribute: string
+                              repeatingOperator: ANY
+                              sourceGroup: string
+                          market: string
+                          classificationStandardGuid: string
+                          classCodeFilterFieldsGuids:
+                          - string
+                          unique: true
+                          uniqueToParent: true
+                          parentAttributeGuid: string
+                          prefillSourceFieldGuid: string
+                          minimum: 0
+                          maximum: 0
+                          isSuggestable: true
+                          length: 0
+                    marketFields:
+                    - market: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      riskProfiles:
+                      - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      fields:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        requirementLevel: string
+                      repeatableGroups:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        description: string
+                        requirementLevel: string
+                        risk_profile: 6434827e-903d-4bdd-b213-d1b8bad56060
+                    riskProfiles:
+                    - uuid: 0a952028-b25f-47b9-a7be-23872666c7f3
+                      name: Test Risk Profile | BOP | Bindable Quote
+                      type: Package
+                      market: Test Market
+                      marketUuid: 20cd4728-f7d2-4c6b-aafb-ab21e3af043c
+                      excessAndSurplus: false
+                      lob: BOP
+                      childLobs:
+                      - CGL
+                      - PROP
+                      inAppetite: true
+                      bindAllowed: true
+                      bindAppetite: true
+                      referAllowed: false
+                      routeType: Quote
+                      requiredToSubmit:
+                        contractCode: false
+                        username: false
+                        password: false
+                      validationErrors: []
+                      evaluations: []
+                Non-Nested Response:
+                  value:
+                    pages:
+                    - guid: string
+                      label: string
+                      description: string
+                      order: 2147483647
+                    groups:
+                    - guid: string
+                      page: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      label: string
+                      description: string
+                      isRepeatable: true
+                      repeatMinMax: ''
+                      order: 2147483647
+                      type: normal
+                      columns:
+                      - guid: string
+                      parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      parentLabel: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      parentColumns:
+                        guid: string
+                    fields:
+                      guid: string
+                      group: string
+                      label: string
+                      description: string
+                      additionalDetails:
+                        heading: string
+                        children:
+                        - heading: string
+                          children:
+                          - listItem: string
+                      order: 0
+                      type: string
+                      dataClass: string
+                      options:
+                        label: string
+                        value: 0
+                      underwritingCategory: string
+                      isAppetiteCategory: true
+                      isEnhancedAppetiteCategory: true
+                      isBind: true
+                      isRefer: true
+                      conditions:
+                        operator: and
+                        action: referral
+                        conditions:
+                        - operator: ==
+                          value: string
+                          attribute: string
+                          repeatingOperator: ANY
+                          sourceGroup: string
+                      actionConditions:
+                        operator: and
+                        action: referral
+                        conditions:
+                        - operator: ==
+                          value: string
+                          attribute: string
+                          repeatingOperator: ANY
+                          sourceGroup: string
+                      market: string
+                      classificationStandardGuid: string
+                      classCodeFilterFieldsGuids:
+                      - string
+                      unique: true
+                      uniqueToParent: true
+                      parentAttributeGuid: string
+                      prefillSourceFieldGuid: string
+                      minimum: 0
+                      maximum: 0
+                      isSuggestable: true
+                      length: 0
+                    marketFields:
+                    - market: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      riskProfiles:
+                      - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      fields:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        requirementLevel: string
+                      repeatableGroups:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        description: string
+                        requirementLevel: string
+                        risk_profile: 6434827e-903d-4bdd-b213-d1b8bad56060
+                    riskProfiles:
+                    - uuid: 0a952028-b25f-47b9-a7be-23872666c7f3
+                      name: Test Risk Profile | BOP | Bindable Quote
+                      type: Package
+                      market: Test Market
+                      marketUuid: 20cd4728-f7d2-4c6b-aafb-ab21e3af043c
+                      excessAndSurplus: false
+                      lob: BOP
+                      childLobs:
+                      - CGL
+                      - PROP
+                      inAppetite: true
+                      bindAllowed: true
+                      bindAppetite: true
+                      referAllowed: false
+                      routeType: Quote
+                      requiredToSubmit:
+                        contractCode: false
+                        username: false
+                        password: false
+                      validationErrors: []
+                      evaluations: []
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                User does not have access to the requested Risk Profile:
+                  value:
+                    detail: User does not have access to the requested risk profile
+                Bind not allowed:
+                  value:
+                    detail: Binding is not allowed for this risk profile
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/forms/refer:
+    get:
+      tags:
+      - Post Quote Flow
+      summary: Get Refer Question Set
+      description: 'Returns referral questions applicable to the requested risk profile.
+
+
+        Nested form parameter will change the structure of the form to the nested structure.'
+      operationId: get_refer_question_set_api_v1_forms_refer_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: risk_profile
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Risk Profile
+      - name: nested
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: true
+          title: Nested
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+              examples:
+                Nested Response:
+                  value:
+                    pages:
+                    - guid: string
+                      label: string
+                      description: string
+                      order: 2147483647
+                      groups:
+                      - guid: string
+                        page: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        label: string
+                        description: string
+                        isRepeatable: true
+                        repeatMinMax: ''
+                        order: 2147483647
+                        type: normal
+                        columns:
+                        - guid: string
+                        parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        parentLabel: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        parentColumns:
+                          guid: string
+                        fields:
+                          guid: string
+                          group: string
+                          label: string
+                          description: string
+                          additionalDetails:
+                            heading: string
+                            children:
+                            - heading: string
+                              children:
+                              - listItem: string
+                          order: 0
+                          type: string
+                          dataClass: string
+                          options:
+                            label: string
+                            value: 0
+                          underwritingCategory: string
+                          isAppetiteCategory: true
+                          isEnhancedAppetiteCategory: true
+                          isBind: true
+                          isRefer: true
+                          conditions:
+                            operator: and
+                            action: referral
+                            conditions:
+                            - operator: ==
+                              value: string
+                              attribute: string
+                              repeatingOperator: ANY
+                              sourceGroup: string
+                          actionConditions:
+                            operator: and
+                            action: referral
+                            conditions:
+                            - operator: ==
+                              value: string
+                              attribute: string
+                              repeatingOperator: ANY
+                              sourceGroup: string
+                          market: string
+                          classificationStandardGuid: string
+                          classCodeFilterFieldsGuids:
+                          - string
+                          unique: true
+                          uniqueToParent: true
+                          parentAttributeGuid: string
+                          prefillSourceFieldGuid: string
+                          minimum: 0
+                          maximum: 0
+                          isSuggestable: true
+                          length: 0
+                    marketFields:
+                    - market: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      riskProfiles:
+                      - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      fields:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        requirementLevel: string
+                      repeatableGroups:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        description: string
+                        requirementLevel: string
+                        risk_profile: 6434827e-903d-4bdd-b213-d1b8bad56060
+                    riskProfiles:
+                    - uuid: 0a952028-b25f-47b9-a7be-23872666c7f3
+                      name: Test Risk Profile | BOP | Bindable Quote
+                      type: Package
+                      market: Test Market
+                      marketUuid: 20cd4728-f7d2-4c6b-aafb-ab21e3af043c
+                      excessAndSurplus: false
+                      lob: BOP
+                      childLobs:
+                      - CGL
+                      - PROP
+                      inAppetite: true
+                      bindAllowed: true
+                      bindAppetite: true
+                      referAllowed: false
+                      routeType: Quote
+                      requiredToSubmit:
+                        contractCode: false
+                        username: false
+                        password: false
+                      validationErrors: []
+                      evaluations: []
+                Non-Nested Response:
+                  value:
+                    pages:
+                    - guid: string
+                      label: string
+                      description: string
+                      order: 2147483647
+                    groups:
+                    - guid: string
+                      page: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      label: string
+                      description: string
+                      isRepeatable: true
+                      repeatMinMax: ''
+                      order: 2147483647
+                      type: normal
+                      columns:
+                      - guid: string
+                      parent: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      parentLabel: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      parentColumns:
+                        guid: string
+                    fields:
+                      guid: string
+                      group: string
+                      label: string
+                      description: string
+                      additionalDetails:
+                        heading: string
+                        children:
+                        - heading: string
+                          children:
+                          - listItem: string
+                      order: 0
+                      type: string
+                      dataClass: string
+                      options:
+                        label: string
+                        value: 0
+                      underwritingCategory: string
+                      isAppetiteCategory: true
+                      isEnhancedAppetiteCategory: true
+                      isBind: true
+                      isRefer: true
+                      conditions:
+                        operator: and
+                        action: referral
+                        conditions:
+                        - operator: ==
+                          value: string
+                          attribute: string
+                          repeatingOperator: ANY
+                          sourceGroup: string
+                      actionConditions:
+                        operator: and
+                        action: referral
+                        conditions:
+                        - operator: ==
+                          value: string
+                          attribute: string
+                          repeatingOperator: ANY
+                          sourceGroup: string
+                      market: string
+                      classificationStandardGuid: string
+                      classCodeFilterFieldsGuids:
+                      - string
+                      unique: true
+                      uniqueToParent: true
+                      parentAttributeGuid: string
+                      prefillSourceFieldGuid: string
+                      minimum: 0
+                      maximum: 0
+                      isSuggestable: true
+                      length: 0
+                    marketFields:
+                    - market: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      riskProfiles:
+                      - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                      fields:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        requirementLevel: string
+                      repeatableGroups:
+                      - uuid: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                        description: string
+                        requirementLevel: string
+                        risk_profile: 6434827e-903d-4bdd-b213-d1b8bad56060
+                    riskProfiles:
+                    - uuid: 0a952028-b25f-47b9-a7be-23872666c7f3
+                      name: Test Risk Profile | BOP | Bindable Quote
+                      type: Package
+                      market: Test Market
+                      marketUuid: 20cd4728-f7d2-4c6b-aafb-ab21e3af043c
+                      excessAndSurplus: false
+                      lob: BOP
+                      childLobs:
+                      - CGL
+                      - PROP
+                      inAppetite: true
+                      bindAllowed: true
+                      bindAppetite: true
+                      referAllowed: false
+                      routeType: Quote
+                      requiredToSubmit:
+                        contractCode: false
+                        username: false
+                        password: false
+                      validationErrors: []
+                      evaluations: []
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                User does not have access to the requested Risk Profile:
+                  value:
+                    detail: User does not have access to the requested risk profile
+                Referring not allowed:
+                  value:
+                    detail: Referring is not allowed for this risk profile
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/get_basic_appetite_api_v1_forms_basic_appetite_get
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.
