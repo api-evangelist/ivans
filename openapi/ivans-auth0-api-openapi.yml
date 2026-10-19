@@ -1,0 +1,406 @@
+openapi: 3.2.0
+info:
+  title: Ivans Passport Auth0 API
+  description: Middleware for Ivans Identity
+  version: 0.1.0
+servers:
+- url: https://passport.ivans.com
+  description: Production Server
+- url: https://ivans-passport.us.staging.appliedcloudplatform.com/
+  description: Staging Server
+- url: https://ivans-passport.us.development.appliedcloudplatform.com/
+  description: Development Server
+tags:
+- name: Auth0
+paths:
+  /api/v1/auth0/users/{user_id}/user-attributes:
+    patch:
+      tags:
+      - Auth0
+      summary: Update User Attributes
+      operationId: update_user_attributes_api_v1_auth0_users__user_id__user_attributes_patch
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: User Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserMetadata'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Auth0User'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/auth0/users/enroll-mfa:
+    get:
+      tags:
+      - Auth0
+      summary: Enroll Mfa
+      operationId: enroll_mfa_api_v1_auth0_users_enroll_mfa_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MFAEnrollmentResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+        '424':
+          description: Failed Dependency
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+      security:
+      - HTTPBearer: []
+  /api/v1/auth0/users/{user_id}/reset-mfa:
+    patch:
+      tags:
+      - Auth0
+      summary: Reset Mfa
+      operationId: reset_mfa_api_v1_auth0_users__user_id__reset_mfa_patch
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: User Id
+      responses:
+        '204':
+          description: Successful Response
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/auth0/home-realm-discovery:
+    get:
+      tags:
+      - Auth0
+      summary: Home Realm Discovery
+      operationId: home_realm_discovery_api_v1_auth0_home_realm_discovery_get
+      parameters:
+      - name: domain
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Domain
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HomeRealmDiscovery'
+                title: Response Home Realm Discovery Api V1 Auth0 Home Realm Discovery Get
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ServiceMetadata:
+      properties:
+        exchange:
+          $ref: '#/components/schemas/ExchangeMetadata'
+        marketingInsights:
+          $ref: '#/components/schemas/MarketingInsightsMetadata'
+        distributionPlatform:
+          $ref: '#/components/schemas/DistributionPlatformMetadata'
+      type: object
+      title: ServiceMetadata
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    Auth0User:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        email:
+          type: string
+          title: Email
+        email_verified:
+          type: boolean
+          title: Email Verified
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+        user_id:
+          type: string
+          title: User Id
+        exchange_user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Exchange User Id
+        exchange_organization_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Exchange Organization Id
+        last_login:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Login
+        blocked:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Blocked
+          default: false
+        user_metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: User Metadata
+          default: {}
+      type: object
+      required:
+      - created_at
+      - email
+      - email_verified
+      - user_id
+      title: Auth0User
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ExchangeMetadata:
+      properties:
+        ecsAccounts:
+          items:
+            type: string
+          type: array
+          title: Ecsaccounts
+        carrierIds:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Carrierids
+        rollupGroups:
+          items:
+            type: string
+          type: array
+          title: Rollupgroups
+      type: object
+      title: ExchangeMetadata
+    _ErrorResponse:
+      properties:
+        detail:
+          type: string
+          title: Detail
+      type: object
+      required:
+      - detail
+      title: _ErrorResponse
+    HomeRealmDiscovery:
+      properties:
+        connection_name:
+          type: string
+          title: Connection Name
+      type: object
+      required:
+      - connection_name
+      title: HomeRealmDiscovery
+    MarketingInsightsMetadata:
+      properties:
+        ecsAccounts:
+          items:
+            type: string
+          type: array
+          title: Ecsaccounts
+      type: object
+      title: MarketingInsightsMetadata
+    MFAEnrollmentResponse:
+      properties:
+        enrollment_url:
+          type: string
+          title: Enrollment Url
+      type: object
+      required:
+      - enrollment_url
+      title: MFAEnrollmentResponse
+    DistributionPlatformMetadata:
+      properties:
+        integratorIds:
+          items:
+            type: string
+          type: array
+          title: Integratorids
+        marketIds:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Marketids
+      type: object
+      title: DistributionPlatformMetadata
+    UserMetadata:
+      properties:
+        useMFA:
+          type: boolean
+          title: Usemfa
+          default: false
+        services:
+          $ref: '#/components/schemas/ServiceMetadata'
+      type: object
+      title: UserMetadata
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

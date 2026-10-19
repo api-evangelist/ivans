@@ -47,43 +47,81 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    PropertylossnoticeType:
+    PhoneType:
       type: object
       properties:
-        claimproperty:
-          type: array
-          items:
-            type: object
-          properties:
-            empty:
-              type: boolean
-        realestatetypecd:
+        phonetype:
           type: string
-        realestateypedesc:
+          enum:
+          - business
+          - personal
+          - cell
+        phone:
           type: string
-        subjectofinsurancecd:
+        extension:
           type: string
-        losskindcd:
+    CoverageselfinsuredretentionType:
+      type: object
+      properties:
+        selfinsuredretentiontypecd:
           type: string
-        objectlossdesc:
+        selfinsuredretentionamt:
+          type: number
+        retentionappliestocd:
           type: string
-        damagedesc:
+    PaymentInfo:
+      type: object
+      properties:
+        paymentTypeCd:
           type: string
-        otherinsuranceind:
+          enum:
+          - AdjExp
+          - Adjustment
+          - Counter
+          - Final
+          - Payment
+          - Recovery
+          - SRecov
+          - StopPay
+          - Transfer
+          - Void
+        totalPaymentAmount:
+          type: number
+        totalclaimlosspaidamt:
+          type: number
+        checkNumber:
+          type: string
+        paymentDt:
+          format: yyyy-MM-dd
+          $ref: '#/components/schemas/LocalDate'
+          example: '2025-01-01'
+        paymentDesc:
+          type: string
+        claimsPartyReferenceIdentifier:
+          type: string
+        losscausecd:
+          type: string
+        payee:
+          $ref: '#/components/schemas/GeneralPartyInfoType'
+        lumpsumind:
           type: boolean
-        mortgageeind:
-          type: boolean
-        occupancytypecd:
-          type: string
-        coverageselfinsuredretention:
-          $ref: '#/components/schemas/CoverageselfinsuredretentionType'
-        coverages:
-          type: array
-          items:
-            type: object
-          properties:
-            empty:
-              type: boolean
+    Era:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    LossnoticeType:
+      type: object
+      properties:
+        autoloss:
+          $ref: '#/components/schemas/AutolossnoticeType'
+        liabilityloss:
+          $ref: '#/components/schemas/LiabilitylossnoticeType'
+        propertyloss:
+          $ref: '#/components/schemas/PropertylossnoticeType'
+        workloss:
+          $ref: '#/components/schemas/WorklossnoticeType'
     ClaimsDownloadRequest:
       type: object
       properties:
@@ -163,76 +201,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LossnoticeType'
-    IsoChronology:
-      type: object
-      properties:
-        id:
-          type: string
-        calendarType:
-          type: string
-    AdjusterParty:
-      type: object
-      properties:
-        generalPartyInfo:
-          $ref: '#/components/schemas/GeneralPartyInfoType'
-        adjusterPartyInfo:
-          $ref: '#/components/schemas/AdjusterPartyInfo'
-    ClaimantInfo:
-      type: object
-      properties:
-        claimsPartyRoleCd:
-          type: string
-          enum:
-          - PAYEE
-          - CLM
-          - DRV
-          - ReptBy
-        claimsPartyReferenceNumber:
-          type: string
-        reportedDate:
-          format: yyyy-MM-dd
-          $ref: '#/components/schemas/LocalDate'
-          example: '2025-01-01'
-        involvementdesc:
-          type: string
-    WorklossnoticeType:
-      type: object
-      properties:
-        jurisdictioncd:
-          type: string
-        jurisdictiondesc:
-          type: string
-        wccclaimtypecd:
-          type: string
-        secondaryinjuryfundind:
-          type: boolean
-        otherinsuranceind:
-          type: boolean
-        fraudulentclaimcd:
-          type: string
-        employeeinfo:
-          type: array
-          items:
-            type: object
-          properties:
-            empty:
-              type: boolean
-        coverages:
-          type: array
-          items:
-            type: object
-          properties:
-            empty:
-              type: boolean
-        vesselcallid:
-          type: string
-        losscondition:
-          type: array
-          items:
-            type: object
-          properties:
-            empty:
-              type: boolean
     AddressType:
       type: object
       properties:
@@ -414,6 +382,269 @@ components:
           readOnly: true
         fullname:
           type: string
+    ContactType:
+      type: object
+      properties:
+        contacttypecd:
+          type: string
+          enum:
+          - Billing Contact
+          - Audit Contact
+          - Claim Contact
+          - Risk Manager
+          - Executive Contact
+          - Misc. Contact
+          - Customer Service Rep
+        personalname:
+          $ref: '#/components/schemas/PersonalnameType'
+        email:
+          type: string
+        phone:
+          $ref: '#/components/schemas/PhoneType'
+        employedbyinsuredind:
+          type: boolean
+    Communication:
+      type: object
+      properties:
+        phone:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneType'
+        email:
+          type: string
+    AdjusterParty:
+      type: object
+      properties:
+        generalPartyInfo:
+          $ref: '#/components/schemas/GeneralPartyInfoType'
+        adjusterPartyInfo:
+          $ref: '#/components/schemas/AdjusterPartyInfo'
+    ReserveAdjustment:
+      type: object
+      properties:
+        reserveAdjustmentAmount:
+          type: number
+        reserveAdjustmentDt:
+          format: yyyy-MM-dd
+          $ref: '#/components/schemas/LocalDate'
+          example: '2025-01-01'
+    ClaimsParty:
+      type: object
+      properties:
+        generalPartyInfo:
+          $ref: '#/components/schemas/GeneralPartyInfoType'
+        claimsPartyInfo:
+          $ref: '#/components/schemas/ClaimantInfo'
+        claimsinjury:
+          $ref: '#/components/schemas/ClaimsinjuryType'
+    ProducerType:
+      type: object
+      properties:
+        organizationname:
+          type: string
+          readOnly: true
+        name:
+          $ref: '#/components/schemas/PersonalnameType'
+          readOnly: true
+        address:
+          $ref: '#/components/schemas/AddressType'
+          readOnly: true
+        npn:
+          type: string
+          readOnly: true
+        contractcode:
+          type: string
+        contractsubcode:
+          type: string
+          readOnly: true
+        contact:
+          $ref: '#/components/schemas/ContactType'
+          readOnly: true
+    ClaimsDownloadResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          description: Unique id for this transaction
+        code:
+          type: string
+          enum:
+          - SUCCESS
+          - FAILURE
+          example: SUCCESS
+        mailbox:
+          type: string
+        message:
+          type: string
+    AdjusterPartyInfo:
+      type: object
+      properties:
+        assignedDt:
+          format: yyyy-MM-dd
+          $ref: '#/components/schemas/LocalDate'
+          example: '2025-01-01'
+        adjusterId:
+          type: string
+        communication:
+          $ref: '#/components/schemas/Communication'
+    PropertylossnoticeType:
+      type: object
+      properties:
+        claimproperty:
+          type: array
+          items:
+            type: object
+          properties:
+            empty:
+              type: boolean
+        realestatetypecd:
+          type: string
+        realestateypedesc:
+          type: string
+        subjectofinsurancecd:
+          type: string
+        losskindcd:
+          type: string
+        objectlossdesc:
+          type: string
+        damagedesc:
+          type: string
+        otherinsuranceind:
+          type: boolean
+        mortgageeind:
+          type: boolean
+        occupancytypecd:
+          type: string
+        coverageselfinsuredretention:
+          $ref: '#/components/schemas/CoverageselfinsuredretentionType'
+        coverages:
+          type: array
+          items:
+            type: object
+          properties:
+            empty:
+              type: boolean
+    AutolossnoticeType:
+      type: object
+      properties:
+        vehiclesinvolved:
+          type: array
+          items:
+            type: object
+          properties:
+            empty:
+              type: boolean
+        coverages:
+          type: array
+          items:
+            type: object
+          properties:
+            empty:
+              type: boolean
+    GeneralPartyInfoType:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/PersonalnameType'
+        commercialname:
+          type: string
+        address:
+          $ref: '#/components/schemas/AddressType'
+        communication:
+          $ref: '#/components/schemas/Communication'
+    WorklossnoticeType:
+      type: object
+      properties:
+        jurisdictioncd:
+          type: string
+        jurisdictiondesc:
+          type: string
+        wccclaimtypecd:
+          type: string
+        secondaryinjuryfundind:
+          type: boolean
+        otherinsuranceind:
+          type: boolean
+        fraudulentclaimcd:
+          type: string
+        employeeinfo:
+          type: array
+          items:
+            type: object
+          properties:
+            empty:
+              type: boolean
+        coverages:
+          type: array
+          items:
+            type: object
+          properties:
+            empty:
+              type: boolean
+        vesselcallid:
+          type: string
+        losscondition:
+          type: array
+          items:
+            type: object
+          properties:
+            empty:
+              type: boolean
+    ClaimantInfo:
+      type: object
+      properties:
+        claimsPartyRoleCd:
+          type: string
+          enum:
+          - PAYEE
+          - CLM
+          - DRV
+          - ReptBy
+        claimsPartyReferenceNumber:
+          type: string
+        reportedDate:
+          format: yyyy-MM-dd
+          $ref: '#/components/schemas/LocalDate'
+          example: '2025-01-01'
+        involvementdesc:
+          type: string
+    LiabilitylossnoticeType:
+      type: object
+      properties:
+        locationnum:
+          type: string
+        buildingnum:
+          type: string
+        subjectofinsurancecd:
+          type: string
+        insuredinterestcd:
+          type: string
+        itemdesc:
+          type: string
+        objectlossdesc:
+          type: string
+        whereseendesc:
+          type: string
+        operationsdesc:
+          type: string
+        otherexposuredesc:
+          type: string
+        coverages:
+          type: array
+          items:
+            type: object
+          properties:
+            empty:
+              type: boolean
+    ClaimsinjuryType:
+      type: object
+      properties:
+        bodypartcd:
+          type: string
+        injurynaturecd:
+          type: string
+        losscausecd:
+          type: string
     LocalDate:
       type: object
       properties:
@@ -460,238 +691,13 @@ components:
           format: int32
         era:
           $ref: '#/components/schemas/Era'
-    ContactType:
+    IsoChronology:
       type: object
       properties:
-        contacttypecd:
+        id:
           type: string
-          enum:
-          - Billing Contact
-          - Audit Contact
-          - Claim Contact
-          - Risk Manager
-          - Executive Contact
-          - Misc. Contact
-          - Customer Service Rep
-        personalname:
-          $ref: '#/components/schemas/PersonalnameType'
-        email:
+        calendarType:
           type: string
-        phone:
-          $ref: '#/components/schemas/PhoneType'
-        employedbyinsuredind:
-          type: boolean
-    CoverageselfinsuredretentionType:
-      type: object
-      properties:
-        selfinsuredretentiontypecd:
-          type: string
-        selfinsuredretentionamt:
-          type: number
-        retentionappliestocd:
-          type: string
-    Communication:
-      type: object
-      properties:
-        phone:
-          type: array
-          items:
-            $ref: '#/components/schemas/PhoneType'
-        email:
-          type: string
-    ClaimsinjuryType:
-      type: object
-      properties:
-        bodypartcd:
-          type: string
-        injurynaturecd:
-          type: string
-        losscausecd:
-          type: string
-    ClaimsDownloadResponse:
-      type: object
-      properties:
-        transactionId:
-          type: string
-          description: Unique id for this transaction
-        code:
-          type: string
-          enum:
-          - SUCCESS
-          - FAILURE
-          example: SUCCESS
-        mailbox:
-          type: string
-        message:
-          type: string
-    PhoneType:
-      type: object
-      properties:
-        phonetype:
-          type: string
-          enum:
-          - business
-          - personal
-          - cell
-        phone:
-          type: string
-        extension:
-          type: string
-    LossnoticeType:
-      type: object
-      properties:
-        autoloss:
-          $ref: '#/components/schemas/AutolossnoticeType'
-        liabilityloss:
-          $ref: '#/components/schemas/LiabilitylossnoticeType'
-        propertyloss:
-          $ref: '#/components/schemas/PropertylossnoticeType'
-        workloss:
-          $ref: '#/components/schemas/WorklossnoticeType'
-    ProducerType:
-      type: object
-      properties:
-        organizationname:
-          type: string
-          readOnly: true
-        name:
-          $ref: '#/components/schemas/PersonalnameType'
-          readOnly: true
-        address:
-          $ref: '#/components/schemas/AddressType'
-          readOnly: true
-        npn:
-          type: string
-          readOnly: true
-        contractcode:
-          type: string
-        contractsubcode:
-          type: string
-          readOnly: true
-        contact:
-          $ref: '#/components/schemas/ContactType'
-          readOnly: true
-    AutolossnoticeType:
-      type: object
-      properties:
-        vehiclesinvolved:
-          type: array
-          items:
-            type: object
-          properties:
-            empty:
-              type: boolean
-        coverages:
-          type: array
-          items:
-            type: object
-          properties:
-            empty:
-              type: boolean
-    AdjusterPartyInfo:
-      type: object
-      properties:
-        assignedDt:
-          format: yyyy-MM-dd
-          $ref: '#/components/schemas/LocalDate'
-          example: '2025-01-01'
-        adjusterId:
-          type: string
-        communication:
-          $ref: '#/components/schemas/Communication'
-    PaymentInfo:
-      type: object
-      properties:
-        paymentTypeCd:
-          type: string
-          enum:
-          - AdjExp
-          - Adjustment
-          - Counter
-          - Final
-          - Payment
-          - Recovery
-          - SRecov
-          - StopPay
-          - Transfer
-          - Void
-        totalPaymentAmount:
-          type: number
-        totalclaimlosspaidamt:
-          type: number
-        checkNumber:
-          type: string
-        paymentDt:
-          format: yyyy-MM-dd
-          $ref: '#/components/schemas/LocalDate'
-          example: '2025-01-01'
-        paymentDesc:
-          type: string
-        claimsPartyReferenceIdentifier:
-          type: string
-        losscausecd:
-          type: string
-        payee:
-          $ref: '#/components/schemas/GeneralPartyInfoType'
-        lumpsumind:
-          type: boolean
-    GeneralPartyInfoType:
-      type: object
-      properties:
-        name:
-          $ref: '#/components/schemas/PersonalnameType'
-        commercialname:
-          type: string
-        address:
-          $ref: '#/components/schemas/AddressType'
-        communication:
-          $ref: '#/components/schemas/Communication'
-    ReserveAdjustment:
-      type: object
-      properties:
-        reserveAdjustmentAmount:
-          type: number
-        reserveAdjustmentDt:
-          format: yyyy-MM-dd
-          $ref: '#/components/schemas/LocalDate'
-          example: '2025-01-01'
-    ClaimsParty:
-      type: object
-      properties:
-        generalPartyInfo:
-          $ref: '#/components/schemas/GeneralPartyInfoType'
-        claimsPartyInfo:
-          $ref: '#/components/schemas/ClaimantInfo'
-        claimsinjury:
-          $ref: '#/components/schemas/ClaimsinjuryType'
-    LiabilitylossnoticeType:
-      type: object
-      properties:
-        locationnum:
-          type: string
-        buildingnum:
-          type: string
-        subjectofinsurancecd:
-          type: string
-        insuredinterestcd:
-          type: string
-        itemdesc:
-          type: string
-        objectlossdesc:
-          type: string
-        whereseendesc:
-          type: string
-        operationsdesc:
-          type: string
-        otherexposuredesc:
-          type: string
-        coverages:
-          type: array
-          items:
-            type: object
-          properties:
-            empty:
-              type: boolean
     PolicyInfo:
       type: object
       properties:
@@ -782,12 +788,6 @@ components:
           format: yyyy-MM-dd
           $ref: '#/components/schemas/LocalDate'
           example: '2025-01-01'
-    Era:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
 x-provenance:
   method: searched
   source: https://api.ivans.com/reference/getdocumentmetainfo

@@ -119,66 +119,208 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    CsvResponse:
+    PhoneType:
       type: object
       properties:
-        transactionId:
+        phonetype:
           type: string
-          example: 54A365A9B3AF4EEFA4E7CE154ABFE209
-        message:
+          enum:
+          - business
+          - personal
+          - cell
+        phone:
           type: string
-          example: Csv Upload Complete
-        transactionStatus:
+        extension:
           type: string
-          example: SUCCESS
-        exchangeFileId:
-          type: string
-          example: 7ce6f940-fd77-419a-b656-27359ee47ff2
-    Companyidentification:
-      type: object
-      properties:
-        companyname:
-          type: string
-        originationaddress:
-          type: string
-          readOnly: true
-    StatementType:
+    TransactionType:
       type: object
       properties:
         producer:
           $ref: '#/components/schemas/ProducerType'
-        statementdt:
+          readOnly: true
+        name:
+          $ref: '#/components/schemas/PersonalnameType'
+        secondaryname:
+          $ref: '#/components/schemas/PersonalnameType'
+          readOnly: true
+        policynum:
+          type: string
+        subpolicynum:
+          type: string
+          readOnly: true
+        lineofbusiness:
+          type: string
+          enum:
+          - ACCT
+          - AGENT
+          - AGLIA
+          - AGPP
+          - AGPR
+          - APKGE
+          - ARCH
+          - AUTOB
+          - AUTOP
+          - BANDM
+          - BOAT
+          - BOP
+          - BOPGL
+          - BOPPR
+          - CFIRE
+          - CGL
+          - CPKGE
+          - CRIM
+          - CUMBR
+          - CYBER
+          - DFIRE
+          - DNTL
+          - DO
+          - EL
+          - EO
+          - EPLI
+          - EQ
+          - EQLIA
+          - EXLIA
+          - FIDUC
+          - FLOOD
+          - GARAG
+          - HLTH
+          - HOME
+          - INMRC
+          - INMRP
+          - KIDRA
+          - LAW
+          - LIFE
+          - LL
+          - LMORT
+          - MEDIA
+          - MHOME
+          - MMAL
+          - MPL
+          - MTRCR
+          - MTRTK
+          - OCMRC
+          - PHYS
+          - PL
+          - PLMSC
+          - PPKGE
+          - PPL
+          - PROP
+          - PRSL
+          - PUMBR
+          - RECV
+          - RRPRL
+          - SFRNC
+          - SMP
+          - SURE
+          - WIND
+          - WORK
+          - WORKV
+          - YACHT
+        sublineofbusiness:
+          type: string
+          enum:
+          - ACCT
+          - ARCH
+          - ARP
+          readOnly: true
+        companycode:
+          type: string
+        transactioneffectivedt:
           format: yyyy-MM-dd
           $ref: '#/components/schemas/LocalDate'
           example: '2025-01-01'
-        summary:
-          $ref: '#/components/schemas/SummaryType'
-        transactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/TransactionType'
-          properties:
-            empty:
-              type: boolean
-    IsoChronology:
+        transactiontypecd:
+          type: string
+          enum:
+          - ADJ
+          - OTH
+          - PCH
+          - NBS
+          - RWL
+          - XLC
+          - XLN
+          - TAX
+          - FEE
+          - STL
+          - REI
+          - UNC
+          - PAD
+          - REW
+          - SCH
+        commissiontypecd:
+          type: string
+          enum:
+          - Commission Item
+          - Adjustment Item
+        policyeffectivedt:
+          format: yyyy-MM-dd
+          $ref: '#/components/schemas/LocalDate'
+          example: '2025-01-01'
+        policyexpirationdt:
+          format: yyyy-MM-dd
+          $ref: '#/components/schemas/LocalDate'
+          example: '2025-01-01'
+        secondarypolicydt:
+          $ref: '#/components/schemas/LocalDate'
+          readOnly: true
+        policygrossamt:
+          type: number
+        commissionrate:
+          type: number
+        commissionamt:
+          type: number
+        adjustmentamt:
+          type: number
+          readOnly: true
+        companyproductcd:
+          type: string
+        producerleveltransactionind:
+          type: boolean
+          readOnly: true
+        agencyinsuredid:
+          type: string
+        installmentnum:
+          type: integer
+          format: int32
+        payplan:
+          type: string
+        billingaccountnum:
+          type: string
+        policyversion:
+          type: string
+        mgacode:
+          type: string
+        npn:
+          type: string
+    CommissionDownloadRequest:
       type: object
       properties:
-        id:
+        statement:
+          $ref: '#/components/schemas/StatementType'
+        companyidentification:
+          $ref: '#/components/schemas/Companyidentification'
+        carrierId:
           type: string
-        calendarType:
-          type: string
-    CsvResponse202:
+    Era:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int32
+    CsvResponse503:
       type: object
       properties:
         transactionId:
           type: string
-          example: 54A365A9B3AF4EEFA4E7CE154ABFE209
+          example: 81A365A9B3AF4EEFA4E7CE154ABFE209
         message:
-          type: string
-          example: Csv Upload Complete. FileId not available. Exchange delivery delayed
+          type: object
+          additionalProperties:
+            type: object
+          example: Unexpected internal exception occurred. Please report to IVANS support
         transactionStatus:
           type: string
-          example: SUCCESS
+          example: FAILURE
     AddressType:
       type: object
       properties:
@@ -346,6 +488,41 @@ components:
           type: string
         longitude:
           type: string
+    CsvResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          example: 54A365A9B3AF4EEFA4E7CE154ABFE209
+        message:
+          type: string
+          example: Csv Upload Complete
+        transactionStatus:
+          type: string
+          example: SUCCESS
+        exchangeFileId:
+          type: string
+          example: 7ce6f940-fd77-419a-b656-27359ee47ff2
+    CsvResponse422:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          example: 81A365A9B3AF4EEFA4E7CE154ABFE209
+        message:
+          type: object
+          additionalProperties:
+            type: object
+          example:
+            detail:
+            - loc:
+              - row
+              - 2
+              msg: Invalid Data
+              type: ZZZZZ
+        transactionStatus:
+          type: string
+          example: FAILURE
     PersonalnameType:
       type: object
       properties:
@@ -360,6 +537,145 @@ components:
           readOnly: true
         fullname:
           type: string
+    ContactType:
+      type: object
+      properties:
+        contacttypecd:
+          type: string
+          enum:
+          - Billing Contact
+          - Audit Contact
+          - Claim Contact
+          - Risk Manager
+          - Executive Contact
+          - Misc. Contact
+          - Customer Service Rep
+        personalname:
+          $ref: '#/components/schemas/PersonalnameType'
+        email:
+          type: string
+        phone:
+          $ref: '#/components/schemas/PhoneType'
+        employedbyinsuredind:
+          type: boolean
+    Companyidentification:
+      type: object
+      properties:
+        companyname:
+          type: string
+        originationaddress:
+          type: string
+          readOnly: true
+    CommissionDownloadResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          description: Unique id for this transaction
+        code:
+          type: string
+          enum:
+          - SUCCESS
+          - FAILURE
+          example: SUCCESS
+        mailbox:
+          type: string
+        message:
+          type: string
+    CsvResponseJson:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          example: 99A365A9B3AF4EEFA4E7CE154ABFE209
+        message:
+          type: object
+          additionalProperties:
+            type: object
+          example:
+            errors:
+            - row: 166
+              column: LineOfBusinessCode
+              input: HOSP
+              msg: Input should be 'ACCT', 'ACHE', 'AGENT', 'AGLIA', 'AGPP', 'AGPR', 'AIRC', 'APFBO', 'APKGE', 'APROD', 'ARCH', 'ART', 'AUTOB', 'AUTOP', 'AVPKG', 'BANDM', 'BMISC', 'BOAT', 'BOP', 'BOPGL', 'BOPPR', 'CAVN', 'CFIRE', 'CFRM', 'CGL', 'CNTGC', 'CPKGE', 'CPMP', 'CRIM', 'CUMBR', 'CYBER', 'DFIRE', 'DISAB', 'DNTL', 'DO', 'ELIAB', 'EMGLI', 'EO', 'EPLI', 'EQ', 'EQLIA', 'EXLIA', 'FIDTY', 'FIDUC', 'FIIBO', 'FLOOD', 'GARAG', 'HLTH', 'HOME', 'INMRC', 'INMRP', 'INTER', 'JUDCL', 'KIDRA', 'LAW', 'LGLEX', 'LICPT', 'LIFE', 'LL', 'LMORT', 'LSTIN', 'LVSTK', 'MEDIA', 'MGMLI', 'MHOME', 'MMAL', 'MOTO', 'MPL', 'MTRCR', 'NWFGR', 'OCMRC', 'OLIB', 'PHYS', 'PL', 'PLMSC', 'PPKGE', 'PPL', 'PROP', 'PRSL', 'PUBOF', 'PUMBR', 'RECV', 'RRPRL', 'SCAP', 'SFRNC', 'SMP', 'SURE', 'TRKRS', 'TRVL', 'WCMA', 'WIND', 'WORK', 'WORKP', 'WORKV', 'XWARR' or 'YACHT'
+        transactionStatus:
+          type: string
+          example: FAILURE
+    ProducerType:
+      type: object
+      properties:
+        organizationname:
+          type: string
+          readOnly: true
+        name:
+          $ref: '#/components/schemas/PersonalnameType'
+          readOnly: true
+        address:
+          $ref: '#/components/schemas/AddressType'
+          readOnly: true
+        npn:
+          type: string
+          readOnly: true
+        contractcode:
+          type: string
+        contractsubcode:
+          type: string
+          readOnly: true
+        contact:
+          $ref: '#/components/schemas/ContactType'
+          readOnly: true
+    StatementType:
+      type: object
+      properties:
+        producer:
+          $ref: '#/components/schemas/ProducerType'
+        statementdt:
+          format: yyyy-MM-dd
+          $ref: '#/components/schemas/LocalDate'
+          example: '2025-01-01'
+        summary:
+          $ref: '#/components/schemas/SummaryType'
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionType'
+          properties:
+            empty:
+              type: boolean
+    CsvResponse202:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          example: 54A365A9B3AF4EEFA4E7CE154ABFE209
+        message:
+          type: string
+          example: Csv Upload Complete. FileId not available. Exchange delivery delayed
+        transactionStatus:
+          type: string
+          example: SUCCESS
+    SummaryType:
+      type: object
+      properties:
+        totalnumitems:
+          type: integer
+          format: int32
+          readOnly: true
+        totalgrossamt:
+          type: number
+        totalcommissionamt:
+          type: number
+        numnonpolicyadjustment:
+          type: integer
+          format: int32
+          readOnly: true
+        totaladjustmentamt:
+          type: number
+          readOnly: true
+        accountdate:
+          format: yyyy-MM-dd
+          $ref: '#/components/schemas/LocalDate'
+          example: '2025-01-01'
     LocalDate:
       type: object
       properties:
@@ -406,329 +722,13 @@ components:
           format: int32
         era:
           $ref: '#/components/schemas/Era'
-    ContactType:
+    IsoChronology:
       type: object
       properties:
-        contacttypecd:
+        id:
           type: string
-          enum:
-          - Billing Contact
-          - Audit Contact
-          - Claim Contact
-          - Risk Manager
-          - Executive Contact
-          - Misc. Contact
-          - Customer Service Rep
-        personalname:
-          $ref: '#/components/schemas/PersonalnameType'
-        email:
+        calendarType:
           type: string
-        phone:
-          $ref: '#/components/schemas/PhoneType'
-        employedbyinsuredind:
-          type: boolean
-    PhoneType:
-      type: object
-      properties:
-        phonetype:
-          type: string
-          enum:
-          - business
-          - personal
-          - cell
-        phone:
-          type: string
-        extension:
-          type: string
-    SummaryType:
-      type: object
-      properties:
-        totalnumitems:
-          type: integer
-          format: int32
-          readOnly: true
-        totalgrossamt:
-          type: number
-        totalcommissionamt:
-          type: number
-        numnonpolicyadjustment:
-          type: integer
-          format: int32
-          readOnly: true
-        totaladjustmentamt:
-          type: number
-          readOnly: true
-        accountdate:
-          format: yyyy-MM-dd
-          $ref: '#/components/schemas/LocalDate'
-          example: '2025-01-01'
-    ProducerType:
-      type: object
-      properties:
-        organizationname:
-          type: string
-          readOnly: true
-        name:
-          $ref: '#/components/schemas/PersonalnameType'
-          readOnly: true
-        address:
-          $ref: '#/components/schemas/AddressType'
-          readOnly: true
-        npn:
-          type: string
-          readOnly: true
-        contractcode:
-          type: string
-        contractsubcode:
-          type: string
-          readOnly: true
-        contact:
-          $ref: '#/components/schemas/ContactType'
-          readOnly: true
-    CommissionDownloadResponse:
-      type: object
-      properties:
-        transactionId:
-          type: string
-          description: Unique id for this transaction
-        code:
-          type: string
-          enum:
-          - SUCCESS
-          - FAILURE
-          example: SUCCESS
-        mailbox:
-          type: string
-        message:
-          type: string
-    CsvResponse422:
-      type: object
-      properties:
-        transactionId:
-          type: string
-          example: 81A365A9B3AF4EEFA4E7CE154ABFE209
-        message:
-          type: object
-          additionalProperties:
-            type: object
-          example:
-            detail:
-            - loc:
-              - row
-              - 2
-              msg: Invalid Data
-              type: ZZZZZ
-        transactionStatus:
-          type: string
-          example: FAILURE
-    CsvResponse503:
-      type: object
-      properties:
-        transactionId:
-          type: string
-          example: 81A365A9B3AF4EEFA4E7CE154ABFE209
-        message:
-          type: object
-          additionalProperties:
-            type: object
-          example: Unexpected internal exception occurred. Please report to IVANS support
-        transactionStatus:
-          type: string
-          example: FAILURE
-    CommissionDownloadRequest:
-      type: object
-      properties:
-        statement:
-          $ref: '#/components/schemas/StatementType'
-        companyidentification:
-          $ref: '#/components/schemas/Companyidentification'
-        carrierId:
-          type: string
-    Era:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
-    TransactionType:
-      type: object
-      properties:
-        producer:
-          $ref: '#/components/schemas/ProducerType'
-          readOnly: true
-        name:
-          $ref: '#/components/schemas/PersonalnameType'
-        secondaryname:
-          $ref: '#/components/schemas/PersonalnameType'
-          readOnly: true
-        policynum:
-          type: string
-        subpolicynum:
-          type: string
-          readOnly: true
-        lineofbusiness:
-          type: string
-          enum:
-          - ACCT
-          - AGENT
-          - AGLIA
-          - AGPP
-          - AGPR
-          - APKGE
-          - ARCH
-          - AUTOB
-          - AUTOP
-          - BANDM
-          - BOAT
-          - BOP
-          - BOPGL
-          - BOPPR
-          - CFIRE
-          - CGL
-          - CPKGE
-          - CRIM
-          - CUMBR
-          - CYBER
-          - DFIRE
-          - DNTL
-          - DO
-          - EL
-          - EO
-          - EPLI
-          - EQ
-          - EQLIA
-          - EXLIA
-          - FIDUC
-          - FLOOD
-          - GARAG
-          - HLTH
-          - HOME
-          - INMRC
-          - INMRP
-          - KIDRA
-          - LAW
-          - LIFE
-          - LL
-          - LMORT
-          - MEDIA
-          - MHOME
-          - MMAL
-          - MPL
-          - MTRCR
-          - MTRTK
-          - OCMRC
-          - PHYS
-          - PL
-          - PLMSC
-          - PPKGE
-          - PPL
-          - PROP
-          - PRSL
-          - PUMBR
-          - RECV
-          - RRPRL
-          - SFRNC
-          - SMP
-          - SURE
-          - WIND
-          - WORK
-          - WORKV
-          - YACHT
-        sublineofbusiness:
-          type: string
-          enum:
-          - ACCT
-          - ARCH
-          - ARP
-          readOnly: true
-        companycode:
-          type: string
-        transactioneffectivedt:
-          format: yyyy-MM-dd
-          $ref: '#/components/schemas/LocalDate'
-          example: '2025-01-01'
-        transactiontypecd:
-          type: string
-          enum:
-          - ADJ
-          - OTH
-          - PCH
-          - NBS
-          - RWL
-          - XLC
-          - XLN
-          - TAX
-          - FEE
-          - STL
-          - REI
-          - UNC
-          - PAD
-          - REW
-          - SCH
-        commissiontypecd:
-          type: string
-          enum:
-          - Commission Item
-          - Adjustment Item
-        policyeffectivedt:
-          format: yyyy-MM-dd
-          $ref: '#/components/schemas/LocalDate'
-          example: '2025-01-01'
-        policyexpirationdt:
-          format: yyyy-MM-dd
-          $ref: '#/components/schemas/LocalDate'
-          example: '2025-01-01'
-        secondarypolicydt:
-          $ref: '#/components/schemas/LocalDate'
-          readOnly: true
-        policygrossamt:
-          type: number
-        commissionrate:
-          type: number
-        commissionamt:
-          type: number
-        adjustmentamt:
-          type: number
-          readOnly: true
-        companyproductcd:
-          type: string
-        producerleveltransactionind:
-          type: boolean
-          readOnly: true
-        agencyinsuredid:
-          type: string
-        installmentnum:
-          type: integer
-          format: int32
-        payplan:
-          type: string
-        billingaccountnum:
-          type: string
-        policyversion:
-          type: string
-        mgacode:
-          type: string
-        npn:
-          type: string
-    CsvResponseJson:
-      type: object
-      properties:
-        transactionId:
-          type: string
-          example: 99A365A9B3AF4EEFA4E7CE154ABFE209
-        message:
-          type: object
-          additionalProperties:
-            type: object
-          example:
-            errors:
-            - row: 166
-              column: LineOfBusinessCode
-              input: HOSP
-              msg: Input should be 'ACCT', 'ACHE', 'AGENT', 'AGLIA', 'AGPP', 'AGPR', 'AIRC', 'APFBO', 'APKGE', 'APROD', 'ARCH', 'ART', 'AUTOB', 'AUTOP', 'AVPKG', 'BANDM', 'BMISC', 'BOAT', 'BOP', 'BOPGL', 'BOPPR', 'CAVN', 'CFIRE', 'CFRM', 'CGL', 'CNTGC', 'CPKGE', 'CPMP', 'CRIM', 'CUMBR', 'CYBER', 'DFIRE', 'DISAB', 'DNTL', 'DO', 'ELIAB', 'EMGLI', 'EO', 'EPLI', 'EQ', 'EQLIA', 'EXLIA', 'FIDTY', 'FIDUC', 'FIIBO', 'FLOOD', 'GARAG', 'HLTH', 'HOME', 'INMRC', 'INMRP', 'INTER', 'JUDCL', 'KIDRA', 'LAW', 'LGLEX', 'LICPT', 'LIFE', 'LL', 'LMORT', 'LSTIN', 'LVSTK', 'MEDIA', 'MGMLI', 'MHOME', 'MMAL', 'MOTO', 'MPL', 'MTRCR', 'NWFGR', 'OCMRC', 'OLIB', 'PHYS', 'PL', 'PLMSC', 'PPKGE', 'PPL', 'PROP', 'PRSL', 'PUBOF', 'PUMBR', 'RECV', 'RRPRL', 'SCAP', 'SFRNC', 'SMP', 'SURE', 'TRKRS', 'TRVL', 'WCMA', 'WIND', 'WORK', 'WORKP', 'WORKV', 'XWARR' or 'YACHT'
-        transactionStatus:
-          type: string
-          example: FAILURE
 x-provenance:
   method: searched
   source: https://api.ivans.com/reference/getdocumentmetainfo

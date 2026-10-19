@@ -288,15 +288,6 @@ components:
         inputType:
           type: string
           default: string
-    enum_info:
-      type: object
-      properties:
-        value:
-          type: integer
-          default: 0
-        label:
-          type: string
-          default: string
     enums:
       type: object
       properties:
@@ -322,6 +313,15 @@ components:
       required:
       - guid
       - value
+    enum_info:
+      type: object
+      properties:
+        value:
+          type: integer
+          default: 0
+        label:
+          type: string
+          default: string
   securitySchemes:
     cookieAuth:
       type: apiKey

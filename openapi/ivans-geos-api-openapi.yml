@@ -300,60 +300,32 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    country_detail_available_responses:
+    USState:
       type: object
       properties:
-        details:
-          type: string
-          default: Not found.
-    Country:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        subdivisions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Subdivision'
         uuid:
           type: string
           format: uuid
           readOnly: true
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
         name:
           type: string
           maxLength: 128
-        alpha3:
-          type:
-          - string
-          - 'null'
-          maxLength: 3
         alpha2:
           type:
           - string
           - 'null'
           maxLength: 2
-        numerical:
-          type:
-          - integer
-          - 'null'
-          maximum: 2147483647
-          minimum: -2147483648
       required:
-      - createdAt
-      - id
       - name
-      - subdivisions
-      - updatedAt
       - uuid
+    SubdivisionTypeEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      type: integer
     PaginatedSubdivisionList:
       type: object
       properties:
@@ -376,14 +348,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Subdivision'
-    SubdivisionTypeEnum:
-      enum:
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      type: integer
     PaginatedUSCountyList:
       type: object
       properties:
@@ -467,24 +431,6 @@ components:
       - subdivisionType
       - updatedAt
       - uuid
-    USState:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-        name:
-          type: string
-          maxLength: 128
-        alpha2:
-          type:
-          - string
-          - 'null'
-          maxLength: 2
-      required:
-      - name
-      - uuid
     PaginatedCountryList:
       type: object
       properties:
@@ -507,16 +453,54 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Country'
-    us_counties_responses:
+    Country:
       type: object
       properties:
-        state:
+        id:
+          type: integer
+          readOnly: true
+        subdivisions:
           type: array
           items:
-            type: string
-            default: Invalid pk "ZZ" - object does not exist.
+            $ref: '#/components/schemas/Subdivision'
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 128
+        alpha3:
+          type:
+          - string
+          - 'null'
+          maxLength: 3
+        alpha2:
+          type:
+          - string
+          - 'null'
+          maxLength: 2
+        numerical:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
       required:
-      - state
+      - createdAt
+      - id
+      - name
+      - subdivisions
+      - updatedAt
+      - uuid
     PaginatedUSStateList:
       type: object
       properties:
@@ -539,6 +523,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/USState'
+    us_counties_responses:
+      type: object
+      properties:
+        state:
+          type: array
+          items:
+            type: string
+            default: Invalid pk "ZZ" - object does not exist.
+      required:
+      - state
+    country_detail_available_responses:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
     USCounty:
       type: object
       properties:

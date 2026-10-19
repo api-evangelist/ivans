@@ -36,6 +36,13 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    TokenRes:
+      type: object
+      properties:
+        encryptionToken:
+          type: string
+        authToken:
+          type: string
     TokenReq:
       type: object
       properties:
@@ -46,13 +53,6 @@ components:
       required:
       - carrierId
       - password
-    TokenRes:
-      type: object
-      properties:
-        encryptionToken:
-          type: string
-        authToken:
-          type: string
 x-provenance:
   method: searched
   source: https://api.ivans.com/reference/getdocumentmetainfo

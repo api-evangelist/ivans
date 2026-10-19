@@ -229,16 +229,24 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    Partner:
+    PartnerPostResponse:
       required:
       - followAccount
+      - followRoute
       - followUserId
       - leadAccount
+      - leadRoute
       - leadUserId
       - partnerId
       - tprSetName
       type: object
       properties:
+        leadRoute:
+          type: string
+          readOnly: true
+        followRoute:
+          type: string
+          readOnly: true
         tprSetId:
           type: integer
           format: int32
@@ -259,24 +267,16 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    PartnerPostResponse:
+    Partner:
       required:
       - followAccount
-      - followRoute
       - followUserId
       - leadAccount
-      - leadRoute
       - leadUserId
       - partnerId
       - tprSetName
       type: object
       properties:
-        leadRoute:
-          type: string
-          readOnly: true
-        followRoute:
-          type: string
-          readOnly: true
         tprSetId:
           type: integer
           format: int32

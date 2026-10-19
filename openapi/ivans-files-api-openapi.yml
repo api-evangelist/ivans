@@ -995,6 +995,57 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    FileHistoryResponse:
+      required:
+      - transactingMailbox
+      type: object
+      properties:
+        fileId:
+          type: string
+          format: uuid
+        eventTime:
+          type: string
+          format: date-time
+        comment:
+          type:
+          - string
+          - 'null'
+        action:
+          type:
+          - string
+          - 'null'
+        transactingMailbox:
+          type: string
+      additionalProperties: false
+    FileRequest:
+      required:
+      - classCode
+      - originalName
+      - receiveAccount
+      - receiveUserId
+      - sendAccount
+      - sendUserId
+      type: object
+      properties:
+        originalName:
+          minLength: 1
+          type: string
+        sendAccount:
+          minLength: 1
+          type: string
+        sendUserId:
+          minLength: 1
+          type: string
+        receiveAccount:
+          minLength: 1
+          type: string
+        receiveUserId:
+          minLength: 1
+          type: string
+        classCode:
+          minLength: 1
+          type: string
+      additionalProperties: false
     FileMetadata:
       required:
       - classCode
@@ -1050,12 +1101,14 @@ components:
           - 'null'
           format: int32
       additionalProperties: false
-    PostFilesResponse:
+    FileStatus:
+      required:
+      - status
       type: object
       properties:
-        fileId:
+        status:
+          minLength: 1
           type: string
-          format: uuid
       additionalProperties: false
     FileWithStatus:
       required:
@@ -1104,65 +1157,12 @@ components:
           - 'null'
           format: int32
       additionalProperties: false
-    FileHistoryResponse:
-      required:
-      - transactingMailbox
+    PostFilesResponse:
       type: object
       properties:
         fileId:
           type: string
           format: uuid
-        eventTime:
-          type: string
-          format: date-time
-        comment:
-          type:
-          - string
-          - 'null'
-        action:
-          type:
-          - string
-          - 'null'
-        transactingMailbox:
-          type: string
-      additionalProperties: false
-    FileStatus:
-      required:
-      - status
-      type: object
-      properties:
-        status:
-          minLength: 1
-          type: string
-      additionalProperties: false
-    FileRequest:
-      required:
-      - classCode
-      - originalName
-      - receiveAccount
-      - receiveUserId
-      - sendAccount
-      - sendUserId
-      type: object
-      properties:
-        originalName:
-          minLength: 1
-          type: string
-        sendAccount:
-          minLength: 1
-          type: string
-        sendUserId:
-          minLength: 1
-          type: string
-        receiveAccount:
-          minLength: 1
-          type: string
-        receiveUserId:
-          minLength: 1
-          type: string
-        classCode:
-          minLength: 1
-          type: string
       additionalProperties: false
     FileWithContentTypeAndStatus:
       required:

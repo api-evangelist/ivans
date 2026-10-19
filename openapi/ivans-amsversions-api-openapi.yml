@@ -173,6 +173,20 @@ components:
             items:
               type: string
       additionalProperties: false
+    AmsVersion:
+      required:
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        sortOrder:
+          type: integer
+          format: int32
+      additionalProperties: false
     AmsVersionDetails:
       required:
       - amsName
@@ -192,20 +206,6 @@ components:
           type: string
         amsName:
           type: string
-      additionalProperties: false
-    AmsVersion:
-      required:
-      - name
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        sortOrder:
-          type: integer
-          format: int32
       additionalProperties: false
   securitySchemes:
     Bearer:

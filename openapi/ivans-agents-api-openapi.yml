@@ -527,6 +527,12 @@ components:
       - lastName
       - middleName
       - npn
+    agent_retrieve:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
     agent_list:
       type: object
       properties:
@@ -592,12 +598,6 @@ components:
       - lastName
       - middleName
       - npn
-    agent_retrieve:
-      type: object
-      properties:
-        detail:
-          type: string
-          default: You do not have permission to perform this action.
     agent_create:
       type: object
       properties:

@@ -117,6 +117,32 @@ paths:
       - Bearer: []
 components:
   schemas:
+    WarpExchCarrierProduct:
+      required:
+      - admin
+      - country
+      - ivansid
+      - name
+      - objectType
+      - productID
+      type: object
+      properties:
+        productID:
+          type: string
+        objectType:
+          type: string
+        name:
+          type: string
+        admin:
+          type: string
+        ivansid:
+          type: string
+        country:
+          type: string
+        active:
+          type: integer
+          format: int32
+      additionalProperties: false
     WarpExchCarrierProductCreateRequest:
       required:
       - admin
@@ -140,32 +166,6 @@ components:
           type:
           - string
           - 'null'
-        active:
-          type: integer
-          format: int32
-      additionalProperties: false
-    WarpExchCarrierProduct:
-      required:
-      - admin
-      - country
-      - ivansid
-      - name
-      - objectType
-      - productID
-      type: object
-      properties:
-        productID:
-          type: string
-        objectType:
-          type: string
-        name:
-          type: string
-        admin:
-          type: string
-        ivansid:
-          type: string
-        country:
-          type: string
         active:
           type: integer
           format: int32

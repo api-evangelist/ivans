@@ -110,23 +110,14 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    LineOfBusiness:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-        name:
-          type: string
-          maxLength: 128
-        code:
-          type: string
-          maxLength: 32
-      required:
-      - code
-      - name
-      - uuid
+    SubdivisionTypeEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      type: integer
     MarketDetail:
       type: object
       properties:
@@ -177,260 +168,9 @@ components:
       - name
       - products
       - subdivisions
-    ProductTypeEnum:
-      enum:
-      - policy
-      - dbcd
-      - claims
-      - edocs
-      type: string
-    MarketList:
-      type: object
-      properties:
-        availableLinesOfBusiness:
-          allOf:
-          - $ref: '#/components/schemas/LineOfBusiness'
-          readOnly: true
-        uuid:
-          type: string
-          format: uuid
-        name:
-          type: string
-          maxLength: 128
-        displayName:
-          type:
-          - string
-          - 'null'
-          maxLength: 128
-        notes:
-          type: string
-        logo:
-          type:
-          - string
-          - 'null'
-          format: uri
-          pattern: (?:png|jpg|svg|jpeg)$
-        akGroupId:
-          type:
-          - string
-          - 'null'
-          maxLength: 32
-      required:
-      - availableLinesOfBusiness
-      - name
     NullEnum:
       enum:
       - null
-    MarketCountry:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        name:
-          type: string
-          maxLength: 128
-        alpha3:
-          type:
-          - string
-          - 'null'
-          maxLength: 3
-        alpha2:
-          type:
-          - string
-          - 'null'
-          maxLength: 2
-        numerical:
-          type:
-          - integer
-          - 'null'
-          maximum: 2147483647
-          minimum: -2147483648
-      required:
-      - createdAt
-      - id
-      - name
-      - updatedAt
-      - uuid
-    PaginatedMarketListList:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: https://distribution.ivansinsurance.com/api/v1/markets/?page=3
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: https://distribution.ivansinsurance.com/api/v1/markets/?page=1
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/MarketList'
-    BlankEnum:
-      enum:
-      - ''
-    IcoTypeEnum:
-      enum:
-      - Property & Casualty
-      - LIFE
-      - HEALTH
-      - GPAL
-      type: string
-    Product:
-      type: object
-      properties:
-        lineOfBusiness:
-          $ref: '#/components/schemas/LineOfBusiness'
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        name:
-          type: string
-          maxLength: 128
-        productType:
-          $ref: '#/components/schemas/ProductTypeEnum'
-      required:
-      - createdAt
-      - lineOfBusiness
-      - name
-      - updatedAt
-      - uuid
-    Broker:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        deleted:
-          type: boolean
-        deletedAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        name:
-          type: string
-          maxLength: 256
-        fein:
-          type: string
-          description: Federal Employer Identification Number
-          maxLength: 10
-        npn:
-          type: string
-          description: National Producer Number
-          maxLength: 32
-      required:
-      - createdAt
-      - updatedAt
-      - uuid
-    MarketSubdivision:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        name:
-          type: string
-          maxLength: 128
-        alpha3:
-          type:
-          - string
-          - 'null'
-          maxLength: 3
-        alpha2:
-          type:
-          - string
-          - 'null'
-          maxLength: 2
-        numerical:
-          type:
-          - integer
-          - 'null'
-          maximum: 2147483647
-          minimum: -2147483648
-        subdivisionType:
-          allOf:
-          - $ref: '#/components/schemas/SubdivisionTypeEnum'
-          minimum: -2147483648
-          maximum: 2147483647
-        country:
-          type: integer
-        parent:
-          type:
-          - integer
-          - 'null'
-      required:
-      - country
-      - createdAt
-      - id
-      - name
-      - subdivisionType
-      - updatedAt
-      - uuid
-    market_detail_responses:
-      type: object
-      properties:
-        details:
-          type: string
-          default: Not found.
-    SubdivisionTypeEnum:
-      enum:
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      type: integer
     Carrier:
       type: object
       properties:
@@ -487,6 +227,266 @@ components:
       - createdAt
       - updatedAt
       - uuid
+    LineOfBusiness:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 128
+        code:
+          type: string
+          maxLength: 32
+      required:
+      - code
+      - name
+      - uuid
+    MarketCountry:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 128
+        alpha3:
+          type:
+          - string
+          - 'null'
+          maxLength: 3
+        alpha2:
+          type:
+          - string
+          - 'null'
+          maxLength: 2
+        numerical:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+      required:
+      - createdAt
+      - id
+      - name
+      - updatedAt
+      - uuid
+    MarketList:
+      type: object
+      properties:
+        availableLinesOfBusiness:
+          allOf:
+          - $ref: '#/components/schemas/LineOfBusiness'
+          readOnly: true
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 128
+        displayName:
+          type:
+          - string
+          - 'null'
+          maxLength: 128
+        notes:
+          type: string
+        logo:
+          type:
+          - string
+          - 'null'
+          format: uri
+          pattern: (?:png|jpg|svg|jpeg)$
+        akGroupId:
+          type:
+          - string
+          - 'null'
+          maxLength: 32
+      required:
+      - availableLinesOfBusiness
+      - name
+    MarketSubdivision:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 128
+        alpha3:
+          type:
+          - string
+          - 'null'
+          maxLength: 3
+        alpha2:
+          type:
+          - string
+          - 'null'
+          maxLength: 2
+        numerical:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+        subdivisionType:
+          allOf:
+          - $ref: '#/components/schemas/SubdivisionTypeEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        country:
+          type: integer
+        parent:
+          type:
+          - integer
+          - 'null'
+      required:
+      - country
+      - createdAt
+      - id
+      - name
+      - subdivisionType
+      - updatedAt
+      - uuid
+    IcoTypeEnum:
+      enum:
+      - Property & Casualty
+      - LIFE
+      - HEALTH
+      - GPAL
+      type: string
+    Broker:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        deleted:
+          type: boolean
+        deletedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        name:
+          type: string
+          maxLength: 256
+        fein:
+          type: string
+          description: Federal Employer Identification Number
+          maxLength: 10
+        npn:
+          type: string
+          description: National Producer Number
+          maxLength: 32
+      required:
+      - createdAt
+      - updatedAt
+      - uuid
+    Product:
+      type: object
+      properties:
+        lineOfBusiness:
+          $ref: '#/components/schemas/LineOfBusiness'
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 128
+        productType:
+          $ref: '#/components/schemas/ProductTypeEnum'
+      required:
+      - createdAt
+      - lineOfBusiness
+      - name
+      - updatedAt
+      - uuid
+    BlankEnum:
+      enum:
+      - ''
+    ProductTypeEnum:
+      enum:
+      - policy
+      - dbcd
+      - claims
+      - edocs
+      type: string
+    market_detail_responses:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
+    PaginatedMarketListList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/markets/?page=3
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/markets/?page=1
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketList'
   securitySchemes:
     cookieAuth:
       type: apiKey

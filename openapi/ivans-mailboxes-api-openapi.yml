@@ -225,26 +225,6 @@ components:
         canAddOrRemovePartnerships:
           type: boolean
       additionalProperties: false
-    OrganizationMailbox:
-      required:
-      - account
-      - userId
-      type: object
-      properties:
-        badLoginAttempts:
-          type: integer
-          format: int32
-        ibmMachineAddress:
-          type:
-          - string
-          - 'null'
-        migratedToMembership:
-          type: boolean
-        account:
-          type: string
-        userId:
-          type: string
-      additionalProperties: false
     ConsumerInfo:
       required:
       - account
@@ -279,6 +259,35 @@ components:
             items:
               type: string
       additionalProperties: false
+    OrganizationMailbox:
+      required:
+      - account
+      - userId
+      type: object
+      properties:
+        badLoginAttempts:
+          type: integer
+          format: int32
+        ibmMachineAddress:
+          type:
+          - string
+          - 'null'
+        migratedToMembership:
+          type: boolean
+        account:
+          type: string
+        userId:
+          type: string
+      additionalProperties: false
+    MailboxPassword:
+      required:
+      - newPassword
+      type: object
+      properties:
+        newPassword:
+          minLength: 1
+          type: string
+      additionalProperties: false
     MailboxSummaryPaginatedResultList:
       type: object
       properties:
@@ -289,15 +298,6 @@ components:
         totalCount:
           type: integer
           format: int32
-      additionalProperties: false
-    MailboxPassword:
-      required:
-      - newPassword
-      type: object
-      properties:
-        newPassword:
-          minLength: 1
-          type: string
       additionalProperties: false
   securitySchemes:
     Bearer:

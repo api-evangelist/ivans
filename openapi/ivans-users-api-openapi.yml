@@ -164,35 +164,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    UserCloudFile:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        originalName:
-          type: string
-          maxLength: 256
-      required:
-      - createdAt
-      - originalName
-      - uuid
-    UserCloudFileUploadRequest:
-      type: object
-      properties:
-        file:
-          type: string
-          format: binary
-        delimiter:
-          type: string
-          maxLength: 8
-      required:
-      - file
     PatchedUserRequest:
       type: object
       properties:
@@ -230,6 +201,24 @@ components:
           type: string
           description: Unique identifier from external system. Used to identify agents.
           maxLength: 64
+    UserCloudFile:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        originalName:
+          type: string
+          maxLength: 256
+      required:
+      - createdAt
+      - originalName
+      - uuid
     User:
       type: object
       properties:
@@ -273,6 +262,17 @@ components:
       required:
       - id
       - integratorUserId
+    UserCloudFileUploadRequest:
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+        delimiter:
+          type: string
+          maxLength: 8
+      required:
+      - file
   securitySchemes:
     cookieAuth:
       type: apiKey

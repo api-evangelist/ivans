@@ -1,0 +1,317 @@
+openapi: 3.2.0
+info:
+  title: Ivans Passport Products API
+  description: Middleware for Ivans Identity
+  version: 0.1.0
+servers:
+- url: https://passport.ivans.com
+  description: Production Server
+- url: https://ivans-passport.us.staging.appliedcloudplatform.com/
+  description: Staging Server
+- url: https://ivans-passport.us.development.appliedcloudplatform.com/
+  description: Development Server
+tags:
+- name: Products
+paths:
+  /api/v1/products/:
+    get:
+      tags:
+      - Products
+      summary: Get Products
+      operationId: get_products_api_v1_products__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number
+          default: 1
+          title: Page
+        description: Page number
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Page size
+          default: 50
+          title: Size
+        description: Page size
+      - name: product_group_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: integer
+          - type: 'null'
+          description: Filter by product group IDs
+          title: Product Group Id
+        description: Filter by product group IDs
+      - name: lifecycle_status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              $ref: '#/components/schemas/LifecycleStatus'
+          - type: 'null'
+          description: Filter by lifecycle statuses
+          title: Lifecycle Status
+        description: Filter by lifecycle statuses
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page_Product_'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/products/{product_id}/product_profile_schema:
+    get:
+      tags:
+      - Products
+      summary: Get Product Profile Schema By Product
+      operationId: get_product_profile_schema_by_product_api_v1_products__product_id__product_profile_schema_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: product_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Product Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ProductGroup:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - id
+      - name
+      title: ProductGroup
+    Product:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        product_group:
+          $ref: '#/components/schemas/ProductGroup'
+        lifecycle_status:
+          $ref: '#/components/schemas/LifecycleStatus'
+        allowed_roles:
+          items:
+            $ref: '#/components/schemas/ProductProfileRole'
+          type: array
+          title: Allowed Roles
+        allowed_account_types:
+          items:
+            $ref: '#/components/schemas/ProductAllowedAccountTypes'
+          type: array
+          title: Allowed Account Types
+      type: object
+      required:
+      - id
+      - name
+      - product_group
+      - lifecycle_status
+      - allowed_roles
+      - allowed_account_types
+      title: Product
+    LifecycleStatus:
+      type: string
+      enum:
+      - Concept
+      - Beta
+      - Active
+      - Limited
+      - Sunset
+      title: LifecycleStatus
+    ProductAllowedAccountTypes:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - id
+      - name
+      title: ProductAllowedAccountTypes
+    _ErrorResponse:
+      properties:
+        detail:
+          type: string
+          title: Detail
+      type: object
+      required:
+      - detail
+      title: _ErrorResponse
+    Page_Product_:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/Product'
+          type: array
+          title: Items
+        total:
+          type: integer
+          minimum: 0.0
+          title: Total
+        page:
+          type: integer
+          minimum: 1.0
+          title: Page
+        size:
+          type: integer
+          minimum: 1.0
+          title: Size
+        pages:
+          type: integer
+          minimum: 0.0
+          title: Pages
+      type: object
+      required:
+      - items
+      - total
+      - page
+      - size
+      - pages
+      title: Page[Product]
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ProductProfileRole:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - id
+      - name
+      title: ProductProfileRole
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

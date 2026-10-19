@@ -224,6 +224,64 @@ paths:
       - HTTPBearer: []
 components:
   schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    UnderwritingCategory:
+      type: integer
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      title: UnderwritingCategory
+    PassportRPA:
+      properties:
+        required:
+          type: boolean
+          title: Required
+        name:
+          type: string
+          title: Name
+        options:
+          items: {}
+          type: array
+          title: Options
+        data_type:
+          type: string
+      type: object
+      required:
+      - required
+      - name
+      - options
+      - data_type
+      title: PassportRPA
+      description: A simplified version of RPA used for Passport
     RiskProfileDiff:
       properties:
         fieldsAdded:
@@ -252,6 +310,15 @@ components:
           default: []
       type: object
       title: RiskProfileDiff
+    ListItem:
+      properties:
+        listItem:
+          type: string
+          title: Listitem
+      type: object
+      required:
+      - listItem
+      title: ListItem
     AdditionalDetails:
       properties:
         heading:
@@ -269,82 +336,6 @@ components:
       - heading
       - children
       title: AdditionalDetails
-    ListItem:
-      properties:
-        listItem:
-          type: string
-          title: Listitem
-      type: object
-      required:
-      - listItem
-      title: ListItem
-    PassportRiskProfile:
-      properties:
-        uuid:
-          type: string
-          title: Uuid
-        name:
-          type: string
-          title: Name
-        rpas:
-          items:
-            $ref: '#/components/schemas/PassportRPA'
-          type: array
-          title: Rpas
-      type: object
-      required:
-      - uuid
-      - name
-      - rpas
-      title: PassportRiskProfile
-      description: A simplified version of RiskProfile used for Passport
-    Body_get_risk_profile_lineage_api_v1_risk_profiles_lineage_post:
-      properties:
-        risk_profile_uuids:
-          items:
-            type: string
-          type: array
-          title: Risk Profile Uuids
-          examples:
-          - - 7f13057a-293d-49e3-9548-d51fe40bd5fd
-      type: object
-      required:
-      - risk_profile_uuids
-      title: Body_get_risk_profile_lineage_api_v1_risk_profiles_lineage_post
-    RequirementLevel:
-      type: integer
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      title: RequirementLevel
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     HTTPValidationError:
       properties:
         detail:
@@ -354,28 +345,28 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    PassportRPA:
+    RiskProfileRepeatableFormGroup:
       properties:
-        required:
-          type: boolean
-          title: Required
-        name:
+        uuid:
           type: string
-          title: Name
-        options:
-          items: {}
-          type: array
-          title: Options
-        data_type:
+          title: Uuid
+        description:
           type: string
+          title: Description
+        requirementLevel:
+          $ref: '#/components/schemas/RequirementLevel'
+        conditions:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
       type: object
       required:
-      - required
-      - name
-      - options
-      - data_type
-      title: PassportRPA
-      description: A simplified version of RPA used for Passport
+      - uuid
+      - description
+      - requirementLevel
+      - conditions
+      title: RiskProfileRepeatableFormGroup
     SerializedRPA:
       properties:
         guid:
@@ -508,38 +499,14 @@ components:
       - isSuggestable
       - length
       title: SerializedRPA
-    UnderwritingCategory:
+    RequirementLevel:
       type: integer
       enum:
       - 0
       - 1
       - 2
       - 3
-      - 4
-      - 5
-      title: UnderwritingCategory
-    RiskProfileRepeatableFormGroup:
-      properties:
-        uuid:
-          type: string
-          title: Uuid
-        description:
-          type: string
-          title: Description
-        requirementLevel:
-          $ref: '#/components/schemas/RequirementLevel'
-        conditions:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-      type: object
-      required:
-      - uuid
-      - description
-      - requirementLevel
-      - conditions
-      title: RiskProfileRepeatableFormGroup
+      title: RequirementLevel
     ValueListOption:
       properties:
         label:
@@ -555,6 +522,39 @@ components:
       - label
       - value
       title: ValueListOption
+    PassportRiskProfile:
+      properties:
+        uuid:
+          type: string
+          title: Uuid
+        name:
+          type: string
+          title: Name
+        rpas:
+          items:
+            $ref: '#/components/schemas/PassportRPA'
+          type: array
+          title: Rpas
+      type: object
+      required:
+      - uuid
+      - name
+      - rpas
+      title: PassportRiskProfile
+      description: A simplified version of RiskProfile used for Passport
+    Body_get_risk_profile_lineage_api_v1_risk_profiles_lineage_post:
+      properties:
+        risk_profile_uuids:
+          items:
+            type: string
+          type: array
+          title: Risk Profile Uuids
+          examples:
+          - - 7f13057a-293d-49e3-9548-d51fe40bd5fd
+      type: object
+      required:
+      - risk_profile_uuids
+      title: Body_get_risk_profile_lineage_api_v1_risk_profiles_lineage_post
   securitySchemes:
     HTTPBearer:
       type: http

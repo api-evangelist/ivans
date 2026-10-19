@@ -1,0 +1,911 @@
+openapi: 3.2.0
+info:
+  title: Ivans Passport Product Profiles API
+  description: Middleware for Ivans Identity
+  version: 0.1.0
+servers:
+- url: https://passport.ivans.com
+  description: Production Server
+- url: https://ivans-passport.us.staging.appliedcloudplatform.com/
+  description: Staging Server
+- url: https://ivans-passport.us.development.appliedcloudplatform.com/
+  description: Development Server
+tags:
+- name: Product Profiles
+paths:
+  /api/v1/product-profiles/:
+    get:
+      tags:
+      - Product Profiles
+      summary: List Product Profiles
+      operationId: list_product_profiles_api_v1_product_profiles__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number
+          default: 1
+          title: Page
+        description: Page number
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Page size
+          default: 50
+          title: Size
+        description: Page size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page_ProductProfileList_'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Product Profiles
+      summary: Create Product Profile
+      operationId: create_product_profile_api_v1_product_profiles__post
+      security:
+      - HTTPBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductProfileCreateUpdate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductProfileDetail'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/product-profiles/{product_profile_id}:
+    patch:
+      tags:
+      - Product Profiles
+      summary: Update Product Profile
+      operationId: update_product_profile_api_v1_product_profiles__product_profile_id__patch
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: product_profile_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Product Profile Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductProfileCreateUpdate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductProfileDetail'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Product Profiles
+      summary: Get Product Profile
+      operationId: get_product_profile_api_v1_product_profiles__product_profile_id__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: product_profile_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Product Profile Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductProfileDetail'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/product-profiles/{product_profile_id}/activate:
+    patch:
+      tags:
+      - Product Profiles
+      summary: Activate Product Profile
+      operationId: activate_product_profile_api_v1_product_profiles__product_profile_id__activate_patch
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: product_profile_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Product Profile Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductProfileDetail'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/product-profiles/{product_profile_id}/deactivate:
+    patch:
+      tags:
+      - Product Profiles
+      summary: Deactivate Product Profile
+      operationId: deactivate_product_profile_api_v1_product_profiles__product_profile_id__deactivate_patch
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: product_profile_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Product Profile Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductProfileDetail'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/product-profiles/{product_profile_id}/users:
+    get:
+      tags:
+      - Product Profiles
+      summary: Get Product Profile Users
+      operationId: get_product_profile_users_api_v1_product_profiles__product_profile_id__users_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: product_profile_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Product Profile Id
+      - name: email
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number
+          default: 1
+          title: Page
+        description: Page number
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Page size
+          default: 50
+          title: Size
+        description: Page size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page_ProductProfileUsers_'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/product-profiles/{product_profile_id}/user:
+    put:
+      tags:
+      - Product Profiles
+      summary: Add User To Product Profile
+      operationId: add_user_to_product_profile_api_v1_product_profiles__product_profile_id__user_put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: product_profile_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Product Profile Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Body_add_user_to_product_profile_api_v1_product_profiles__product_profile_id__user_put'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductProfileUsers'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/product-profiles/{product_profile_id}/user/{user_id}:
+    delete:
+      tags:
+      - Product Profiles
+      summary: Remove User From Product Profile
+      operationId: remove_user_from_product_profile_api_v1_product_profiles__product_profile_id__user__user_id__delete
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: User Id
+      - name: product_profile_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Product Profile Id
+      responses:
+        '204':
+          description: Successful Response
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ProductProfileUsers:
+      properties:
+        user:
+          $ref: '#/components/schemas/ProductProfileUser'
+        role:
+          $ref: '#/components/schemas/ProductProfileRole'
+      type: object
+      required:
+      - user
+      - role
+      title: ProductProfileUsers
+    Page_ProductProfileList_:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/ProductProfileList'
+          type: array
+          title: Items
+        total:
+          type: integer
+          minimum: 0.0
+          title: Total
+        page:
+          type: integer
+          minimum: 1.0
+          title: Page
+        size:
+          type: integer
+          minimum: 1.0
+          title: Size
+        pages:
+          type: integer
+          minimum: 0.0
+          title: Pages
+      type: object
+      required:
+      - items
+      - total
+      - page
+      - size
+      - pages
+      title: Page[ProductProfileList]
+    Body_add_user_to_product_profile_api_v1_product_profiles__product_profile_id__user_put:
+      properties:
+        email:
+          type: string
+          pattern: ^[A-Za-z0-9._%+\-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$
+          title: Email
+          examples:
+          - foo@mail.com
+        role:
+          type: string
+          title: Role
+          examples:
+          - Viewer
+      type: object
+      required:
+      - email
+      - role
+      title: Body_add_user_to_product_profile_api_v1_product_profiles__product_profile_id__user_put
+    ProductGroup:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - id
+      - name
+      title: ProductGroup
+    Product:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        product_group:
+          $ref: '#/components/schemas/ProductGroup'
+        lifecycle_status:
+          $ref: '#/components/schemas/LifecycleStatus'
+        allowed_roles:
+          items:
+            $ref: '#/components/schemas/ProductProfileRole'
+          type: array
+          title: Allowed Roles
+        allowed_account_types:
+          items:
+            $ref: '#/components/schemas/ProductAllowedAccountTypes'
+          type: array
+          title: Allowed Account Types
+      type: object
+      required:
+      - id
+      - name
+      - product_group
+      - lifecycle_status
+      - allowed_roles
+      - allowed_account_types
+      title: Product
+    _ErrorResponse:
+      properties:
+        detail:
+          type: string
+          title: Detail
+      type: object
+      required:
+      - detail
+      title: _ErrorResponse
+    ProductProfileDetail:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        product:
+          $ref: '#/components/schemas/Product'
+        organization:
+          $ref: '#/components/schemas/ProductProfileOrganization'
+        accounts:
+          items:
+            $ref: '#/components/schemas/ProductProfileAccount'
+          type: array
+          title: Accounts
+        configuration:
+          additionalProperties: true
+          type: object
+          title: Configuration
+        is_active:
+          type: boolean
+          title: Is Active
+      type: object
+      required:
+      - id
+      - name
+      - product
+      - organization
+      - accounts
+      - configuration
+      - is_active
+      title: ProductProfileDetail
+    ProductProfileListProduct:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - id
+      - name
+      title: ProductProfileListProduct
+    ProductProfileRole:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - id
+      - name
+      title: ProductProfileRole
+    ProductProfileAccount:
+      properties:
+        id:
+          type: integer
+          title: Id
+        code:
+          type: string
+          title: Code
+        type:
+          type: string
+          title: Type
+        organizations:
+          items:
+            $ref: '#/components/schemas/ProductProfileOrganization'
+          type: array
+          title: Organizations
+      type: object
+      required:
+      - id
+      - code
+      - organizations
+      title: ProductProfileAccount
+    LifecycleStatus:
+      type: string
+      enum:
+      - Concept
+      - Beta
+      - Active
+      - Limited
+      - Sunset
+      title: LifecycleStatus
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Page_ProductProfileUsers_:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/ProductProfileUsers'
+          type: array
+          title: Items
+        total:
+          type: integer
+          minimum: 0.0
+          title: Total
+        page:
+          type: integer
+          minimum: 1.0
+          title: Page
+        size:
+          type: integer
+          minimum: 1.0
+          title: Size
+        pages:
+          type: integer
+          minimum: 0.0
+          title: Pages
+      type: object
+      required:
+      - items
+      - total
+      - page
+      - size
+      - pages
+      title: Page[ProductProfileUsers]
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ProductAllowedAccountTypes:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - id
+      - name
+      title: ProductAllowedAccountTypes
+    ProductProfileCreateUpdate:
+      properties:
+        name:
+          type: string
+          title: Name
+        product_id:
+          type: integer
+          title: Product Id
+        organization_id:
+          type: integer
+          title: Organization Id
+      additionalProperties: true
+      type: object
+      required:
+      - name
+      - product_id
+      - organization_id
+      title: ProductProfileCreateUpdate
+      description: This is the base model to be used for the dynamic product profile create/update schema.
+    ProductProfileUser:
+      properties:
+        id:
+          type: integer
+          title: Id
+        email:
+          type: string
+          title: Email
+        first_name:
+          type: string
+          title: First Name
+        last_name:
+          type: string
+          title: Last Name
+        has_mfa:
+          type: boolean
+          title: Has Mfa
+        last_login:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Login
+      type: object
+      required:
+      - id
+      - email
+      - first_name
+      - last_name
+      - has_mfa
+      - last_login
+      title: ProductProfileUser
+    ProductProfileList:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        product:
+          $ref: '#/components/schemas/ProductProfileListProduct'
+        is_active:
+          type: boolean
+          title: Is Active
+      type: object
+      required:
+      - id
+      - name
+      - product
+      - is_active
+      title: ProductProfileList
+    ProductProfileOrganization:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - id
+      - name
+      title: ProductProfileOrganization
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

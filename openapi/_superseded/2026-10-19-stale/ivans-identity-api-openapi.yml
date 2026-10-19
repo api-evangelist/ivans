@@ -1,0 +1,115 @@
+openapi: 3.2.0
+info:
+  title: Ivans Passport Identity API
+  description: Middleware for Ivans Identity
+  version: 0.1.0
+servers:
+- url: https://passport.ivans.com
+  description: Production Server
+- url: https://ivans-passport.us.staging.appliedcloudplatform.com/
+  description: Staging Server
+- url: https://ivans-passport.us.development.appliedcloudplatform.com/
+  description: Development Server
+tags:
+- name: Identity
+paths:
+  /api/v1/identity/auth0-token/:
+    post:
+      tags:
+      - Identity
+      summary: Auth0 Token
+      operationId: auth0_token_api_v1_identity_auth0_token__post
+      parameters:
+      - name: force
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Force
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Body_auth0_token_api_v1_identity_auth0_token__post'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema: {}
+              example:
+                access_token: token
+                refresh_token: token
+                expires_in: 86400
+                token_type: Bearer
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                error: access_denied
+                error_description: Unauthorized
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Body_auth0_token_api_v1_identity_auth0_token__post:
+      properties:
+        client_id:
+          type: string
+          title: Client Id
+        client_secret:
+          type: string
+          title: Client Secret
+        email:
+          type: string
+          title: Email
+        password:
+          type: string
+          title: Password
+      type: object
+      required:
+      - client_id
+      - client_secret
+      title: Body_auth0_token_api_v1_identity_auth0_token__post
+x-provenance:
+  method: searched
+  source: https://api.ivans.com/reference/auth0_token_api_v1_identity_auth0_token__post
+  generated: '2026-10-13'
+  note: Assembled verbatim from the OpenAPI definition fragments IVANS embeds in each operation page of its ReadMe developer portal (api.ivans.com/reference); paths and components merged per API, nothing authored.

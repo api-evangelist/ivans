@@ -412,27 +412,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    basic_appetite_invalid_body_request:
-      type: object
-      properties:
-        lobs:
-          type: array
-          items: {}
-          default:
-          - Required or Invalid
-        markets:
-          type: array
-          items: {}
-          default:
-          - Invalid
-        naicsIndex:
-          type: string
-          default: Required or Invalid
-        states:
-          type: array
-          items: {}
-          default:
-          - Invalid
     BasicAppetiteRequest:
       type: object
       description: 'Returns basic appetite result and optional form.
@@ -536,6 +515,27 @@ components:
       required:
       - lobs
       - naicsIndex
+    basic_appetite_invalid_body_request:
+      type: object
+      properties:
+        lobs:
+          type: array
+          items: {}
+          default:
+          - Required or Invalid
+        markets:
+          type: array
+          items: {}
+          default:
+          - Invalid
+        naicsIndex:
+          type: string
+          default: Required or Invalid
+        states:
+          type: array
+          items: {}
+          default:
+          - Invalid
   securitySchemes:
     cookieAuth:
       type: apiKey

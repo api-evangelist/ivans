@@ -60,19 +60,16 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    StructureChild:
+    Structure:
       type: object
       properties:
-        id:
-          type: string
-        code:
-          type: string
-        name:
-          type: string
+        agency:
+          $ref: '#/components/schemas/StructureChild'
+        branch:
+          $ref: '#/components/schemas/StructureChild'
       required:
-      - code
-      - id
-      - name
+      - agency
+      - branch
     PaginatedStructureList:
       type: object
       properties:
@@ -95,16 +92,19 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Structure'
-    Structure:
+    StructureChild:
       type: object
       properties:
-        agency:
-          $ref: '#/components/schemas/StructureChild'
-        branch:
-          $ref: '#/components/schemas/StructureChild'
+        id:
+          type: string
+        code:
+          type: string
+        name:
+          type: string
       required:
-      - agency
-      - branch
+      - code
+      - id
+      - name
   securitySchemes:
     cookieAuth:
       type: apiKey

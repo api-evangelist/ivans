@@ -399,6 +399,24 @@ components:
       required:
       - questionId
       - value
+    basic_appetite_capture_invalid_body_request:
+      type: object
+      properties:
+        lobs:
+          type: array
+          items: {}
+          default:
+          - Required or Invalid
+        markets:
+          type: array
+          items: {}
+          default:
+          - Required or Invalid
+        fieldValues:
+          type: array
+          items: {}
+          default:
+          - Required or Invalid
     BasicAppetiteCaptureRequest:
       type: object
       description: 'Returns basic appetite result, form, and possible routes.
@@ -442,24 +460,6 @@ components:
       - fieldValues
       - lobs
       - markets
-    basic_appetite_capture_invalid_body_request:
-      type: object
-      properties:
-        lobs:
-          type: array
-          items: {}
-          default:
-          - Required or Invalid
-        markets:
-          type: array
-          items: {}
-          default:
-          - Required or Invalid
-        fieldValues:
-          type: array
-          items: {}
-          default:
-          - Required or Invalid
   securitySchemes:
     cookieAuth:
       type: apiKey

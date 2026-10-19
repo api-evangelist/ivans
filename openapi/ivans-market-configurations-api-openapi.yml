@@ -407,148 +407,7 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    LineOfBusiness:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-        name:
-          type: string
-          maxLength: 128
-        code:
-          type: string
-          maxLength: 32
-      required:
-      - code
-      - name
-      - uuid
-    PatchedMarketConfigurationUpdateRequest:
-      type: object
-      properties:
-        linesOfBusiness:
-          type: array
-          items:
-            type: string
-            format: uuid
-        accessStructures:
-          type: array
-          items:
-            $ref: '#/components/schemas/MarketStructureRequest'
-        agency:
-          type: string
-          format: uuid
-        appointed:
-          type: boolean
-        preferred:
-          type: boolean
-        notes:
-          type: string
-    MarketConfigContractCodeDetail:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-        parent:
-          type: string
-        nickname:
-          type: string
-          maxLength: 128
-        codeType:
-          allOf:
-          - $ref: '#/components/schemas/CodeTypeEnum'
-          description: '[(1, ''Agency Id''), (2, ''Producer Id''), (3, ''Network Code'')]'
-          minimum: -2147483648
-          maximum: 2147483647
-        code:
-          type: string
-          maxLength: 128
-        user:
-          $ref: '#/components/schemas/SimpleUser'
-        users:
-          type: array
-          items:
-            $ref: '#/components/schemas/SimpleUser'
-        lastModifiedBy:
-          $ref: '#/components/schemas/SimpleUser'
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-        marketConfiguration:
-          type: string
-        accessStructures:
-          type: array
-          items:
-            $ref: '#/components/schemas/StructureAccess'
-        contractSubcodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/MarketContractCodeDetail'
-        lastUsedOn:
-          type:
-          - string
-          - 'null'
-          format: date-time
-      required:
-      - accessStructures
-      - code
-      - codeType
-      - contractSubcodes
-      - lastModifiedBy
-      - marketConfiguration
-      - updatedAt
-      - user
-      - users
-      - uuid
-    market_configuration_create_responses:
-      type: object
-      properties:
-        market:
-          type: array
-          items: {}
-          default:
-          - “56b2ff81-18d1-46ad-959a-1ea682bb95ed7” is not a valid UUID
-    AgencyTenantDetail:
-      type: object
-      description: Serializer for retrieving agency information.
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-          description: The unique ID for the agency.
-        externalId:
-          type: string
-          readOnly: true
-          description: The integrator's ID for the agency.
-        npn:
-          type: string
-          readOnly: true
-          description: The NPN of the agency.
-        name:
-          type: string
-          readOnly: true
-          description: The name of the agency.
-        isActive:
-          type: boolean
-          readOnly: true
-          description: Whether the agency is active.
-        testMode:
-          type: boolean
-          readOnly: true
-          description: Whether the agency is in test mode. In test mode, submissions for this agency will not be sent to the carrier, and a placeholder quote will be returned instead.
-      required:
-      - externalId
-      - id
-      - isActive
-      - name
-      - npn
-      - testMode
-    PaginatedMarketConfigurationList:
+    PaginatedMarketConfigCredentialList:
       type: object
       properties:
         count:
@@ -559,17 +418,17 @@ components:
           - string
           - 'null'
           format: uri
-          example: https://distribution.ivansinsurance.com/api/v1/market-configurations/?page=3
+          example: https://distribution.ivansinsurance.com/api/v1/market-configurations/{uuid}/credentials/?page=3
         previous:
           type:
           - string
           - 'null'
           format: uri
-          example: https://distribution.ivansinsurance.com/api/v1/market-configurations/?page=1
+          example: https://distribution.ivansinsurance.com/api/v1/market-configurations/{uuid}/credentials/?page=1
         results:
           type: array
           items:
-            $ref: '#/components/schemas/MarketConfiguration'
+            $ref: '#/components/schemas/MarketConfigCredential'
     market_configuration_patch_responses:
       type: object
       properties:
@@ -600,25 +459,38 @@ components:
           items: {}
           default:
           - Must be a valid boolean
-    market_configuration_contract_code_responses:
-      type: object
-      properties:
-        details:
-          type: string
-          default: Not found.
-    StructureChild:
+    CodeTypeEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      type: integer
+    SimpleUser:
       type: object
       properties:
         id:
           type: string
-        code:
+          format: uuid
+          readOnly: true
+        integratorUserId:
           type: string
         name:
           type: string
+          readOnly: true
+        externalId:
+          type: string
+          description: Unique identifier from external system. Used to identify agents.
+          maxLength: 64
       required:
-      - code
       - id
+      - integratorUserId
       - name
+    market_configuration_create_responses_forbidden:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
     MarketConfiguration:
       type: object
       properties:
@@ -650,6 +522,57 @@ components:
       - allowedLinesOfBusiness
       - market
       - uuid
+    market_configuration_credential_responses:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
+    market_configuration_patch_responses_forbidden:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
+    PaginatedMarketConfigurationList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/market-configurations/?page=3
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/market-configurations/?page=1
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketConfiguration'
+    MarketStructureRequest:
+      type: object
+      properties:
+        agency:
+          type: string
+          format: uuid
+        branch:
+          type: string
+          format: uuid
+        department:
+          type: string
+          format: uuid
+        businessUnit:
+          type: string
+          format: uuid
+      required:
+      - agency
     MarketConfigCredential:
       type: object
       properties:
@@ -691,143 +614,6 @@ components:
       - user
       - username
       - uuid
-    SimpleUser:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        integratorUserId:
-          type: string
-        name:
-          type: string
-          readOnly: true
-        externalId:
-          type: string
-          description: Unique identifier from external system. Used to identify agents.
-          maxLength: 64
-      required:
-      - id
-      - integratorUserId
-      - name
-    CodeTypeEnum:
-      enum:
-      - 1
-      - 2
-      - 3
-      type: integer
-    StructureAccess:
-      type: object
-      properties:
-        agency:
-          $ref: '#/components/schemas/StructureChild'
-        branch:
-          $ref: '#/components/schemas/StructureChild'
-        department:
-          $ref: '#/components/schemas/StructureChild'
-        businessUnit:
-          $ref: '#/components/schemas/StructureChild'
-      required:
-      - agency
-      - branch
-      - businessUnit
-      - department
-    MarketConfigurationCreateRequest:
-      type: object
-      properties:
-        market:
-          type: string
-          format: uuid
-        agency:
-          type: string
-          format: uuid
-      required:
-      - market
-    PaginatedMarketConfigContractCodeDetailList:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: https://distribution.ivansinsurance.com/api/v1/market-configurations/{uuid}/contract-codes/?page=3
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: https://distribution.ivansinsurance.com/api/v1/market-configurations/{uuid}/contract-codes/?page=1
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/MarketConfigContractCodeDetail'
-    market_configuration_patch_responses_forbidden:
-      type: object
-      properties:
-        detail:
-          type: string
-          default: You do not have permission to perform this action.
-    MarketStructureRequest:
-      type: object
-      properties:
-        agency:
-          type: string
-          format: uuid
-        branch:
-          type: string
-          format: uuid
-        department:
-          type: string
-          format: uuid
-        businessUnit:
-          type: string
-          format: uuid
-      required:
-      - agency
-    market_configuration_create_responses_forbidden:
-      type: object
-      properties:
-        detail:
-          type: string
-          default: You do not have permission to perform this action.
-    market_configuration_credential_responses:
-      type: object
-      properties:
-        details:
-          type: string
-          default: Not found.
-    MarketNested:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-        name:
-          type: string
-          maxLength: 128
-        displayName:
-          type:
-          - string
-          - 'null'
-          maxLength: 128
-        logo:
-          type:
-          - string
-          - 'null'
-          format: uri
-          pattern: (?:png|jpg|svg|jpeg)$
-        availableLinesOfBusiness:
-          allOf:
-          - $ref: '#/components/schemas/LineOfBusiness'
-          readOnly: true
-      required:
-      - availableLinesOfBusiness
-      - name
     MarketContractCodeDetail:
       type: object
       properties:
@@ -887,7 +673,206 @@ components:
       - user
       - users
       - uuid
-    PaginatedMarketConfigCredentialList:
+    AgencyTenantDetail:
+      type: object
+      description: Serializer for retrieving agency information.
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: The unique ID for the agency.
+        externalId:
+          type: string
+          readOnly: true
+          description: The integrator's ID for the agency.
+        npn:
+          type: string
+          readOnly: true
+          description: The NPN of the agency.
+        name:
+          type: string
+          readOnly: true
+          description: The name of the agency.
+        isActive:
+          type: boolean
+          readOnly: true
+          description: Whether the agency is active.
+        testMode:
+          type: boolean
+          readOnly: true
+          description: Whether the agency is in test mode. In test mode, submissions for this agency will not be sent to the carrier, and a placeholder quote will be returned instead.
+      required:
+      - externalId
+      - id
+      - isActive
+      - name
+      - npn
+      - testMode
+    MarketConfigurationCreateRequest:
+      type: object
+      properties:
+        market:
+          type: string
+          format: uuid
+        agency:
+          type: string
+          format: uuid
+      required:
+      - market
+    StructureAccess:
+      type: object
+      properties:
+        agency:
+          $ref: '#/components/schemas/StructureChild'
+        branch:
+          $ref: '#/components/schemas/StructureChild'
+        department:
+          $ref: '#/components/schemas/StructureChild'
+        businessUnit:
+          $ref: '#/components/schemas/StructureChild'
+      required:
+      - agency
+      - branch
+      - businessUnit
+      - department
+    MarketNested:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 128
+        displayName:
+          type:
+          - string
+          - 'null'
+          maxLength: 128
+        logo:
+          type:
+          - string
+          - 'null'
+          format: uri
+          pattern: (?:png|jpg|svg|jpeg)$
+        availableLinesOfBusiness:
+          allOf:
+          - $ref: '#/components/schemas/LineOfBusiness'
+          readOnly: true
+      required:
+      - availableLinesOfBusiness
+      - name
+    LineOfBusiness:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 128
+        code:
+          type: string
+          maxLength: 32
+      required:
+      - code
+      - name
+      - uuid
+    market_configuration_contract_code_responses:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
+    market_configuration_detail_responses:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
+    market_configuration_create_responses:
+      type: object
+      properties:
+        market:
+          type: array
+          items: {}
+          default:
+          - “56b2ff81-18d1-46ad-959a-1ea682bb95ed7” is not a valid UUID
+    MarketConfigContractCodeDetail:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        parent:
+          type: string
+        nickname:
+          type: string
+          maxLength: 128
+        codeType:
+          allOf:
+          - $ref: '#/components/schemas/CodeTypeEnum'
+          description: '[(1, ''Agency Id''), (2, ''Producer Id''), (3, ''Network Code'')]'
+          minimum: -2147483648
+          maximum: 2147483647
+        code:
+          type: string
+          maxLength: 128
+        user:
+          $ref: '#/components/schemas/SimpleUser'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimpleUser'
+        lastModifiedBy:
+          $ref: '#/components/schemas/SimpleUser'
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        marketConfiguration:
+          type: string
+        accessStructures:
+          type: array
+          items:
+            $ref: '#/components/schemas/StructureAccess'
+        contractSubcodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketContractCodeDetail'
+        lastUsedOn:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      required:
+      - accessStructures
+      - code
+      - codeType
+      - contractSubcodes
+      - lastModifiedBy
+      - marketConfiguration
+      - updatedAt
+      - user
+      - users
+      - uuid
+    StructureChild:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        name:
+          type: string
+      required:
+      - code
+      - id
+      - name
+    PaginatedMarketConfigContractCodeDetailList:
       type: object
       properties:
         count:
@@ -898,23 +883,38 @@ components:
           - string
           - 'null'
           format: uri
-          example: https://distribution.ivansinsurance.com/api/v1/market-configurations/{uuid}/credentials/?page=3
+          example: https://distribution.ivansinsurance.com/api/v1/market-configurations/{uuid}/contract-codes/?page=3
         previous:
           type:
           - string
           - 'null'
           format: uri
-          example: https://distribution.ivansinsurance.com/api/v1/market-configurations/{uuid}/credentials/?page=1
+          example: https://distribution.ivansinsurance.com/api/v1/market-configurations/{uuid}/contract-codes/?page=1
         results:
           type: array
           items:
-            $ref: '#/components/schemas/MarketConfigCredential'
-    market_configuration_detail_responses:
+            $ref: '#/components/schemas/MarketConfigContractCodeDetail'
+    PatchedMarketConfigurationUpdateRequest:
       type: object
       properties:
-        details:
+        linesOfBusiness:
+          type: array
+          items:
+            type: string
+            format: uuid
+        accessStructures:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketStructureRequest'
+        agency:
           type: string
-          default: Not found.
+          format: uuid
+        appointed:
+          type: boolean
+        preferred:
+          type: boolean
+        notes:
+          type: string
   securitySchemes:
     cookieAuth:
       type: apiKey

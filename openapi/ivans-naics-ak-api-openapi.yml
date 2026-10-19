@@ -194,6 +194,43 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    PaginatedNAICSIndexList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/naics/?page=3
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/naics/?page=1
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/NAICSIndex'
+    naics_ak_424_response:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: string
+        endpoint:
+          type: string
+          default: string
+        params:
+          type: string
+          default: dict
+        message:
+          type: string
+          default: string
     NAICSIndex:
       type: object
       properties:
@@ -212,12 +249,21 @@ components:
       - description
       - naicsCode
       - uuid
-    naics_index_detail_responses:
+    NAICSIndexAKLookupRequest:
       type: object
       properties:
-        details:
+        akHash:
           type: string
-          default: Not found.
+          minLength: 1
+          description: AK Hash NAICS index
+      required:
+      - akHash
+    naics_ak_lookup_invalid_request_body:
+      type: object
+      properties:
+        akHash:
+          type: string
+          default: AK hash 'string' cannot be matched to a NAICS index
     NAICSIndexDetail:
       type: object
       properties:
@@ -241,58 +287,12 @@ components:
       - description
       - naicsCode
       - uuid
-    naics_ak_424_response:
+    naics_index_detail_responses:
       type: object
       properties:
-        detail:
+        details:
           type: string
-          default: string
-        endpoint:
-          type: string
-          default: string
-        params:
-          type: string
-          default: dict
-        message:
-          type: string
-          default: string
-    PaginatedNAICSIndexList:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: https://distribution.ivansinsurance.com/api/v1/naics/?page=3
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: https://distribution.ivansinsurance.com/api/v1/naics/?page=1
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/NAICSIndex'
-    naics_ak_lookup_invalid_request_body:
-      type: object
-      properties:
-        akHash:
-          type: string
-          default: AK hash 'string' cannot be matched to a NAICS index
-    NAICSIndexAKLookupRequest:
-      type: object
-      properties:
-        akHash:
-          type: string
-          minLength: 1
-          description: AK Hash NAICS index
-      required:
-      - akHash
+          default: Not found.
   securitySchemes:
     cookieAuth:
       type: apiKey

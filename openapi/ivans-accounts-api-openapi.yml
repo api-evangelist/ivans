@@ -1,0 +1,141 @@
+openapi: 3.2.0
+info:
+  title: Ivans Passport Accounts API
+  description: Middleware for Ivans Identity
+  version: 0.1.0
+servers:
+- url: https://passport.ivans.com
+  description: Production Server
+- url: https://ivans-passport.us.staging.appliedcloudplatform.com/
+  description: Staging Server
+- url: https://ivans-passport.us.development.appliedcloudplatform.com/
+  description: Development Server
+tags:
+- name: Accounts
+paths:
+  /api/v1/accounts/by-organizations:
+    get:
+      tags:
+      - Accounts
+      summary: Get Accounts By Organization
+      description: Get accounts associated with the given organizations.
+      operationId: get_accounts_by_organization_api_v1_accounts_by_organizations_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: external_organization_ids
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+          description: External organization IDs
+          title: External Organization Ids
+        description: External organization IDs
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+                title: Response Get Accounts By Organization Api V1 Accounts By Organizations Get
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    _ErrorResponse:
+      properties:
+        detail:
+          type: string
+          title: Detail
+      type: object
+      required:
+      - detail
+      title: _ErrorResponse
+    Account:
+      properties:
+        id:
+          type: integer
+          title: Id
+        code:
+          type: string
+          title: Code
+        type:
+          type: string
+          title: Type
+      type: object
+      required:
+      - id
+      - code
+      title: Account
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

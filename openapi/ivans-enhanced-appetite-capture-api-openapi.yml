@@ -430,6 +430,19 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    FieldValuesRequest:
+      type: object
+      properties:
+        questionId:
+          type: string
+          minLength: 1
+        value:
+          type:
+          - string
+          - 'null'
+      required:
+      - questionId
+      - value
     EnhancedAppetiteCaptureRequest:
       type: object
       description: 'Returns enhanced appetite result, form, and routes.
@@ -493,19 +506,6 @@ components:
           items: {}
           default:
           - Required or Invalid
-    FieldValuesRequest:
-      type: object
-      properties:
-        questionId:
-          type: string
-          minLength: 1
-        value:
-          type:
-          - string
-          - 'null'
-      required:
-      - questionId
-      - value
   securitySchemes:
     cookieAuth:
       type: apiKey

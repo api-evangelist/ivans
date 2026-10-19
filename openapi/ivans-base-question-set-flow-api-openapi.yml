@@ -110,24 +110,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    QuotePayload:
-      properties:
-        fieldValues:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/FieldValue'
-            type: array
-          - type: 'null'
-          title: Fieldvalues
-        repeatableFieldBlocks:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/RepeatableFieldBlock'
-            type: array
-          - type: 'null'
-          title: Repeatablefieldblocks
-      type: object
-      title: QuotePayload
     ValidationError:
       properties:
         loc:
@@ -154,15 +136,6 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     RepeatableFieldBlock:
       properties:
         id:
@@ -204,6 +177,33 @@ components:
       - questionId
       - value
       title: FieldValue
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    QuotePayload:
+      properties:
+        fieldValues:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/FieldValue'
+            type: array
+          - type: 'null'
+          title: Fieldvalues
+        repeatableFieldBlocks:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/RepeatableFieldBlock'
+            type: array
+          - type: 'null'
+          title: Repeatablefieldblocks
+      type: object
+      title: QuotePayload
   securitySchemes:
     HTTPBearer:
       type: http

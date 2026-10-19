@@ -83,46 +83,12 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    LineOfBusiness:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-        name:
-          type: string
-          maxLength: 128
-        code:
-          type: string
-          maxLength: 32
-      required:
-      - code
-      - name
-      - uuid
     risk_profile_list_json_response_forbidden:
       type: object
       properties:
         detail:
           type: string
           default: You do not have permission to perform this action.
-    ProductReadOnly:
-      type: object
-      description: 'Serializes subset of read-only fields for Product.
-
-
-        ViewSet: RiskProfileViewSet
-
-
-        Endpoint: GET /risk-profiles/'
-      properties:
-        market:
-          $ref: '#/components/schemas/MarketSimple'
-        lineOfBusiness:
-          $ref: '#/components/schemas/LineOfBusiness'
-      required:
-      - lineOfBusiness
-      - market
     RouteConfigurationReadOnly:
       type: object
       description: 'Serializes subset of read-only fields for RouteConfiguration.
@@ -141,6 +107,67 @@ components:
       required:
       - description
       - routeType
+    LineOfBusiness:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 128
+        code:
+          type: string
+          maxLength: 32
+      required:
+      - code
+      - name
+      - uuid
+    MarketSimple:
+      type: object
+      description: 'Serializes subset of read-only fields for Market.
+
+
+        ViewSet: RiskProfileViewSet
+
+
+        Endpoint: GET /risk-profiles/'
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+      required:
+      - name
+      - uuid
+    ProductReadOnly:
+      type: object
+      description: 'Serializes subset of read-only fields for Product.
+
+
+        ViewSet: RiskProfileViewSet
+
+
+        Endpoint: GET /risk-profiles/'
+      properties:
+        market:
+          $ref: '#/components/schemas/MarketSimple'
+        lineOfBusiness:
+          $ref: '#/components/schemas/LineOfBusiness'
+      required:
+      - lineOfBusiness
+      - market
+    TypeEnum:
+      enum:
+      - Base
+      - Monoline
+      - Package
+      - Bundle
+      type: string
     RiskProfileReadOnlyWithAnalyzerInfo:
       type: object
       description: 'Serializes read-only fields for risk profiles, including additional info (e.g. supported states, multi-location support).
@@ -207,33 +234,6 @@ components:
       - type
       - uuid
       - version
-    TypeEnum:
-      enum:
-      - Base
-      - Monoline
-      - Package
-      - Bundle
-      type: string
-    MarketSimple:
-      type: object
-      description: 'Serializes subset of read-only fields for Market.
-
-
-        ViewSet: RiskProfileViewSet
-
-
-        Endpoint: GET /risk-profiles/'
-      properties:
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-        name:
-          type: string
-          readOnly: true
-      required:
-      - name
-      - uuid
     PaginatedRiskProfileReadOnlyWithAnalyzerInfoList:
       type: object
       properties:

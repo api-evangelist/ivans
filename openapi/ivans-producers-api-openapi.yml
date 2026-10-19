@@ -568,188 +568,6 @@ paths:
       - producers
 components:
   schemas:
-    ProducerTransferRequest:
-      required:
-      - companyAccount
-      - fromAgencyAccount
-      - fromAgencyUserId
-      - producerCode
-      - toAgencyAccount
-      - toAgencyUserId
-      type: object
-      properties:
-        fromAgencyAccount:
-          minLength: 1
-          type: string
-        fromAgencyUserId:
-          minLength: 1
-          type: string
-        toAgencyAccount:
-          minLength: 1
-          type: string
-        toAgencyUserId:
-          minLength: 1
-          type: string
-        companyAccount:
-          type: string
-        producerCode:
-          type: string
-      additionalProperties: false
-    ProducerUpdateRequest:
-      required:
-      - initialLoadCode
-      type: object
-      properties:
-        companyAccount:
-          type:
-          - string
-          - 'null'
-        producerCode:
-          type:
-          - string
-          - 'null'
-        contractNumber:
-          type:
-          - string
-          - 'null'
-        participantCode:
-          type:
-          - string
-          - 'null'
-        other1:
-          type:
-          - string
-          - 'null'
-        other2:
-          type:
-          - string
-          - 'null'
-        other3:
-          type:
-          - string
-          - 'null'
-        other4:
-          type:
-          - string
-          - 'null'
-        other5:
-          type:
-          - string
-          - 'null'
-        initialLoadCode:
-          minLength: 1
-          type: string
-      additionalProperties: false
-    Producer:
-      required:
-      - agencyAccount
-      - agencyUserId
-      - companyAccount
-      - id
-      - initialLoadCode
-      - producerCode
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        agencyAccount:
-          minLength: 1
-          type: string
-        agencyUserId:
-          minLength: 1
-          type: string
-        companyAccount:
-          minLength: 1
-          type: string
-        producerCode:
-          minLength: 1
-          type: string
-        contractNumber:
-          type:
-          - string
-          - 'null'
-        participantCode:
-          type:
-          - string
-          - 'null'
-        other1:
-          type:
-          - string
-          - 'null'
-        other2:
-          type:
-          - string
-          - 'null'
-        other3:
-          type:
-          - string
-          - 'null'
-        other4:
-          type:
-          - string
-          - 'null'
-        other5:
-          type:
-          - string
-          - 'null'
-        initialLoadCode:
-          minLength: 1
-          type: string
-      additionalProperties: false
-    ProducerCreateRequest:
-      required:
-      - agencyAccount
-      - agencyUserId
-      - initialLoadCode
-      - producerCode
-      type: object
-      properties:
-        agencyAccount:
-          minLength: 1
-          type: string
-        agencyUserId:
-          minLength: 1
-          type: string
-        companyAccount:
-          type:
-          - string
-          - 'null'
-        producerCode:
-          minLength: 1
-          type: string
-        contractNumber:
-          type:
-          - string
-          - 'null'
-        participantCode:
-          type:
-          - string
-          - 'null'
-        other1:
-          type:
-          - string
-          - 'null'
-        other2:
-          type:
-          - string
-          - 'null'
-        other3:
-          type:
-          - string
-          - 'null'
-        other4:
-          type:
-          - string
-          - 'null'
-        other5:
-          type:
-          - string
-          - 'null'
-        initialLoadCode:
-          minLength: 1
-          type: string
-      additionalProperties: false
     ProducerV3CreateRequest:
       required:
       - agencyAccount
@@ -771,6 +589,51 @@ components:
         producerCode:
           minLength: 1
           type: string
+        contractNumber:
+          type:
+          - string
+          - 'null'
+        participantCode:
+          type:
+          - string
+          - 'null'
+        other1:
+          type:
+          - string
+          - 'null'
+        other2:
+          type:
+          - string
+          - 'null'
+        other3:
+          type:
+          - string
+          - 'null'
+        other4:
+          type:
+          - string
+          - 'null'
+        other5:
+          type:
+          - string
+          - 'null'
+        initialLoadCode:
+          minLength: 1
+          type: string
+      additionalProperties: false
+    ProducerUpdateRequest:
+      required:
+      - initialLoadCode
+      type: object
+      properties:
+        companyAccount:
+          type:
+          - string
+          - 'null'
+        producerCode:
+          type:
+          - string
+          - 'null'
         contractNumber:
           type:
           - string
@@ -855,23 +718,6 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    ErrorFormat:
-      type: object
-      properties:
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
-        traceId:
-          type: string
-        validationErrors:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              type: string
-      additionalProperties: false
     ProducerV3UpdateRequest:
       required:
       - agencyAccount
@@ -917,6 +763,160 @@ components:
         initialLoadCode:
           minLength: 1
           type: string
+      additionalProperties: false
+    Producer:
+      required:
+      - agencyAccount
+      - agencyUserId
+      - companyAccount
+      - id
+      - initialLoadCode
+      - producerCode
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        agencyAccount:
+          minLength: 1
+          type: string
+        agencyUserId:
+          minLength: 1
+          type: string
+        companyAccount:
+          minLength: 1
+          type: string
+        producerCode:
+          minLength: 1
+          type: string
+        contractNumber:
+          type:
+          - string
+          - 'null'
+        participantCode:
+          type:
+          - string
+          - 'null'
+        other1:
+          type:
+          - string
+          - 'null'
+        other2:
+          type:
+          - string
+          - 'null'
+        other3:
+          type:
+          - string
+          - 'null'
+        other4:
+          type:
+          - string
+          - 'null'
+        other5:
+          type:
+          - string
+          - 'null'
+        initialLoadCode:
+          minLength: 1
+          type: string
+      additionalProperties: false
+    ProducerTransferRequest:
+      required:
+      - companyAccount
+      - fromAgencyAccount
+      - fromAgencyUserId
+      - producerCode
+      - toAgencyAccount
+      - toAgencyUserId
+      type: object
+      properties:
+        fromAgencyAccount:
+          minLength: 1
+          type: string
+        fromAgencyUserId:
+          minLength: 1
+          type: string
+        toAgencyAccount:
+          minLength: 1
+          type: string
+        toAgencyUserId:
+          minLength: 1
+          type: string
+        companyAccount:
+          type: string
+        producerCode:
+          type: string
+      additionalProperties: false
+    ProducerCreateRequest:
+      required:
+      - agencyAccount
+      - agencyUserId
+      - initialLoadCode
+      - producerCode
+      type: object
+      properties:
+        agencyAccount:
+          minLength: 1
+          type: string
+        agencyUserId:
+          minLength: 1
+          type: string
+        companyAccount:
+          type:
+          - string
+          - 'null'
+        producerCode:
+          minLength: 1
+          type: string
+        contractNumber:
+          type:
+          - string
+          - 'null'
+        participantCode:
+          type:
+          - string
+          - 'null'
+        other1:
+          type:
+          - string
+          - 'null'
+        other2:
+          type:
+          - string
+          - 'null'
+        other3:
+          type:
+          - string
+          - 'null'
+        other4:
+          type:
+          - string
+          - 'null'
+        other5:
+          type:
+          - string
+          - 'null'
+        initialLoadCode:
+          minLength: 1
+          type: string
+      additionalProperties: false
+    ErrorFormat:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+        traceId:
+          type: string
+        validationErrors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
       additionalProperties: false
   securitySchemes:
     Bearer:

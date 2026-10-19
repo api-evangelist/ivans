@@ -1,0 +1,590 @@
+openapi: 3.2.0
+info:
+  title: Ivans Passport Organizations API
+  description: Middleware for Ivans Identity
+  version: 0.1.0
+servers:
+- url: https://passport.ivans.com
+  description: Production Server
+- url: https://ivans-passport.us.staging.appliedcloudplatform.com/
+  description: Staging Server
+- url: https://ivans-passport.us.development.appliedcloudplatform.com/
+  description: Development Server
+tags:
+- name: Organizations
+paths:
+  /api/v1/organizations/:
+    get:
+      tags:
+      - Organizations
+      summary: List Organizations
+      description: List all organizations.
+      operationId: list_organizations_api_v1_organizations__get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/OrganizationList'
+                type: array
+                title: Response List Organizations Api V1 Organizations  Get
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+        '424':
+          description: Failed Dependency
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+      security:
+      - HTTPBearer: []
+  /api/v1/organizations/{org_id}/accounts:
+    get:
+      tags:
+      - Organizations
+      summary: Get Organization Accounts
+      description: Get accounts associated with an organization.
+      operationId: get_organization_accounts_api_v1_organizations__org_id__accounts_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Org Id
+      - name: account_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by account type name
+          title: Account Type
+        description: Filter by account type name
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+                title: Response Get Organization Accounts Api V1 Organizations  Org Id  Accounts Get
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/organizations/{org_id}/product-profiles:
+    get:
+      tags:
+      - Organizations
+      summary: Get Organization Product Profiles
+      description: Get product profiles associated with an organization.
+      operationId: get_organization_product_profiles_api_v1_organizations__org_id__product_profiles_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Org Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductProfileDetail'
+                title: Response Get Organization Product Profiles Api V1 Organizations  Org Id  Product Profiles Get
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/organizations/search:
+    get:
+      tags:
+      - Organizations
+      summary: Get Organizations
+      operationId: get_organizations_api_v1_organizations_search_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: search_term
+        in: query
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          description: Organization name or external ID to search for
+          title: Search Term
+        description: Organization name or external ID to search for
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganizationWithApplications'
+                title: Response Get Organizations Api V1 Organizations Search Get
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/organizations/{org_id}:
+    get:
+      tags:
+      - Organizations
+      summary: Get Organization
+      description: Fetch an organization
+      operationId: get_organization_api_v1_organizations__org_id__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Org Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationDetail'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    OrganizationWithApplications:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        applications:
+          items:
+            $ref: '#/components/schemas/OrganizationApplication'
+          type: array
+          title: Applications
+      type: object
+      required:
+      - id
+      - name
+      - applications
+      title: OrganizationWithApplications
+    ProductGroup:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - id
+      - name
+      title: ProductGroup
+    OrganizationList:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        rollup_group:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Rollup Group
+        rollup_groups:
+          type: integer
+          title: Rollup Groups
+        accounts:
+          type: integer
+          title: Accounts
+        products:
+          type: 'null'
+          title: Products
+      type: object
+      required:
+      - id
+      - name
+      title: OrganizationList
+    ProductProfileAccount:
+      properties:
+        id:
+          type: integer
+          title: Id
+        code:
+          type: string
+          title: Code
+        type:
+          type: string
+          title: Type
+        organizations:
+          items:
+            $ref: '#/components/schemas/ProductProfileOrganization'
+          type: array
+          title: Organizations
+      type: object
+      required:
+      - id
+      - code
+      - organizations
+      title: ProductProfileAccount
+    Product:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        product_group:
+          $ref: '#/components/schemas/ProductGroup'
+        lifecycle_status:
+          $ref: '#/components/schemas/LifecycleStatus'
+        allowed_roles:
+          items:
+            $ref: '#/components/schemas/ProductProfileRole'
+          type: array
+          title: Allowed Roles
+        allowed_account_types:
+          items:
+            $ref: '#/components/schemas/ProductAllowedAccountTypes'
+          type: array
+          title: Allowed Account Types
+      type: object
+      required:
+      - id
+      - name
+      - product_group
+      - lifecycle_status
+      - allowed_roles
+      - allowed_account_types
+      title: Product
+    LifecycleStatus:
+      type: string
+      enum:
+      - Concept
+      - Beta
+      - Active
+      - Limited
+      - Sunset
+      title: LifecycleStatus
+    ProductAllowedAccountTypes:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - id
+      - name
+      title: ProductAllowedAccountTypes
+    OrganizationApplication:
+      properties:
+        external_organization_id:
+          type: string
+          title: External Organization Id
+        external_application:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: External Application
+      type: object
+      required:
+      - external_organization_id
+      title: OrganizationApplication
+    OrganizationDetail:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        applications:
+          items:
+            $ref: '#/components/schemas/OrganizationApplication'
+          type: array
+          title: Applications
+        accounts:
+          items:
+            $ref: '#/components/schemas/Account'
+          type: array
+          title: Accounts
+      type: object
+      required:
+      - id
+      - name
+      - applications
+      - accounts
+      title: OrganizationDetail
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    _ErrorResponse:
+      properties:
+        detail:
+          type: string
+          title: Detail
+      type: object
+      required:
+      - detail
+      title: _ErrorResponse
+    ProductProfileOrganization:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - id
+      - name
+      title: ProductProfileOrganization
+    ProductProfileDetail:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        product:
+          $ref: '#/components/schemas/Product'
+        organization:
+          $ref: '#/components/schemas/ProductProfileOrganization'
+        accounts:
+          items:
+            $ref: '#/components/schemas/ProductProfileAccount'
+          type: array
+          title: Accounts
+        configuration:
+          additionalProperties: true
+          type: object
+          title: Configuration
+        is_active:
+          type: boolean
+          title: Is Active
+      type: object
+      required:
+      - id
+      - name
+      - product
+      - organization
+      - accounts
+      - configuration
+      - is_active
+      title: ProductProfileDetail
+    Account:
+      properties:
+        id:
+          type: integer
+          title: Id
+        code:
+          type: string
+          title: Code
+        type:
+          type: string
+          title: Type
+      type: object
+      required:
+      - id
+      - code
+      title: Account
+    ProductProfileRole:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - id
+      - name
+      title: ProductProfileRole
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

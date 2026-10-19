@@ -85,6 +85,61 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    NCCIClassificationCodeDetail:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        persistentId:
+          type: string
+          readOnly: true
+          description: A hash of the code and description.Used to match the same code across different versions of the same Classification Standard.
+        code:
+          type: string
+          maxLength: 10
+        description:
+          type: string
+        states:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubdivisionSimple'
+        standard:
+          $ref: '#/components/schemas/Standard'
+      required:
+      - code
+      - description
+      - persistentId
+      - standard
+      - states
+      - uuid
+    ncci_invalid_request_body:
+      type: object
+      properties:
+        state:
+          type: string
+          default: Invalid
+    ncci_list_pagination_fail:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Invalid page.
+    SubdivisionSimple:
+      type: object
+      properties:
+        alpha2:
+          type:
+          - string
+          - 'null'
+          maxLength: 2
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+      required:
+      - uuid
     Standard:
       type: object
       properties:
@@ -139,61 +194,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/NCCIClassificationCodeDetail'
-    ncci_invalid_request_body:
-      type: object
-      properties:
-        state:
-          type: string
-          default: Invalid
-    ncci_list_pagination_fail:
-      type: object
-      properties:
-        details:
-          type: string
-          default: Invalid page.
-    NCCIClassificationCodeDetail:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-        persistentId:
-          type: string
-          readOnly: true
-          description: A hash of the code and description.Used to match the same code across different versions of the same Classification Standard.
-        code:
-          type: string
-          maxLength: 10
-        description:
-          type: string
-        states:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubdivisionSimple'
-        standard:
-          $ref: '#/components/schemas/Standard'
-      required:
-      - code
-      - description
-      - persistentId
-      - standard
-      - states
-      - uuid
-    SubdivisionSimple:
-      type: object
-      properties:
-        alpha2:
-          type:
-          - string
-          - 'null'
-          maxLength: 2
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-      required:
-      - uuid
   securitySchemes:
     cookieAuth:
       type: apiKey

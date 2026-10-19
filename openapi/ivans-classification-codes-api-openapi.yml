@@ -160,6 +160,35 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    ClassificationCodeDetail:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        persistentId:
+          type: string
+          readOnly: true
+          description: A hash of the code and description.Used to match the same code across different versions of the same Classification Standard.
+        code:
+          type: string
+          maxLength: 10
+        description:
+          type: string
+        states:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubdivisionSimple'
+        standard:
+          $ref: '#/components/schemas/Standard'
+      required:
+      - code
+      - description
+      - persistentId
+      - standard
+      - states
+      - uuid
     PaginatedClassificationCodeDetailWithRelatedList:
       type: object
       properties:
@@ -207,6 +236,33 @@ components:
       required:
       - classificationStandard
       - filterFieldValues
+    RelatedCode:
+      type: object
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+        uuid:
+          type: string
+      required:
+      - code
+      - description
+      - uuid
+    SubdivisionSimple:
+      type: object
+      properties:
+        alpha2:
+          type:
+          - string
+          - 'null'
+          maxLength: 2
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+      required:
+      - uuid
     Standard:
       type: object
       properties:
@@ -239,19 +295,47 @@ components:
       - market
       - marketName
       - name
-    RelatedCode:
+    classification_code_retrieve_responses:
       type: object
       properties:
-        code:
+        details:
           type: string
-        description:
+          default: Not found.
+    PaginatedClassificationCodeDetailList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/classification-codes/?page=3
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/classification-codes/?page=1
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassificationCodeDetail'
+    FieldValuesRequest:
+      type: object
+      properties:
+        questionId:
           type: string
-        uuid:
-          type: string
+          minLength: 1
+        value:
+          type:
+          - string
+          - 'null'
       required:
-      - code
-      - description
-      - uuid
+      - questionId
+      - value
     ClassificationCodeDetailWithRelated:
       type: object
       description: 'Adds related codes to ClassificationCodeDetailSerializer.
@@ -293,54 +377,6 @@ components:
       - standard
       - states
       - uuid
-    ClassificationCodeDetail:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-        persistentId:
-          type: string
-          readOnly: true
-          description: A hash of the code and description.Used to match the same code across different versions of the same Classification Standard.
-        code:
-          type: string
-          maxLength: 10
-        description:
-          type: string
-        states:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubdivisionSimple'
-        standard:
-          $ref: '#/components/schemas/Standard'
-      required:
-      - code
-      - description
-      - persistentId
-      - standard
-      - states
-      - uuid
-    FieldValuesRequest:
-      type: object
-      properties:
-        questionId:
-          type: string
-          minLength: 1
-        value:
-          type:
-          - string
-          - 'null'
-      required:
-      - questionId
-      - value
-    classification_code_retrieve_responses:
-      type: object
-      properties:
-        details:
-          type: string
-          default: Not found.
     classification_code_invalid_request_body:
       type: object
       properties:
@@ -352,42 +388,6 @@ components:
           items: {}
           default:
           - Required or Invalid
-    SubdivisionSimple:
-      type: object
-      properties:
-        alpha2:
-          type:
-          - string
-          - 'null'
-          maxLength: 2
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-      required:
-      - uuid
-    PaginatedClassificationCodeDetailList:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: https://distribution.ivansinsurance.com/api/v1/classification-codes/?page=3
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: https://distribution.ivansinsurance.com/api/v1/classification-codes/?page=1
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ClassificationCodeDetail'
   securitySchemes:
     cookieAuth:
       type: apiKey

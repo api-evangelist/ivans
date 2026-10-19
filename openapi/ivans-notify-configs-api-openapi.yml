@@ -189,40 +189,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ConsumerInfo:
-      required:
-      - account
-      - endpoint
-      - headers
-      - userId
-      type: object
-      properties:
-        consumerInfoId:
-          type: integer
-          format: int32
-        account:
-          type: string
-        userId:
-          type: string
-        delay:
-          type: integer
-          format: int32
-        maxFileListSize:
-          type: integer
-          format: int32
-        consumerPackage:
-          type:
-          - string
-          - 'null'
-        endpoint:
-          type: string
-        headers:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              type: string
-      additionalProperties: false
     ConsumerInfoRegistration:
       required:
       - account
@@ -270,6 +236,40 @@ components:
             items:
               type: string
           description: custom headers to include in notification package
+      additionalProperties: false
+    ConsumerInfo:
+      required:
+      - account
+      - endpoint
+      - headers
+      - userId
+      type: object
+      properties:
+        consumerInfoId:
+          type: integer
+          format: int32
+        account:
+          type: string
+        userId:
+          type: string
+        delay:
+          type: integer
+          format: int32
+        maxFileListSize:
+          type: integer
+          format: int32
+        consumerPackage:
+          type:
+          - string
+          - 'null'
+        endpoint:
+          type: string
+        headers:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
       additionalProperties: false
     ConsumerInfoUpdate:
       required:

@@ -558,12 +558,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    license_create:
-      type: object
-      properties:
-        detail:
-          type: string
-          default: You do not have permission to perform this action.
     InsuranceLicenseRequest:
       type: object
       properties:
@@ -625,6 +619,18 @@ components:
       - residentStatus
       - subdivision
       - type
+    license_create:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
+    license_list:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
     license_update:
       type: object
       properties:
@@ -632,12 +638,6 @@ components:
           type: string
           default: You do not have permission to perform this action.
     license_retrieve:
-      type: object
-      properties:
-        detail:
-          type: string
-          default: You do not have permission to perform this action.
-    license_list:
       type: object
       properties:
         detail:

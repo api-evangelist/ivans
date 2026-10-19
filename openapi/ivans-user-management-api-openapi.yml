@@ -1,0 +1,1493 @@
+openapi: 3.2.0
+info:
+  title: Ivans Passport User Management API
+  description: Middleware for Ivans Identity
+  version: 0.1.0
+servers:
+- url: https://passport.ivans.com
+  description: Production Server
+- url: https://ivans-passport.us.staging.appliedcloudplatform.com/
+  description: Staging Server
+- url: https://ivans-passport.us.development.appliedcloudplatform.com/
+  description: Development Server
+tags:
+- name: User Management
+paths:
+  /api/v1/user/sync-mfa:
+    post:
+      tags:
+      - User Management
+      summary: Sync Mfa Status
+      operationId: sync_mfa_status_api_v1_user_sync_mfa_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+        '424':
+          description: Failed Dependency
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+      security:
+      - HTTPBearer: []
+  /api/v1/user/roles:
+    get:
+      tags:
+      - User Management
+      summary: Get Roles
+      operationId: get_roles_api_v1_user_roles_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: role_types
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleType'
+          title: Role Types
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Role'
+                title: Response Get Roles Api V1 User Roles Get
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/user/self:
+    get:
+      tags:
+      - User Management
+      summary: Get Self
+      operationId: get_self_api_v1_user_self_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetail'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+        '424':
+          description: Failed Dependency
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+      security:
+      - HTTPBearer: []
+    patch:
+      tags:
+      - User Management
+      summary: Update Self
+      operationId: update_self_api_v1_user_self_patch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSelfUpdate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+        '424':
+          description: Failed Dependency
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+  /api/v1/user/link-sso-identity:
+    post:
+      tags:
+      - User Management
+      summary: Link Sso Identity
+      description: 'Flow B step 1: begin cross-email SSO account linking.
+
+        The SSO token is validated via the Authorization header. Returns an Auth0 authorization URL
+
+        that the UI should redirect the browser to so the user can authenticate their existing account.
+
+        The SSO sub is signed into the OAuth state parameter — no cookie required.'
+      operationId: link_sso_identity_api_v1_user_link_sso_identity_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LinkSSOInitiateResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+        '424':
+          description: Failed Dependency
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+      security:
+      - HTTPBearer: []
+  /api/v1/user/link-sso-callback:
+    get:
+      tags:
+      - User Management
+      summary: Link Sso Callback
+      description: 'Shared Flow B callback for both API and admin flows.
+
+        Recovers the SSO sub (and optional redirect_to) from the signed state, exchanges the code,
+
+        and links the two Auth0 identities. Returns JSON for API callers; redirects for admin callers.'
+      operationId: link_sso_callback_api_v1_user_link_sso_callback_get
+      parameters:
+      - name: code
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Code
+      - name: state
+        in: query
+        required: true
+        schema:
+          type: string
+          title: State
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/user/create-from-sso:
+    post:
+      tags:
+      - User Management
+      summary: Create User From Sso
+      description: 'Flow C: create a new Passport user from an SSO identity.
+
+        Called when a user logs in via SSO and confirms they have no existing Passport account.'
+      operationId: create_user_from_sso_api_v1_user_create_from_sso_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserFromSSORequest'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetail'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+        '424':
+          description: Failed Dependency
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/user/self/product-profiles/:
+    get:
+      tags:
+      - User Management
+      summary: List Product Profiles For Self
+      operationId: list_product_profiles_for_self_api_v1_user_self_product_profiles__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: is_admin_only
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: If true, only return product profiles where the current user has "product_profiles_add_user" permission
+          default: false
+          title: Is Admin Only
+        description: If true, only return product profiles where the current user has "product_profiles_add_user" permission
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number
+          default: 1
+          title: Page
+        description: Page number
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Page size
+          default: 50
+          title: Size
+        description: Page size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page_ProductProfileListItem_'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/user/{search_param}:
+    get:
+      tags:
+      - User Management
+      summary: Get User
+      operationId: get_user_api_v1_user__search_param__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: search_param
+        in: path
+        required: true
+        schema:
+          type: string
+          description: User ID, Email or External User ID
+          title: Search Param
+        description: User ID, Email or External User ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailWithProductProfiles'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/user/{search_param}/applications:
+    put:
+      tags:
+      - User Management
+      summary: Create Or Update Application Association
+      description: 'Link a user to an application with an external user ID.
+
+        If the user is already linked to that application, it will overwrite the external user ID if `overwrite` is set to True.'
+      operationId: create_or_update_application_association_api_v1_user__search_param__applications_put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: search_param
+        in: path
+        required: true
+        schema:
+          type: string
+          description: User ID, Email or External User ID
+          title: Search Param
+        description: User ID, Email or External User ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Body_create_or_update_application_association_api_v1_user__search_param__applications_put'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetail'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/user/:
+    get:
+      tags:
+      - User Management
+      summary: Get Users
+      operationId: get_users_api_v1_user__get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: email
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter users by email address
+          title: Email
+        description: Filter users by email address
+      - name: blocked
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Filter users by blocked status
+          title: Blocked
+        description: Filter users by blocked status
+      - name: has_mfa
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Filter users by MFA status
+          title: Has Mfa
+        description: Filter users by MFA status
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number
+          default: 1
+          title: Page
+        description: Page number
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100000
+          minimum: 1
+          default: 50
+          title: Size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page_TypeVar_Customized_TypeVar_Customized_UserDetail_'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - User Management
+      summary: Create User
+      operationId: create_user_api_v1_user__post
+      security:
+      - HTTPBearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetail'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/user/{user_id}/product-profiles/add:
+    patch:
+      tags:
+      - User Management
+      summary: Add User To Product Profiles
+      operationId: add_user_to_product_profiles_api_v1_user__user_id__product_profiles_add_patch
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: User Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/UserProductProfileAdd'
+              title: Payload
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailWithProductProfiles'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/user/{user_id}/product-profiles/remove:
+    patch:
+      tags:
+      - User Management
+      summary: Remove User From Product Profiles
+      operationId: remove_user_from_product_profiles_api_v1_user__user_id__product_profiles_remove_patch
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: User Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/UserProductProfileRemove'
+              title: Payload
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailWithProductProfiles'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/user/{email}/product-profiles/add:
+    put:
+      tags:
+      - User Management
+      summary: Get Or Create User And Add User To Product Profiles
+      description: User will be created if they do not already exist in the system
+      operationId: get_or_create_user_and_add_user_to_product_profiles_api_v1_user__email__product_profiles_add_put
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: email
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[A-Za-z0-9._%+\-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$
+          title: Email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/UserProductProfileAdd'
+              title: Payload
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailWithProductProfiles'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    Role:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        role_type:
+          $ref: '#/components/schemas/RoleType'
+      type: object
+      required:
+      - id
+      - name
+      - role_type
+      title: Role
+    UserProductProfileAdd:
+      properties:
+        product_profile_id:
+          type: integer
+          title: Product Profile Id
+        role_id:
+          type: integer
+          title: Role Id
+      type: object
+      required:
+      - product_profile_id
+      - role_id
+      title: UserProductProfileAdd
+    UserDetailProduct:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - id
+      - name
+      title: UserDetailProduct
+    UserDetail:
+      properties:
+        id:
+          type: integer
+          title: Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+        first_name:
+          type: string
+          title: First Name
+        last_name:
+          type: string
+          title: Last Name
+        email:
+          type: string
+          title: Email
+        email_verified:
+          type: boolean
+          title: Email Verified
+        blocked:
+          type: boolean
+          title: Blocked
+        has_mfa:
+          type: boolean
+          title: Has Mfa
+        roles:
+          items:
+            $ref: '#/components/schemas/RoleWithPermissions'
+          type: array
+          title: Roles
+        aliases:
+          items:
+            $ref: '#/components/schemas/UserApplication'
+          type: array
+          title: Aliases
+        last_login:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Login
+      type: object
+      required:
+      - id
+      - created_at
+      - updated_at
+      - first_name
+      - last_name
+      - email
+      - email_verified
+      - blocked
+      - has_mfa
+      - roles
+      - aliases
+      - last_login
+      title: UserDetail
+    Alias:
+      properties:
+        application_name:
+          type: string
+          title: Application Name
+          description: Name of the application the user is linked to
+          examples:
+          - EXCHANGE
+        external_user_id:
+          type: string
+          title: External User Id
+          description: External user ID in the linked application
+      type: object
+      required:
+      - application_name
+      - external_user_id
+      title: Alias
+      description: Schema for user application alias.
+    Links:
+      properties:
+        first:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First
+          examples:
+          - /api/v1/users?limit=1&offset1
+        last:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last
+          examples:
+          - /api/v1/users?limit=1&offset1
+        self:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Self
+          examples:
+          - /api/v1/users?limit=1&offset1
+        next:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next
+          examples:
+          - /api/v1/users?limit=1&offset1
+        prev:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prev
+          examples:
+          - /api/v1/users?limit=1&offset1
+      type: object
+      title: Links
+    UserSelfUpdate:
+      properties:
+        first_name:
+          type: string
+          title: First Name
+        last_name:
+          type: string
+          title: Last Name
+      type: object
+      required:
+      - first_name
+      - last_name
+      title: UserSelfUpdate
+      description: attributes that a user can update about themselves
+    ProductProfileListItem:
+      properties:
+        product_profile:
+          $ref: '#/components/schemas/ProductProfileList'
+        role:
+          $ref: '#/components/schemas/ProductProfileRoleWithPermissions'
+      type: object
+      required:
+      - product_profile
+      - role
+      title: ProductProfileListItem
+    _ErrorResponse:
+      properties:
+        detail:
+          type: string
+          title: Detail
+      type: object
+      required:
+      - detail
+      title: _ErrorResponse
+    UserDetailAccount:
+      properties:
+        code:
+          type: string
+          title: Code
+        type:
+          type: string
+          title: Type
+      type: object
+      required:
+      - code
+      title: UserDetailAccount
+    UserDetailOrgApplication:
+      properties:
+        external_organization_id:
+          type: string
+          title: External Organization Id
+        external_application:
+          type: string
+          title: External Application
+      type: object
+      required:
+      - external_organization_id
+      title: UserDetailOrgApplication
+    CreateUserFromSSORequest:
+      properties:
+        sso_token:
+          type: string
+          title: Sso Token
+          description: JWT access token from the SSO login
+      type: object
+      required:
+      - sso_token
+      title: CreateUserFromSSORequest
+    ProductProfileListProduct:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - id
+      - name
+      title: ProductProfileListProduct
+    UserCreate:
+      properties:
+        first_name:
+          type: string
+          title: First Name
+        last_name:
+          type: string
+          title: Last Name
+        email:
+          type: string
+          title: Email
+        email_verified:
+          type: boolean
+          title: Email Verified
+          default: false
+        password:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Password
+        aliases:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/Alias'
+            type: array
+          - type: 'null'
+          title: Aliases
+          description: List of application aliases for the user
+      type: object
+      required:
+      - first_name
+      - last_name
+      - email
+      title: UserCreate
+    ProductProfileRoleWithPermissions:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        permissions:
+          items:
+            type: string
+          type: array
+          title: Permissions
+      type: object
+      required:
+      - id
+      - name
+      - permissions
+      title: ProductProfileRoleWithPermissions
+    UserDetailOrg:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        applications:
+          items:
+            $ref: '#/components/schemas/UserDetailOrgApplication'
+          type: array
+          title: Applications
+      type: object
+      required:
+      - id
+      - name
+      - applications
+      title: UserDetailOrg
+    RoleWithPermissions:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        role_type:
+          $ref: '#/components/schemas/RoleType'
+        permissions:
+          items:
+            type: string
+          type: array
+          title: Permissions
+      type: object
+      required:
+      - id
+      - name
+      - role_type
+      - permissions
+      title: RoleWithPermissions
+    UserDetailProductProfileLink:
+      properties:
+        id:
+          type: integer
+          title: Id
+        role:
+          $ref: '#/components/schemas/RoleWithPermissions'
+        product:
+          $ref: '#/components/schemas/UserDetailProduct'
+        organization:
+          $ref: '#/components/schemas/UserDetailOrg'
+        configuration:
+          additionalProperties: true
+          type: object
+          title: Configuration
+        accounts:
+          items:
+            $ref: '#/components/schemas/UserDetailAccount'
+          type: array
+          title: Accounts
+      type: object
+      required:
+      - id
+      - role
+      title: UserDetailProductProfileLink
+    LinkSSOInitiateResponse:
+      properties:
+        redirect_url:
+          type: string
+          title: Redirect Url
+          description: Auth0 authorization URL — redirect the user's browser here to authenticate their existing account
+      type: object
+      required:
+      - redirect_url
+      title: LinkSSOInitiateResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    UserApplication:
+      properties:
+        application_name:
+          type: string
+          title: Application Name
+        external_user_id:
+          type: string
+          title: External User Id
+      type: object
+      required:
+      - external_user_id
+      title: UserApplication
+    Body_create_or_update_application_association_api_v1_user__search_param__applications_put:
+      properties:
+        application_name:
+          type: string
+          const: EXCHANGE
+          title: Application Name
+          description: Name of the application to link the user to, currently only 'EXCHANGE' is supported
+        external_user_id:
+          type: string
+          title: External User Id
+          description: External User ID to link the user with
+        overwrite:
+          type: boolean
+          title: Overwrite
+          description: Whether to overwrite the external user ID if the user is already linked
+          default: false
+      type: object
+      required:
+      - application_name
+      - external_user_id
+      title: Body_create_or_update_application_association_api_v1_user__search_param__applications_put
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    Page_TypeVar_Customized_TypeVar_Customized_UserDetail_:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/UserDetail'
+          type: array
+          title: Items
+        total:
+          type: integer
+          minimum: 0.0
+          title: Total
+        page:
+          type: integer
+          minimum: 1.0
+          title: Page
+        size:
+          type: integer
+          minimum: 1.0
+          title: Size
+        pages:
+          type: integer
+          minimum: 0.0
+          title: Pages
+        links:
+          $ref: '#/components/schemas/Links'
+          readOnly: true
+      type: object
+      required:
+      - items
+      - total
+      - page
+      - size
+      - pages
+      - links
+      title: Page[TypeVar]Customized[TypeVar]Customized[UserDetail]
+    UserProductProfileRemove:
+      properties:
+        product_profile_id:
+          type: integer
+          title: Product Profile Id
+      type: object
+      required:
+      - product_profile_id
+      title: UserProductProfileRemove
+    Page_ProductProfileListItem_:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/ProductProfileListItem'
+          type: array
+          title: Items
+        total:
+          type: integer
+          minimum: 0.0
+          title: Total
+        page:
+          type: integer
+          minimum: 1.0
+          title: Page
+        size:
+          type: integer
+          minimum: 1.0
+          title: Size
+        pages:
+          type: integer
+          minimum: 0.0
+          title: Pages
+      type: object
+      required:
+      - items
+      - total
+      - page
+      - size
+      - pages
+      title: Page[ProductProfileListItem]
+    RoleType:
+      type: string
+      enum:
+      - PLATFORM
+      - PRODUCT
+      title: RoleType
+    UserDetailWithProductProfiles:
+      properties:
+        id:
+          type: integer
+          title: Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+        first_name:
+          type: string
+          title: First Name
+        last_name:
+          type: string
+          title: Last Name
+        email:
+          type: string
+          title: Email
+        email_verified:
+          type: boolean
+          title: Email Verified
+        blocked:
+          type: boolean
+          title: Blocked
+        has_mfa:
+          type: boolean
+          title: Has Mfa
+        roles:
+          items:
+            $ref: '#/components/schemas/RoleWithPermissions'
+          type: array
+          title: Roles
+        aliases:
+          items:
+            $ref: '#/components/schemas/UserApplication'
+          type: array
+          title: Aliases
+        last_login:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Login
+        product_profiles:
+          items:
+            $ref: '#/components/schemas/UserDetailProductProfileLink'
+          type: array
+          title: Product Profiles
+      type: object
+      required:
+      - id
+      - created_at
+      - updated_at
+      - first_name
+      - last_name
+      - email
+      - email_verified
+      - blocked
+      - has_mfa
+      - roles
+      - aliases
+      - last_login
+      - product_profiles
+      title: UserDetailWithProductProfiles
+    ProductProfileList:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        product:
+          $ref: '#/components/schemas/ProductProfileListProduct'
+        is_active:
+          type: boolean
+          title: Is Active
+      type: object
+      required:
+      - id
+      - name
+      - product
+      - is_active
+      title: ProductProfileList
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

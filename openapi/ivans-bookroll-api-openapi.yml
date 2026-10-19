@@ -1,0 +1,131 @@
+openapi: 3.2.0
+info:
+  title: Ivans Passport Bookroll API
+  description: Middleware for Ivans Identity
+  version: 0.1.0
+servers:
+- url: https://passport.ivans.com
+  description: Production Server
+- url: https://ivans-passport.us.staging.appliedcloudplatform.com/
+  description: Staging Server
+- url: https://ivans-passport.us.development.appliedcloudplatform.com/
+  description: Development Server
+tags:
+- name: Bookroll
+paths:
+  /api/v1/bookroll/owner-mapping:
+    get:
+      tags:
+      - Bookroll
+      summary: Get Exchange To Ask Kodiak Owner Mapping
+      operationId: get_exchange_to_ask_kodiak_owner_mapping_api_v1_bookroll_owner_mapping_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: carrier_ids
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+          title: Carrier Ids
+      responses:
+        '200':
+          description: Returns AK owner ids that are mapped to exchange carrier ids, or empty array if no mapping found
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    type: string
+                title: Response Get Exchange To Ask Kodiak Owner Mapping Api V1 Bookroll Owner Mapping Get
+              example:
+                exchange_carrier_id_1:
+                - ak_owner_id_1
+                - ak_owner_id_2
+                exchange_carrier_id_2: []
+                exchange_carrier_id_3:
+                - ak_owner_id_3
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Bad Request
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Not Found
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ErrorResponse'
+          description: Failed Dependency
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    _ErrorResponse:
+      properties:
+        detail:
+          type: string
+          title: Detail
+      type: object
+      required:
+      - detail
+      title: _ErrorResponse
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

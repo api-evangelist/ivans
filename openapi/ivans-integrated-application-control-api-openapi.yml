@@ -181,6 +181,41 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    RouteConfigurationReadOnly:
+      type: object
+      description: 'Serializes subset of read-only fields for RouteConfiguration.
+
+
+        ViewSet: RiskProfileViewSet
+
+
+        Endpoint: GET /risk-profiles/'
+      properties:
+        description:
+          type: string
+          readOnly: true
+        routeType:
+          type: string
+      required:
+      - description
+      - routeType
+    IDMVersion:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 128
+        idmVersion:
+          allOf:
+          - $ref: '#/components/schemas/IdmVersionEnum'
+          description: The Ivans Data Model version used by the application.
+        availableIdmVersions:
+          type: array
+          items: {}
+          readOnly: true
+      required:
+      - availableIdmVersions
+      - name
     LineOfBusiness:
       type: object
       properties:
@@ -198,11 +233,44 @@ components:
       - code
       - name
       - uuid
+    PatchedIntegratedApplicationRiskProfileRequest:
+      type: object
+      properties:
+        riskProfiles:
+          type: array
+          items:
+            type: string
+            format: uuid
+    MarketSimple:
+      type: object
+      description: 'Serializes subset of read-only fields for Market.
+
+
+        ViewSet: RiskProfileViewSet
+
+
+        Endpoint: GET /risk-profiles/'
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+      required:
+      - name
+      - uuid
     CarrierTierEnum:
       enum:
       - PROD
       - UAT
       - DEV
+      type: string
+    IdmVersionEnum:
+      enum:
+      - '1.0'
+      - '2.0'
       type: string
     ProductReadOnly:
       type: object
@@ -221,6 +289,19 @@ components:
       required:
       - lineOfBusiness
       - market
+    PatchedIDMVersionRequestRequest:
+      type: object
+      properties:
+        idmVersion:
+          type: string
+          minLength: 1
+    TypeEnum:
+      enum:
+      - Base
+      - Monoline
+      - Package
+      - Bundle
+      type: string
     RiskProfileReadOnly:
       type: object
       description: 'Serializes read-only fields for risk profiles.
@@ -277,87 +358,6 @@ components:
       - type
       - uuid
       - version
-    PatchedIDMVersionRequestRequest:
-      type: object
-      properties:
-        idmVersion:
-          type: string
-          minLength: 1
-    RouteConfigurationReadOnly:
-      type: object
-      description: 'Serializes subset of read-only fields for RouteConfiguration.
-
-
-        ViewSet: RiskProfileViewSet
-
-
-        Endpoint: GET /risk-profiles/'
-      properties:
-        description:
-          type: string
-          readOnly: true
-        routeType:
-          type: string
-      required:
-      - description
-      - routeType
-    IDMVersion:
-      type: object
-      properties:
-        name:
-          type: string
-          maxLength: 128
-        idmVersion:
-          allOf:
-          - $ref: '#/components/schemas/IdmVersionEnum'
-          description: The Ivans Data Model version used by the application.
-        availableIdmVersions:
-          type: array
-          items: {}
-          readOnly: true
-      required:
-      - availableIdmVersions
-      - name
-    PatchedIntegratedApplicationRiskProfileRequest:
-      type: object
-      properties:
-        riskProfiles:
-          type: array
-          items:
-            type: string
-            format: uuid
-    TypeEnum:
-      enum:
-      - Base
-      - Monoline
-      - Package
-      - Bundle
-      type: string
-    MarketSimple:
-      type: object
-      description: 'Serializes subset of read-only fields for Market.
-
-
-        ViewSet: RiskProfileViewSet
-
-
-        Endpoint: GET /risk-profiles/'
-      properties:
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-        name:
-          type: string
-          readOnly: true
-      required:
-      - name
-      - uuid
-    IdmVersionEnum:
-      enum:
-      - '1.0'
-      - '2.0'
-      type: string
     IntegratedApplicationWithRiskProfiles:
       type: object
       properties:

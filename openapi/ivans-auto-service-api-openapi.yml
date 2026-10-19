@@ -282,21 +282,6 @@ paths:
       - HTTPBearer: []
 components:
   schemas:
-    AutoDetailResponse:
-      properties:
-        details:
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/AutoFieldValueResponse'
-            - $ref: '#/components/schemas/AutoFieldOptionsResponse'
-          type: array
-          title: Details
-          description: List of vehicle details with labels and values
-      type: object
-      required:
-      - details
-      title: AutoDetailResponse
-      description: Response model for Auto vehicle details.
     AutoFieldOptionsResponse:
       properties:
         guid:
@@ -322,46 +307,6 @@ components:
       - options
       title: AutoFieldOptionsResponse
       description: Response model for Auto field data with options.
-    ErrorResponseWithValidationDetails:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationErrorDetail'
-          type: array
-          title: Detail
-      type: object
-      required:
-      - detail
-      title: ErrorResponseWithValidationDetails
-      description: Response for errors that have a list of validation details.
-    ErrorResponseWithMessageOnly:
-      properties:
-        detail:
-          type: string
-          title: Detail
-      type: object
-      required:
-      - detail
-      title: ErrorResponseWithMessageOnly
-      description: Response for errors that have only a message.
-    ValueOptionResponse:
-      properties:
-        label:
-          type: string
-          title: Label
-          description: Label of the option
-        value:
-          anyOf:
-          - type: integer
-          - type: string
-          title: Value
-          description: Value of the option
-      type: object
-      required:
-      - label
-      - value
-      title: ValueOptionResponse
-      description: Response model for options with label and value.
     AutoFieldValueResponse:
       properties:
         guid:
@@ -385,6 +330,34 @@ components:
       - label
       title: AutoFieldValueResponse
       description: Response model for Auto field data with values.
+    ValueOptionResponse:
+      properties:
+        label:
+          type: string
+          title: Label
+          description: Label of the option
+        value:
+          anyOf:
+          - type: integer
+          - type: string
+          title: Value
+          description: Value of the option
+      type: object
+      required:
+      - label
+      - value
+      title: ValueOptionResponse
+      description: Response model for options with label and value.
+    ErrorResponseWithMessageOnly:
+      properties:
+        detail:
+          type: string
+          title: Detail
+      type: object
+      required:
+      - detail
+      title: ErrorResponseWithMessageOnly
+      description: Response for errors that have only a message.
     ValidationErrorDetail:
       properties:
         type:
@@ -409,6 +382,33 @@ components:
       - input
       title: ValidationErrorDetail
       description: Validation error detail for standard Pydantic/FastAPI request validation errors.
+    AutoDetailResponse:
+      properties:
+        details:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/AutoFieldValueResponse'
+            - $ref: '#/components/schemas/AutoFieldOptionsResponse'
+          type: array
+          title: Details
+          description: List of vehicle details with labels and values
+      type: object
+      required:
+      - details
+      title: AutoDetailResponse
+      description: Response model for Auto vehicle details.
+    ErrorResponseWithValidationDetails:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+          type: array
+          title: Detail
+      type: object
+      required:
+      - detail
+      title: ErrorResponseWithValidationDetails
+      description: Response for errors that have a list of validation details.
   securitySchemes:
     HTTPBearer:
       type: http

@@ -799,19 +799,19 @@ components:
         enableManualAmsInfoEdit:
           type: boolean
       additionalProperties: false
-    agency_update:
-      type: object
-      properties:
-        detail:
-          type: string
-          default: You do not have permission to perform this action.
-    agency_list:
-      type: object
-      properties:
-        detail:
-          type: string
-          default: You do not have permission to perform this action.
     agency_create:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
+    agency_retrieve:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: You do not have permission to perform this action.
+    agency_update:
       type: object
       properties:
         detail:
@@ -845,7 +845,7 @@ components:
       - isActive
       - name
       - npn
-    agency_retrieve:
+    agency_list:
       type: object
       properties:
         detail:

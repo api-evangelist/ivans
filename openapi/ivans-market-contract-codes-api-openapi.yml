@@ -684,12 +684,49 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    CodeTypeEnum:
-      enum:
-      - 1
-      - 2
-      - 3
-      type: integer
+    MarketContractCodeCreateRequest:
+      type: object
+      properties:
+        marketConfiguration:
+          type: string
+          format: uuid
+        parent:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        nickname:
+          type: string
+          minLength: 1
+        codeType:
+          allOf:
+          - $ref: '#/components/schemas/CodeTypeEnum'
+          description: '[(1, ''Agency Id''), (2, ''Producer Id''), (3, ''Network Code'')]'
+          minimum: -2147483648
+          maximum: 2147483647
+        code:
+          type: string
+          minLength: 1
+          maxLength: 128
+        user:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        users:
+          type: array
+          items:
+            type: string
+            format: uuid
+        accessStructures:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketStructureRequest'
+      required:
+      - code
+      - codeType
+      - marketConfiguration
+      - nickname
     StructureChild:
       type: object
       properties:
@@ -703,23 +740,12 @@ components:
       - code
       - id
       - name
-    MarketContractCodeBulkDeleteRequest:
+    market_contract_code_delete_responses:
       type: object
-      description: 'Serializer for bulk deletion of MarketContractCodes.
-
-
-        ViewSet: MarketContractCodeViewSet
-
-
-        Endpoint: market-contract-codes/bulk-delete/'
       properties:
-        contractCodes:
-          type: array
-          items:
-            type: string
-            format: uuid
-      required:
-      - contractCodes
+        details:
+          type: string
+          default: Not found.
     StructureAccess:
       type: object
       properties:
@@ -736,96 +762,29 @@ components:
       - branch
       - businessUnit
       - department
-    market_contract_code_detail_update_responses:
+    CodeTypeEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      type: integer
+    MarketStructureRequest:
       type: object
       properties:
-        details:
-          type: string
-          default: Not found.
-    market_contract_code_delete_responses:
-      type: object
-      properties:
-        details:
-          type: string
-          default: Not found.
-    market_contract_code_update_responses_body:
-      type: object
-      properties:
-        marketConfiguration:
-          type: array
-          items: {}
-          default:
-          - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" - object does not exist.
-        parent:
-          type: array
-          items: {}
-          default:
-          - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" - object does not exist.
-        user:
-          type: array
-          items: {}
-          default:
-          - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" - object does not exist.
-        accessStructures:
-          type: array
-          items: {}
-          default:
-          - agency:
-            - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" -object does not exist.
-            branch:
-            - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" -object does not exist.
-            department:
-            - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" -object does not exist.
-            businessUnit:
-            - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" -object does not exist.
-    SimpleUser:
-      type: object
-      properties:
-        id:
+        agency:
           type: string
           format: uuid
-          readOnly: true
-        integratorUserId:
+        branch:
           type: string
-        name:
+          format: uuid
+        department:
           type: string
-          readOnly: true
-        externalId:
+          format: uuid
+        businessUnit:
           type: string
-          description: Unique identifier from external system. Used to identify agents.
-          maxLength: 64
+          format: uuid
       required:
-      - id
-      - integratorUserId
-      - name
-    market_configuration_contract_code_detail_responses:
-      type: object
-      properties:
-        details:
-          type: string
-          default: Not found.
-    PaginatedMarketContractCodeDetailList:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: https://distribution.ivansinsurance.com/api/v1/market-contract-codes/?page=3
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: https://distribution.ivansinsurance.com/api/v1/market-contract-codes/?page=1
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/MarketContractCodeDetail'
+      - agency
     PatchedMarketContractCodeCreateRequest:
       type: object
       properties:
@@ -864,6 +823,60 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MarketStructureRequest'
+    market_configuration_contract_code_detail_responses:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
+    PaginatedMarketContractCodeDetailList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/market-contract-codes/?page=3
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://distribution.ivansinsurance.com/api/v1/market-contract-codes/?page=1
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketContractCodeDetail'
+    SimpleUser:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        integratorUserId:
+          type: string
+        name:
+          type: string
+          readOnly: true
+        externalId:
+          type: string
+          description: Unique identifier from external system. Used to identify agents.
+          maxLength: 64
+      required:
+      - id
+      - integratorUserId
+      - name
+    market_contract_code_detail_update_responses:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
     MarketContractCodeDetail:
       type: object
       properties:
@@ -923,66 +936,53 @@ components:
       - user
       - users
       - uuid
-    MarketStructureRequest:
-      type: object
-      properties:
-        agency:
-          type: string
-          format: uuid
-        branch:
-          type: string
-          format: uuid
-        department:
-          type: string
-          format: uuid
-        businessUnit:
-          type: string
-          format: uuid
-      required:
-      - agency
-    MarketContractCodeCreateRequest:
+    market_contract_code_update_responses_body:
       type: object
       properties:
         marketConfiguration:
-          type: string
-          format: uuid
+          type: array
+          items: {}
+          default:
+          - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" - object does not exist.
         parent:
-          type:
-          - string
-          - 'null'
-          format: uuid
-        nickname:
-          type: string
-          minLength: 1
-        codeType:
-          allOf:
-          - $ref: '#/components/schemas/CodeTypeEnum'
-          description: '[(1, ''Agency Id''), (2, ''Producer Id''), (3, ''Network Code'')]'
-          minimum: -2147483648
-          maximum: 2147483647
-        code:
-          type: string
-          minLength: 1
-          maxLength: 128
+          type: array
+          items: {}
+          default:
+          - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" - object does not exist.
         user:
-          type:
-          - string
-          - 'null'
-          format: uuid
-        users:
+          type: array
+          items: {}
+          default:
+          - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" - object does not exist.
+        accessStructures:
+          type: array
+          items: {}
+          default:
+          - agency:
+            - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" -object does not exist.
+            branch:
+            - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" -object does not exist.
+            department:
+            - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" -object does not exist.
+            businessUnit:
+            - Invalid pk "3fa85f64-5717-4562-b3fc-2c963f66afa6" -object does not exist.
+    MarketContractCodeBulkDeleteRequest:
+      type: object
+      description: 'Serializer for bulk deletion of MarketContractCodes.
+
+
+        ViewSet: MarketContractCodeViewSet
+
+
+        Endpoint: market-contract-codes/bulk-delete/'
+      properties:
+        contractCodes:
           type: array
           items:
             type: string
             format: uuid
-        accessStructures:
-          type: array
-          items:
-            $ref: '#/components/schemas/MarketStructureRequest'
       required:
-      - code
-      - codeType
-      - marketConfiguration
-      - nickname
+      - contractCodes
   securitySchemes:
     cookieAuth:
       type: apiKey

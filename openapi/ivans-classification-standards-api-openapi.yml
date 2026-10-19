@@ -146,6 +146,23 @@ components:
       - lineOfBusiness
       - market
       - name
+    ClassificationCode:
+      type: object
+      properties:
+        code:
+          type: string
+          maxLength: 10
+        description:
+          type: string
+      required:
+      - code
+      - description
+    classification_standard_detail_available_responses:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Not found.
     ClassificationStandardDetail:
       type: object
       properties:
@@ -173,29 +190,6 @@ components:
       - lineOfBusiness
       - market
       - name
-    classification_standard_detail_available_responses:
-      type: object
-      properties:
-        details:
-          type: string
-          default: Not found.
-    ClassificationCode:
-      type: object
-      properties:
-        code:
-          type: string
-          maxLength: 10
-        description:
-          type: string
-      required:
-      - code
-      - description
-    classification_standard_list_available_responses_pagination_fail:
-      type: object
-      properties:
-        details:
-          type: string
-          default: Invalid page.
     PaginatedClassificationStandardList:
       type: object
       properties:
@@ -218,6 +212,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ClassificationStandard'
+    classification_standard_list_available_responses_pagination_fail:
+      type: object
+      properties:
+        details:
+          type: string
+          default: Invalid page.
   securitySchemes:
     cookieAuth:
       type: apiKey

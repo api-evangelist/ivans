@@ -150,14 +150,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ScheduleResultFormat:
-      type: string
-      enum:
-      - csv_zip
-      - xlsx
-      - json_zip
-      title: ScheduleResultFormat
-      description: An enumeration.
     ValidationError:
       properties:
         loc:
@@ -188,6 +180,14 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    ScheduleResultFormat:
+      type: string
+      enum:
+      - csv_zip
+      - xlsx
+      - json_zip
+      title: ScheduleResultFormat
+      description: An enumeration.
 x-readme: {}
 x-provenance:
   method: searched

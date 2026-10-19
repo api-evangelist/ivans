@@ -131,19 +131,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CarrierNaic:
-      required:
-      - carrierName
-      - naic
-      type: object
-      properties:
-        naic:
-          type: integer
-          format: int32
-        carrierName:
-          minLength: 1
-          type: string
-      additionalProperties: false
     CarrierNaicGroup:
       required:
       - carrierNaics
@@ -157,6 +144,19 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CarrierNaic'
+      additionalProperties: false
+    CarrierNaic:
+      required:
+      - carrierName
+      - naic
+      type: object
+      properties:
+        naic:
+          type: integer
+          format: int32
+        carrierName:
+          minLength: 1
+          type: string
       additionalProperties: false
     CarrierNaicV2:
       required:

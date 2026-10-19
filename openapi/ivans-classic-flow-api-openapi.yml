@@ -367,46 +367,6 @@ components:
       - msg
       - type
       title: ValidationError
-    ClassicQuotePayload:
-      properties:
-        fieldValues:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/FieldValue'
-            type: array
-          - type: 'null'
-          title: Fieldvalues
-        repeatableFieldBlocks:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/RepeatableFieldBlock'
-            type: array
-          - type: 'null'
-          title: Repeatablefieldblocks
-        lobs:
-          items:
-            type: string
-          type: array
-          title: Lobs
-        markets:
-          items:
-            type: string
-          type: array
-          title: Markets
-      type: object
-      required:
-      - lobs
-      - markets
-      title: ClassicQuotePayload
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     RepeatableFieldBlock:
       properties:
         id:
@@ -448,6 +408,46 @@ components:
       - questionId
       - value
       title: FieldValue
+    ClassicQuotePayload:
+      properties:
+        fieldValues:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/FieldValue'
+            type: array
+          - type: 'null'
+          title: Fieldvalues
+        repeatableFieldBlocks:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/RepeatableFieldBlock'
+            type: array
+          - type: 'null'
+          title: Repeatablefieldblocks
+        lobs:
+          items:
+            type: string
+          type: array
+          title: Lobs
+        markets:
+          items:
+            type: string
+          type: array
+          title: Markets
+      type: object
+      required:
+      - lobs
+      - markets
+      title: ClassicQuotePayload
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     HTTPBearer:
       type: http
